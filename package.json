@@ -1,0 +1,31 @@
+{
+  "name": "devsphere",
+  "private": true,
+  "type": "module",
+  "version": "0.0.0",
+  "packageManager": "pnpm@10.28.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @devsphere/desktop dev",
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "lint": "eslint . && prettier --check .",
+    "format": "prettier --write .",
+    "check": "pnpm lint && pnpm typecheck && pnpm test && uv run pytest",
+    "package": "pnpm --filter @devsphere/desktop package",
+    "e2e": "pnpm --filter @devsphere/e2e test",
+    "docs:check": "python tools/check_docs.py"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.0",
+    "eslint": "^10.14.0",
+    "prettier": "^3.9.10",
+    "turbo": "^2.11.10",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^5.1.0"
+  }
+}

@@ -1,0 +1,87 @@
+name: User story (backlog item)
+description: Add a backlog item with its sprint, priority and test cases
+title: "[US-xx] "
+labels: ["story"]
+body:
+  - type: input
+    id: story_id
+    attributes:
+      {
+        label: Story ID,
+        placeholder: "US-07",
+        description: "Use the ID from docs/backlog/backlog_v1.md",
+      }
+    validations: { required: true }
+  - type: dropdown
+    id: sprint
+    attributes:
+      label: Sprint
+      options:
+        [
+          "Sprint 0",
+          "Sprint 1",
+          "Sprint 2",
+          "Sprint 3",
+          "Sprint 4",
+          "Sprint 5",
+          "Sprint 6",
+          "Sprint 7",
+          "Sprint 8",
+          "Sprint 9",
+          "Sprint 10",
+          "Sprint 11",
+          "Sprint 12",
+          "Sprint 13",
+          "Sprint 14",
+          "Sprint 15",
+        ]
+    validations: { required: true }
+  - type: dropdown
+    id: release
+    attributes: { label: Release, options: [MVP, R2, R3] }
+    validations: { required: true }
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: "P0 blocks everything or protects trust. P1 rest of MVP. P2 R2. P3 R3."
+      options: ["P0 Critical", "P1 High", "P2 Medium", "P3 Low"]
+    validations: { required: true }
+  - type: textarea
+    id: user_story
+    attributes: { label: User story, placeholder: "As a student I can ... so that ..." }
+    validations: { required: true }
+  - type: textarea
+    id: requirements
+    attributes:
+      label: Requirements covered
+      value: "- [ ] FR-XXX-000: \n- [ ] NFR-XXX-000: "
+    validations: { required: true }
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      value: "- [ ] Every requirement above has a passing test case\n- [ ] "
+    validations: { required: true }
+  - type: textarea
+    id: test_cases
+    attributes:
+      label: Test cases
+      description: One row per case. IDs follow TC-<requirement ID>-<nn> (see docs/main/test_plan_v1.md).
+      value: |
+        | Done | Test case | Requirement | Method | What to check |
+        |---|---|---|---|---|
+        | [ ] | TC-FR-XXX-000-01 | FR-XXX-000 | Test | |
+    validations: { required: true }
+  - type: textarea
+    id: dependencies
+    attributes: { label: Depends on, placeholder: "US-05, SP-02" }
+  - type: checkboxes
+    id: dod
+    attributes:
+      label: Definition of done
+      options:
+        - label: Code reviewed and merged; CI green on Windows and Ubuntu
+        - label: Test cases pass and results recorded
+        - label: No secrets or protected tests in bundles, logs or prompts
+        - label: Docs updated; demonstrated in the sprint review

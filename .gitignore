@@ -1,0 +1,21 @@
+node_modules/
+dist/
+out/
+release/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.turbo/
+.env
+.env.*
+!.env.example
+*.log
+coverage/
+.DS_Store
+*.sqlite
+*.sqlite-journal
+# NOTE: content/ holds protected tests and reference solutions, so this repository must stay
+# private (FR-CONT-001). They are excluded from bundles by services/content-ci (BR-07).

@@ -1,0 +1,20 @@
+{
+  "cases": [
+    {
+      "name": "expired",
+      "expect": 401
+    },
+    {
+      "name": "wrong-audience",
+      "expect": 401
+    },
+    {
+      "name": "bad-signature",
+      "expect": 401
+    },
+    {
+      "name": "missing",
+      "expect": 401
+    }
+  ]
+}

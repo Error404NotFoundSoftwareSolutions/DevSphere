@@ -1,0 +1,13 @@
+[project]
+name = "devsphere-grader"
+version = "0.0.0"
+description = "Grading service: Orchestrator and Runner"
+requires-python = ">=3.12"
+dependencies = ["cryptography>=43", "pyyaml>=6"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["grader"]

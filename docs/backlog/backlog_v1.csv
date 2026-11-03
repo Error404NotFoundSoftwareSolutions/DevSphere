@@ -1,0 +1,61 @@
+Sprint,Release,Story ID,Title,User story,Functional requirements,Non-functional requirements,Requirement count
+0,-,SP-01,"Electron shell spike (native modules, packaging, terminal)",Closes TBD-01 (resolved as Option B). Pass criteria in SAD Section 4.1 (S1).,,,0
+0,-,SP-02,Sign-in spike,Closes TBD-02 (S2).,,,0
+0,-,SP-03,Grader sandbox spike,Closes TBD-03 (S3).,,,0
+0,-,SP-04,Cost and vendor comparison,Closes TBD-06 and TBD-13 (S4).,,,0
+0,-,SP-05,Legal review: age policy and retention,Closes TBD-08 and TBD-09 (S5).,,,0
+0,-,SP-06,"Repository, CI skeleton and definition of done","Set up content repo, app repo, CI, and run tools/gen_rtm.py and tools/check_sad.py on each change.",,,0
+1,MVP,US-01,Sign in with Google,"As a student, I can sign in with my Google account through my browser, so that I do not create a new password.",FR-AUTH-001; FR-AUTH-002; FR-AUTH-003; FR-AUTH-004; FR-AUTH-005; FR-AUTH-006; FR-AUTH-007; FR-AUTH-008; FR-AUTH-009,NFR-SEC-004; NFR-SEC-006,11
+1,MVP,US-02,"Privacy notice, consent and age check","As a student, I see what data is collected and agree before I continue, so that I stay in control of my data.",FR-PROF-001; FR-PROF-010,,2
+1,MVP,US-03,Create and manage my profile,"As a student, I can set my name and optional college details, and only I can see them.",FR-PROF-002; FR-PROF-003; FR-PROF-004; FR-PROF-005; FR-PROF-006; FR-PROF-007; FR-PROF-008,,7
+1,MVP,US-04,Request data export or deletion,"As a student, I can ask for my data to be exported or deleted, and the action is audited.",FR-PROF-009,NFR-SEC-013,2
+1,MVP,US-05,Backend foundation (technical enabler),"As the team, we have an API contract, structured logs with correlation IDs, database migrations and generated traceability, so that later work stays consistent.",,NFR-MAINT-001; NFR-MAINT-004; NFR-MAINT-006; NFR-TEST-003,4
+2,MVP,US-06,Browse the lab catalogue,"As a student, I can see available labs with difficulty, prerequisites and supported systems.",FR-CAT-001; FR-CAT-002; FR-CAT-003,,3
+2,MVP,US-07,Download and cache a verified lab bundle,"As a student, I can download a lab, trust that it is unmodified, and open it offline.",FR-CAT-004; FR-CAT-007; FR-CAT-008,,3
+2,MVP,US-08,Keep my attempt on one lab version,"As a student, my attempt does not change when a new lab version is published, and I am told a newer one exists.",FR-CAT-005; FR-CAT-006,,2
+2,MVP,US-09,Author a lab as files with CI checks,"As a content author, I write a lab as files and CI proves the starter fails, the reference solution passes and results are repeatable.",FR-CONT-001; FR-CONT-002; FR-CONT-003; FR-CONT-004; FR-CONT-005,NFR-MAINT-002; NFR-LEGAL-002,7
+2,MVP,US-10,"Publish, roll back and record content","As an operator, I approve a lab, publish an immutable version, roll back by republishing, and keep a record of who published what.",FR-CONT-006; FR-CONT-007; FR-CONT-008; FR-CONT-009,NFR-MAINT-003; NFR-LEGAL-001,6
+3,MVP,US-11,See whether my computer is ready,"As a student, I see which tools are ready, missing or incompatible, and nothing is reinstalled needlessly.",FR-ENV-001; FR-ENV-002; FR-ENV-003; FR-ENV-009; FR-ENV-012; FR-ENV-013,,6
+3,MVP,US-12,Approve and run setup safely,"As a student, I review a setup plan and consent before anything is installed, and nothing runs with permanent admin rights.",FR-ENV-004; FR-ENV-005; FR-ENV-006; FR-ENV-011,NFR-SEC-009; NFR-SEC-010,6
+3,MVP,US-13,Create the project environment and recover from failure,"As a student, my project environment is created from the lab's lockfile, checked afterwards, and failures explain how to recover.",FR-ENV-007; FR-ENV-008; FR-ENV-010,,3
+3,MVP,US-14,Work on Windows and a second OS,"As a student on a supported OS, the core flow works the same way.",,NFR-PORT-001; NFR-PORT-002; NFR-PORT-003; NFR-PORT-005,4
+4,MVP,US-15,Open the lab workspace,"As a student, I get an editor, terminal and my guide side by side, chosen by the lab.",FR-WS-001; FR-WS-002; FR-WS-003; FR-WS-004; FR-WS-005,NFR-MAINT-005,6
+4,MVP,US-16,Run lab tasks with limits,"As a student, I can run lab tasks that have time and output limits, and stop them at any time.",FR-EXEC-001; FR-EXEC-002; FR-EXEC-003; FR-EXEC-005; FR-EXEC-006; FR-EXEC-009,NFR-SEC-002; NFR-SEC-003,8
+4,MVP,US-17,Stay in control of what runs,"As a student, nothing risky or AI-proposed runs without my approval, and I am told which commands are tracked.",FR-EXEC-004; FR-EXEC-007; FR-EXEC-008,,3
+4,MVP,US-18,Responsive interface,"As a student, the interface stays responsive and shows progress during long operations.",,NFR-PERF-003; NFR-PERF-004,2
+5,MVP,US-19,Follow a step-by-step guide,"As a student, I follow ordered steps with copyable snippets and explanations, and can revisit completed steps.",FR-GUIDE-001; FR-GUIDE-002; FR-GUIDE-003; FR-GUIDE-004; FR-GUIDE-005; FR-GUIDE-007,,6
+5,MVP,US-20,Check my own work locally,"As a student, I can run practice checks and understanding checks, clearly labelled as unverified.",FR-GUIDE-006; FR-GUIDE-008,,2
+5,MVP,US-21,Save and recover my progress,"As a student, my progress is saved after every step and survives a crash.",FR-PROG-001; FR-PROG-002; FR-PROG-003,NFR-REL-001; NFR-REL-002,5
+5,MVP,US-22,Sync progress and work offline,"As a student, my progress syncs without duplicates, I can work offline, and I can continue on another device.",FR-PROG-004; FR-PROG-005; FR-PROG-006; FR-PROG-007,NFR-REL-003; NFR-PERF-006; NFR-PERF-007,7
+6,MVP,US-23,Ask the tutor with context I control,"As a student, I choose what the tutor sees and I give consent before my code is sent to a cloud provider.",FR-AI-001; FR-AI-004; FR-AI-012; FR-AI-014,NFR-PRIV-001; NFR-PRIV-002,6
+6,MVP,US-24,"Get hints that teach, not only answers","As a student, the tutor explains and gives progressive help up to the lab's limit and never claims code is correct.",FR-AI-006; FR-AI-007; FR-AI-008; FR-AI-016,,4
+6,MVP,US-25,AI through a protected proxy with limits,"As the team, AI requests pass through our backend that holds the key and enforces per-student limits.",FR-AI-002; FR-AI-003; FR-AI-013; FR-AI-015,NFR-COST-002; NFR-SEC-015,6
+6,MVP,US-26,Keep secrets and attacks out of prompts,"As a student, secrets are removed before sending, and malicious text in files cannot control the tutor.",FR-AI-005; FR-AI-009,NFR-SEC-005; NFR-PRIV-003,4
+6,MVP,US-27,Keep working when AI is down,"As a student, when AI fails I get a clear message and everything else keeps working.",FR-AI-010; FR-AI-011,,2
+7,MVP,US-28,Submit my work for verification,"As a student, I review which files are sent, exclude secrets, and upload a snapshot for grading.",FR-GRADE-003; FR-GRADE-004,NFR-SEC-014,3
+7,MVP,US-29,Grade in an isolated sandbox,"As the team, student code runs only in a disposable sandbox with no network and no secrets, away from our data.",FR-GRADE-005; FR-GRADE-006,NFR-SEC-007; NFR-SEC-008,4
+7,MVP,US-30,Compute official scores on the server,"As a student, I get a Verified result computed from the grader's signed output, with per-check feedback that does not reveal tests.",FR-GRADE-001; FR-GRADE-008; FR-GRADE-009; FR-GRADE-010; FR-GRADE-011,,5
+7,MVP,US-31,Practice results are labelled,"As a student, any result computed on my machine is marked Practice and never counted as official.",FR-GRADE-002,,1
+8,MVP,US-32,Reliable and repeatable grading,"As a student, resubmitting never doubles my points, grader failures are not held against me, and I see queue status and history.",FR-GRADE-012; FR-GRADE-015; FR-GRADE-016; FR-GRADE-017,NFR-REL-004; NFR-PERF-005; NFR-TEST-002,7
+8,MVP,US-33,Grader resists cheating and hostile code,"As the team, the grader rejects forged results, off-list dependencies and tampered tests, and passes our hostile-submission suite.",FR-GRADE-007; FR-GRADE-018; FR-GRADE-020; FR-GRADE-021,,4
+8,MVP,US-34,Fair scoring rules,"As a student, my setup readiness is shown apart from my score, and using the tutor never lowers my score.",FR-GRADE-013; FR-GRADE-014,,2
+9,MVP,US-35,Security review before the pilot,"As the team, we complete the threat model, dependency scanning and untrusted-input rules.",,NFR-SEC-001; NFR-SEC-011; NFR-SEC-012,3
+9,MVP,US-36,Privacy and legal readiness,"As the team, retention, legal review and access rules are approved before real students join.",,NFR-PRIV-004; NFR-PRIV-005; NFR-PRIV-006; NFR-PRIV-007,4
+9,MVP,US-37,Usability and accessibility,"As a beginner, I can find the next action, use the keyboard, and understand every error.",,NFR-UX-001; NFR-UX-002; NFR-UX-003; NFR-UX-004; NFR-UX-005; NFR-UX-006; NFR-UX-007,7
+9,MVP,US-38,Fast start and detection,"As a student, the app starts and checks my machine within the target times.",,NFR-PERF-001; NFR-PERF-002,2
+9,MVP,US-39,"Backups, degraded mode and rollback","As the team, backups are restored in a rehearsal, outages show clear messages, and bad content can be reversed.",,NFR-REL-005; NFR-REL-006; NFR-REL-007,3
+9,MVP,US-40,Cost control,"As the team, budgets and alerts exist and we report cost per active student.",,NFR-COST-001; NFR-COST-003,2
+9,MVP,US-41,Every requirement has a test record,"As the team, each MVP requirement has a named test or inspection record.",,NFR-TEST-001,1
+11,R2,US-R2-1,Browse and filter challenges,"As a student, I can find bug-fixing challenges by technology and difficulty and see my attempt history.",FR-CAT-009; FR-CAT-010; FR-PROG-008,,3
+11,R2,US-R2-2,Define and validate a challenge,"As a content author, I define a bug challenge from a reviewed repository and CI proves it fails first and passes with the fix.",FR-BUG-001; FR-BUG-002; FR-BUG-012; FR-BUG-013,,4
+11,R2,US-R2-3,Work on a clean copy of buggy code,"As a student, I get a clean copy at a pinned commit, can reset it, and the guide opens the right file.",FR-BUG-003; FR-BUG-004; FR-EXEC-010; FR-WS-006; FR-GUIDE-009,,5
+12,R2,US-R2-4,Investigate with the tutor,"As a student, the tutor guides me to reproduce, locate and test, without revealing the fix.",FR-BUG-005; FR-BUG-010,,2
+12,R2,US-R2-5,Verified bug-fix grading,"As a student, my fix is graded against hidden regression tests and out-of-scope changes are flagged.",FR-BUG-006; FR-BUG-007; FR-BUG-008; FR-BUG-009; FR-BUG-011,,5
+13,R3,US-R3-1,Check Git readiness,"As a student, I see whether Git, my Git identity and my GitHub access are each ready.",FR-GIT-001; FR-GIT-002; FR-GIT-003; FR-GIT-004; FR-GIT-005,,5
+13,R3,US-R3-2,Safe branch and remote checks,"As a student, I see repository status and the app checks my branch and remote before I open a PR.",FR-GIT-006; FR-GIT-007; FR-GIT-008; FR-GIT-009; FR-CAT-011,,5
+14,R3,US-R3-3,Get my own template repository,"As a student, I receive a personal practice repository from an approved template with my own issue variant.",FR-OSS-001; FR-OSS-002; FR-OSS-003; FR-OSS-014,NFR-LEGAL-003,5
+14,R3,US-R3-4,Track my pull request,"As a student, the platform links my PR to my attempt and I review my PR description before submitting.",FR-OSS-004; FR-OSS-005; FR-OSS-009; FR-OSS-015,,4
+15,R3,US-R3-5,Secure webhooks and CI,"As the team, webhooks are verified, duplicate events are ignored, and untrusted PR code never receives secrets.",FR-OSS-006; FR-OSS-007,NFR-SEC-016; NFR-SEC-017,4
+15,R3,US-R3-6,Points and review,"As a student, I earn points from verified PR state, never twice, and maintainers can review or override with a reason.",FR-OSS-008; FR-OSS-010; FR-OSS-011; FR-OSS-012; FR-OSS-013; FR-OSS-016; FR-OSS-017,,7
+15,R3,US-R3-7,Third operating system,"As a student on a third OS, the core flow works.",,NFR-PORT-004,1
+10,MVP,PL-01,Run the pilot (10 to 20 students) and fix findings,Acceptance gates in SRS Section 10.1; no new requirements.,,,0

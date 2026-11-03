@@ -1,0 +1,23 @@
+{
+  "name": "@devsphere/lab-schema",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Lab manifest JSON Schema and validator",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "ajv": "^8.20.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^5.1.0"
+  }
+}

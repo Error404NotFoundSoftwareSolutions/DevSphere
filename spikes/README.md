@@ -1,0 +1,25 @@
+<!--
+User story: SP-01 Electron shell spike (native modules, packaging, terminal) (Sprint 0, -)
+Requirements: none (spike or pilot)
+User story: SP-02 Sign-in spike (Sprint 0, -)
+Requirements: none (spike or pilot)
+User story: SP-03 Grader sandbox spike (Sprint 0, -)
+Requirements: none (spike or pilot)
+User story: SP-04 Cost and vendor comparison (Sprint 0, -)
+Requirements: none (spike or pilot)
+User story: SP-05 Legal review: age policy and retention (Sprint 0, -)
+Requirements: none (spike or pilot)
+Implemented here: Sprint 0: each spike ends with a written decision, then the code is deleted or moved
+-->
+
+# spikes
+
+| Spike | Question | Output |
+|---|---|---|
+| SP-01 `electron-shell/` | Do node-pty and better-sqlite3 build and package on Windows and Ubuntu? | `RESULT.md` |
+| SP-02 `signin/` | Does PKCE + provider credential sign-in work from Electron? | `RESULT.md` |
+| SP-03 `grader-sandbox/` | Can the hostile suite be contained at acceptable cost? | `RESULT.md` |
+| SP-04 | Provider and cost comparison (TBD-06, TBD-03) | `docs/DECISIONS.md` entry |
+| SP-05 | Legal review of age policy and retention (TBD-07, TBD-08) | `docs/DECISIONS.md` entry |
+
+Rule: spike code is throwaway. Record the decision in `docs/DECISIONS.md` and link it from the RESULT file.

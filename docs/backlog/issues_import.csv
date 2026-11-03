@@ -1,0 +1,2123 @@
+order,title,body,labels,milestone
+1,"[SP-01] Electron shell spike (native modules, packaging, terminal)","**Story ID:** SP-01
+**Sprint:** 0  |  **Release:** -  |  **Priority:** P0 Critical  |  **Work order:** #1 of 60
+
+## User story
+Closes TBD-01 (resolved as Option B). Pass criteria in SAD Section 4.1 (S1).
+
+## Requirements covered
+- (none: spike or pilot; pass criteria are in the story text)
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: SP-01`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+- [ ] Written result recorded in the matching `spikes/` or `tests/usability/` file
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-0,-,P0,spike",Sprint 0
+2,[SP-02] Sign-in spike,"**Story ID:** SP-02
+**Sprint:** 0  |  **Release:** -  |  **Priority:** P0 Critical  |  **Work order:** #2 of 60
+
+## User story
+Closes TBD-02 (S2).
+
+## Requirements covered
+- (none: spike or pilot; pass criteria are in the story text)
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: SP-02`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+- [ ] Written result recorded in the matching `spikes/` or `tests/usability/` file
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-0,-,P0,spike",Sprint 0
+3,[SP-03] Grader sandbox spike,"**Story ID:** SP-03
+**Sprint:** 0  |  **Release:** -  |  **Priority:** P0 Critical  |  **Work order:** #3 of 60
+
+## User story
+Closes TBD-03 (S3).
+
+## Requirements covered
+- (none: spike or pilot; pass criteria are in the story text)
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: SP-03`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+- [ ] Written result recorded in the matching `spikes/` or `tests/usability/` file
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-0,-,P0,spike",Sprint 0
+4,"[SP-06] Repository, CI skeleton and definition of done","**Story ID:** SP-06
+**Sprint:** 0  |  **Release:** -  |  **Priority:** P0 Critical  |  **Work order:** #4 of 60
+
+## User story
+Set up content repo, app repo, CI, and run tools/gen_rtm.py and tools/check_sad.py on each change.
+
+## Requirements covered
+- (none: spike or pilot; pass criteria are in the story text)
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: SP-06`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+- [ ] Written result recorded in the matching `spikes/` or `tests/usability/` file
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-0,-,P0,spike",Sprint 0
+5,[SP-04] Cost and vendor comparison,"**Story ID:** SP-04
+**Sprint:** 0  |  **Release:** -  |  **Priority:** P1 High  |  **Work order:** #5 of 60
+
+## User story
+Closes TBD-06 and TBD-13 (S4).
+
+## Requirements covered
+- (none: spike or pilot; pass criteria are in the story text)
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: SP-04`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+- [ ] Written result recorded in the matching `spikes/` or `tests/usability/` file
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-0,-,P1,spike",Sprint 0
+6,[SP-05] Legal review: age policy and retention,"**Story ID:** SP-05
+**Sprint:** 0  |  **Release:** -  |  **Priority:** P1 High  |  **Work order:** #6 of 60
+
+## User story
+Closes TBD-08 and TBD-09 (S5).
+
+## Requirements covered
+- (none: spike or pilot; pass criteria are in the story text)
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: SP-05`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+- [ ] Written result recorded in the matching `spikes/` or `tests/usability/` file
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-0,-,P1,spike",Sprint 0
+7,[US-01] Sign in with Google,"**Story ID:** US-01
+**Sprint:** 1  |  **Release:** MVP  |  **Priority:** P0 Critical  |  **Work order:** #7 of 60
+
+## User story
+As a student, I can sign in with my Google account through my browser, so that I do not create a new password.
+
+## Requirements covered
+- [ ] `FR-AUTH-001`: The Client shall offer Google sign-in using the system browser and the identity provider's supported native-application flow; an embedded web view shall not be used for sign-in.
+- [ ] `FR-AUTH-002`: The Client package shall contain no confidential OAuth client secret and no backend credential.
+- [ ] `FR-AUTH-003`: The sign-in request shall ask only for the identity scopes needed for sign-in (OpenID, profile, email).
+- [ ] `FR-AUTH-004`: The backend shall validate the signature, issuer, audience and expiry of the session token on every protected request and shall reject invalid, expired or revoked tokens.
+- [ ] `FR-AUTH-005`: The backend shall map a verified identity to a stable internal user ID using the provider's stable subject identifier, shall not use email address as the account key, and shall not create duplicate accounts for the same subject.
+- [ ] `FR-AUTH-006`: Sign-out shall remove all local session material, and a revoked or expired session shall be denied by protected APIs.
+- [ ] `FR-AUTH-007`: Session material shall be persisted only in OS-backed secure storage; if only weak storage is available, the Client shall not persist it and shall require sign-in on next start.
+- [ ] `FR-AUTH-008`: The Client shall distinguish cancelled sign-in, network failure, expired session and unverified email, and shall show a recovery action for each.
+- [ ] `FR-AUTH-009`: The backend shall determine roles from server-controlled data; a role or permission supplied by the Client shall be ignored.
+- [ ] `NFR-SEC-004`: Secrets shall be stored only in OS-backed secure storage or a server-side secret manager; plaintext storage shall not be a default or fallback.
+- [ ] `NFR-SEC-006`: The backend shall enforce authorisation on every protected operation and shall deny by default when token or role validation fails.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-01`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-AUTH-001-01` | `FR-AUTH-001` | Test | Integration, system, security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-AUTH-001-02` | `FR-AUTH-001` | Test | Integration, system, security | Sign-in cancelled in the browser: Client shows a 'cancelled' message with a retry action; no session is stored; no account is created. |
+| [ ] | `TC-FR-AUTH-002-01` | `FR-AUTH-002` | Inspection | Integration, system, security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-AUTH-002-02` | `FR-AUTH-002` | Inspection | Integration, system, security | Packaged client contains no secret: Scanner reports no secret; only the public desktop client ID is present. |
+| [ ] | `TC-FR-AUTH-003-01` | `FR-AUTH-003` | Inspection | Integration, system, security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-AUTH-004-01` | `FR-AUTH-004` | Test | Integration, system, security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-AUTH-004-02` | `FR-AUTH-004` | Test | Integration, system, security | Token validation matrix: Valid token: 200. Expired, wrong audience, wrong issuer, bad signature, revoked, missing: 401, with no data returned and an audit-safe log entry. |
+| [ ] | `TC-FR-AUTH-005-01` | `FR-AUTH-005` | Test | Integration, system, security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-AUTH-005-02` | `FR-AUTH-005` | Test | Integration, system, security | Stable account key: Same internal user ID each time; exactly one user row exists. |
+| [ ] | `TC-FR-AUTH-006-01` | `FR-AUTH-006` | Test | Integration, system, security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-AUTH-007-01` | `FR-AUTH-007` | Test | Integration, system, security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-AUTH-007-02` | `FR-AUTH-007` | Test | Integration, system, security | No secure storage available: Nothing is persisted; the Client works for the session and asks for sign-in at next start; no plaintext token on disk. |
+| [ ] | `TC-FR-AUTH-008-01` | `FR-AUTH-008` | Test | Integration, system, security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-AUTH-009-01` | `FR-AUTH-009` | Test | Integration, system, security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-AUTH-009-02` | `FR-AUTH-009` | Test | Integration, system, security | Forged role is ignored: Role is read from server data only; operator endpoint returns 403; no state change. |
+| [ ] | `TC-NFR-SEC-004-01` | `NFR-SEC-004` | Test | Security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-SEC-006-01` | `NFR-SEC-006` | Test | Security | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-1,MVP,P0,story",Sprint 1
+8,[US-05] Backend foundation (technical enabler),"**Story ID:** US-05
+**Sprint:** 1  |  **Release:** MVP  |  **Priority:** P0 Critical  |  **Work order:** #8 of 60
+
+## User story
+As the team, we have an API contract, structured logs with correlation IDs, database migrations and generated traceability, so that later work stays consistent.
+
+## Requirements covered
+- [ ] `NFR-MAINT-001`: The Client, backend, grader and content pipeline shall interact through documented interfaces; the backend contract shall be published as an OpenAPI document and client types shall be generated from it in CI.
+- [ ] `NFR-MAINT-004`: Backend logs shall be structured and carry correlation IDs across API, queue and grader, excluding secrets and student code.
+- [ ] `NFR-MAINT-006`: Database schema changes shall be applied through reviewed, versioned migrations.
+- [ ] `NFR-TEST-003`: The requirement counts and traceability matrix shall be generated by script from the requirement tables on each change to this document.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-05`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-NFR-MAINT-001-01` | `NFR-MAINT-001` | Inspection | Inspection | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-MAINT-004-01` | `NFR-MAINT-004` | Test | Inspection | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-MAINT-006-01` | `NFR-MAINT-006` | Inspection | Inspection | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-TEST-003-01` | `NFR-TEST-003` | Inspection | Inspection | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-1,MVP,P0,story",Sprint 1
+9,"[US-02] Privacy notice, consent and age check","**Story ID:** US-02
+**Sprint:** 1  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #9 of 60
+
+## User story
+As a student, I see what data is collected and agree before I continue, so that I stay in control of my data.
+
+## Requirements covered
+- [ ] `FR-PROF-001`: Before collecting any profile data, the Client shall present a privacy notice and record the student's consent with notice version and timestamp.
+- [ ] `FR-PROF-010`: The platform shall apply the age policy approved under TBD-08 at sign-up and shall record only the outcome of that check, not a date of birth.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-02`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-PROF-001-01` | `FR-PROF-001` | Test | Integration, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-PROF-010-01` | `FR-PROF-010` | Test | Integration, system | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-1,MVP,P1,story",Sprint 1
+10,[US-03] Create and manage my profile,"**Story ID:** US-03
+**Sprint:** 1  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #10 of 60
+
+## User story
+As a student, I can set my name and optional college details, and only I can see them.
+
+## Requirements covered
+- [ ] `FR-PROF-002`: On first sign-in the Client shall collect a display name (prefilled from the identity provider and editable); all other profile fields shall be optional.
+- [ ] `FR-PROF-003`: The profile shall support optional college/university, course, academic year/semester and interests; no date of birth, phone number or address shall be collected.
+- [ ] `FR-PROF-004`: The backend shall validate profile fields (type, length, allowed characters) and reject invalid input with field-level messages.
+- [ ] `FR-PROF-005`: The profile shall be created and updated for the user ID derived from the authenticated token; a user ID in a request body shall be ignored.
+- [ ] `FR-PROF-006`: A student shall be able to read only their own profile and records; operator access shall require the `operator` role and shall be audited.
+- [ ] `FR-PROF-007`: Profile data shall be private by default and shall not be visible to other students.
+- [ ] `FR-PROF-008`: A student shall be able to view and edit their profile after onboarding.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-03`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-PROF-002-01` | `FR-PROF-002` | Test | Integration, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-PROF-003-01` | `FR-PROF-003` | Inspection | Integration, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-PROF-004-01` | `FR-PROF-004` | Test | Integration, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-PROF-005-01` | `FR-PROF-005` | Test | Integration, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-PROF-005-02` | `FR-PROF-005` | Test | Integration, system | User ID in body is ignored: Student A's profile changes; B's profile is unchanged. |
+| [ ] | `TC-FR-PROF-006-01` | `FR-PROF-006` | Test | Integration, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-PROF-006-02` | `FR-PROF-006` | Test | Integration, system | Cross-student read attempt: 403 or 404 on every request; no data returned; operator read as operator succeeds and creates an audit event. |
+| [ ] | `TC-FR-PROF-007-01` | `FR-PROF-007` | Test | Integration, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-PROF-008-01` | `FR-PROF-008` | Test | Integration, system | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-1,MVP,P1,story",Sprint 1
+11,[US-04] Request data export or deletion,"**Story ID:** US-04
+**Sprint:** 1  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #11 of 60
+
+## User story
+As a student, I can ask for my data to be exported or deleted, and the action is audited.
+
+## Requirements covered
+- [ ] `FR-PROF-009`: The platform shall provide a documented route for a student to request data export and account deletion; fulfilment procedures and timelines shall follow the retention policy (TBD-09).
+- [ ] `NFR-SEC-013`: Security-relevant actions (role changes, publications, score corrections, data export/deletion) shall create audit events with actor, target, time and reason, and no secret values.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-04`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-PROF-009-01` | `FR-PROF-009` | Inspection | Integration, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-SEC-013-01` | `NFR-SEC-013` | Test | Security | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-1,MVP,P1,story",Sprint 1
+12,[US-07] Download and cache a verified lab bundle,"**Story ID:** US-07
+**Sprint:** 2  |  **Release:** MVP  |  **Priority:** P0 Critical  |  **Work order:** #12 of 60
+
+## User story
+As a student, I can download a lab, trust that it is unmodified, and open it offline.
+
+## Requirements covered
+- [ ] `FR-CAT-004`: Published lab bundles shall be immutable and checksummed, and the Client shall verify the checksum before use.
+- [ ] `FR-CAT-007`: The backend shall deliver only published bundles that the student is authorised to access, and no bundle delivered to the Client shall contain protected tests or reference solutions.
+- [ ] `FR-CAT-008`: The Client shall cache downloaded bundles for offline use and show each cached bundle's version and whether a newer version is available.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-07`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-CAT-004-01` | `FR-CAT-004` | Test | Unit, integration | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-CAT-004-02` | `FR-CAT-004` | Test | Unit, integration | Tampered cached bundle: Checksum mismatch is detected; bundle is not used; student is told to re-download. |
+| [ ] | `TC-FR-CAT-007-01` | `FR-CAT-007` | Test | Unit, integration | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-CAT-007-02` | `FR-CAT-007` | Test | Unit, integration | No protected material delivered: No canary string found anywhere. |
+| [ ] | `TC-FR-CAT-008-01` | `FR-CAT-008` | Test | Unit, integration | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-2,MVP,P0,story",Sprint 2
+13,[US-06] Browse the lab catalogue,"**Story ID:** US-06
+**Sprint:** 2  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #13 of 60
+
+## User story
+As a student, I can see available labs with difficulty, prerequisites and supported systems.
+
+## Requirements covered
+- [ ] `FR-CAT-001`: The Client shall list published labs with title, description, difficulty, objectives, prerequisites, estimated effort, workspace type and supported operating systems.
+- [ ] `FR-CAT-002`: Each lab shall be defined by a manifest conforming to a versioned schema, and the Client shall validate the manifest before using it.
+- [ ] `FR-CAT-003`: The Client shall reject a manifest with an unsupported schema version and show a compatibility message instead of failing silently.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-06`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-CAT-001-01` | `FR-CAT-001` | Test | Unit, integration | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-CAT-002-01` | `FR-CAT-002` | Test | Unit, integration | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-CAT-003-01` | `FR-CAT-003` | Test | Unit, integration | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-2,MVP,P1,story",Sprint 2
+14,[US-08] Keep my attempt on one lab version,"**Story ID:** US-08
+**Sprint:** 2  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #14 of 60
+
+## User story
+As a student, my attempt does not change when a new lab version is published, and I am told a newer one exists.
+
+## Requirements covered
+- [ ] `FR-CAT-005`: An attempt shall be pinned at start to the bundle version, rubric version and evaluator version, and shall retain them for its lifetime.
+- [ ] `FR-CAT-006`: Publishing a new version shall not change an in-progress attempt; the Client shall notify the student that a newer version exists and let the student start a new attempt.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-08`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-CAT-005-01` | `FR-CAT-005` | Test | Unit, integration | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-CAT-006-01` | `FR-CAT-006` | Test | Unit, integration | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-CAT-006-02` | `FR-CAT-006` | Test | Unit, integration | New version during an attempt: The attempt keeps v1, rubric and evaluator versions; a 'newer version available' notice appears; a new attempt uses v2. |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-2,MVP,P1,story",Sprint 2
+15,[US-09] Author a lab as files with CI checks,"**Story ID:** US-09
+**Sprint:** 2  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #15 of 60
+
+## User story
+As a content author, I write a lab as files and CI proves the starter fails, the reference solution passes and results are repeatable.
+
+## Requirements covered
+- [ ] `FR-CONT-001`: Labs shall be stored as files (manifest, guide, tests, reference solution) in a private, version-controlled content repository with access limited to authors and operators, and changes shall be accepted only through reviewed pull requests.
+- [ ] `FR-CONT-002`: CI shall validate each lab's manifest against the schema, check that referenced assets and links exist, check prerequisites against the supported toolchain, and check that rubric weights sum to the declared maximum.
+- [ ] `FR-CONT-003`: CI shall run the lab's reference solution against the complete test set and shall fail the build if any required test fails.
+- [ ] `FR-CONT-004`: CI shall run the lab's starter state against the tests and shall fail the build if the starter does not produce the failures the lab expects.
+- [ ] `FR-CONT-005`: CI shall run the test set at least N times (N in TBD-11) against the reference solution and shall fail the build if results are inconsistent.
+- [ ] `NFR-MAINT-002`: Adding a lab shall require only content files (manifest, guide, tests) and CI, with no Client release.
+- [ ] `NFR-LEGAL-002`: Lab text shall not state or imply that a third-party service is free, unlimited or permanently available; it shall point to the provider's current terms and show a last-verified date.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-09`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-CONT-001-01` | `FR-CONT-001` | Inspection | CI evidence | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-CONT-002-01` | `FR-CONT-002` | Test | CI evidence | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-CONT-002-02` | `FR-CONT-002` | Test | CI evidence | Broken content: CI fails for each, naming the defect. |
+| [ ] | `TC-FR-CONT-003-01` | `FR-CONT-003` | Test | CI evidence | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-CONT-003-02` | `FR-CONT-003` | Test | CI evidence | Reference solution fails a required test: CI fails and names the failing test; publication is blocked. |
+| [ ] | `TC-FR-CONT-004-01` | `FR-CONT-004` | Test | CI evidence | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-CONT-004-02` | `FR-CONT-004` | Test | CI evidence | Starter already passes: CI fails with 'starter does not produce expected failures'. |
+| [ ] | `TC-FR-CONT-005-01` | `FR-CONT-005` | Test | CI evidence | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-CONT-005-02` | `FR-CONT-005` | Test | CI evidence | Nondeterministic test: CI fails on inconsistent results. |
+| [ ] | `TC-NFR-MAINT-002-01` | `NFR-MAINT-002` | Demonstration | Inspection | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-LEGAL-002-01` | `NFR-LEGAL-002` | Inspection | Inspection | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-2,MVP,P1,story",Sprint 2
+16,"[US-10] Publish, roll back and record content","**Story ID:** US-10
+**Sprint:** 2  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #16 of 60
+
+## User story
+As an operator, I approve a lab, publish an immutable version, roll back by republishing, and keep a record of who published what.
+
+## Requirements covered
+- [ ] `FR-CONT-006`: On approval, CI shall publish an immutable, checksummed bundle to private bundle storage (delivered only through the authenticated API, FR-CAT-007) and protected tests only to private grader storage.
+- [ ] `FR-CONT-007`: Rolling back a lab shall publish a new version containing the earlier content; historical versions shall be retained and not modified.
+- [ ] `FR-CONT-008`: Each publication shall record the source commit, the approving person, the timestamp and the bundle checksum.
+- [ ] `FR-CONT-009`: Lab content that references third-party service documentation shall carry a last-verified date, and CI shall flag entries older than the threshold in TBD-12.
+- [ ] `NFR-MAINT-003`: All third-party dependencies shall be inventoried with version, licence and update owner.
+- [ ] `NFR-LEGAL-001`: The product shall preserve licence notices and comply with the licences of integrated tools, libraries, fonts and content.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-10`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-CONT-006-01` | `FR-CONT-006` | Test | CI evidence | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-CONT-007-01` | `FR-CONT-007` | Test | CI evidence | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-CONT-007-02` | `FR-CONT-007` | Test | CI evidence | Rollback: A new version v3 exists with content identical to v1 (same file hashes); v1 and v2 are unchanged; the rollback is recorded. |
+| [ ] | `TC-FR-CONT-008-01` | `FR-CONT-008` | Test | CI evidence | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-CONT-009-01` | `FR-CONT-009` | Test | CI evidence | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-MAINT-003-01` | `NFR-MAINT-003` | Inspection | Inspection | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-LEGAL-001-01` | `NFR-LEGAL-001` | Inspection | Inspection | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-2,MVP,P1,story",Sprint 2
+17,[US-11] See whether my computer is ready,"**Story ID:** US-11
+**Sprint:** 3  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #17 of 60
+
+## User story
+As a student, I see which tools are ready, missing or incompatible, and nothing is reinstalled needlessly.
+
+## Requirements covered
+- [ ] `FR-ENV-001`: The Client shall detect the operating system, version, CPU architecture, free disk space and total and available memory.
+- [ ] `FR-ENV-002`: The Client shall detect whether each prerequisite declared by the lab (at least Python, `uv` and Git) is installed and report its version and location.
+- [ ] `FR-ENV-003`: The Client shall compare detected versions with the lab's declared constraints and report each prerequisite as ready, missing or incompatible.
+- [ ] `FR-ENV-009`: A prerequisite that already satisfies the lab's constraints shall count as ready and shall not be reinstalled.
+- [ ] `FR-ENV-012`: The student shall be able to re-run prerequisite checks after changing the environment.
+- [ ] `FR-ENV-013`: The Client shall report an unsupported OS, architecture or tool version clearly and shall not present an untested configuration as supported.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-11`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-ENV-001-01` | `FR-ENV-001` | Test | Unit, system (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-ENV-002-01` | `FR-ENV-002` | Test | Unit, system (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-ENV-003-01` | `FR-ENV-003` | Test | Unit, system (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-ENV-009-01` | `FR-ENV-009` | Test | Unit, system (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-ENV-009-02` | `FR-ENV-009` | Test | Unit, system (each OS) | Compatible Python already present: Python is reported ready; the setup plan has no Python install step; readiness credit is recorded. |
+| [ ] | `TC-FR-ENV-012-01` | `FR-ENV-012` | Test | Unit, system (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-ENV-013-01` | `FR-ENV-013` | Test | Unit, system (each OS) | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-3,MVP,P1,story",Sprint 3
+18,[US-12] Approve and run setup safely,"**Story ID:** US-12
+**Sprint:** 3  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #18 of 60
+
+## User story
+As a student, I review a setup plan and consent before anything is installed, and nothing runs with permanent admin rights.
+
+## Requirements covered
+- [ ] `FR-ENV-004`: Before any change, the Client shall show a setup plan listing what will change, why, the source, expected download size, required permissions and any restart.
+- [ ] `FR-ENV-005`: The Client shall obtain explicit consent before installing software, changing system settings or starting services, and shall make no such change if consent is withheld.
+- [ ] `FR-ENV-006`: The Client shall not run persistently with administrator/root privileges and shall request elevation only for the single operation that needs it.
+- [ ] `FR-ENV-011`: Downloads used for setup shall come from official sources and shall be verified by checksum or signature where the source provides one.
+- [ ] `NFR-SEC-009`: The Client shall not run student code or setup tasks as administrator/root by default.
+- [ ] `NFR-SEC-010`: Application updates and downloaded installers shall be verified by signature or checksum.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-12`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-ENV-004-01` | `FR-ENV-004` | Test | Unit, system (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-ENV-005-01` | `FR-ENV-005` | Test | Unit, system (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-ENV-005-02` | `FR-ENV-005` | Test | Unit, system (each OS) | Consent declined: No change to the system; the lab shows 'not ready' with the reason. |
+| [ ] | `TC-FR-ENV-006-01` | `FR-ENV-006` | Test | Unit, system (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-ENV-006-02` | `FR-ENV-006` | Test | Unit, system (each OS) | No persistent elevation: The Client process is not elevated; elevation is requested for the single step only. |
+| [ ] | `TC-FR-ENV-011-01` | `FR-ENV-011` | Test | Unit, system (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-SEC-009-01` | `NFR-SEC-009` | Test | Security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-SEC-010-01` | `NFR-SEC-010` | Test | Security | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-3,MVP,P1,story",Sprint 3
+19,[US-13] Create the project environment and recover from failure,"**Story ID:** US-13
+**Sprint:** 3  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #19 of 60
+
+## User story
+As a student, my project environment is created from the lab's lockfile, checked afterwards, and failures explain how to recover.
+
+## Requirements covered
+- [ ] `FR-ENV-007`: Project dependencies shall be installed into an isolated project environment using `uv` by default, with `venv` and `pip` as fallback, and shall honour the lab's lockfile.
+- [ ] `FR-ENV-008`: After any setup step the Client shall verify success by re-detecting the tool and, where applicable, running a harmless validation command, and shall not report success without that verification.
+- [ ] `FR-ENV-010`: When a setup step fails, the Client shall show the failure, recovery guidance and a log with secrets removed, and shall clean up or clearly report any partial state.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-13`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-ENV-007-01` | `FR-ENV-007` | Test | Unit, system (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-ENV-008-01` | `FR-ENV-008` | Test | Unit, system (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-ENV-008-02` | `FR-ENV-008` | Test | Unit, system (each OS) | Success is verified, not assumed: Re-detection fails; the step is reported as failed. |
+| [ ] | `TC-FR-ENV-010-01` | `FR-ENV-010` | Test | Unit, system (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-ENV-010-02` | `FR-ENV-010` | Test | Unit, system (each OS) | Network lost during a download: Failure is shown with recovery guidance; partial files are cleaned up or reported; a redacted log is available. |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-3,MVP,P1,story",Sprint 3
+20,[US-14] Work on Windows and a second OS,"**Story ID:** US-14
+**Sprint:** 3  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #20 of 60
+
+## User story
+As a student on a supported OS, the core flow works the same way.
+
+## Requirements covered
+- [ ] `NFR-PORT-001`: Core MVP functions shall work on Windows and the second supported OS selected in TBD-04.
+- [ ] `NFR-PORT-002`: OS-specific behaviour shall be encapsulated in platform adapters, not in lab content.
+- [ ] `NFR-PORT-003`: Lab manifests shall declare supported OS, architecture and tool-version constraints.
+- [ ] `NFR-PORT-005`: [Option B] Native modules shall be rebuilt for the Electron ABI and smoke-tested in CI on each supported OS.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-14`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-NFR-PORT-001-01` | `NFR-PORT-001` | Test | System (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-PORT-002-01` | `NFR-PORT-002` | Inspection | System (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-PORT-003-01` | `NFR-PORT-003` | Inspection | System (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-PORT-005-01` | `NFR-PORT-005` | Test | System (each OS) | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-3,MVP,P1,story",Sprint 3
+21,[US-16] Run lab tasks with limits,"**Story ID:** US-16
+**Sprint:** 4  |  **Release:** MVP  |  **Priority:** P0 Critical  |  **Work order:** #21 of 60
+
+## User story
+As a student, I can run lab tasks that have time and output limits, and stop them at any time.
+
+## Requirements covered
+- [ ] `FR-EXEC-001`: The Client shall run approved tasks in the lab's declared working directory.
+- [ ] `FR-EXEC-002`: Processes shall be started with an executable and an argument list, with a validated working directory; student-controlled values (file names, branch names, text) shall never be interpolated into a shell command string.
+- [ ] `FR-EXEC-003`: For tasks run through the managed terminal or task runner, the Client shall record the command, start and end time, exit code and bounded, secret-redacted output.
+- [ ] `FR-EXEC-005`: The student shall be able to stop any process the Client started, and the Client shall terminate that process's children where the OS allows.
+- [ ] `FR-EXEC-006`: Managed tasks shall have configurable time and output-size limits with defaults set in TBD-13.
+- [ ] `FR-EXEC-009`: When a task is blocked by permissions, a missing dependency or a limit, the Client shall say which and suggest a fix.
+- [ ] `NFR-SEC-002`: The Client UI layer shall have no direct unrestricted shell or filesystem access; privileged operations shall pass through a narrow, schema-validated interface.
+- [ ] `NFR-SEC-003`: [Option B] If a custom desktop shell is used, the renderer shall run with context isolation and sandboxing enabled, Node integration disabled, a restrictive content security policy, and an allow-listed IPC surface.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-16`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-EXEC-001-01` | `FR-EXEC-001` | Test | Unit, system (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-EXEC-002-01` | `FR-EXEC-002` | Test | Unit, system (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-EXEC-002-02` | `FR-EXEC-002` | Test | Unit, system (each OS) | Shell metacharacters in names: Names are treated as literal data; a canary file that an injected command would create is not created. |
+| [ ] | `TC-FR-EXEC-003-01` | `FR-EXEC-003` | Test | Unit, system (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-EXEC-005-01` | `FR-EXEC-005` | Test | Unit, system (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-EXEC-005-02` | `FR-EXEC-005` | Test | Unit, system (each OS) | Stop a task with children: Task and children end; none remain after 5 seconds. |
+| [ ] | `TC-FR-EXEC-006-01` | `FR-EXEC-006` | Test | Unit, system (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-EXEC-006-02` | `FR-EXEC-006` | Test | Unit, system (each OS) | Runaway task: Stopped at the time or output limit; limit reached message shown; UI stays responsive. |
+| [ ] | `TC-FR-EXEC-009-01` | `FR-EXEC-009` | Test | Unit, system (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-SEC-002-01` | `NFR-SEC-002` | Test | Security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-SEC-003-01` | `NFR-SEC-003` | Test | Security | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-4,MVP,P0,story",Sprint 4
+22,[US-17] Stay in control of what runs,"**Story ID:** US-17
+**Sprint:** 4  |  **Release:** MVP  |  **Priority:** P0 Critical  |  **Work order:** #22 of 60
+
+## User story
+As a student, nothing risky or AI-proposed runs without my approval, and I am told which commands are tracked.
+
+## Requirements covered
+- [ ] `FR-EXEC-004`: The Client shall not claim knowledge of commands run in terminals it does not manage.
+- [ ] `FR-EXEC-007`: The Client shall obtain consent before an action that deletes data, modifies files outside the lab workspace, or uses the network beyond what the lab declares.
+- [ ] `FR-EXEC-008`: A command proposed by the tutor shall never run without explicit student approval.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-17`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-EXEC-004-01` | `FR-EXEC-004` | Inspection | Unit, system (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-EXEC-007-01` | `FR-EXEC-007` | Test | Unit, system (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-EXEC-008-01` | `FR-EXEC-008` | Test | Unit, system (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-EXEC-008-02` | `FR-EXEC-008` | Test | Unit, system (each OS) | Tutor proposes a destructive command: Nothing runs without approval; declining leaves no change; approval runs only the shown command through the normal consent step. |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-4,MVP,P0,story",Sprint 4
+23,[US-15] Open the lab workspace,"**Story ID:** US-15
+**Sprint:** 4  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #23 of 60
+
+## User story
+As a student, I get an editor, terminal and my guide side by side, chosen by the lab.
+
+## Requirements covered
+- [ ] `FR-WS-001`: The Client shall select the workspace from the lab manifest.
+- [ ] `FR-WS-002`: The code workspace shall provide file navigation, editing, Python syntax support, an integrated terminal and execution of declared tasks.
+- [ ] `FR-WS-003`: Workspace-specific code shall sit behind a documented, versioned interface so that further workspace types can be added without changes to the guide, tutor or grading logic.
+- [ ] `FR-WS-004`: If a declared workspace type or dependency is unavailable, the Client shall show a recovery path and shall remain usable for other labs.
+- [ ] `FR-WS-005`: The guide, tutor and results views shall remain available alongside the workspace.
+- [ ] `NFR-MAINT-005`: Lab projects shall use standard repository and file formats in a documented, user-accessible directory so students can continue working outside the platform.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-15`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-WS-001-01` | `FR-WS-001` | Test | System, demonstration | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-WS-002-01` | `FR-WS-002` | Demonstration | System, demonstration | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-WS-003-01` | `FR-WS-003` | Inspection | System, demonstration | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-WS-004-01` | `FR-WS-004` | Test | System, demonstration | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-WS-005-01` | `FR-WS-005` | Demonstration | System, demonstration | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-MAINT-005-01` | `NFR-MAINT-005` | Inspection | Inspection | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-4,MVP,P1,story",Sprint 4
+24,[US-18] Responsive interface,"**Story ID:** US-18
+**Sprint:** 4  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #24 of 60
+
+## User story
+As a student, the interface stays responsive and shows progress during long operations.
+
+## Requirements covered
+- [ ] `NFR-PERF-003`: The Client UI shall remain responsive while setup, tests, AI requests and downloads run.
+- [ ] `NFR-PERF-004`: The Client shall show progress for any operation expected to take longer than 2 seconds.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-18`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-NFR-PERF-003-01` | `NFR-PERF-003` | Test | Performance | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-PERF-004-01` | `NFR-PERF-004` | Test | Performance | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-4,MVP,P1,story",Sprint 4
+25,[US-19] Follow a step-by-step guide,"**Story ID:** US-19
+**Sprint:** 5  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #25 of 60
+
+## User story
+As a student, I follow ordered steps with copyable snippets and explanations, and can revisit completed steps.
+
+## Requirements covered
+- [ ] `FR-GUIDE-001`: A lab shall present ordered, structured guide steps.
+- [ ] `FR-GUIDE-002`: A step shall support explanatory text, instructions, code snippets, commands, file paths, expected output and references.
+- [ ] `FR-GUIDE-003`: The Client shall provide a copy action that places exactly the snippet text, with original whitespace and without interface labels, on the clipboard.
+- [ ] `FR-GUIDE-004`: Code examples shall be accompanied by explanations of the important sections.
+- [ ] `FR-GUIDE-005`: The Client shall track guide-step completion independently of code correctness and environment readiness.
+- [ ] `FR-GUIDE-007`: The student shall be able to revisit completed steps.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-19`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-GUIDE-001-01` | `FR-GUIDE-001` | Test | System | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GUIDE-002-01` | `FR-GUIDE-002` | Test | System | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GUIDE-003-01` | `FR-GUIDE-003` | Test | System | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GUIDE-004-01` | `FR-GUIDE-004` | Inspection | System | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GUIDE-005-01` | `FR-GUIDE-005` | Test | System | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GUIDE-007-01` | `FR-GUIDE-007` | Test | System | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-5,MVP,P1,story",Sprint 5
+26,[US-20] Check my own work locally,"**Story ID:** US-20
+**Sprint:** 5  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #26 of 60
+
+## User story
+As a student, I can run practice checks and understanding checks, clearly labelled as unverified.
+
+## Requirements covered
+- [ ] `FR-GUIDE-006`: A step may declare a practice check that the student can run locally, and the Client shall show its outcome labelled Practice (unverified).
+- [ ] `FR-GUIDE-008`: A lab may include multiple-choice understanding checks, which the Client shall score deterministically, and modification tasks verified by tests. Free-text explanations shall be stored and shown with formative feedback only and shall not be scored in the MVP.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-20`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-GUIDE-006-01` | `FR-GUIDE-006` | Test | System | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GUIDE-008-01` | `FR-GUIDE-008` | Test | System | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-5,MVP,P1,story",Sprint 5
+27,[US-21] Save and recover my progress,"**Story ID:** US-21
+**Sprint:** 5  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #27 of 60
+
+## User story
+As a student, my progress is saved after every step and survives a crash.
+
+## Requirements covered
+- [ ] `FR-PROG-001`: The system shall record, per attempt, the selected lab, state, completed steps and results.
+- [ ] `FR-PROG-002`: The Client shall show labs as not started, in progress, completed or failed.
+- [ ] `FR-PROG-003`: The Client shall save local progress after each completed step and each task or evaluation event, and shall recover it after an abnormal exit.
+- [ ] `NFR-REL-001`: A failure in the workspace, a lab process or the tutor shall not crash the Client or lose saved progress.
+- [ ] `NFR-REL-002`: The Client shall report a setup, submission or external action as successful only after confirming the resulting state.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-21`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-PROG-001-01` | `FR-PROG-001` | Test | Unit, integration, fault injection | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-PROG-002-01` | `FR-PROG-002` | Test | Unit, integration, fault injection | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-PROG-003-01` | `FR-PROG-003` | Test | Unit, integration, fault injection | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-PROG-003-02` | `FR-PROG-003` | Test | Unit, integration, fault injection | Crash recovery: On restart, completed steps and results are restored; the incomplete step is shown as incomplete. |
+| [ ] | `TC-NFR-REL-001-01` | `NFR-REL-001` | Test | Fault injection | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-REL-002-01` | `NFR-REL-002` | Test | Fault injection | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-5,MVP,P1,story",Sprint 5
+28,[US-22] Sync progress and work offline,"**Story ID:** US-22
+**Sprint:** 5  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #28 of 60
+
+## User story
+As a student, my progress syncs without duplicates, I can work offline, and I can continue on another device.
+
+## Requirements covered
+- [ ] `FR-PROG-004`: The Client shall sync progress through the authenticated API using client-generated event IDs, with at-least-once delivery, and the backend shall apply each event idempotently.
+- [ ] `FR-PROG-005`: Step completions shall merge as a set union across devices; verified results are server-authoritative and are never overwritten by Client data.
+- [ ] `FR-PROG-006`: The Client shall show the last sync time and number of pending events, shall allow offline work on cached labs, and shall explain that verified grading and tutor use need connectivity.
+- [ ] `FR-PROG-007`: After sign-in on another device, progress state and results shall be available; source files shall not be synchronised, and the Client shall say so.
+- [ ] `NFR-REL-003`: Synchronisation shall recover from network loss without duplicate progress, submissions or points.
+- [ ] `NFR-PERF-006`: Catalogue and progress lists shall use pagination or incremental loading.
+- [ ] `NFR-PERF-007`: Output captured by the Client and Grader shall be size-limited to bound memory and disk use.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-22`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-PROG-004-01` | `FR-PROG-004` | Test | Unit, integration, fault injection | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-PROG-004-02` | `FR-PROG-004` | Test | Unit, integration, fault injection | Replayed and interrupted sync: No duplicate event; no lost event; pending count returns to zero. |
+| [ ] | `TC-FR-PROG-005-01` | `FR-PROG-005` | Test | Unit, integration, fault injection | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-PROG-005-02` | `FR-PROG-005` | Test | Unit, integration, fault injection | Two devices offline: Step completions are the union; the client-sent verified result is ignored. |
+| [ ] | `TC-FR-PROG-006-01` | `FR-PROG-006` | Test | Unit, integration, fault injection | Offline behaviour: Cached lab, workspace and practice checks work; the UI shows last sync and pending events and explains that grading and tutor need a connection. |
+| [ ] | `TC-FR-PROG-007-01` | `FR-PROG-007` | Test | Unit, integration, fault injection | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-REL-003-01` | `NFR-REL-003` | Test | Fault injection | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-PERF-006-01` | `NFR-PERF-006` | Test | Performance | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-PERF-007-01` | `NFR-PERF-007` | Test | Performance | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-5,MVP,P1,story",Sprint 5
+29,[US-26] Keep secrets and attacks out of prompts,"**Story ID:** US-26
+**Sprint:** 6  |  **Release:** MVP  |  **Priority:** P0 Critical  |  **Work order:** #29 of 60
+
+## User story
+As a student, secrets are removed before sending, and malicious text in files cannot control the tutor.
+
+## Requirements covered
+- [ ] `FR-AI-005`: Before a request leaves the device, the Client shall redact detected secrets and shall exclude protected tests, reference solutions and files outside the workspace.
+- [ ] `FR-AI-009`: Repository files, terminal output and guide text supplied to the tutor shall be treated as untrusted and shall not be able to change tutor policy, expand context or grant tool permissions.
+- [ ] `NFR-SEC-005`: Secrets shall be redacted from logs, telemetry, crash reports, AI requests, screenshots exported by the Client and evaluation output.
+- [ ] `NFR-PRIV-003`: Diagnostic telemetry shall be minimal and shall not contain source code, prompt content or secret values by default.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-26`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-AI-005-01` | `FR-AI-005` | Test | Unit, integration, prompt set | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-AI-005-02` | `FR-AI-005` | Test | Unit, integration, prompt set | Secrets in tutor context: No secret and no protected file content in the outbound request; redaction is also applied by the backend. |
+| [ ] | `TC-FR-AI-009-01` | `FR-AI-009` | Test | Unit, integration, prompt set | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-AI-009-02` | `FR-AI-009` | Test | Unit, integration, prompt set | Prompt injection in files and output: Policy, level and context are unchanged; no tool or command is granted or run; deterministic checks pass. |
+| [ ] | `TC-NFR-SEC-005-01` | `NFR-SEC-005` | Test | Security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-PRIV-003-01` | `NFR-PRIV-003` | Test | Security, inspection | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-6,MVP,P0,story",Sprint 6
+30,[US-23] Ask the tutor with context I control,"**Story ID:** US-23
+**Sprint:** 6  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #30 of 60
+
+## User story
+As a student, I choose what the tutor sees and I give consent before my code is sent to a cloud provider.
+
+## Requirements covered
+- [ ] `FR-AI-001`: The Client shall provide a text tutor within the active lab.
+- [ ] `FR-AI-004`: The tutor shall receive only the context the student has permitted for the session (current step, selected code, recent task output), shall default to minimal context, and the Client shall show what is shared.
+- [ ] `FR-AI-012`: The Client shall show the active provider and model.
+- [ ] `FR-AI-014`: The Client shall disclose that prompts and selected code are sent to a cloud AI provider and shall obtain consent before first use.
+- [ ] `NFR-PRIV-001`: The Client shall disclose when code, prompts or logs leave the device and to which service.
+- [ ] `NFR-PRIV-002`: The student shall be able to turn off sharing of workspace context with the tutor; the tutor shall continue to work from the question and current step.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-23`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-AI-001-01` | `FR-AI-001` | Demonstration | Unit, integration, prompt set | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-AI-004-01` | `FR-AI-004` | Test | Unit, integration, prompt set | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-AI-012-01` | `FR-AI-012` | Test | Unit, integration, prompt set | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-AI-014-01` | `FR-AI-014` | Test | Unit, integration, prompt set | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-PRIV-001-01` | `NFR-PRIV-001` | Test | Security, inspection | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-PRIV-002-01` | `NFR-PRIV-002` | Test | Security, inspection | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-6,MVP,P1,story",Sprint 6
+31,"[US-24] Get hints that teach, not only answers","**Story ID:** US-24
+**Sprint:** 6  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #31 of 60
+
+## User story
+As a student, the tutor explains and gives progressive help up to the lab's limit and never claims code is correct.
+
+## Requirements covered
+- [ ] `FR-AI-006`: The tutor shall offer progressive assistance (concept, hint, pseudocode, partial example, guided debugging, worked example) up to a per-lab maximum level that is set by the lab bundle and applied by the backend proxy; a level requested by the Client above that maximum shall be ignored.
+- [ ] `FR-AI-007`: The tutor shall explain errors and give actionable guidance instead of only replacing code.
+- [ ] `FR-AI-008`: The tutor shall label its output as suggestions and shall not state that code is correct or passing until a test confirms it.
+- [ ] `FR-AI-016`: The tutor shall not execute commands or edit files without explicit student approval.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-24`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-AI-006-01` | `FR-AI-006` | Test | Unit, integration, prompt set | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-AI-006-02` | `FR-AI-006` | Test | Unit, integration, prompt set | Level cap is applied by the backend: Backend uses level 3 and logs it; response follows level 3 policy. |
+| [ ] | `TC-FR-AI-007-01` | `FR-AI-007` | Demonstration | Unit, integration, prompt set | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-AI-008-01` | `FR-AI-008` | Test | Unit, integration, prompt set | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-AI-016-01` | `FR-AI-016` | Test | Unit, integration, prompt set | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-6,MVP,P1,story",Sprint 6
+32,[US-25] AI through a protected proxy with limits,"**Story ID:** US-25
+**Sprint:** 6  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #32 of 60
+
+## User story
+As the team, AI requests pass through our backend that holds the key and enforces per-student limits.
+
+## Requirements covered
+- [ ] `FR-AI-002`: Cloud AI requests shall pass through a backend proxy that holds the provider credential; no AI provider key shall exist in the Client.
+- [ ] `FR-AI-003`: The tutor shall use a provider interface so that a provider can be replaced without changing tutor policy or guide logic.
+- [ ] `FR-AI-013`: The student shall be able to cancel a request, and the backend shall enforce per-user rate, request-size and time limits.
+- [ ] `FR-AI-015`: The backend shall not retain prompt or response content beyond request handling unless the student opts in; retained metadata shall be limited to provider, model, status and latency.
+- [ ] `NFR-COST-002`: AI and verified-grading usage shall be limited per student (defaults in TBD-13).
+- [ ] `NFR-SEC-015`: The backend shall apply rate limits to sign-in, AI, submission and profile endpoints.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-25`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-AI-002-01` | `FR-AI-002` | Inspection | Unit, integration, prompt set | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-AI-003-01` | `FR-AI-003` | Inspection | Unit, integration, prompt set | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-AI-013-01` | `FR-AI-013` | Test | Unit, integration, prompt set | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-AI-015-01` | `FR-AI-015` | Inspection | Unit, integration, prompt set | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-AI-015-02` | `FR-AI-015` | Inspection | Unit, integration, prompt set | No content retention by default: Only provider, model, status and latency are stored; no prompt or response text; with opt-in enabled, content is stored and the opt-in is recorded. |
+| [ ] | `TC-NFR-COST-002-01` | `NFR-COST-002` | Test | Inspection, demonstration | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-SEC-015-01` | `NFR-SEC-015` | Test | Security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-SEC-015-02` | `NFR-SEC-015` | Test | Security | Rate limits: 429 with retry information after the limit; normal use is unaffected. |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-6,MVP,P1,story",Sprint 6
+33,[US-27] Keep working when AI is down,"**Story ID:** US-27
+**Sprint:** 6  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #33 of 60
+
+## User story
+As a student, when AI fails I get a clear message and everything else keeps working.
+
+## Requirements covered
+- [ ] `FR-AI-010`: The provider layer shall classify failures as authentication, quota/rate limit, network, timeout or outage; shall retry only within a bounded policy; and shall not repeatedly retry an invalid credential.
+- [ ] `FR-AI-011`: When AI is unavailable, the guide, editor, terminal, practice checks and verified grading shall remain usable and the Client shall say that AI is unavailable.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-27`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-AI-010-01` | `FR-AI-010` | Test | Unit, integration, prompt set | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-AI-010-02` | `FR-AI-010` | Test | Unit, integration, prompt set | Provider failure classes: Each is classified correctly; 401 is not retried; others retry within the bounded policy; the Client shows a matching message. |
+| [ ] | `TC-FR-AI-011-01` | `FR-AI-011` | Test | Unit, integration, prompt set | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-AI-011-02` | `FR-AI-011` | Test | Unit, integration, prompt set | AI is unavailable: All other functions work; 'AI unavailable' is shown. |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-6,MVP,P1,story",Sprint 6
+34,[US-28] Submit my work for verification,"**Story ID:** US-28
+**Sprint:** 7  |  **Release:** MVP  |  **Priority:** P0 Critical  |  **Work order:** #34 of 60
+
+## User story
+As a student, I review which files are sent, exclude secrets, and upload a snapshot for grading.
+
+## Requirements covered
+- [ ] `FR-GRADE-003`: The student shall be able to submit a snapshot for verified grading, and the Client shall label the returned result Verified.
+- [ ] `FR-GRADE-004`: Before upload, the Client shall show which files will be submitted, exclude ignored and secret-bearing paths (including `.env` files) by default, enforce size and file-type limits, and obtain student confirmation.
+- [ ] `NFR-SEC-014`: Archive and file handling in the Client, API and Grader shall prevent path traversal, symbolic-link escape and decompression bombs.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-28`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-GRADE-003-01` | `FR-GRADE-003` | Test | Integration, security, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GRADE-004-01` | `FR-GRADE-004` | Test | Integration, security, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GRADE-004-02` | `FR-GRADE-004` | Test | Integration, security, system | Snapshot contents: File list is shown; secret-bearing and ignored paths are excluded by default; oversize or disallowed files are blocked with a reason; student must confirm. |
+| [ ] | `TC-NFR-SEC-014-01` | `NFR-SEC-014` | Test | Security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-SEC-014-02` | `NFR-SEC-014` | Test | Security | Hostile archives in all three components: Each component rejects them; no file is written outside the target directory. |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-7,MVP,P0,story",Sprint 7
+35,[US-29] Grade in an isolated sandbox,"**Story ID:** US-29
+**Sprint:** 7  |  **Release:** MVP  |  **Priority:** P0 Critical  |  **Work order:** #35 of 60
+
+## User story
+As the team, student code runs only in a disposable sandbox with no network and no secrets, away from our data.
+
+## Requirements covered
+- [ ] `FR-GRADE-005`: The Grader shall run the snapshot against the pinned visible and protected tests in a disposable sandbox that is non-root, has no network by default, has CPU, memory, time, process and output limits, and has no access to secrets or application data.
+- [ ] `FR-GRADE-006`: The Grader environment shall run in a project or environment separate from the application database and production secrets.
+- [ ] `NFR-SEC-007`: The Grader sandbox shall isolate student code from the host, network, other submissions and platform secrets, and the isolation level shall be justified by the threat model (TBD-03).
+- [ ] `NFR-SEC-008`: Protected tests, reference solutions and grader credentials shall exist only in grader-controlled storage and shall not be returned by any student-facing API.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-29`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-GRADE-005-01` | `FR-GRADE-005` | Test | Integration, security, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GRADE-006-01` | `FR-GRADE-006` | Inspection | Integration, security, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-SEC-007-01` | `NFR-SEC-007` | Analysis | Security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-SEC-008-01` | `NFR-SEC-008` | Test | Security | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-7,MVP,P0,story",Sprint 7
+36,[US-30] Compute official scores on the server,"**Story ID:** US-30
+**Sprint:** 7  |  **Release:** MVP  |  **Priority:** P0 Critical  |  **Work order:** #36 of 60
+
+## User story
+As a student, I get a Verified result computed from the grader's signed output, with per-check feedback that does not reveal tests.
+
+## Requirements covered
+- [ ] `FR-GRADE-001`: Each lab shall declare an evaluator and a versioned rubric.
+- [ ] `FR-GRADE-008`: Each check result shall be one of passed, failed, skipped, blocked or not-applicable, with points, a reason code and student-safe feedback that does not reveal protected test source.
+- [ ] `FR-GRADE-009`: The backend shall compute the score from the Grader's signed result; a score, rank, rubric version or evaluator version supplied by the Client shall be ignored.
+- [ ] `FR-GRADE-010`: Each verified result shall record bundle version, rubric version, evaluator version, snapshot hash, sandbox image version and timestamp.
+- [ ] `FR-GRADE-011`: Score records shall be immutable; a correction shall be a new record with actor, reason and timestamp.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-30`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-GRADE-001-01` | `FR-GRADE-001` | Inspection | Integration, security, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GRADE-008-01` | `FR-GRADE-008` | Test | Integration, security, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GRADE-009-01` | `FR-GRADE-009` | Test | Integration, security, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GRADE-009-02` | `FR-GRADE-009` | Test | Integration, security, system | Client-supplied score fields: All are ignored; the stored score comes only from the signed grader result. |
+| [ ] | `TC-FR-GRADE-009-03` | `FR-GRADE-009` | Test | Integration, security, system | Forged grader result: All rejected; no score record is written. |
+| [ ] | `TC-FR-GRADE-010-01` | `FR-GRADE-010` | Test | Integration, security, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GRADE-011-01` | `FR-GRADE-011` | Test | Integration, security, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GRADE-011-02` | `FR-GRADE-011` | Test | Integration, security, system | Score correction: A new record with actor, reason and time is added; the original record is unchanged; an update or delete of a score row is refused. |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-7,MVP,P0,story",Sprint 7
+37,[US-31] Practice results are labelled,"**Story ID:** US-31
+**Sprint:** 7  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #37 of 60
+
+## User story
+As a student, any result computed on my machine is marked Practice and never counted as official.
+
+## Requirements covered
+- [ ] `FR-GRADE-002`: The Client shall run practice checks locally (file assertions, task outcomes, visible tests) and label every such result Practice (unverified).
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-31`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-GRADE-002-01` | `FR-GRADE-002` | Test | Integration, security, system | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-7,MVP,P1,story",Sprint 7
+38,[US-33] Grader resists cheating and hostile code,"**Story ID:** US-33
+**Sprint:** 8  |  **Release:** MVP  |  **Priority:** P0 Critical  |  **Work order:** #38 of 60
+
+## User story
+As the team, the grader rejects forged results, off-list dependencies and tampered tests, and passes our hostile-submission suite.
+
+## Requirements covered
+- [ ] `FR-GRADE-007`: Before the pilot, the Grader shall pass sandbox-escape, resource-exhaustion, path-traversal, archive-extraction and result-forgery tests defined in the Test Plan.
+- [ ] `FR-GRADE-018`: The evaluator shall not treat AI output, a student's statement or the existence of a file alone as proof that a feature works.
+- [ ] `FR-GRADE-020`: The Grader shall build a lab's execution environment from the lab's locked dependency set prepared before grading (prebuilt image or offline package cache) and shall not download packages at grading time; a submission that needs a dependency outside that set shall receive a clear ""dependency not allowed"" result.
+- [ ] `FR-GRADE-021`: The Grader shall run protected tests with a trusted harness that ignores student-supplied test configuration (for example conftest files, pytest plugins and settings), and shall mark the run blocked if the set of executed test IDs differs from the pinned test manifest.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-33`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-GRADE-007-01` | `FR-GRADE-007` | Test | Integration, security, system | Hostile suite: Every case ends with its listed outcome; grader stays healthy; no effect outside the sandbox. |
+| [ ] | `TC-FR-GRADE-018-01` | `FR-GRADE-018` | Inspection | Integration, security, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GRADE-020-01` | `FR-GRADE-020` | Test | Integration, security, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GRADE-020-02` | `FR-GRADE-020` | Test | Integration, security, system | Dependency outside the locked set: Result 'dependency not allowed'; no network connection attempted; run is not scored as a pass. |
+| [ ] | `TC-FR-GRADE-021-01` | `FR-GRADE-021` | Test | Integration, security, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GRADE-021-02` | `FR-GRADE-021` | Test | Integration, security, system | Tampered harness inputs: Student configuration is ignored; if executed test IDs differ from the pinned manifest the run is blocked; the result is never passed. |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-8,MVP,P0,story",Sprint 8
+39,[US-32] Reliable and repeatable grading,"**Story ID:** US-32
+**Sprint:** 8  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #39 of 60
+
+## User story
+As a student, resubmitting never doubles my points, grader failures are not held against me, and I see queue status and history.
+
+## Requirements covered
+- [ ] `FR-GRADE-012`: Submitting the same snapshot hash for the same attempt, and retrying a grading job, shall not create a duplicate result or duplicate points.
+- [ ] `FR-GRADE-015`: The system shall distinguish a student failure from an infrastructure error (Grader unavailable, timeout of the service); infrastructure errors shall not count against the student and shall allow retry.
+- [ ] `FR-GRADE-016`: The backend shall limit verified submissions per student and attempt, show queued/running/completed status, and keep the history of submissions.
+- [ ] `FR-GRADE-017`: The system shall retain enough non-secret evidence to explain why points were awarded or withheld.
+- [ ] `NFR-REL-004`: Grading jobs shall be retried within a bounded policy after transient infrastructure failure, and failed jobs shall be visible to operators.
+- [ ] `NFR-PERF-005`: For a standard MVP lab, a verified submission shall return a result within 120 seconds at the 95th percentile under pilot load (target; TBD-10).
+- [ ] `NFR-TEST-002`: Verified results shall be reproducible for the same snapshot, bundle, rubric, evaluator and sandbox image, except for tests declared nondeterministic (none are permitted in the MVP).
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-32`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-GRADE-012-01` | `FR-GRADE-012` | Test | Integration, security, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GRADE-012-02` | `FR-GRADE-012` | Test | Integration, security, system | Duplicate submission and redelivery: One evaluation run and one score record exist; points are awarded once. |
+| [ ] | `TC-FR-GRADE-015-01` | `FR-GRADE-015` | Test | Integration, security, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GRADE-015-02` | `FR-GRADE-015` | Test | Integration, security, system | Infrastructure failure: Run is retried within the bounded policy; if it still fails it is shown as an infrastructure error, not a student failure; it is visible to operators; quota is not consumed; resubmit works. |
+| [ ] | `TC-FR-GRADE-016-01` | `FR-GRADE-016` | Test | Integration, security, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GRADE-017-01` | `FR-GRADE-017` | Test | Integration, security, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-REL-004-01` | `NFR-REL-004` | Test | Fault injection | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-PERF-005-01` | `NFR-PERF-005` | Test | Performance | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-PERF-005-02` | `NFR-PERF-005` | Test | Performance | Grading latency under load: 95th percentile total time is within target; no job lost; queue drains. |
+| [ ] | `TC-NFR-TEST-002-01` | `NFR-TEST-002` | Test | Inspection | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-TEST-002-02` | `NFR-TEST-002` | Test | Inspection | Reproducible verified results: All five results are identical. |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-8,MVP,P1,story",Sprint 8
+40,[US-34] Fair scoring rules,"**Story ID:** US-34
+**Sprint:** 8  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #40 of 60
+
+## User story
+As a student, my setup readiness is shown apart from my score, and using the tutor never lowers my score.
+
+## Requirements covered
+- [ ] `FR-GRADE-013`: Environment readiness shall be reported separately from the lab score.
+- [ ] `FR-GRADE-014`: The use of the tutor shall not reduce a score, and prompt count, token count and time spent shall not be score inputs.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-34`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-GRADE-013-01` | `FR-GRADE-013` | Test | Integration, security, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GRADE-014-01` | `FR-GRADE-014` | Inspection | Integration, security, system | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-8,MVP,P1,story",Sprint 8
+41,[US-35] Security review before the pilot,"**Story ID:** US-35
+**Sprint:** 9  |  **Release:** MVP  |  **Priority:** P0 Critical  |  **Work order:** #41 of 60
+
+## User story
+As the team, we complete the threat model, dependency scanning and untrusted-input rules.
+
+## Requirements covered
+- [ ] `NFR-SEC-001`: Student code, dependencies, archives, project files, AI output and (R3) PR content shall be treated as untrusted input.
+- [ ] `NFR-SEC-011`: A threat model covering authentication, the Grader, secrets, AI prompt injection and content publication shall be completed and reviewed before the pilot.
+- [ ] `NFR-SEC-012`: Dependencies shall be scanned for known vulnerabilities in CI, and a process for handling findings shall exist before the pilot.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-35`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-NFR-SEC-001-01` | `NFR-SEC-001` | Analysis | Security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-SEC-011-01` | `NFR-SEC-011` | Analysis | Security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-SEC-012-01` | `NFR-SEC-012` | Inspection | Security | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-9,MVP,P0,story",Sprint 9
+42,[US-36] Privacy and legal readiness,"**Story ID:** US-36
+**Sprint:** 9  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #42 of 60
+
+## User story
+As the team, retention, legal review and access rules are approved before real students join.
+
+## Requirements covered
+- [ ] `NFR-PRIV-004`: The platform shall document what data is stored, why, for how long and how to delete it, and shall approve a retention schedule before the pilot (TBD-09).
+- [ ] `NFR-PRIV-005`: The platform shall complete a legal review covering applicable privacy law (including India's Digital Personal Data Protection Act, 2023) and the treatment of users under 18 before the pilot (TBD-08).
+- [ ] `NFR-PRIV-006`: Student profile fields shall be limited to those in FR-PROF-003 unless a new field is approved through change control.
+- [ ] `NFR-PRIV-007`: Stored student snapshots and records shall be accessible only to the owning student and authorised operators.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-36`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-NFR-PRIV-004-01` | `NFR-PRIV-004` | Inspection | Security, inspection | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-PRIV-005-01` | `NFR-PRIV-005` | Inspection | Security, inspection | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-PRIV-006-01` | `NFR-PRIV-006` | Inspection | Security, inspection | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-PRIV-007-01` | `NFR-PRIV-007` | Test | Security, inspection | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-9,MVP,P1,story",Sprint 9
+43,[US-37] Usability and accessibility,"**Story ID:** US-37
+**Sprint:** 9  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #43 of 60
+
+## User story
+As a beginner, I can find the next action, use the keyboard, and understand every error.
+
+## Requirements covered
+- [ ] `NFR-UX-001`: In usability sessions with beginner participants, a majority shall be able to identify the next required action on the active lab screen without help (success threshold; TBD-14).
+- [ ] `NFR-UX-002`: Setup instructions shall state what the tool is, why the lab needs it, what will change and how success is verified.
+- [ ] `NFR-UX-003`: The Client shall use consistent status terms for ready, missing, installing, verifying, failed, passed and blocked.
+- [ ] `NFR-UX-004`: Primary controls shall be reachable by keyboard with a visible focus indicator.
+- [ ] `NFR-UX-005`: The Client shall aim for WCAG 2.2 AA principles where applicable, with deviations recorded.
+- [ ] `NFR-UX-006`: Every error message shall state the problem and a recommended recovery action.
+- [ ] `NFR-UX-007`: The student shall be able to request more detail or a higher assistance level from the tutor without restarting the lab, within the lab's maximum level.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-37`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-NFR-UX-001-01` | `NFR-UX-001` | Test | Usability | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-UX-002-01` | `NFR-UX-002` | Inspection | Usability | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-UX-003-01` | `NFR-UX-003` | Inspection | Usability | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-UX-004-01` | `NFR-UX-004` | Test | Usability | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-UX-005-01` | `NFR-UX-005` | Inspection | Usability | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-UX-006-01` | `NFR-UX-006` | Inspection | Usability | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-UX-007-01` | `NFR-UX-007` | Test | Usability | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-9,MVP,P1,story",Sprint 9
+44,[US-38] Fast start and detection,"**Story ID:** US-38
+**Sprint:** 9  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #44 of 60
+
+## User story
+As a student, the app starts and checks my machine within the target times.
+
+## Requirements covered
+- [ ] `NFR-PERF-001`: On the reference machine, the Client shall become usable within 10 seconds of launch, excluding first-run installation (target; TBD-07).
+- [ ] `NFR-PERF-002`: Detection of the standard prerequisite set shall complete within 30 seconds on a healthy machine, excluding downloads (target; TBD-07).
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-38`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-NFR-PERF-001-01` | `NFR-PERF-001` | Test | Performance | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-PERF-002-01` | `NFR-PERF-002` | Test | Performance | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-9,MVP,P1,story",Sprint 9
+45,"[US-39] Backups, degraded mode and rollback","**Story ID:** US-39
+**Sprint:** 9  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #45 of 60
+
+## User story
+As the team, backups are restored in a rehearsal, outages show clear messages, and bad content can be reversed.
+
+## Requirements covered
+- [ ] `NFR-REL-005`: Automated backups of the application database shall be enabled and a restore shall be tested before the pilot.
+- [ ] `NFR-REL-006`: The backend shall return clear degraded-mode responses when identity, database, storage or queue dependencies are unavailable.
+- [ ] `NFR-REL-007`: Material changes to published bundles shall be reversible by publishing an earlier content version (FR-CONT-007).
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-39`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-NFR-REL-005-01` | `NFR-REL-005` | Test | Fault injection | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-REL-005-02` | `NFR-REL-005` | Test | Fault injection | Restore rehearsal: Row counts and checksums of key tables match; restore time is recorded; the application starts against the restored data. |
+| [ ] | `TC-NFR-REL-006-01` | `NFR-REL-006` | Test | Fault injection | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-REL-007-01` | `NFR-REL-007` | Test | Fault injection | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-9,MVP,P1,story",Sprint 9
+46,[US-40] Cost control,"**Story ID:** US-40
+**Sprint:** 9  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #46 of 60
+
+## User story
+As the team, budgets and alerts exist and we report cost per active student.
+
+## Requirements covered
+- [ ] `NFR-COST-001`: Budgets and alerts shall be configured for cloud, AI and grading costs before the pilot.
+- [ ] `NFR-COST-003`: The team shall report cost per active student for the pilot.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-40`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-NFR-COST-001-01` | `NFR-COST-001` | Inspection | Inspection, demonstration | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-COST-003-01` | `NFR-COST-003` | Demonstration | Inspection, demonstration | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-9,MVP,P1,story",Sprint 9
+47,[US-41] Every requirement has a test record,"**Story ID:** US-41
+**Sprint:** 9  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #47 of 60
+
+## User story
+As the team, each MVP requirement has a named test or inspection record.
+
+## Requirements covered
+- [ ] `NFR-TEST-001`: Every MVP requirement shall have at least one test case or other verification record named `TC-<requirement ID>-<nn>` or an equivalent inspection record.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-41`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-NFR-TEST-001-01` | `NFR-TEST-001` | Inspection | Inspection | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-9,MVP,P1,story",Sprint 9
+48,[PL-01] Run the pilot (10 to 20 students) and fix findings,"**Story ID:** PL-01
+**Sprint:** 10  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #48 of 60
+
+## User story
+Acceptance gates in SRS Section 10.1; no new requirements.
+
+## Requirements covered
+- (none: spike or pilot; pass criteria are in the story text)
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: PL-01`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+- [ ] Written result recorded in the matching `spikes/` or `tests/usability/` file
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-10,MVP,P1,pilot",Sprint 10
+49,[US-R2-1] Browse and filter challenges,"**Story ID:** US-R2-1
+**Sprint:** 11  |  **Release:** R2  |  **Priority:** P2 Medium  |  **Work order:** #49 of 60
+
+## User story
+As a student, I can find bug-fixing challenges by technology and difficulty and see my attempt history.
+
+## Requirements covered
+- [ ] `FR-CAT-009`: The catalogue shall support filtering by technology and difficulty.
+- [ ] `FR-CAT-010`: The catalogue shall list bug-fixing challenges.
+- [ ] `FR-PROG-008`: The Client shall show attempt history and score changes over time.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-R2-1`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-CAT-009-01` | `FR-CAT-009` | Test | Unit, integration | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-CAT-010-01` | `FR-CAT-010` | Test | Unit, integration | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-PROG-008-01` | `FR-PROG-008` | Test | Unit, integration, fault injection | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-11,R2,P2,story",Sprint 11
+50,[US-R2-2] Define and validate a challenge,"**Story ID:** US-R2-2
+**Sprint:** 11  |  **Release:** R2  |  **Priority:** P2 Medium  |  **Work order:** #50 of 60
+
+## User story
+As a content author, I define a bug challenge from a reviewed repository and CI proves it fails first and passes with the fix.
+
+## Requirements covered
+- [ ] `FR-BUG-001`: A challenge shall define the repository snapshot pinned to a commit, issue description, expected behaviour, reproduction steps, constraints, difficulty, environment, visible tests and a reference to protected tests.
+- [ ] `FR-BUG-002`: CI shall verify that the starter state reproduces the issue (declared tests fail), that the reference fix passes all tests, and that regression tests pass on the reference fix.
+- [ ] `FR-BUG-012`: Only curated, reviewed repositories shall be offered; arbitrary public repositories shall not be supported.
+- [ ] `FR-BUG-013`: Setup commands for a challenge shall come from the reviewed manifest; setup scripts supplied inside a challenge repository shall not run automatically.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-R2-2`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-BUG-001-01` | `FR-BUG-001` | Inspection | Integration, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-BUG-002-01` | `FR-BUG-002` | Test | Integration, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-BUG-012-01` | `FR-BUG-012` | Inspection | Integration, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-BUG-013-01` | `FR-BUG-013` | Test | Integration, system | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-11,R2,P2,story",Sprint 11
+51,[US-R2-3] Work on a clean copy of buggy code,"**Story ID:** US-R2-3
+**Sprint:** 11  |  **Release:** R2  |  **Priority:** P2 Medium  |  **Work order:** #51 of 60
+
+## User story
+As a student, I get a clean copy at a pinned commit, can reset it, and the guide opens the right file.
+
+## Requirements covered
+- [ ] `FR-BUG-003`: The Client shall provision a clean working copy at the pinned commit.
+- [ ] `FR-BUG-004`: The student shall be able to inspect and modify the code, run the reproduction and run visible tests.
+- [ ] `FR-EXEC-010`: The Client shall be able to reset a challenge workspace to its starter state on request.
+- [ ] `FR-WS-006`: The code workspace shall provide Python language-server diagnostics.
+- [ ] `FR-GUIDE-009`: A guide step shall be able to open a specific file and location in the workspace.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-R2-3`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-BUG-003-01` | `FR-BUG-003` | Test | Integration, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-BUG-004-01` | `FR-BUG-004` | Demonstration | Integration, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-EXEC-010-01` | `FR-EXEC-010` | Test | Unit, system (each OS) | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-WS-006-01` | `FR-WS-006` | Test | System, demonstration | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GUIDE-009-01` | `FR-GUIDE-009` | Test | System | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-11,R2,P2,story",Sprint 11
+52,[US-R2-4] Investigate with the tutor,"**Story ID:** US-R2-4
+**Sprint:** 12  |  **Release:** R2  |  **Priority:** P2 Medium  |  **Work order:** #52 of 60
+
+## User story
+As a student, the tutor guides me to reproduce, locate and test, without revealing the fix.
+
+## Requirements covered
+- [ ] `FR-BUG-005`: The tutor in this mode shall guide investigation (reproduce, locate, hypothesise, test) under a per-challenge assistance policy and shall not reveal the reference fix or protected tests.
+- [ ] `FR-BUG-010`: The Client may request a short explanation of the root cause and fix, which shall be stored with formative feedback.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-R2-4`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-BUG-005-01` | `FR-BUG-005` | Test | Integration, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-BUG-010-01` | `FR-BUG-010` | Test | Integration, system | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-12,R2,P2,story",Sprint 12
+53,[US-R2-5] Verified bug-fix grading,"**Story ID:** US-R2-5
+**Sprint:** 12  |  **Release:** R2  |  **Priority:** P2 Medium  |  **Work order:** #53 of 60
+
+## User story
+As a student, my fix is graded against hidden regression tests and out-of-scope changes are flagged.
+
+## Requirements covered
+- [ ] `FR-BUG-006`: Verified grading shall check that the issue is resolved and that protected regression tests pass.
+- [ ] `FR-BUG-007`: Protected tests shall include cases that differ from the visible tests, so that hard-coding visible expectations does not pass.
+- [ ] `FR-BUG-008`: The Grader shall flag changes to files outside the permitted scope for review.
+- [ ] `FR-BUG-009`: A challenge shall not be scored as fully passed solely because code changed or the tutor proposed a change.
+- [ ] `FR-BUG-011`: The system shall store challenge version, attempt ID, commit or diff hash, test results and score.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-R2-5`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-BUG-006-01` | `FR-BUG-006` | Test | Integration, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-BUG-007-01` | `FR-BUG-007` | Test | Integration, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-BUG-007-02` | `FR-BUG-007` | Test | Integration, system | Hard-coded visible expectations (R2): Protected variants fail; the challenge is not scored as fully passed. |
+| [ ] | `TC-FR-BUG-008-01` | `FR-BUG-008` | Test | Integration, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-BUG-009-01` | `FR-BUG-009` | Test | Integration, system | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-BUG-011-01` | `FR-BUG-011` | Test | Integration, system | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-12,R2,P2,story",Sprint 12
+54,[US-R3-1] Check Git readiness,"**Story ID:** US-R3-1
+**Sprint:** 13  |  **Release:** R3  |  **Priority:** P3 Low  |  **Work order:** #54 of 60
+
+## User story
+As a student, I see whether Git, my Git identity and my GitHub access are each ready.
+
+## Requirements covered
+- [ ] `FR-GIT-001`: The Client shall detect Git and report its version and path.
+- [ ] `FR-GIT-002`: The Client shall show the effective Git `user.name` and `user.email` and explain that they are commit metadata, not authentication.
+- [ ] `FR-GIT-003`: The Client shall check Git identity, Git transport authentication and platform GitHub authorisation as three separate readiness items.
+- [ ] `FR-GIT-004`: The Client shall guide GitHub CLI browser authentication over HTTPS as the recommended path and SSH as an optional path, and shall verify SSH connectivity without reading or transmitting the private key.
+- [ ] `FR-GIT-005`: The Client and tutor shall never ask a student to paste a personal access token or private key into the application or the tutor.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-R3-1`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-GIT-001-01` | `FR-GIT-001` | Test | System | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GIT-002-01` | `FR-GIT-002` | Test | System | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GIT-003-01` | `FR-GIT-003` | Test | System | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GIT-004-01` | `FR-GIT-004` | Test | System | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GIT-005-01` | `FR-GIT-005` | Test | System | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-13,R3,P3,story",Sprint 13
+55,[US-R3-2] Safe branch and remote checks,"**Story ID:** US-R3-2
+**Sprint:** 13  |  **Release:** R3  |  **Priority:** P3 Low  |  **Work order:** #55 of 60
+
+## User story
+As a student, I see repository status and the app checks my branch and remote before I open a PR.
+
+## Requirements covered
+- [ ] `FR-GIT-006`: The Client shall verify that `origin` points to the student's repository and, where used, `upstream` to the template, and that work is on a task branch rather than the base branch.
+- [ ] `FR-GIT-007`: Branch names and repository URLs shall be validated and shall not be able to inject options or commands into Git invocations.
+- [ ] `FR-GIT-008`: The Client shall show repository status, changed files, diff and history for the challenge workspace.
+- [ ] `FR-GIT-009`: Before the student opens a PR, the Client shall verify branch, remote and commit state.
+- [ ] `FR-CAT-011`: The catalogue shall list contribution challenges.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-R3-2`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-GIT-006-01` | `FR-GIT-006` | Test | System | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GIT-007-01` | `FR-GIT-007` | Test | System | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GIT-008-01` | `FR-GIT-008` | Test | System | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-GIT-009-01` | `FR-GIT-009` | Test | System | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-CAT-011-01` | `FR-CAT-011` | Test | Unit, integration | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-13,R3,P3,story",Sprint 13
+56,[US-R3-3] Get my own template repository,"**Story ID:** US-R3-3
+**Sprint:** 14  |  **Release:** R3  |  **Priority:** P3 Low  |  **Work order:** #56 of 60
+
+## User story
+As a student, I receive a personal practice repository from an approved template with my own issue variant.
+
+## Requirements covered
+- [ ] `FR-OSS-001`: The platform shall create, through its GitHub App, a repository for each student or cohort from an approved template in a platform-owned organisation, with access limited to that student and maintainers.
+- [ ] `FR-OSS-002`: A contribution challenge shall define repository, issue or variant, base branch, difficulty, acceptance criteria, contribution guidelines and scoring policy.
+- [ ] `FR-OSS-003`: Challenges shall support per-student issue variants to reduce copying.
+- [ ] `FR-OSS-014`: Before a template is offered, its licence, contribution guide, issue and PR templates, CI and branch rules shall be verified.
+- [ ] `NFR-LEGAL-003`: [R3] Each template repository shall have an approved licence and contribution policy before use.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-R3-3`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-OSS-001-01` | `FR-OSS-001` | Test | Integration, security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-OSS-002-01` | `FR-OSS-002` | Inspection | Integration, security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-OSS-003-01` | `FR-OSS-003` | Inspection | Integration, security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-OSS-014-01` | `FR-OSS-014` | Inspection | Integration, security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-LEGAL-003-01` | `NFR-LEGAL-003` | Inspection | Inspection | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-14,R3,P3,story",Sprint 14
+57,[US-R3-4] Track my pull request,"**Story ID:** US-R3-4
+**Sprint:** 14  |  **Release:** R3  |  **Priority:** P3 Low  |  **Work order:** #57 of 60
+
+## User story
+As a student, the platform links my PR to my attempt and I review my PR description before submitting.
+
+## Requirements covered
+- [ ] `FR-OSS-004`: The system shall associate an attempt with the student's repository, branch, commits and PR.
+- [ ] `FR-OSS-005`: The system shall validate that a PR targets the expected repository and base branch before treating it as a submission.
+- [ ] `FR-OSS-009`: The system shall track PR opened, checks passed, approved and merged or closed as separate states.
+- [ ] `FR-OSS-015`: The Client may prefill a PR description, but the student shall review and explicitly submit it.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-R3-4`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-OSS-004-01` | `FR-OSS-004` | Test | Integration, security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-OSS-005-01` | `FR-OSS-005` | Test | Integration, security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-OSS-005-02` | `FR-OSS-005` | Test | Integration, security | Wrong target (R3): Not treated as a submission; the student is told why. |
+| [ ] | `TC-FR-OSS-009-01` | `FR-OSS-009` | Test | Integration, security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-OSS-015-01` | `FR-OSS-015` | Test | Integration, security | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-14,R3,P3,story",Sprint 14
+58,[US-R3-5] Secure webhooks and CI,"**Story ID:** US-R3-5
+**Sprint:** 15  |  **Release:** R3  |  **Priority:** P3 Low  |  **Work order:** #58 of 60
+
+## User story
+As the team, webhooks are verified, duplicate events are ignored, and untrusted PR code never receives secrets.
+
+## Requirements covered
+- [ ] `FR-OSS-006`: Automated checks for a PR shall run with least-privilege tokens and no repository secrets on untrusted code, and protected tests shall run on the Grader against the PR head commit.
+- [ ] `FR-OSS-007`: The webhook endpoint shall verify the signature of each delivery, deduplicate deliveries, tolerate out-of-order and repeated events, enqueue work, and never execute PR code in the request.
+- [ ] `NFR-SEC-016`: [R3] GitHub App private keys and webhook secrets shall be held only in the server-side secret manager, with least-privilege installation permissions.
+- [ ] `NFR-SEC-017`: [R3] Workflows that run untrusted PR code shall not use privileged triggers or tokens with write access or secrets.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-R3-5`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-OSS-006-01` | `FR-OSS-006` | Test | Integration, security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-OSS-006-02` | `FR-OSS-006` | Test | Integration, security | Fork-PR secret access (R3): Secrets are empty and write access is denied. |
+| [ ] | `TC-FR-OSS-007-01` | `FR-OSS-007` | Test | Integration, security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-OSS-007-02` | `FR-OSS-007` | Test | Integration, security | Webhook forgery, replay, disorder (R3): Bad signature rejected; replay deduplicated; final PR state is correct; no PR code is run in the request. |
+| [ ] | `TC-NFR-SEC-016-01` | `NFR-SEC-016` | Inspection | Security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-NFR-SEC-017-01` | `NFR-SEC-017` | Test | Security | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-15,R3,P3,story",Sprint 15
+59,[US-R3-6] Points and review,"**Story ID:** US-R3-6
+**Sprint:** 15  |  **Release:** R3  |  **Priority:** P3 Low  |  **Work order:** #59 of 60
+
+## User story
+As a student, I earn points from verified PR state, never twice, and maintainers can review or override with a reason.
+
+## Requirements covered
+- [ ] `FR-OSS-008`: Contribution points shall be computed from the state of the PR (head commit and check conclusions), not from counting events.
+- [ ] `FR-OSS-010`: Provisional points shall be awarded from verified checks; approval or merge shall not be required for points and delayed review shall not reduce points.
+- [ ] `FR-OSS-011`: An automated review comment shall be labelled advisory, and human maintainers shall review a sample of PRs and any graduation contribution.
+- [ ] `FR-OSS-012`: The system shall never merge a student PR automatically.
+- [ ] `FR-OSS-013`: A maintainer override of an automated outcome shall record actor, timestamp and reason.
+- [ ] `FR-OSS-016`: The system shall not award duplicate points to the same student for the same challenge and qualifying PR state.
+- [ ] `FR-OSS-017`: Student repositories shall be archived or deleted according to the retention policy at cohort end.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-R3-6`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-FR-OSS-008-01` | `FR-OSS-008` | Test | Integration, security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-OSS-010-01` | `FR-OSS-010` | Test | Integration, security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-OSS-011-01` | `FR-OSS-011` | Inspection | Integration, security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-OSS-012-01` | `FR-OSS-012` | Test | Integration, security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-OSS-013-01` | `FR-OSS-013` | Test | Integration, security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-OSS-016-01` | `FR-OSS-016` | Test | Integration, security | Requirement is met as written (see Requirements covered) |
+| [ ] | `TC-FR-OSS-016-02` | `FR-OSS-016` | Test | Integration, security | No duplicate points (R3): Points awarded once. |
+| [ ] | `TC-FR-OSS-017-01` | `FR-OSS-017` | Inspection | Integration, security | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-15,R3,P3,story",Sprint 15
+60,[US-R3-7] Third operating system,"**Story ID:** US-R3-7
+**Sprint:** 15  |  **Release:** R3  |  **Priority:** P3 Low  |  **Work order:** #60 of 60
+
+## User story
+As a student on a third OS, the core flow works.
+
+## Requirements covered
+- [ ] `NFR-PORT-004`: Core functions shall work on a third OS.
+
+## Acceptance criteria
+- [ ] Every requirement above has a passing test case below, recorded in the test record
+- [ ] Code header names this story (`User story: US-R3-7`) and `python tools/check_docs.py` passes
+
+## Test cases
+Tick a case only when it has run and passed.
+
+| Done | Test case | Requirement | Method | Level | What to check |
+|---|---|---|---|---|---|
+| [ ] | `TC-NFR-PORT-004-01` | `NFR-PORT-004` | Test | System (each OS) | Requirement is met as written (see Requirements covered) |
+
+## Definition of done
+- [ ] Code reviewed and merged; CI green on Windows and Ubuntu
+- [ ] Tests above pass; no secrets, no protected tests in any bundle or prompt
+- [ ] Docs updated if behaviour or design changed (`docs/`)
+- [ ] Demonstrated in the sprint review
+
+## Dependencies / notes
+- Depends on: (list story IDs)
+","sprint-15,R3,P3,story",Sprint 15

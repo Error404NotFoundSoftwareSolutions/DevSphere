@@ -1,0 +1,42 @@
+# User story: US-09 Author a lab as files with CI checks (Sprint 2, MVP)
+# Requirements: FR-CONT-001..005, NFR-MAINT-002, NFR-LEGAL-002
+# Implemented here: the sample lab manifest; the schema is packages/lab-schema/manifest.schema.json
+
+schema_version: 1
+id: python-hello-001
+version: 1.0.0
+title: Hello, Python
+description: Write and test your first function.
+difficulty: beginner
+estimated_minutes: 45
+os: [windows, linux, macos]
+runtimes:
+  - name: python
+    version: ">=3.12,<3.14"
+workspace:
+  type: code-editor
+  language: python
+environment:
+  manager: uv
+guide:
+  steps:
+    - id: setup
+      title: Open the starter file
+      content_ref: guide/01-setup.md
+    - id: greet
+      title: Write the greet function
+      content_ref: guide/02-greet.md
+      practice_check: visible-greet
+tutor:
+  enabled: true
+  max_assistance_level: 4
+  allowed_context: [guide, selected_files, task_output]
+evaluation:
+  rubric_version: 1
+  evaluator: pytest
+  max_points: 100
+  checks:
+    - { id: visible-greet, type: test, points: 40, visible: true }
+    - { id: protected-edge-cases, type: test, points: 60, visible: false }
+references:
+  - { url: "https://docs.python.org/3/tutorial/", last_verified: "2026-11-03" }

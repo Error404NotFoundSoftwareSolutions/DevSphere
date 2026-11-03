@@ -1,0 +1,45 @@
+{
+  "name": "@devsphere/desktop",
+  "version": "0.0.0",
+  "private": true,
+  "description": "DevSphere desktop app (Electron)",
+  "main": "./out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "package": "electron-vite build && electron-builder",
+    "rebuild": "electron-rebuild -f -w node-pty -w better-sqlite3"
+  },
+  "dependencies": {
+    "@devsphere/api-client": "workspace:*",
+    "@devsphere/ipc-contract": "workspace:*",
+    "@devsphere/lab-schema": "workspace:*",
+    "@devsphere/redaction": "workspace:*",
+    "@devsphere/ui": "workspace:*",
+    "@monaco-editor/react": "^4.7.0",
+    "@tanstack/react-query": "^5.105.2",
+    "@xterm/xterm": "^6.0.0",
+    "electron-updater": "^6.8.11",
+    "monaco-editor": "^0.57.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "zustand": "^5.0.16"
+  },
+  "devDependencies": {
+    "@electron/rebuild": "^4.2.1",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.2.1",
+    "electron": "^45.2.1",
+    "electron-builder": "^26.18.0",
+    "electron-vite": "^6.0.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.5",
+    "vitest": "^5.1.0"
+  }
+}

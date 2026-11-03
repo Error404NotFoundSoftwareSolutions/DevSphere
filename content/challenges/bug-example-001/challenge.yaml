@@ -1,0 +1,14 @@
+# User story: US-R2-2 Define and validate a challenge (Sprint 11, R2)
+# Requirements: FR-BUG-001..002, FR-BUG-012..013
+# Implemented here: R2 example: a bug challenge declares the buggy commit, the issue text and the regression tests (FR-BUG-001, FR-BUG-002)
+
+schema_version: 1
+id: bug-example-001
+type: bug
+title: Off-by-one in a pagination helper
+difficulty: beginner
+repo: { path: starter/, pinned_commit: TBD }
+issue: issue.md
+visible_tests: tests/visible
+protected_tests: tests/protected # never bundled
+max_assistance_level: 3 # investigation help, never the fix

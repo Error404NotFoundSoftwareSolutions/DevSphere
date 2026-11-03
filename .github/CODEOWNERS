@@ -1,0 +1,5 @@
+# Replace with real GitHub handles.
+/services/grader/        @security-owner
+/packages/redaction/     @security-owner
+/docs/main/              @product-owner
+/apps/desktop/src/main/  @desktop-lead

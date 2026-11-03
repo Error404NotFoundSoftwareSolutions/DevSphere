@@ -1,0 +1,8 @@
+docs/
+pnpm-lock.yaml
+uv.lock
+**/dist
+**/out
+
+# Documents are generated or hand-formatted
+**/*.md
