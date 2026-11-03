@@ -1,0 +1,14 @@
+name: lab_schema
+description: Lab manifest schema and validator
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: '>=3.5.0 <4.0.0'
+
+dependencies:
+  json_schema: ^5.1.3
+
+dev_dependencies:
+  test: ^1.25.0
+

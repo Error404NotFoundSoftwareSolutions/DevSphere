@@ -5,7 +5,7 @@
 | Document control | Value |
 |---|---|
 | Document ID | SAD-ASLP-001 |
-| Version | 1.1-draft (Electron selected; see Section 4.1) |
+| Version | 1.2-draft (Flutter desktop shell selected; macOS in MVP; see Section 4.1) |
 | Status | Draft for architecture review |
 | Prepared | 3 November 2026 |
 | Supersedes | `sad.md` v0.1 (see Section 11.3) |
@@ -162,14 +162,14 @@ R3 adds ARCH-GIT (in the Client) and ARCH-OSS (in the Backend, plus a GitHub App
 
 All entries are **hypotheses for TBD-01 and TBD-06**; versions are pinned at implementation (NFR-MAINT-003).
 
-| Layer | Option A (VS Code extension; not selected) | Option B (Electron; **selected**, Section 4.1) |
+| Layer | Option A (VS Code extension; not selected) | Option B (Flutter; **selected**, Section 4.1) |
 |---|---|---|
-| Client shell | VS Code extension (TypeScript), webviews for guide, tutor and progress | Electron app: main process, sandboxed renderer, preload bridge |
-| Editor and terminal | VS Code editor, Terminal and Task APIs | Monaco, xterm.js, `node-pty` in a worker (needs per-OS native rebuilds, NFR-PORT-005) |
+| Client shell | VS Code extension (TypeScript), webviews for guide, tutor and progress | Flutter desktop app (Dart): Windows, Linux, macOS (all in MVP) |
+| Editor and terminal | VS Code editor, Terminal and Task APIs | Native Dart code editor (re_editor), xterm + flutter_pty in local worker |
 | Python intelligence | The Python extension (check licence terms at selection) | Pyright (open-source licence) behind the LSP interface |
-| Local store | JSON files with atomic writes in the extension's storage directory | SQLite |
-| Session storage | VS Code `SecretStorage` (OS keychain backed) | Electron `safeStorage` |
-| Packaging | VSIX through the Marketplace or sideload for the pilot | Signed installers per OS (code-signing cost applies) |
+| Local store | JSON files with atomic writes in the extension's storage directory | SQLite (drift / sqlite3 in local worker) |
+| Session storage | VS Code `SecretStorage` (OS keychain backed) | `flutter_secure_storage` (FR-AUTH-007) |
+| Packaging | VSIX through the Marketplace or sideload for the pilot | Signed installers per OS: Windows (MSIX/Inno), Linux (AppImage/deb), macOS (.dmg) |
 | Backend | Python, FastAPI, one deployable service | Same |
 | Database | Managed PostgreSQL | Same |
 | Identity | Managed identity provider with Google sign-in | Same |
@@ -178,25 +178,25 @@ All entries are **hypotheses for TBD-01 and TBD-06**; versions are pinned at imp
 | Object storage | Private buckets; signed URLs | Same |
 | Content CI | Hosted CI workflow | Same |
 
-## 4.1 Client shell decision: Option B (Electron) selected
+## 4.1 Client shell decision: Option B (Flutter) selected
 
-On 3 November 2026 the product owner chose an Electron desktop application for Windows and Linux, with macOS as a best-effort target (ADR-001 and ADR-002 in `DECISIONS.md`). This overrides the Option A lean in earlier drafts. The rest of this document describes the design in terms of the Client's responsibilities; where Sections 5.1 and 5.4 mention the extension host, read the mapping below.
+On 3 November 2026 the desktop app architecture changed from Electron to Flutter (Dart) for Windows, Linux, and macOS (macOS in MVP). ADR-003 in `DECISIONS.md` records this and supersedes ADR-001 and ADR-002. The rest of this document describes the design in terms of the Client's responsibilities; where Sections 5.1 and 5.4 mention the extension host, read the mapping below.
 
 | Topic | Design under Option B |
 |---|---|
-| Processes | **Main** (window, lifecycle, IPC router, updater), **Preload** (typed bridge), **Renderer** (React UI, sandboxed, no Node), **Local worker** (separate Node process started by Main; owns files, processes, PTY, Git, local store) |
-| IPC | One shared contract package defines every channel and its schema; Main and the worker validate each message and reject anything not in the contract (NFR-SEC-002, NFR-SEC-003) |
-| Editor and terminal | Monaco and xterm.js in the Renderer; `node-pty` in the worker |
-| Managed terminal evidence | The platform owns the PTY, so command, times, exit code and bounded output can be recorded for tasks it starts (FR-EXEC-003) and the UI states that other terminals are not observed (FR-EXEC-004) |
+| Processes | **UI Application** (Flutter desktop app: window, routing, Riverpod state, guide, tutor, workspace widgets; strictly banned from `dart:io` file and process APIs), **Local worker** (separate Dart process started by the UI; owns files, processes, PTY, Git, local store) |
+| IPC | One shared contract package (`packages/ipc_contract`) defines every channel and its typed request/response schema with strict validation rejecting unknown fields (NFR-SEC-002, NFR-SEC-003) |
+| Editor and terminal | Native Dart `re_editor` and xterm + `flutter_pty` in the local worker |
+| Managed terminal evidence | The platform owns the PTY in the worker, so command, times, exit code and bounded output can be recorded for tasks it starts (FR-EXEC-003) and the UI states that other terminals are not observed (FR-EXEC-004) |
 | Local store | SQLite in the worker (progress, cached bundle index, outbox). It holds no secrets and no protected material |
-| Session storage | `safeStorage`; if the OS reports a weak backend, nothing is persisted (FR-AUTH-007) |
+| Session storage | `flutter_secure_storage`; if the OS reports a weak backend, nothing is persisted (FR-AUTH-007) |
 | Python intelligence | Pyright through the language-server interface (FR-WS-006, R2); Pylance is not assumed |
-| Packaging | electron-builder: Windows installer, Linux AppImage and `.deb`, macOS `.dmg` when R3 begins; signing and notarisation need paid certificates (budget under TBD-06 and NFR-COST) |
+| Packaging | Flutter desktop: Windows installer (MSIX / Inno Setup), Linux AppImage and `.deb`, macOS `.dmg` with signing and notarisation |
 | Updates | Signed updates verified before install (NFR-SEC-010) |
-| Native modules | `node-pty` and the SQLite module are rebuilt for the Electron ABI and smoke-tested in CI on every supported OS (NFR-PORT-005) |
-| Spike S1 (replaces the extension spike) | Pass when: (a) both native modules build and run on Windows and Ubuntu in CI, and on macOS before R3; (b) the packaged app installs, starts and uninstalls cleanly; (c) secure storage works or is safely absent; (d) a renderer with Node disabled can use only contract channels; (e) Monaco, xterm and a managed task run end to end; (f) child processes stop on both OSes |
+| Native modules / CI | Melos workspace with Flutter CI matrix on `windows-latest`, `ubuntu-latest`, and `macos-latest` running `melos run analyze` and `melos run test` (NFR-PORT-005) |
+| Spike S1 (Flutter shell spike) | Pass when: (a) Flutter shell builds and runs on Windows, Linux and macOS in CI; (b) the packaged app installs, starts and uninstalls cleanly; (c) secure storage works or is safely absent; (d) UI cannot import dart:io or access Process/File APIs directly; (e) re_editor, xterm/pty and managed tasks run end to end; (f) child processes stop on all three OSes |
 
-Cost of this choice, stated plainly: more engineering (shell, native builds, signing and updates) than Option A. The Sprint plan keeps the same stories; Sprints 3 and 4 carry the extra packaging and PTY work, and a spare sprint before the pilot is advised.
+Cost of this choice, stated plainly: requires separate local worker process architecture for privileged operations. The Sprint plan keeps the same stories; Sprints 3 and 4 carry the packaging and worker IPC work.
 
 **Default cloud stack (hypothesis for TBD-06):** one cloud project for the application and one for the Grader. A managed-Postgres, managed-identity, scale-to-zero container service and managed queue family is assumed because it reduces operations work; the cost comparison in TBD-06 must include the database's fixed monthly cost because a scale-to-zero API still pays for an always-on database.
 
@@ -206,7 +206,7 @@ Cost of this choice, stated plainly: more engineering (shell, native builds, sig
 
 ## 5.1 Client (ARCH-CLIENT, ARCH-WS, ARCH-GUIDE)
 
-*Electron mapping: see Section 4.1. The module list below becomes Renderer features plus worker modules.*
+*Flutter mapping: see Section 4.1. The module list below becomes Flutter UI features plus local worker modules.*
 
 **Structure.** One extension with these modules: `auth`, `catalogue`, `attempt`, `guide` (webview), `tutor` (webview), `progress` (webview), `env`, `exec`, `sync`, `store`, `diagnostics`. Modules talk through typed interfaces; webviews talk to the extension host by messages that are validated against a schema before action (NFR-SEC-002).
 
@@ -665,7 +665,7 @@ This section answers: *was each decision good, bad or conditional?* A verdict is
 
 | # | Decision | Verdict | Reasoning | Remaining risk |
 |---|---|---|---|---|
-| D1 | VS Code extension as the default shell (Option A) | **Overridden by the product owner** | The product owner chose Electron (Option B), Section 4.1. The reasoning for A (lower build cost) still stands and is the main cost of this choice. | More engineering and per-OS packaging; mitigated by the S1 CI matrix. |
+| D1 | VS Code extension as the default shell (Option A) | **Overridden by the product owner** | Flutter desktop app (Option B, ADR-003 superseding ADR-001/002) selected for Windows, Linux, and macOS. | Native desktop packaging; mitigated by Flutter CI matrix. |
 | D2 | Practice (unverified) versus Verified results | **Keep** | Removes the central flaw of v0.2 (locally computed scores treated as authoritative). | Students may think Practice results count; the UI must label them clearly (FR-GUIDE-006). |
 | D3 | Server-side Grader in a separate project | **Keep** | Only way to make scores trustworthy and to keep protected tests off student machines. | Most expensive and risky component; see Section 5.6.3 residual risk. |
 | D4 | Orchestrator and Runner split | **Keep** (new) | The part that holds the signing key never executes student code. | Adds one more deployable; accepted. |
@@ -685,8 +685,8 @@ This section answers: *was each decision good, bad or conditional?* A verdict is
 | # | Original decision | Verdict | Why | Replacement |
 |---|---|---|---|---|
 | C1 | Backend mints a custom identity token after a client-side Google exchange | **Change** | An extra token bridge adds an endpoint, key handling and failure modes with no benefit; TBD-02 already says to avoid it. | Sign-in-with-credential through the provider SDK (Section 5.2), with a fallback only if the spike fails. |
-| C2 | Electron plus Monaco plus a separate local worker, `node-pty`, SQLite, JupyterLab, Ollama, Zustand, TanStack, Tailwind, Radix and others in one baseline | **Change, then partly reversed** | Fifteen-plus moving parts for a small team before the first lab works. The product owner then chose Electron (Section 4.1), so the shell stays; the cut still applies to everything the SRS does not need in the MVP (Jupyter, Ollama, admin portal, extra UI libraries). | Keep the dependency list short; each library needs a story that uses it. |
-| C3 | SQLite for the local store | **Reversed by the Electron decision** | Under Option A native modules were a packaging risk. Under Option B the worker already needs native modules (`node-pty`), so SQLite in the worker is acceptable and gives transactions for the outbox. | The SQLite module is part of the S1 build matrix (Section 4.1). |
+| C2 | Earlier Electron proposal (ADR-001) | **Superseded** | Replaced by Flutter desktop shell (ADR-003) for native performance, direct Dart integration, and 3-OS MVP. | Flutter desktop app, Melos workspace, native Dart editor (`re_editor`), and local worker. |
+| C3 | SQLite for the local store | **Keep** | Retained with `sqlite3`/`drift` in the local worker for reliable outbox buffering and progress recovery. | Tested across Windows, Linux and macOS in CI. |
 | C4 | Lab bundles in public storage | **Change** | Contradicted "authorised access" and exposed guides and visible tests. | Private bucket, signed URLs after an authorisation check (SRS FR-CONT-006). |
 | C5 | Grader results trusted because they were "signed" | **Change** | A signature proves the Orchestrator produced a document, not that the Runner told the truth. | Pinned test manifest, trusted harness, strict parsing, hostile-submission suite (Section 5.6.3). |
 | C6 | Grader pulling dependencies at run time | **Change** | Needs network, lets students choose packages, adds latency and nondeterminism. | Prebuilt lab image from the lockfile, no network (SRS FR-GRADE-020). |
@@ -701,7 +701,7 @@ It described a very large Electron-based product (all three modes, admin portal,
 
 | TBD | Lean | What would change it |
 |---|---|---|
-| TBD-01 | Resolved: Option B (Electron) | A failed S1 build matrix on one OS would reduce the MVP to the OSes that pass |
+| TBD-01 | Resolved: Option B (Flutter desktop app, ADR-003) | A failed S1 build matrix on one OS would reduce the MVP to the OSes that pass |
 | TBD-02 | Provider SDK sign-in-with-credential | SDK cannot run in the extension host with custom persistence |
 | TBD-03 | Container under a user-space kernel sandbox, separate project, no network | Hostile suite shows escape or cross-submission leakage; then use a VM-level boundary |
 | TBD-06 | One managed cloud for auth, database, queue and API | Cost comparison shows the database fixed cost is out of budget |
@@ -772,14 +772,14 @@ The workspace interface (FR-WS-003) allows Jupyter and SQL workspaces; the provi
 
 | Risk | Impact | Mitigation | Owner |
 |---|---|---|---|
-| Native modules, signing or updates fail on one OS | Release blocked on that OS | S1 CI matrix on every OS from Sprint 0; ship Windows and Ubuntu first; macOS after R3 start | Engineering |
+| Packaging, signing or updates fail on one OS | Release blocked on that OS | S1 CI matrix on Windows, Linux, and macOS from Sprint 0 | Engineering |
 | Grader escape or result forgery | Loss of trust in all scores | S3 hostile suite; separate project; zero-permission identity; pinned test manifest; low-stakes pilot | Security |
 | Cost overrun from AI or grading | Pilot stops | Quotas, budgets, alerts, cost-per-student reporting | Product |
 | Secret leaks into a prompt or snapshot | Credential exposure | Two-pass redaction, default exclusions, leak tests as acceptance gate | Security |
 | Answer sharing between students | Verified scores overstate learning | Anomaly detection on identical snapshot hashes; per-student variants where feasible; treat pilot scores as formative | Product |
 | Legal or minors issue | Pilot blocked | TBD-08 and TBD-09 resolved first; 18-plus pilot | Product |
 | Small team, wide scope | Slip | Releases gate scope; LATER items need change control | Product |
-| Identity SDK does not fit the Electron worker or main process | Auth redesign | S2 fallback design already specified | Engineering |
+| Identity SDK does not fit the Flutter desktop client | Auth redesign | S2 fallback design already specified | Engineering |
 | Third-party content goes stale | Misleading labs | Last-verified date checked by CI | Content |
 
 ---

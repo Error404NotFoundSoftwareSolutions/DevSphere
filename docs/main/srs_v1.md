@@ -5,7 +5,7 @@
 | Document control | Value |
 |---|---|
 | Document ID | SRS-ASLP-001 |
-| Version | 1.2-draft (client shell resolved; see Section 1.6.1) |
+| Version | 1.3-draft (client shell migrated to Flutter; macOS in MVP; see Section 1.6.1) |
 | Status | Draft for review |
 | Prepared | 3 November 2026 |
 | Supersedes | `srs.md` v0.2 (see Section 1.6) |
@@ -120,7 +120,7 @@ SRS v0.2 and its Test Plan had defects that this version corrects:
 | The Grader had no rule for dependencies; installing packages at grading time would need network access and would let a submission choose its own packages. | Added FR-GRADE-020 (prebuilt, locked environment, no downloads). |
 | Protected tests run in the same sandbox as student code, so a submission could forge or short-circuit results. | Added FR-GRADE-021 (trusted harness, pinned test manifest) and result-forgery tests in FR-GRADE-007. |
 | Decision-register items had no order, although several depend on others. | Added a "Depends on" column and a sequencing note (Section 11). |
-| The product owner chose an Electron client for Windows, Linux and (later) macOS. | TBD-01 and TBD-04 updated. The requirements marked [Option B] (NFR-SEC-003, NFR-PORT-005) now apply in full. |
+| The client shell migrated from Electron to Flutter (Dart) for Windows, Linux, and macOS (all in MVP). | TBD-01 and TBD-04 updated. ADR-003 supersedes ADR-001/002. NFR-SEC-002, NFR-SEC-003, NFR-PORT-001, NFR-PORT-004, and NFR-PORT-005 updated for Flutter architecture and 3-OS MVP. |
 
 Group-level ID mapping from v0.2 (atomic IDs are superseded and not carried over one-to-one): `FR-PROFILE`→`FR-PROF`; `FR-EVAL`→`FR-GRADE`; `FR-ADMIN`→`FR-CONT` (content pipeline) and LATER; `FR-CLOUD`→`FR-PROG`, `FR-CAT`, `NFR-CLOUD`; `FR-DS`→lab content (LATER); `FR-OSS`/`FR-GIT`→R3; `FR-BUG`→R2.
 
@@ -502,8 +502,8 @@ Columns: **ID | Requirement | Release | Verification**. Numeric targets marked "
 | ID | Requirement | Release | Verif. |
 |---|---|---|---|
 | NFR-SEC-001 | Student code, dependencies, archives, project files, AI output and (R3) PR content shall be treated as untrusted input. | MVP | A |
-| NFR-SEC-002 | The Client UI layer shall have no direct unrestricted shell or filesystem access; privileged operations shall pass through a narrow, schema-validated interface. | MVP | T |
-| NFR-SEC-003 | [Option B] If a custom desktop shell is used, the renderer shall run with context isolation and sandboxing enabled, Node integration disabled, a restrictive content security policy, and an allow-listed IPC surface. | MVP | T |
+| NFR-SEC-002 | The Client UI layer shall have no direct unrestricted shell or filesystem access; privileged operations shall pass through a narrow, schema-validated interface to the local worker process. | MVP | T |
+| NFR-SEC-003 | The Client UI layer (apps/desktop/lib/ui and lib/features) shall not import dart:io or use Process/File APIs directly; privileged operations (process execution, file access, Git, SQLite sync) shall be handled by a separate local-worker process over a validated, typed IPC contract. | MVP | T |
 | NFR-SEC-004 | Secrets shall be stored only in OS-backed secure storage or a server-side secret manager; plaintext storage shall not be a default or fallback. | MVP | T |
 | NFR-SEC-005 | Secrets shall be redacted from logs, telemetry, crash reports, AI requests, screenshots exported by the Client and evaluation output. | MVP | T |
 | NFR-SEC-006 | The backend shall enforce authorisation on every protected operation and shall deny by default when token or role validation fails. | MVP | T |
@@ -572,11 +572,11 @@ Columns: **ID | Requirement | Release | Verification**. Numeric targets marked "
 
 | ID | Requirement | Release | Verif. |
 |---|---|---|---|
-| NFR-PORT-001 | Core MVP functions shall work on Windows and the second supported OS selected in TBD-04. | MVP | T |
+| NFR-PORT-001 | Core MVP functions shall work across Windows, Linux and macOS. | MVP | T |
 | NFR-PORT-002 | OS-specific behaviour shall be encapsulated in platform adapters, not in lab content. | MVP | I |
 | NFR-PORT-003 | Lab manifests shall declare supported OS, architecture and tool-version constraints. | MVP | I |
-| NFR-PORT-004 | Core functions shall work on a third OS. | R3 | T |
-| NFR-PORT-005 | [Option B] Native modules shall be rebuilt for the Electron ABI and smoke-tested in CI on each supported OS. | MVP | T |
+| NFR-PORT-004 | Platform hardening and OS parity shall be verified with automated test execution on Windows, Linux and macOS. | R3 | T |
+| NFR-PORT-005 | Flutter desktop CI shall build and smoke-test on Windows, Linux and macOS. | MVP | T |
 
 ## 6.7 Maintainability and interoperability (NFR-MAINT)
 
@@ -743,10 +743,10 @@ All MVP requirements shall have a recorded passing verification, or an approved 
 
 | ID | Decision | Needed by | Depends on | Resolution rule |
 |---|---|---|---|---|
-| TBD-01 | Client shell: VS Code extension (A) or custom desktop app (B) | Before MVP build | TBD-06 | Spike (1–2 weeks). **RESOLVED 3 Nov 2026: Option B (Electron)**, chosen by the product owner; the spike now verifies native modules, packaging and secure storage on each OS (see `DECISIONS.md` ADR-001). |
+| TBD-01 | Client shell: VS Code extension (A) or custom desktop app (B) | Before MVP build | TBD-06 | Spike (1–2 weeks). **RESOLVED 3 Nov 2026: Option B (Flutter desktop app with native Dart re_editor and local worker)**, superseding Electron (see `DECISIONS.md` ADR-003). |
 | TBD-02 | Sign-in implementation with the identity provider's standard system-browser flow, including refresh and revocation | Before MVP build | TBD-01, TBD-06 | Working sign-in on two OSes; avoid custom token bridges unless the standard flow fails. |
 | TBD-03 | Grader sandbox technology and isolation level | Before MVP build | TBD-06 | Prototype against hostile test submissions; choose isolation justified by threat model. |
-| TBD-04 | Supported OS versions, second OS, architecture policy | Before MVP build | TBD-01 | Product decision after TBD-01. **PARTLY RESOLVED 3 Nov 2026:** Windows and Ubuntu LTS for the MVP, macOS targeted for R3 (NFR-PORT-004); exact versions still open (ADR-002). |
+| TBD-04 | Supported OS versions, second OS, architecture policy | Before MVP build | TBD-01 | Product decision after TBD-01. **RESOLVED 3 Nov 2026:** Windows, Linux (Ubuntu LTS), and macOS are all supported in MVP (ADR-003). |
 | TBD-05 | Python versions supported by MVP labs | Before lab authoring | - | Engineering decision. |
 | TBD-06 | Specific cloud vendors for auth, database, API, grader, AI | Before MVP build | - | Cost and operations comparison. |
 | TBD-07 | Reference machine specification for performance targets | Before test planning | TBD-04 | QA decision. |
@@ -761,7 +761,7 @@ All MVP requirements shall have a recorded passing verification, or an approved 
 
 **Sequencing.** Run TBD-06 (vendor comparison) first, with TBD-01 (shell) and TBD-08 (legal) in parallel. Then TBD-02 (sign-in), TBD-03 (grader) and TBD-04 (OS policy). TBD-13 (limits) and TBD-07 (reference machine) follow. A decision is closed only when its result is written in the Decision Register and the dependent requirements are reviewed.
 
-**Working hypotheses (to be confirmed or rejected by the spikes, not decisions):** TBD-01: resolved as Option B (Electron). TBD-02: Authorization Code with PKCE through the system browser, then the provider SDK's sign-in-with-credential call. TBD-03: a disposable container run under a user-space kernel sandbox in a separate project with no network and a zero-permission service identity. TBD-08: pilot restricted to students aged 18 or over. See `sad_v1.md` Section 12.
+**Working hypotheses (to be confirmed or rejected by the spikes, not decisions):** TBD-01: resolved as Option B (Flutter). TBD-02: Authorization Code with PKCE through the system browser, then the provider SDK's sign-in-with-credential call. TBD-03: a disposable container run under a user-space kernel sandbox in a separate project with no network and a zero-permission service identity. TBD-08: pilot restricted to students aged 18 or over. See `sad_v1.md` Section 12.
 
 ---
 

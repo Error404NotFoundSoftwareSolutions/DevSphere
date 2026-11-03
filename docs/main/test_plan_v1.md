@@ -9,8 +9,8 @@
 | Status | Draft for review |
 | Prepared | 3 November 2026 |
 | Supersedes | `test_plan.md` v0.2 (see Section 1.3) |
-| Verifies | `srs_v1.md` v1.2-draft |
-| Design reference | `sad_v1.md` v1.1-draft |
+| Verifies | `srs_v1.md` v1.3-draft |
+| Design reference | `sad_v1.md` v1.2-draft |
 | Backlog reference | `backlog_v1.md` |
 | Test owner | TBD |
 | Approval | Pending |
@@ -68,9 +68,9 @@ This plan defines how the platform is verified: levels and methods, environments
 
 | Level | Purpose | Typical tools (suggested; confirm at implementation) | Runs |
 |---|---|---|---|
-| Unit | Functions and modules (redaction, path validation, manifest validation, scoring maths) | pytest (backend, grader), Vitest or Jest (extension) | Every commit |
-| Integration and contract | Backend with database, storage and queue; API against the OpenAPI contract; extension host against a mock backend | pytest with test containers, Schemathesis or equivalent, VS Code extension test runner | Every commit |
-| System | End-to-end flows on real OSes: sign-in, setup, lab, submit, result | Extension test runner plus scripted scenarios; manual scripts where automation is impractical | Per sprint, and nightly where automated |
+| Unit | Functions and modules (redaction, path validation, manifest validation, scoring maths) | pytest (backend, grader), flutter_test / dart test (desktop app, local worker, packages) | Every commit |
+| Integration and contract | Backend with database, storage and queue; API against the OpenAPI contract; Flutter desktop against local worker and mock backend | pytest with test containers, Schemathesis or equivalent, integration_test for Flutter desktop | Every commit |
+| System | End-to-end flows on real OSes: sign-in, setup, lab, submit, result | Flutter integration_test runner across Windows, Linux and macOS; manual scripts where automation is impractical | Per sprint, and nightly where automated |
 | Security | Authorisation matrix, secret leak, grader hostile suite, dependency scan | Custom suites, secret scanner, dependency scanner, static analysis | Per sprint; hostile suite on every grader change |
 | Performance and capacity | Start-up, detection time, grading latency under load | Load tool of choice against a staging grader | Before the pilot and after grader changes |
 | Usability and accessibility | Beginner task success, keyboard access, error clarity | Moderated sessions, accessibility checker, checklist | Sprints 4 to 6 and 9 |
@@ -113,14 +113,14 @@ This plan defines how the platform is verified: levels and methods, environments
 | Environment | Use | Notes |
 |---|---|---|
 | Local developer | Unit and fast integration tests | |
-| CI | Every commit: unit, integration, contract, dependency scan, content CI | Runs on both supported OSes for the extension |
+| CI | Every commit: unit, integration, contract, dependency scan, content CI | Runs on Windows, Linux and macOS for Flutter desktop |
 | Staging (application project) | System tests, performance tests, restore rehearsal | Separate from production; synthetic data only |
 | Staging grader (grader project) | Hostile suite, grading load tests | Mirrors production isolation settings; no production secrets |
 | Production pilot | Pilot monitoring only | No destructive tests |
 
 ## 3.2 Devices
 
-At least one physical machine or clean virtual machine per supported OS (TBD-04), each with a clean image, an image with Python already installed, and an image with an incompatible Python. Reset to the clean snapshot between setup tests.
+At least one physical machine or clean virtual machine per supported OS (Windows, Linux, macOS; all in MVP), each with a clean image, an image with Python already installed, and an image with an incompatible Python. Reset to the clean snapshot between setup tests.
 
 ## 3.3 Reference machine and load model
 
@@ -244,7 +244,7 @@ Developers write unit and integration tests for their stories. A tester (or a de
 | SRS Section 10 item | Verified by |
 |---|---|
 | 10.1.1 Spikes closed | Written decision records for TBD-01, TBD-02, TBD-03 (inspection) |
-| 10.1.2 New student completes a lab and gets a Verified result on both OSes | `TC-FR-GRADE-003-01`, `TC-FR-AUTH-001-01`, `TC-NFR-PORT-001-01` run on each OS |
+| 10.1.2 New student completes a lab and gets a Verified result on Windows, Linux and macOS | `TC-FR-GRADE-003-01`, `TC-FR-AUTH-001-01`, `TC-NFR-PORT-001-01` run on each OS |
 | 10.1.3 Existing Python is not reinstalled | `TC-FR-ENV-009-02` |
 | 10.1.4 Cancel, no-network, AI-unavailable and grader-unavailable paths | `TC-FR-ENV-005-02`, `TC-FR-PROG-006-01`, `TC-FR-AI-011-02`, `TC-FR-GRADE-015-02` |
 | 10.1.5 Secret-leak tests | Section 5.2, `TC-NFR-SEC-005-01` |
@@ -284,7 +284,7 @@ The sprint numbers follow `backlog_v1.md`. Every sprint also runs the automated 
 | Risk | Effect | Mitigation |
 |---|---|---|
 | Spikes delay the fixtures that tests need | Tests start late | Build FX-01 and the token matrix in Sprint 0 |
-| Extension test tooling limits what can be automated | More manual system tests | Keep logic in testable modules; use demonstration scripts for UI-only checks |
+| Desktop test tooling limits what can be automated | More manual system tests | Keep logic in testable packages; use demonstration scripts for UI-only checks |
 | Model behaviour is not deterministic | Flaky tutor tests | Separate deterministic policy tests from measured behaviour (Section 5.5) |
 | A second OS or hardware is not available | Portability claims untested | Decide TBD-04 early; use cloud VMs for clean-image tests |
 | Hostile suite never covers a novel attack | False confidence | Treat residual risk as stated in the SAD; add every real finding as a new H case |
@@ -603,8 +603,8 @@ Status starts as **Not run**. Update results in the test management record; a re
 | TC-FR-OSS-016-02 | FR-OSS-016 | Test | Integration, security | 15 | US-R3-6 | R3 | Points awarded once. | Not run |
 | TC-FR-OSS-017-01 | FR-OSS-017 | Inspection | Integration, security | 15 | US-R3-6 | R3 | Student repositories shall be archived or deleted according to the retention policy at cohort end. | Not run |
 | TC-NFR-SEC-001-01 | NFR-SEC-001 | Analysis | Security | 9 | US-35 | MVP | Student code, dependencies, archives, project files, AI output and (R3) PR content shall be treated as untrusted input. | Not run |
-| TC-NFR-SEC-002-01 | NFR-SEC-002 | Test | Security | 4 | US-16 | MVP | The Client UI layer shall have no direct unrestricted shell or filesystem access; privileged operations shall pass through a narrow, schema-validated interface. | Not run |
-| TC-NFR-SEC-003-01 | NFR-SEC-003 | Test | Security | 4 | US-16 | MVP | [Option B] If a custom desktop shell is used, the renderer shall run with context isolation and sandboxing enabled, Node integration disabled, a restrictive content security policy, and an allow-listed IPC surface. | Not run |
+| TC-NFR-SEC-002-01 | NFR-SEC-002 | Test | Security | 4 | US-16 | MVP | The Client UI layer shall have no direct unrestricted shell or filesystem access; privileged operations shall pass through a narrow, schema-validated interface to the local worker process. | Not run |
+| TC-NFR-SEC-003-01 | NFR-SEC-003 | Test | Security | 4 | US-16 | MVP | The Client UI layer (apps/desktop/lib/ui and lib/features) shall not import dart:io or use Process/File APIs directly; privileged operations (process execution, file access, Git, SQLite sync) shall be handled by a separate local-worker process over a validated, typed IPC contract. | Not run |
 | TC-NFR-SEC-004-01 | NFR-SEC-004 | Test | Security | 1 | US-01 | MVP | Secrets shall be stored only in OS-backed secure storage or a server-side secret manager; plaintext storage shall not be a default or fallback. | Not run |
 | TC-NFR-SEC-005-01 | NFR-SEC-005 | Test | Security | 6 | US-26 | MVP | Secrets shall be redacted from logs, telemetry, crash reports, AI requests, screenshots exported by the Client and evaluation output. | Not run |
 | TC-NFR-SEC-006-01 | NFR-SEC-006 | Test | Security | 1 | US-01 | MVP | The backend shall enforce authorisation on every protected operation and shall deny by default when token or role validation fails. | Not run |
@@ -651,11 +651,11 @@ Status starts as **Not run**. Update results in the test management record; a re
 | TC-NFR-UX-005-01 | NFR-UX-005 | Inspection | Usability | 9 | US-37 | MVP | The Client shall aim for WCAG 2.2 AA principles where applicable, with deviations recorded. | Not run |
 | TC-NFR-UX-006-01 | NFR-UX-006 | Inspection | Usability | 9 | US-37 | MVP | Every error message shall state the problem and a recommended recovery action. | Not run |
 | TC-NFR-UX-007-01 | NFR-UX-007 | Test | Usability | 9 | US-37 | MVP | The student shall be able to request more detail or a higher assistance level from the tutor without restarting the lab, within the lab's maximum level. | Not run |
-| TC-NFR-PORT-001-01 | NFR-PORT-001 | Test | System (each OS) | 3 | US-14 | MVP | Core MVP functions shall work on Windows and the second supported OS selected in TBD-04. | Not run |
+| TC-NFR-PORT-001-01 | NFR-PORT-001 | Test | System (each OS) | 3 | US-14 | MVP | Core MVP functions shall work across Windows, Linux and macOS. | Not run |
 | TC-NFR-PORT-002-01 | NFR-PORT-002 | Inspection | System (each OS) | 3 | US-14 | MVP | OS-specific behaviour shall be encapsulated in platform adapters, not in lab content. | Not run |
 | TC-NFR-PORT-003-01 | NFR-PORT-003 | Inspection | System (each OS) | 3 | US-14 | MVP | Lab manifests shall declare supported OS, architecture and tool-version constraints. | Not run |
-| TC-NFR-PORT-004-01 | NFR-PORT-004 | Test | System (each OS) | 15 | US-R3-7 | R3 | Core functions shall work on a third OS. | Not run |
-| TC-NFR-PORT-005-01 | NFR-PORT-005 | Test | System (each OS) | 3 | US-14 | MVP | [Option B] Native modules shall be rebuilt for the Electron ABI and smoke-tested in CI on each supported OS. | Not run |
+| TC-NFR-PORT-004-01 | NFR-PORT-004 | Test | System (each OS) | 15 | US-R3-7 | R3 | Platform hardening and OS parity shall be verified with automated test execution on Windows, Linux and macOS. | Not run |
+| TC-NFR-PORT-005-01 | NFR-PORT-005 | Test | System (each OS) | 3 | US-14 | MVP | Flutter desktop CI shall build and smoke-test on Windows, Linux and macOS. | Not run |
 | TC-NFR-MAINT-001-01 | NFR-MAINT-001 | Inspection | Inspection | 1 | US-05 | MVP | The Client, backend, grader and content pipeline shall interact through documented interfaces; the backend contract shall be published as an OpenAPI document and client types shall be generated from it in CI. | Not run |
 | TC-NFR-MAINT-002-01 | NFR-MAINT-002 | Demonstration | Inspection | 2 | US-09 | MVP | Adding a lab shall require only content files (manifest, guide, tests) and CI, with no Client release. | Not run |
 | TC-NFR-MAINT-003-01 | NFR-MAINT-003 | Inspection | Inspection | 2 | US-10 | MVP | All third-party dependencies shall be inventoried with version, licence and update owner. | Not run |

@@ -9,8 +9,8 @@
 | Status | Draft for review |
 | Prepared | 3 November 2026 |
 | Supersedes | `test_plan.md` v0.2 (see Section 1.3) |
-| Verifies | `srs_v1.md` v1.2-draft |
-| Design reference | `sad_v1.md` v1.1-draft |
+| Verifies | `srs_v1.md` v1.3-draft |
+| Design reference | `sad_v1.md` v1.2-draft |
 | Backlog reference | `backlog_v1.md` |
 | Test owner | TBD |
 | Approval | Pending |
@@ -68,9 +68,9 @@ This plan defines how the platform is verified: levels and methods, environments
 
 | Level | Purpose | Typical tools (suggested; confirm at implementation) | Runs |
 |---|---|---|---|
-| Unit | Functions and modules (redaction, path validation, manifest validation, scoring maths) | pytest (backend, grader), Vitest or Jest (extension) | Every commit |
-| Integration and contract | Backend with database, storage and queue; API against the OpenAPI contract; extension host against a mock backend | pytest with test containers, Schemathesis or equivalent, VS Code extension test runner | Every commit |
-| System | End-to-end flows on real OSes: sign-in, setup, lab, submit, result | Extension test runner plus scripted scenarios; manual scripts where automation is impractical | Per sprint, and nightly where automated |
+| Unit | Functions and modules (redaction, path validation, manifest validation, scoring maths) | pytest (backend, grader), flutter_test / dart test (desktop app, local worker, packages) | Every commit |
+| Integration and contract | Backend with database, storage and queue; API against the OpenAPI contract; Flutter desktop against local worker and mock backend | pytest with test containers, Schemathesis or equivalent, integration_test for Flutter desktop | Every commit |
+| System | End-to-end flows on real OSes: sign-in, setup, lab, submit, result | Flutter integration_test runner across Windows, Linux and macOS; manual scripts where automation is impractical | Per sprint, and nightly where automated |
 | Security | Authorisation matrix, secret leak, grader hostile suite, dependency scan | Custom suites, secret scanner, dependency scanner, static analysis | Per sprint; hostile suite on every grader change |
 | Performance and capacity | Start-up, detection time, grading latency under load | Load tool of choice against a staging grader | Before the pilot and after grader changes |
 | Usability and accessibility | Beginner task success, keyboard access, error clarity | Moderated sessions, accessibility checker, checklist | Sprints 4 to 6 and 9 |
@@ -113,14 +113,14 @@ This plan defines how the platform is verified: levels and methods, environments
 | Environment | Use | Notes |
 |---|---|---|
 | Local developer | Unit and fast integration tests | |
-| CI | Every commit: unit, integration, contract, dependency scan, content CI | Runs on both supported OSes for the extension |
+| CI | Every commit: unit, integration, contract, dependency scan, content CI | Runs on Windows, Linux and macOS for Flutter desktop |
 | Staging (application project) | System tests, performance tests, restore rehearsal | Separate from production; synthetic data only |
 | Staging grader (grader project) | Hostile suite, grading load tests | Mirrors production isolation settings; no production secrets |
 | Production pilot | Pilot monitoring only | No destructive tests |
 
 ## 3.2 Devices
 
-At least one physical machine or clean virtual machine per supported OS (TBD-04), each with a clean image, an image with Python already installed, and an image with an incompatible Python. Reset to the clean snapshot between setup tests.
+At least one physical machine or clean virtual machine per supported OS (Windows, Linux, macOS; all in MVP), each with a clean image, an image with Python already installed, and an image with an incompatible Python. Reset to the clean snapshot between setup tests.
 
 ## 3.3 Reference machine and load model
 
@@ -244,7 +244,7 @@ Developers write unit and integration tests for their stories. A tester (or a de
 | SRS Section 10 item | Verified by |
 |---|---|
 | 10.1.1 Spikes closed | Written decision records for TBD-01, TBD-02, TBD-03 (inspection) |
-| 10.1.2 New student completes a lab and gets a Verified result on both OSes | `TC-FR-GRADE-003-01`, `TC-FR-AUTH-001-01`, `TC-NFR-PORT-001-01` run on each OS |
+| 10.1.2 New student completes a lab and gets a Verified result on Windows, Linux and macOS | `TC-FR-GRADE-003-01`, `TC-FR-AUTH-001-01`, `TC-NFR-PORT-001-01` run on each OS |
 | 10.1.3 Existing Python is not reinstalled | `TC-FR-ENV-009-02` |
 | 10.1.4 Cancel, no-network, AI-unavailable and grader-unavailable paths | `TC-FR-ENV-005-02`, `TC-FR-PROG-006-01`, `TC-FR-AI-011-02`, `TC-FR-GRADE-015-02` |
 | 10.1.5 Secret-leak tests | Section 5.2, `TC-NFR-SEC-005-01` |
@@ -284,7 +284,7 @@ The sprint numbers follow `backlog_v1.md`. Every sprint also runs the automated 
 | Risk | Effect | Mitigation |
 |---|---|---|
 | Spikes delay the fixtures that tests need | Tests start late | Build FX-01 and the token matrix in Sprint 0 |
-| Extension test tooling limits what can be automated | More manual system tests | Keep logic in testable modules; use demonstration scripts for UI-only checks |
+| Desktop test tooling limits what can be automated | More manual system tests | Keep logic in testable packages; use demonstration scripts for UI-only checks |
 | Model behaviour is not deterministic | Flaky tutor tests | Separate deterministic policy tests from measured behaviour (Section 5.5) |
 | A second OS or hardware is not available | Portability claims untested | Decide TBD-04 early; use cloud VMs for clean-image tests |
 | Hostile suite never covers a novel attack | False confidence | Treat residual risk as stated in the SAD; add every real finding as a new H case |

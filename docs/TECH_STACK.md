@@ -4,24 +4,25 @@ Versions were current when this scaffold was created (3 Nov 2026). The lockfiles
 
 | Layer | Choice | Why |
 |---|---|---|
-| Monorepo | pnpm workspaces + Turborepo; uv workspace for Python | One repo, shared contracts, cached builds |
-| Desktop shell | Electron 45, electron-vite, electron-builder, electron-updater | Cross-OS desktop app with a mature build and update path |
-| Language | TypeScript (strict) | One language for UI, main and worker |
-| UI | React 19, Vite, Tailwind CSS 4 | Familiar, fast, accessible components |
-| State | Zustand (UI state), TanStack Query (server state) | Small and predictable |
-| Editor and terminal | Monaco, xterm.js, node-pty | The editor and terminal students expect |
-| Validation | zod (IPC), ajv (lab manifests) | One schema per boundary |
-| Local store | SQLite through better-sqlite3 in the worker | Transactions for the sync outbox |
-| Secrets (client) | Electron `safeStorage` | OS-backed; refuse weak Linux backends |
+| Monorepo | Melos workspace (Dart/Flutter); uv workspace for Python | One repo, shared contracts, multi-package management |
+| Desktop shell | Flutter (Dart) for Windows, Linux, macOS | High-performance, cross-platform native client in MVP |
+| Language | Dart (strict analysis) for client; Python 3.12 for backend/services | Type safety, native compilation, clean async handling |
+| UI | Flutter Material 3 | Accessible, responsive, cross-platform components |
+| State and Routing | Riverpod, go_router | Predictable state management and declarative navigation |
+| Editor and terminal | Native Dart code editor (`re_editor`), xterm + `flutter_pty` in worker | Native text editing without webview overhead; streaming PTY |
+| Validation | Typed Dart request/response classes (IPC), json_schema (lab manifests) | Strict contract validation; no unknown field smuggling |
+| Local store | SQLite (`sqlite3` / `drift`) in the local worker | Transactions and durable buffering for the sync outbox |
+| Secrets (client) | `flutter_secure_storage` | OS-backed (keychain, libsecret, DPAPI); refuse weak backends |
+| Privileged worker | Dedicated Dart worker process (`services/local-worker`) | UI strictly isolated from filesystem and process execution |
 | Backend | Python, FastAPI, Pydantic v2, SQLAlchemy 2, Alembic | Same language as graders and lab tooling |
 | Database | Managed PostgreSQL | Relational data with uniqueness constraints |
-| Identity | Managed provider with Google sign-in (TBD-06) | No password storage |
+| Identity | Managed provider with Google sign-in (TBD-06) | PKCE in system browser, loopback redirect, no password storage |
 | Queue | Managed HTTP task queue | Retries and delay for grading jobs |
 | Grader | Container per submission under a user-space kernel sandbox, separate project | Isolation justified by the threat model (TBD-03) |
 | Python tooling for students | uv (venv + pip fallback), pytest | Reproducible lab environments |
-| Tests | Vitest, pytest, Playwright (Electron) | Unit, integration, end-to-end |
-| Quality | ESLint, Prettier, Ruff, mypy | Consistent code |
-| CI | GitHub Actions on Windows, Ubuntu, macOS | Native module and packaging checks |
+| Tests | `flutter_test`, `dart test`, `integration_test`, `pytest` | Unit, integration, cross-platform app journeys |
+| Quality | `dart analyze`, Ruff, mypy | Consistent code |
+| CI | GitHub Actions on Windows, Ubuntu, macOS | 3-OS build matrix and automated test verification |
 
 ## Rules for adding a dependency
 

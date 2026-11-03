@@ -1,0 +1,32 @@
+name: desktop
+description: DevSphere desktop learning application in Flutter
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: '>=3.5.0 <4.0.0'
+  flutter: '>=3.24.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^2.5.1
+  go_router: ^14.2.7
+  flutter_secure_storage: ^9.2.2
+  url_launcher: ^6.3.0
+  ipc_contract:
+    path: ../../packages/ipc_contract
+  ui:
+    path: ../../packages/ui
+  api_client:
+    path: ../../packages/api_client
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+

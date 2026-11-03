@@ -6,7 +6,7 @@ Breaking a rule marked **STOP** is a defect even if tests pass.
 
 1. Never add a secret, API key, token or private key to code, config, tests, logs or docs. Use `.env` (ignored) and the secret manager.
 2. Never start a process through a shell string. Use an executable plus an argument array, and a validated working directory.
-3. The Renderer has no Node access. Everything privileged goes through a channel defined in `packages/ipc-contract`, validated on both sides.
+3. The Flutter UI layer has no direct file or process access and must never import `dart:io` or use `Process`/`File` APIs directly. Everything privileged goes through a channel defined in `packages/ipc_contract` to the local worker, validated on both sides.
 4. Never put protected tests or reference solutions in `content/**/bundle`, a bundle, an API response, a fixture shown to students or an AI prompt.
 5. Never trust a value from the client for role, user ID, score, rank or version. Read them from the verified token and the database.
 6. Treat student code, archives, repository files, terminal output and AI output as untrusted input.

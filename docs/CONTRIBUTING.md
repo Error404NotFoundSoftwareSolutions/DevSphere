@@ -2,7 +2,7 @@
 
 ## Setup
 
-Follow `DEV_SETUP.md`. Then `pnpm install` and `uv sync --all-packages`.
+Follow `DEV_SETUP.md`. Then `dart pub global activate melos`, `melos bootstrap` and `uv sync --all-packages`.
 
 ## Branches and commits
 
@@ -12,11 +12,11 @@ Follow `DEV_SETUP.md`. Then `pnpm install` and `uv sync --all-packages`.
 
 ## Pull requests
 
-Use the template. A PR needs: the story ID, requirement IDs, tests named `TC-<ID>-<nn>`, passing `pnpm check`, `uv run pytest`, and `python tools/check_docs.py`. One reviewer must approve. Changes under `services/grader`, `packages/redaction` or `docs/main` need the code owner.
+Use the template. A PR needs: the story ID, requirement IDs, tests named `TC-<ID>-<nn>`, passing `melos run check`, `uv run pytest`, and `python tools/check_docs.py`. One reviewer must approve. Changes under `services/grader`, `packages/redaction` or `docs/main` need the code owner.
 
 ## Code style
 
-TypeScript strict; Prettier and ESLint. Python: Ruff and type hints. Comments explain why. No secrets, ever (see `.agent/RULES.md`).
+Dart strict analysis; Python: Ruff and type hints. Comments explain why. No secrets, ever (see `.agent/RULES.md`). UI layer (`apps/desktop/lib/ui` & `lib/features`) must never import `dart:io` or access `Process`/`File` APIs directly.
 
 ## Changing requirements or design
 

@@ -3,20 +3,25 @@
 Format: **Status** (Proposed, Accepted, Superseded), **Context**, **Decision**, **Consequences**. Add a new entry for every real decision; never edit an accepted entry, supersede it.
 
 ## ADR-001: Electron desktop shell
-- **Status:** Accepted (3 Nov 2026, product owner). Closes SRS TBD-01.
+- **Status:** Superseded by ADR-003 (3 Nov 2026). Closes SRS TBD-01.
 - **Context:** The earlier plan defaulted to a VS Code extension because it is cheaper. The product owner wants a standalone app for Windows and Linux, and macOS if possible.
 - **Decision:** Build an Electron app with a sandboxed React renderer, a typed preload bridge, a main process and a separate local worker process.
 - **Consequences:** Full control of layout and workspace types. More engineering: native modules (`node-pty`, SQLite) must be rebuilt per OS, installers must be signed, updates must be verified. SRS requirements NFR-SEC-003 and NFR-PORT-005 apply in full.
 
 ## ADR-002: Operating systems
-- **Status:** Accepted (3 Nov 2026). Partly closes TBD-04.
+- **Status:** Superseded by ADR-003 (3 Nov 2026). Partly closes TBD-04.
 - **Decision:** Windows and Ubuntu LTS for the MVP; macOS targeted for R3 (NFR-PORT-004). Exact versions are still open.
 - **Consequences:** macOS needs an Apple developer account for signing and notarisation; CI builds macOS from the start as best-effort.
 
-## ADR-003: Monorepo with pnpm, Turborepo and a uv workspace
-- **Status:** Accepted.
-- **Decision:** One repository. JavaScript and TypeScript packages use pnpm workspaces with Turborepo for task caching. Python services use a uv workspace.
-- **Consequences:** Shared contracts (IPC, manifest schema, redaction corpus) live once. CI must run both toolchains.
+## ADR-003: Desktop app migrated to Flutter (Dart) and Melos workspace
+- **Status:** Accepted (3 Nov 2026). Supersedes ADR-001 and ADR-002.
+- **Context:** Electron shell required complex native module rebuilds (`node-pty`, `better-sqlite3`), incurred high memory overhead, and relegated macOS to an R3 best-effort target. The project required a unified, high-performance cross-platform desktop shell across Windows, Linux, and macOS from MVP.
+- **Decision:**
+  1. Adopt Flutter (Dart) for the desktop client on Windows, Linux, and macOS, bringing macOS into the MVP.
+  2. Use native Dart editor (`re_editor`) instead of webview/Monaco.
+  3. Enforce the trust model in code: UI layer (`apps/desktop/lib/ui` and `lib/features`) is strictly prohibited from importing `dart:io` `File` and `Process` APIs. All privileged operations (file I/O, process execution, Git, SQLite sync) are delegated to a separate local worker process (`services/local-worker`) over a narrow, schema-validated IPC interface (`packages/ipc_contract`).
+  4. Use a Melos workspace (`melos.yaml`, root `pubspec.yaml`) covering `apps/desktop`, `services/local-worker`, and Dart packages (`packages/*`), alongside the `uv` Python workspace.
+- **Consequences:** Native performance and uniform experience across Windows, Linux, and macOS in the MVP. Node/pnpm/Turborepo infrastructure is eliminated. Packaging and signing target native desktop formats (MSIX/Inno, AppImage/deb, dmg/notarisation).
 
 ## ADR-004: Practice versus Verified results
 - **Status:** Accepted. **Decision:** Local results are Practice; only the server grader creates official scores (BR-01, BR-02). **Consequences:** a grader service is required for the MVP.

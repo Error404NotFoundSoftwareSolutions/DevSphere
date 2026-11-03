@@ -6,19 +6,15 @@ Full design: `main/sad_v1.md`. This page is the short map.
 
 ```mermaid
 flowchart LR
-  UI[Renderer<br/>React UI, no Node] -->|typed calls| PRE[Preload bridge]
-  PRE --> MAIN[Main process<br/>windows, auth, IPC router, updater]
-  MAIN <-->|validated messages| WORKER[Local worker<br/>files, processes, PTY, Git, SQLite, sync]
-  MAIN -->|HTTPS + token| API[Backend API]
+  UI[Flutter Desktop UI<br/>Riverpod, router, no dart:io] -->|typed IPC contract| WORKER[Local worker<br/>files, processes, PTY, Git, SQLite, sync]
+  UI -->|HTTPS + token| API[Backend API]
   WORKER -->|events, uploads| API
 ```
 
 | Process | Does | Must not |
 |---|---|---|
-| Renderer | Draws UI, holds UI state | Touch files, processes or secrets |
-| Preload | Exposes named functions from the IPC contract | Expose raw IPC or Node |
-| Main | Windows, sign-in, session in secure storage, routes IPC, checks updates | Run student code |
-| Local worker | Detect environment, run approved tasks, terminal, local store, sync, snapshots | Accept raw command strings |
+| Flutter Desktop UI | Draws UI, holds UI state, navigation, native editor (`re_editor`) | Touch files, run processes directly (banned from `dart:io`) |
+| Local worker | Detect environment, run approved tasks, terminal/PTY, local store, sync, snapshots | Accept unvalidated command strings or path traversal |
 
 ## Cloud
 
@@ -35,7 +31,7 @@ Student confirms files, the app uploads a snapshot, the API enqueues a job, the 
 
 ## Communication rules
 
-1. UI to worker only through channels in `packages/ipc-contract` (`IPC_API.md`).
+1. UI to worker only through channels in `packages/ipc_contract` (`IPC_API.md`). The UI layer is banned from `dart:io` `File` and `Process` APIs.
 2. App to cloud only through the backend API (`BACKEND_API.md`) with a bearer token.
 3. Backend to grader only through the job queue; the grader returns signed results to one internal endpoint.
 4. Nothing on the student's machine ever receives protected tests.

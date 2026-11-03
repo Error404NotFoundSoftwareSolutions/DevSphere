@@ -4,12 +4,12 @@ Full plan with the case catalogue: `main/test_plan_v1.md`. Every committed requi
 
 | Level | Where | Tool |
 |---|---|---|
-| Unit | next to the code (`*.test.ts`, `test_*.py`) | Vitest, pytest |
-| Integration and contract | `services/api/tests`, `services/grader/tests` | pytest |
-| End-to-end on the packaged app | `tests/e2e` | Playwright for Electron |
-| Cross-OS | CI matrix: Windows, Ubuntu, macOS (best effort) | GitHub Actions |
-| Security suites | `fixtures/hostile`, `fixtures/secrets`, `fixtures/tokens` | pytest |
-| Performance | `tests/perf` | Playwright timing, load tool for the grader |
+| Unit | next to the code (`*_test.dart`, `test_*.py`) | `flutter_test`, `dart test`, `pytest` |
+| Integration and contract | `services/api/tests`, `services/grader/tests`, `services/local-worker/test` | `pytest`, `dart test` |
+| End-to-end on the desktop app | `apps/desktop/integration_test` | Flutter `integration_test` |
+| Cross-OS | CI matrix: Windows, Ubuntu, macOS | GitHub Actions |
+| Security suites | `fixtures/hostile`, `fixtures/secrets`, `fixtures/tokens` | `pytest`, `dart test` |
+| Performance | `apps/desktop/integration_test`, load tool for the grader | `integration_test`, load tool |
 | Usability | `tests/usability` | Moderated sessions |
 
 ## Rules

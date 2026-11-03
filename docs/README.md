@@ -6,14 +6,15 @@ DevSphere helps beginners learn software engineering by building real projects o
 
 ```bash
 # one-time, see DEV_SETUP.md for each OS
-pnpm install
+dart pub global activate melos
+melos bootstrap
 uv sync --all-packages
 
-pnpm dev                      # desktop app (development mode)
+flutter run -d windows          # or -d linux, -d macos (desktop app)
 uv run uvicorn app.main:app --reload --app-dir services/api    # backend API
-pnpm check                    # lint, typecheck, tests
-uv run pytest                 # Python tests
-python tools/check_docs.py    # documents stay consistent with each other
+melos run check                # Dart/Flutter analyze and tests
+uv run pytest                  # Python tests
+python tools/check_docs.py     # documents stay consistent with each other
 ```
 
 ## Document index

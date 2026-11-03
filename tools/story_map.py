@@ -10,7 +10,7 @@ from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SKIP = {"node_modules", ".git", ".venv", "out", "release", "dist", "__pycache__"}
+SKIP = {"node_modules", ".git", ".venv", "out", "release", "dist", "__pycache__", ".dart_tool", "build", ".pub-cache"}
 STORY = re.compile(r"User story:\s+((?:SP|US|PL)-[A-Z0-9-]+)")
 
 

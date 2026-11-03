@@ -36,10 +36,9 @@ S = [
 (3,"MVP","US-11","See whether my computer is ready","As a student, I see which tools are ready, missing or incompatible, and nothing is reinstalled needlessly.","FR-ENV-001..003, FR-ENV-009, FR-ENV-012, FR-ENV-013"),
 (3,"MVP","US-12","Approve and run setup safely","As a student, I review a setup plan and consent before anything is installed, and nothing runs with permanent admin rights.","FR-ENV-004..006, FR-ENV-011, NFR-SEC-009, NFR-SEC-010"),
 (3,"MVP","US-13","Create the project environment and recover from failure","As a student, my project environment is created from the lab's lockfile, checked afterwards, and failures explain how to recover.","FR-ENV-007, FR-ENV-008, FR-ENV-010"),
-(3,"MVP","US-14","Work on Windows and a second OS","As a student on a supported OS, the core flow works the same way.","NFR-PORT-001..003, NFR-PORT-005"),
-# ---- Sprint 4
-(4,"MVP","US-15","Open the lab workspace","As a student, I get an editor, terminal and my guide side by side, chosen by the lab.","FR-WS-001..005, NFR-MAINT-005"),
-(4,"MVP","US-16","Run lab tasks with limits","As a student, I can run lab tasks that have time and output limits, and stop them at any time.","FR-EXEC-001..003, FR-EXEC-005, FR-EXEC-006, FR-EXEC-009, NFR-SEC-002, NFR-SEC-003"),
+(3,"MVP","US-14","Work on Windows, Linux and macOS","As a student on Windows, Linux or macOS, the core flow works the same way.","NFR-PORT-001..003, NFR-PORT-005"),
+(4,"MVP","US-15","Open the lab workspace","As a student, I get a native editor, terminal and my guide side by side, chosen by the lab.","FR-WS-001..005, NFR-MAINT-005"),
+(4,"MVP","US-16","Run lab tasks with limits","As a student, I can run lab tasks that have time and output limits via the local worker, and stop them at any time.","FR-EXEC-001..003, FR-EXEC-005, FR-EXEC-006, FR-EXEC-009, NFR-SEC-002, NFR-SEC-003"),
 (4,"MVP","US-17","Stay in control of what runs","As a student, nothing risky or AI-proposed runs without my approval, and I am told which commands are tracked.","FR-EXEC-004, FR-EXEC-007, FR-EXEC-008"),
 (4,"MVP","US-18","Responsive interface","As a student, the interface stays responsive and shows progress during long operations.","NFR-PERF-003, NFR-PERF-004"),
 # ---- Sprint 5
@@ -66,7 +65,7 @@ S = [
 (9,"MVP","US-35","Security review before the pilot","As the team, we complete the threat model, dependency scanning and untrusted-input rules.","NFR-SEC-001, NFR-SEC-011, NFR-SEC-012"),
 (9,"MVP","US-36","Privacy and legal readiness","As the team, retention, legal review and access rules are approved before real students join.","NFR-PRIV-004..007"),
 (9,"MVP","US-37","Usability and accessibility","As a beginner, I can find the next action, use the keyboard, and understand every error.","NFR-UX-001..007"),
-(9,"MVP","US-38","Fast start and detection","As a student, the app starts and checks my machine within the target times.","NFR-PERF-001, NFR-PERF-002"),
+(9,"MVP","US-38","Fast start and detection","As a student, the Flutter desktop app starts and checks my machine within the target times.","NFR-PERF-001, NFR-PERF-002"),
 (9,"MVP","US-39","Backups, degraded mode and rollback","As the team, backups are restored in a rehearsal, outages show clear messages, and bad content can be reversed.","NFR-REL-005..007"),
 (9,"MVP","US-40","Cost control","As the team, budgets and alerts exist and we report cost per active student.","NFR-COST-001, NFR-COST-003"),
 (9,"MVP","US-41","Every requirement has a test record","As the team, each MVP requirement has a named test or inspection record.","NFR-TEST-001"),
@@ -83,10 +82,10 @@ S = [
 (14,"R3","US-R3-4","Track my pull request","As a student, the platform links my PR to my attempt and I review my PR description before submitting.","FR-OSS-004, FR-OSS-005, FR-OSS-009, FR-OSS-015"),
 (15,"R3","US-R3-5","Secure webhooks and CI","As the team, webhooks are verified, duplicate events are ignored, and untrusted PR code never receives secrets.","FR-OSS-006, FR-OSS-007, NFR-SEC-016, NFR-SEC-017"),
 (15,"R3","US-R3-6","Points and review","As a student, I earn points from verified PR state, never twice, and maintainers can review or override with a reason.","FR-OSS-008, FR-OSS-010..013, FR-OSS-016, FR-OSS-017"),
-(15,"R3","US-R3-7","Third operating system","As a student on a third OS, the core flow works.","NFR-PORT-004"),
+(15,"R3","US-R3-7","Platform hardening and OS parity","As a student on Windows, Linux or macOS, platform hardening and full OS parity are verified.","NFR-PORT-004"),
 ]
 SPIKES = [
- (0,"SP-01","Electron shell spike (native modules, packaging, terminal)","Closes TBD-01 (resolved as Option B). Pass criteria in SAD Section 4.1 (S1)."),
+ (0,"SP-01","Flutter shell spike (flutter_pty, code editor, drift, secure storage, 3-OS packaging)","Closes TBD-01 (resolved as Option B Flutter). Pass criteria in SAD Section 4.1 (S1)."),
  (0,"SP-02","Sign-in spike","Closes TBD-02 (S2)."),
  (0,"SP-03","Grader sandbox spike","Closes TBD-03 (S3)."),
  (0,"SP-04","Cost and vendor comparison","Closes TBD-06 and TBD-13 (S4)."),

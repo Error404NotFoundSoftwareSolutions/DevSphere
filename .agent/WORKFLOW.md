@@ -8,7 +8,7 @@
 6. **Implement.** Smallest change that passes. Keep the starter-file comment up to date.
 7. **Check.** Run:
    ```bash
-   pnpm check
+   melos run check
    uv run pytest
    python tools/check_docs.py
    ```

@@ -10,7 +10,7 @@ Status: not started
 
 ## Question
 
-Sign in with Google from Electron using PKCE and a loopback redirect, then exchange for a provider credential; test cancel, offline and expired token.
+Sign in with Google from Flutter desktop using PKCE and a loopback redirect, then exchange for a provider credential; test cancel, offline and expired token.
 
 ## What I tried
 

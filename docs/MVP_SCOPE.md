@@ -9,13 +9,13 @@ The MVP is one vertical slice, piloted with 10 to 20 students: sign in, pick a P
 | Accounts | Google sign-in, minimal private profile, consent and age check |
 | Catalogue | 3 to 5 Python labs as immutable, versioned bundles |
 | Environment | Detect OS, Python, uv, Git; consented setup; isolated project environment |
-| Workspace | Monaco editor, terminal, task runner |
+| Workspace | Native Dart code editor (`re_editor`), terminal, task runner |
 | Guide | Ordered steps, copyable snippets, practice and understanding checks |
 | Tutor | Text tutor through the backend proxy, progressive hints, context controls, redaction |
 | Grading | Practice results (local) and Verified results (server sandbox) |
 | Progress | Saved locally, synced at-least-once, works offline on cached labs |
 | Content | Labs as files, validated and published by CI |
-| Platforms | Windows and Ubuntu LTS (macOS from R3) |
+| Platforms | Windows, Linux (Ubuntu LTS), and macOS |
 
 ## Out (see SRS section 5.14)
 

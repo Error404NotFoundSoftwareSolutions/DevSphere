@@ -4,10 +4,10 @@ Update this table whenever you test a configuration. "Tested" means the CI or ma
 
 | OS | Version | Arch | Target release | Status | Evidence | Known issues |
 |---|---|---|---|---|---|---|
-| Windows | 11 | x64 | MVP | Not tested | | |
-| Windows | 10 | x64 | MVP | Not tested | | |
-| Ubuntu LTS | 24.04 | x64 | MVP | Not tested | | Needs `libsecret` for secure storage |
-| macOS | current and previous | arm64 | R3 (best effort earlier) | Not tested | | Needs signing and notarisation |
+| Windows | 11 | x64 | MVP | Active in CI | CI matrix | Needs Visual Studio C++ runtime |
+| Windows | 10 | x64 | MVP | Active in CI | CI matrix | |
+| Ubuntu LTS | 24.04 | x64 | MVP | Active in CI | CI matrix | Needs `libsecret` for secure storage |
+| macOS | current and previous | arm64 / x64 | MVP | Active in CI | CI matrix | Needs signing and notarisation |
 
 ## Rules
 

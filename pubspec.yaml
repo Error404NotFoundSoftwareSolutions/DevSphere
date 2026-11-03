@@ -1,0 +1,10 @@
+name: devsphere_monorepo
+description: DevSphere monorepo workspace
+publish_to: none
+
+environment:
+  sdk: '>=3.5.0 <4.0.0'
+
+dev_dependencies:
+  melos: ^6.3.2
+

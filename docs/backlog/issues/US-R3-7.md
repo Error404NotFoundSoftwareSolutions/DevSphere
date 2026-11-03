@@ -1,5 +1,5 @@
 ---
-title: "[US-R3-7] Third operating system"
+title: "[US-R3-7] Platform hardening and OS parity"
 labels: [sprint-15, R3, P3, story]
 milestone: "Sprint 15"
 ---
@@ -8,10 +8,10 @@ milestone: "Sprint 15"
 **Sprint:** 15  |  **Release:** R3  |  **Priority:** P3 Low  |  **Work order:** #60 of 60
 
 ## User story
-As a student on a third OS, the core flow works.
+As a student on Windows, Linux or macOS, platform hardening and full OS parity are verified.
 
 ## Requirements covered
-- [ ] `NFR-PORT-004`: Core functions shall work on a third OS.
+- [ ] `NFR-PORT-004`: Platform hardening and OS parity shall be verified with automated test execution on Windows, Linux and macOS.
 
 ## Acceptance criteria
 - [ ] Every requirement above has a passing test case below, recorded in the test record

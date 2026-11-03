@@ -1,5 +1,0 @@
-packages:
-  - "apps/*"
-  - "services/local-worker"
-  - "packages/*"
-  - "tests/e2e"

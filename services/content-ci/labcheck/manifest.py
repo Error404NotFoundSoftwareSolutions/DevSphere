@@ -8,7 +8,9 @@ from pathlib import Path
 import yaml
 from jsonschema import Draft202012Validator
 
-SCHEMA = Path(__file__).parents[3] / "packages/lab-schema/manifest.schema.json"
+_SCHEMA_PRIMARY = Path(__file__).parents[3] / "packages/lab_schema/manifest.schema.json"
+_SCHEMA_FALLBACK = Path(__file__).parents[3] / "packages/lab-schema/manifest.schema.json"
+SCHEMA = _SCHEMA_PRIMARY if _SCHEMA_PRIMARY.exists() else _SCHEMA_FALLBACK
 
 
 def check_manifest(lab: Path) -> list[str]:

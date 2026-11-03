@@ -8,8 +8,8 @@ Implemented here: where cross-cutting tests live. Unit tests sit next to the cod
 
 | Folder | What | Run |
 |---|---|---|
-| `e2e/` | The packaged app, driven by Playwright (Windows, Ubuntu; macOS best-effort) | `pnpm e2e` |
+| `apps/desktop/integration_test/` | The desktop app, driven by Flutter `integration_test` (Windows, Linux, macOS) | `flutter test integration_test` |
 | `usability/` | Pilot script and feedback form (PL-01, US-37) | by hand |
-| `perf/` | Start-up and detection timing (US-38) | `pnpm --filter @devsphere/e2e perf` |
+| `perf/` (integration_test) | Start-up and detection timing (US-38) | `flutter test integration_test/startup_test.dart` |
 
 Naming: a test for requirement `FR-AUTH-001` is called `TC-FR-AUTH-001-01` in its title, so the traceability matrix can find it.

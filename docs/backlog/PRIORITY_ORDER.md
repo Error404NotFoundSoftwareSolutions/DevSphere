@@ -12,7 +12,7 @@ Order rule: sprint first, then priority (P0 before P1 before P2 before P3), then
 
 | # | Sprint | Priority | Story | Title | Test cases |
 |---:|---:|---|---|---|---:|
-| 1 | 0 | P0 | [SP-01](issues/SP-01.md) | Electron shell spike (native modules, packaging, terminal) | 0 |
+| 1 | 0 | P0 | [SP-01](issues/SP-01.md) | Flutter shell spike (flutter_pty, code editor, drift, secure storage, 3-OS packaging) | 0 |
 | 2 | 0 | P0 | [SP-02](issues/SP-02.md) | Sign-in spike | 0 |
 | 3 | 0 | P0 | [SP-03](issues/SP-03.md) | Grader sandbox spike | 0 |
 | 4 | 0 | P0 | [SP-06](issues/SP-06.md) | Repository, CI skeleton and definition of done | 0 |
@@ -31,7 +31,7 @@ Order rule: sprint first, then priority (P0 before P1 before P2 before P3), then
 | 17 | 3 | P1 | [US-11](issues/US-11.md) | See whether my computer is ready | 7 |
 | 18 | 3 | P1 | [US-12](issues/US-12.md) | Approve and run setup safely | 8 |
 | 19 | 3 | P1 | [US-13](issues/US-13.md) | Create the project environment and recover from failure | 5 |
-| 20 | 3 | P1 | [US-14](issues/US-14.md) | Work on Windows and a second OS | 4 |
+| 20 | 3 | P1 | [US-14](issues/US-14.md) | Work on Windows, Linux and macOS | 4 |
 | 21 | 4 | P0 | [US-16](issues/US-16.md) | Run lab tasks with limits | 11 |
 | 22 | 4 | P0 | [US-17](issues/US-17.md) | Stay in control of what runs | 4 |
 | 23 | 4 | P1 | [US-15](issues/US-15.md) | Open the lab workspace | 6 |
@@ -71,4 +71,4 @@ Order rule: sprint first, then priority (P0 before P1 before P2 before P3), then
 | 57 | 14 | P3 | [US-R3-4](issues/US-R3-4.md) | Track my pull request | 5 |
 | 58 | 15 | P3 | [US-R3-5](issues/US-R3-5.md) | Secure webhooks and CI | 6 |
 | 59 | 15 | P3 | [US-R3-6](issues/US-R3-6.md) | Points and review | 8 |
-| 60 | 15 | P3 | [US-R3-7](issues/US-R3-7.md) | Third operating system | 1 |
+| 60 | 15 | P3 | [US-R3-7](issues/US-R3-7.md) | Platform hardening and OS parity | 1 |

@@ -19,8 +19,8 @@ def story_ids() -> list[str]:
 
 
 def channels_in_code() -> set[str]:
-    text = (ROOT / "packages/ipc-contract/src/channels.ts").read_text(encoding="utf-8")
-    block = text.split("CHANNELS", 1)[1].split("] as const", 1)[0]
+    text = (ROOT / "packages/ipc_contract/lib/src/channels.dart").read_text(encoding="utf-8")
+    block = text.split("channels = [", 1)[1].split("];", 1)[0]
     return set(re.findall(r'"([a-z]+:[A-Za-z]+)"', block))
 
 
@@ -28,6 +28,25 @@ def channels_in_docs() -> set[str]:
     return set(
         re.findall(r"`([a-z]+:[A-Za-z]+)`", (ROOT / "docs/IPC_API.md").read_text(encoding="utf-8"))
     )
+
+
+def check_ui_architecture() -> list[str]:
+    violations = []
+    target_dirs = [
+        ROOT / "apps/desktop/lib/ui",
+        ROOT / "apps/desktop/lib/features",
+    ]
+    for target in target_dirs:
+        if not target.exists():
+            continue
+        for file in target.rglob("*.dart"):
+            content = file.read_text(encoding="utf-8")
+            for i, line in enumerate(content.splitlines(), start=1):
+                if "import 'dart:io'" in line or 'import "dart:io"' in line:
+                    violations.append(f"{file.relative_to(ROOT)}:{i} imports dart:io directly")
+                if "Process.run" in line or "Process.start" in line:
+                    violations.append(f"{file.relative_to(ROOT)}:{i} accesses Process API")
+    return violations
 
 
 def main() -> int:
@@ -39,6 +58,7 @@ def main() -> int:
     code, docs = channels_in_code(), channels_in_docs()
     problems += [f"channel {c} is in code but not in docs/IPC_API.md" for c in sorted(code - docs)]
     problems += [f"channel {c} is in docs/IPC_API.md but not in code" for c in sorted(docs - code)]
+    problems += check_ui_architecture()
     for p in problems:
         print("FAIL", p)
     print("OK" if not problems else f"{len(problems)} problem(s)")

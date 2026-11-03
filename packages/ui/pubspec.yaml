@@ -1,0 +1,17 @@
+name: ui
+description: Shared UI widgets and label helpers for DevSphere
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: '>=3.5.0 <4.0.0'
+  flutter: '>=3.24.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+

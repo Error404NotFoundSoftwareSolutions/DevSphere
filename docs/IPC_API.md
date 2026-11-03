@@ -1,6 +1,6 @@
 # IPC API
 
-The only calls the UI may make. Defined in `packages/ipc-contract` (`channels.ts`, `schemas.ts`). Main and the worker validate every request and reject unknown channels and extra fields. No call accepts a raw command string.
+The only calls the UI may make. Defined in `packages/ipc_contract` (`channels.dart`, `schemas.dart`). The UI is strictly prohibited from direct Dart I/O file and process access. The local worker validates every request and rejects unknown channels and extra fields. No call accepts a raw command string.
 
 | Channel | Purpose | Story |
 |---|---|---|
@@ -25,4 +25,4 @@ The only calls the UI may make. Defined in `packages/ipc-contract` (`channels.ts
 
 ## Rules for each call
 
-Input and output are zod schemas. Errors use `{ code, message, recovery }`. Long operations send progress events. A call that changes the system or runs code requires an approval id from the user.
+Input and output are typed Dart request/response classes with strict schema validation. Errors use `{ code, message, recovery }`. Long operations send progress events. A call that changes the system or runs code requires an approval id from the user.

@@ -1,6 +1,6 @@
 # DevSphere
 
-An AI-assisted software learning platform: students build real projects on their own computer with guided steps, an AI tutor and automated checks. Desktop app (Electron) for Windows and Linux, macOS planned.
+An AI-assisted software learning platform: students build real projects on their own computer with guided steps, an AI tutor and automated checks. Desktop app (Flutter) for Windows, Linux and macOS.
 
 **Start here**
 
@@ -17,11 +17,13 @@ An AI-assisted software learning platform: students build real projects on their
 **Quick start**
 
 ```bash
-pnpm install          # JavaScript and TypeScript packages
-uv sync               # Python packages (api, grader, content-ci)
-pnpm dev              # run the desktop app in development
-pnpm check            # lint, typecheck and tests (JS and Python)
+dart pub global activate melos
+melos bootstrap              # Dart and Flutter packages
+uv sync --all-packages       # Python packages (api, grader, content-ci)
+flutter run -d windows       # run desktop app (or -d linux, -d macos)
+melos run check              # Dart/Flutter analyze and tests
+uv run pytest                # Python service tests
 python tools/check_docs.py   # keep requirements, design, backlog and tests consistent
 ```
 
-Repository layout: `apps/` user-facing apps, `services/` processes and backends, `packages/` shared TypeScript libraries, `content/` labs, `fixtures/` test data, `infra/` cloud setup, `tools/` scripts, `docs/` documentation, `.agent/` guidance for AI agents.
+Repository layout: `apps/` user-facing apps (Flutter), `services/` processes and backends (`local-worker`, `api`, `grader`, `content-ci`), `packages/` shared Dart libraries, `content/` labs, `fixtures/` test data, `infra/` cloud setup, `tools/` scripts, `docs/` documentation, `.agent/` guidance for AI agents.

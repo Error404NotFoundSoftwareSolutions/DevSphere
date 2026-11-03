@@ -7,7 +7,7 @@
 <!-- FR-/NFR- IDs, and the TC-<ID>-<nn> tests -->
 
 ## Checks
-- [ ] `pnpm check` and `uv run pytest` pass
+- [ ] `melos run check` and `uv run pytest` pass
 - [ ] `python tools/check_docs.py` passes
 - [ ] No secrets or protected material added
 - [ ] Docs and CHANGELOG updated

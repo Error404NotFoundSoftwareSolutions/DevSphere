@@ -1,9 +1,9 @@
 order,title,body,labels,milestone
-1,"[SP-01] Electron shell spike (native modules, packaging, terminal)","**Story ID:** SP-01
+1,"[SP-01] Flutter shell spike (flutter_pty, code editor, drift, secure storage, 3-OS packaging)","**Story ID:** SP-01
 **Sprint:** 0  |  **Release:** -  |  **Priority:** P0 Critical  |  **Work order:** #1 of 60
 
 ## User story
-Closes TBD-01 (resolved as Option B). Pass criteria in SAD Section 4.1 (S1).
+Closes TBD-01 (resolved as Option B Flutter). Pass criteria in SAD Section 4.1 (S1).
 
 ## Requirements covered
 - (none: spike or pilot; pass criteria are in the story text)
@@ -657,17 +657,17 @@ Tick a case only when it has run and passed.
 ## Dependencies / notes
 - Depends on: (list story IDs)
 ","sprint-3,MVP,P1,story",Sprint 3
-20,[US-14] Work on Windows and a second OS,"**Story ID:** US-14
+20,"[US-14] Work on Windows, Linux and macOS","**Story ID:** US-14
 **Sprint:** 3  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #20 of 60
 
 ## User story
-As a student on a supported OS, the core flow works the same way.
+As a student on Windows, Linux or macOS, the core flow works the same way.
 
 ## Requirements covered
-- [ ] `NFR-PORT-001`: Core MVP functions shall work on Windows and the second supported OS selected in TBD-04.
+- [ ] `NFR-PORT-001`: Core MVP functions shall work across Windows, Linux and macOS.
 - [ ] `NFR-PORT-002`: OS-specific behaviour shall be encapsulated in platform adapters, not in lab content.
 - [ ] `NFR-PORT-003`: Lab manifests shall declare supported OS, architecture and tool-version constraints.
-- [ ] `NFR-PORT-005`: [Option B] Native modules shall be rebuilt for the Electron ABI and smoke-tested in CI on each supported OS.
+- [ ] `NFR-PORT-005`: Flutter desktop CI shall build and smoke-test on Windows, Linux and macOS.
 
 ## Acceptance criteria
 - [ ] Every requirement above has a passing test case below, recorded in the test record
@@ -696,7 +696,7 @@ Tick a case only when it has run and passed.
 **Sprint:** 4  |  **Release:** MVP  |  **Priority:** P0 Critical  |  **Work order:** #21 of 60
 
 ## User story
-As a student, I can run lab tasks that have time and output limits, and stop them at any time.
+As a student, I can run lab tasks that have time and output limits via the local worker, and stop them at any time.
 
 ## Requirements covered
 - [ ] `FR-EXEC-001`: The Client shall run approved tasks in the lab's declared working directory.
@@ -705,8 +705,8 @@ As a student, I can run lab tasks that have time and output limits, and stop the
 - [ ] `FR-EXEC-005`: The student shall be able to stop any process the Client started, and the Client shall terminate that process's children where the OS allows.
 - [ ] `FR-EXEC-006`: Managed tasks shall have configurable time and output-size limits with defaults set in TBD-13.
 - [ ] `FR-EXEC-009`: When a task is blocked by permissions, a missing dependency or a limit, the Client shall say which and suggest a fix.
-- [ ] `NFR-SEC-002`: The Client UI layer shall have no direct unrestricted shell or filesystem access; privileged operations shall pass through a narrow, schema-validated interface.
-- [ ] `NFR-SEC-003`: [Option B] If a custom desktop shell is used, the renderer shall run with context isolation and sandboxing enabled, Node integration disabled, a restrictive content security policy, and an allow-listed IPC surface.
+- [ ] `NFR-SEC-002`: The Client UI layer shall have no direct unrestricted shell or filesystem access; privileged operations shall pass through a narrow, schema-validated interface to the local worker process.
+- [ ] `NFR-SEC-003`: The Client UI layer (apps/desktop/lib/ui and lib/features) shall not import dart:io or use Process/File APIs directly; privileged operations (process execution, file access, Git, SQLite sync) shall be handled by a separate local-worker process over a validated, typed IPC contract.
 
 ## Acceptance criteria
 - [ ] Every requirement above has a passing test case below, recorded in the test record
@@ -776,7 +776,7 @@ Tick a case only when it has run and passed.
 **Sprint:** 4  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #23 of 60
 
 ## User story
-As a student, I get an editor, terminal and my guide side by side, chosen by the lab.
+As a student, I get a native editor, terminal and my guide side by side, chosen by the lab.
 
 ## Requirements covered
 - [ ] `FR-WS-001`: The Client shall select the workspace from the lab manifest.
@@ -1544,7 +1544,7 @@ Tick a case only when it has run and passed.
 **Sprint:** 9  |  **Release:** MVP  |  **Priority:** P1 High  |  **Work order:** #44 of 60
 
 ## User story
-As a student, the app starts and checks my machine within the target times.
+As a student, the Flutter desktop app starts and checks my machine within the target times.
 
 ## Requirements covered
 - [ ] `NFR-PERF-001`: On the reference machine, the Client shall become usable within 10 seconds of launch, excluding first-run installation (target; TBD-07).
@@ -2092,14 +2092,14 @@ Tick a case only when it has run and passed.
 ## Dependencies / notes
 - Depends on: (list story IDs)
 ","sprint-15,R3,P3,story",Sprint 15
-60,[US-R3-7] Third operating system,"**Story ID:** US-R3-7
+60,[US-R3-7] Platform hardening and OS parity,"**Story ID:** US-R3-7
 **Sprint:** 15  |  **Release:** R3  |  **Priority:** P3 Low  |  **Work order:** #60 of 60
 
 ## User story
-As a student on a third OS, the core flow works.
+As a student on Windows, Linux or macOS, platform hardening and full OS parity are verified.
 
 ## Requirements covered
-- [ ] `NFR-PORT-004`: Core functions shall work on a third OS.
+- [ ] `NFR-PORT-004`: Platform hardening and OS parity shall be verified with automated test execution on Windows, Linux and macOS.
 
 ## Acceptance criteria
 - [ ] Every requirement above has a passing test case below, recorded in the test record
