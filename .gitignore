@@ -6,6 +6,9 @@
 .pub-cache/
 .pub/
 build/
+*.iml
+.idea/
+pubspec_overrides.yaml
 
 # Python
 .venv/
