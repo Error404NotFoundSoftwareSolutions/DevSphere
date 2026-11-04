@@ -1,0 +1,4 @@
+# Feature flags (ARC-11). Every flag has an owner and an expiry; expired flags are deleted or promoted.
+version: 1
+flags: []
+# - { id: FLAG-browser-agent, capability: CAP-BROWSER-AGENT, owner: "<name>", default: off, expires: 2027-03-01 }

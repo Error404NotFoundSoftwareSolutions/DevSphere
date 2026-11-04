@@ -88,3 +88,31 @@ Format: **Status** (Proposed, Accepted, Superseded), **Context**, **Decision**, 
   3. Author and deploy production Cloud Firestore Security Rules (`firestore.rules`) enforcing student-only data isolation (`request.auth.uid == uid`), audit-immutable consent logs with strict exclusion of date-of-birth (FR-PROF-001, FR-PROF-010), and read-only educational catalogue access with default-deny.
   4. Encapsulate client interactions within clean service abstractions (`FirebaseAuthService`, `FirestoreService`).
 - **Consequences:** Enables secure, seamless Google sign-in and real-time document synchronization with end-to-end data boundary enforcement.
+
+## ADR-016: Extension fabric and agentic coding kit (Track X)
+- **Status:** Accepted (4 Nov 2026), documentation only.
+- **Decision:** Ports and adapters, named extension points, a capability registry, profiles and flags, contracts-first schemas, and an ideas intake pipeline (IDEA -> RFC -> ADR -> plan -> stories). Agent instructions live in `AGENTS.md` and `.agents/` as the single source, with an interaction protocol (session report plus questions) and a code freeze flag in `.agents/STATE.yaml`.
+- **Consequences:** New ideas attach through `.agents/registry/`; no code changes while `code_freeze: true`; enforcement hooks come later (PL-KIT-08).
+
+## ADR-017: Curriculum, skill graph and roadmap engine (Track E)
+- **Status:** Proposed (4 Nov 2026). Questions Q-020 to Q-023 answered (hybrid roadmaps, prebuilt practice repo, four first packs, levels and badges). Waiting for the owner's yes and a change request against `MVP_SCOPE.md`.
+- **Context:** The core idea is teaching tool literacy to engineering students with scored hands-on labs on prebuilt or generated roadmaps, an open-source contribution sandbox, then professional skills (`docs/CORE_IDEA.md`).
+- **Decision (recommended):** Skill graph and skill packs as validated content; roadmaps from a prebuilt source and a catalogue-constrained generator; scores and badges only from Verified results; AI reviewer is advisory (`.agents/plans/60-curriculum-and-roadmap-plan.md`).
+- **Consequences:** New content schemas; evals for the generator and reviewer; MVP "Out" items (achievements, more labs) need an owner decision.
+
+## ADR-018: DevSphere IDE as a branded fork of Code-OSS (Track B)
+- **Status:** Accepted (4 Nov 2026). Answers: Q-001 IDE hosts the learning platform; Q-002 patch-set on a pinned tag; Q-004 both user types via profiles; Q-006 closed source; Q-007 Open VSX; Q-008 name undecided (working name DevSphere); Q-015 separate repo `devsphere-ide`. The Flutter app is paused; ADR-003 is formally superseded only when Q-014 (archive or keep) is answered.
+- **Context:** The owner wants an IDE based on open-source VS Code, made our own, with an integrated browser. The current app is a Flutter learning shell with a native Dart editor.
+- **Options:** patch-set on a pinned upstream tag; long-lived fork; Eclipse Theia; extension plus wrapper; web-only. See `.agents/architecture/ide-fork.md` section 5.
+- **Decision:** patch-set on a pinned tag, extension-first (`.agents/rules/95-ide-fork.md`), Open VSX gallery, telemetry off, learning flow as built-in extensions reusing Track A services over contracts.
+- **Consequences:** TypeScript joins the stack; monthly upstream sync; legal review of branding, marketplace and licences; SRS/SAD v2 needed.
+
+## ADR-019: Integrated browser (Track C)
+- **Status:** Accepted (4 Nov 2026). Answers: Q-003 preview, reader, AI-operable and general browsing; Q-019 general browsing is a capability (warning banner, isolated session, no sync/passwords/extensions), not a browser replacement.
+- **Decision:** Isolated browser surface in the IDE behind a `BrowserEngine` port; preview and reader first; agent automation only through declared tools with approvals, consent banner and audit log (`.agents/architecture/integrated-browser.md`).
+- **Consequences:** New hostile-page test fixtures and evals; new network destinations documented in `docs/SECURITY.md`.
+
+## ADR-020: In-product agent runtime with Tutor / Pair / Agent modes (Track D)
+- **Status:** Accepted (4 Nov 2026). Answers: Q-004, Q-005 (Tutor, Pair, Agent by profile). Provider choice (Q-013) still open; the provider port keeps it swappable.
+- **Decision:** One runtime with tool registry, approval engine, checkpoints, audit log and provider port; mode chosen by profile; Tutor guarantees of ADR-007 and `AI_TUTOR_POLICY.md` stay intact (`.agents/architecture/agent-runtime.md`).
+- **Consequences:** Rules TRU-05..TRU-10 and AIR-01..AIR-12 become release gates once accepted.

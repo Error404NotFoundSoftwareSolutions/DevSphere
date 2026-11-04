@@ -1,0 +1,21 @@
+# Extension point registry. Add a row BEFORE building a feature that needs a new plug-in place (ARC-04).
+# stability: experimental | stable.  track: A..X as in STATE.yaml.
+version: 1
+extension_points:
+  - { id: EP-PROVIDER,           track: D, stability: experimental, contract: "ModelProvider port",            note: "Model, speech, embedding providers" }
+  - { id: EP-AGENT-TOOL,         track: D, stability: experimental, contract: "tool schema (MCP-compatible)",   note: "Tools an agent can call; must declare side effects and capabilities" }
+  - { id: EP-APPROVAL-POLICY,    track: D, stability: experimental, contract: "policy schema",                  note: "Decides allow/ask/deny; scoped allowances" }
+  - { id: EP-WORKBENCH-VIEW,     track: B, stability: stable,       contract: "VS Code contribution points",    note: "Views, editors, status bar, commands" }
+  - { id: EP-BROWSER-CAPABILITY, track: C, stability: experimental, contract: "capability list per origin",     note: "What the integrated browser may do" }
+  - { id: EP-LAB-KIND,           track: A, stability: stable,       contract: "packages/lab_schema manifest",   note: "New lab types, languages, runtimes" }
+  - { id: EP-CHECKER,            track: A, stability: stable,       contract: "checker schema (Runner)",        note: "New automatic checks" }
+  - { id: EP-IPC-CHANNEL,        track: A, stability: stable,       contract: "packages/ipc_contract",          note: "UI <-> worker channels; docs/IPC_API.md must match" }
+  - { id: EP-API-ROUTE,          track: A, stability: stable,       contract: "OpenAPI (docs/BACKEND_API.md)",  note: "Backend endpoints" }
+  - { id: EP-EVENT-SINK,         track: X, stability: experimental, contract: "event schema",                   note: "Audit log and analytics consumers" }
+  - { id: EP-PROFILE,            track: X, stability: experimental, contract: "profile schema",                 note: "User-type presets: beginner, professional, exam" }
+  - { id: EP-EXTENSION-GALLERY,  track: B, stability: experimental, contract: "ExtensionGallery port",          note: "Open VSX default" }
+  - { id: EP-CONTENT-SOURCE,     track: A, stability: experimental, contract: "content-source port",            note: "Where labs/challenges come from" }
+  - { id: EP-SKILL-PACK,         track: E, stability: experimental, contract: "skill pack schema",              note: "A set of labs + final verified task for one skill" }
+  - { id: EP-ROADMAP-SOURCE,     track: E, stability: experimental, contract: "roadmap schema",                 note: "Prebuilt or generated roadmaps; catalogue-only" }
+  - { id: EP-REVIEWER,           track: E, stability: experimental, contract: "review rubric + comment schema", note: "Automated/AI/human PR reviewers; advisory only" }
+  - { id: EP-TELEMETRY,          track: X, stability: experimental, contract: "Telemetry port",                 note: "Default: none" }

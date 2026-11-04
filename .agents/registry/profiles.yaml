@@ -1,0 +1,19 @@
+# Profiles = configuration presets (ARC-05). Feature code reads capability switches, never the profile name.
+version: 1
+profiles:
+  beginner:
+    ai_mode: Tutor
+    browser: { nav: [localhost, allowlist], devtools: false, automation: off }
+    telemetry: none
+    shows: [guided-steps, practice-badge, context-controls]
+  professional:
+    ai_mode: Pair            # Agent opt-in
+    browser: { nav: [localhost, allowlist, any-with-warning], devtools: true, automation: read+act-with-approval }
+    telemetry: none
+    shows: [full-workbench, terminal, git]
+  exam:
+    ai_mode: off
+    browser: { nav: [localhost], devtools: false, automation: off }
+    telemetry: none
+    shows: [guided-steps, practice-badge]
+    note: "Proposed. Only a verified submission counts; AI and external navigation disabled."
