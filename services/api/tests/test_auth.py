@@ -3,9 +3,9 @@
 # Implemented here: tests for token validation matrix, stable user IDs, sign-out revocation, role enforcement
 
 from app.core import audit
-from app.core.auth import create_token, get_or_create_user
+from app.core.auth import create_token
 from app.db import memory
-from conftest import OPERATOR, STUDENT
+from conftest import OPERATOR
 
 
 def test_tc_fr_auth_004_01_backend_validates_token(client):

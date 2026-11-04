@@ -122,7 +122,7 @@ def verify_token(token_str: str) -> dict:
                 "message": "Malformed token payload.",
                 "recovery": "Please sign in again.",
             },
-        )
+        ) from None
 
     sub = payload.get("sub", "anonymous")
 

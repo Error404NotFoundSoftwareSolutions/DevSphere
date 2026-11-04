@@ -2,6 +2,9 @@
 cmake_minimum_required(VERSION 3.10)
 project(runner LANGUAGES CXX)
 
+# Force installation to stay local in the build directory bundle, avoiding root /usr/local installation
+set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/bundle" CACHE PATH "Local bundle installation directory" FORCE)
+
 # The name of the executable created for the application. Change this to change
 # the on-disk name of your application.
 set(BINARY_NAME "devsphere_scaffold")

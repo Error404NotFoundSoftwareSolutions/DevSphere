@@ -95,6 +95,14 @@ if [ "$TARGET_DEVICE" = "linux" ]; then
     echo "Falling back to Chrome device..."
     TARGET_DEVICE="chrome"
   fi
+
+  # Clean stale CMake cache if it was configured with /usr/local
+  if [ -f "$ROOT_DIR/apps/desktop/build/linux/x64/debug/CMakeCache.txt" ]; then
+    if grep -q "CMAKE_INSTALL_PREFIX:PATH=/usr/local" "$ROOT_DIR/apps/desktop/build/linux/x64/debug/CMakeCache.txt" 2>/dev/null; then
+      echo "Cleaning stale Linux CMake build cache..."
+      rm -rf "$ROOT_DIR/apps/desktop/build/linux"
+    fi
+  fi
 fi
 
 # 4. Start Backend API Server
@@ -144,3 +152,4 @@ echo "--> Launching DevSphere Client on target: $TARGET_DEVICE..."
 cd "$ROOT_DIR/apps/desktop"
 
 flutter run -d "$TARGET_DEVICE"
+
