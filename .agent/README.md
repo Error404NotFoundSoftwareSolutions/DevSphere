@@ -2,14 +2,16 @@
 
 This folder tells an agent what the project is for, what it must never do, where things live and how to carry out a task.
 
+> **Standard issue workflow:** See [WORKFLOW.md](WORKFLOW.md). For every issue: branch, change, test until green (max 5 cycles), docs, commit, push, pull request.
+
 ## Reading order
 
-1. `GOAL.md`: what we are building and why.
-2. `RULES.md`: hard rules. Read before every task.
-3. `PROJECT_MAP.md`: where each part of the system lives.
-4. `WORKFLOW.md`: the steps for any task.
-5. `tasks/`: a playbook per kind of task (story, IPC call, API endpoint, lab, defect, release).
-6. `CURRENT_SPRINT.md`: what is being worked on now.
+1. `WORKFLOW.md`: **Standard issue workflow** (branch, change, test until green, docs, commit, push, PR). Read first.
+2. `GOAL.md`: what we are building and why.
+3. `RULES.md`: hard rules. Read before every task.
+4. `PROJECT_MAP.md`: where each part of the system lives and where tests go.
+5. `tasks/`: a playbook per kind of task (story, defect, IPC call, API endpoint, lab, release).
+6. `CURRENT_SPRINT.md`: what is being worked on now and priority order.
 7. `checklists/`: definition of done and security review.
 
 ## Source of truth

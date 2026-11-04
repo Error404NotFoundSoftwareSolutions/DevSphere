@@ -21,3 +21,16 @@
 | `docs/` | All documentation | all |
 
 Every source file begins with a comment naming the user story and requirement IDs it implements. `docs/backlog/STORY_MAP.md` lists them all.
+
+## Where tests go
+
+Each test type lives in its designated location:
+
+| Test type | Location | Runner / Command |
+|---|---|---|
+| **Python services** | `services/api/tests/`, `services/grader/tests/`, `services/content-ci/tests/` | `uv run pytest` |
+| **Dart packages** | `packages/<name>/test/` (`ipc_contract`, `redaction`, `lab_schema`, `api_client`, `ui`) | `melos run test` |
+| **Desktop app & Worker** | `apps/desktop/test/`, `services/local-worker/test/` | `melos run test` |
+| **Integration tests** | `apps/desktop/integration_test/`, `tests/` | `flutter test integration_test/` / `uv run pytest tests/` |
+| **Lab content tests** | `content/<lab>/tests/` (public tests) and `content/<lab>/tests/protected/` (grader hidden tests) | `services/content-ci` / Grader harness |
+| **Spikes** | `spikes/<spike-name>/` (spike code, results, verification logs) | per-spike validation script / manual record |

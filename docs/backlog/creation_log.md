@@ -2,7 +2,7 @@
 
 | Story ID | Issue Number | Issue URL | Status / Notes |
 | --- | --- | --- | --- |
-| SP-01 | #1 | https://github.com/Error404NotFoundSoftwareSolutions/DevSphere/issues/1 | Created and fields set successfully |
+| SP-01 | #1 | https://github.com/Error404NotFoundSoftwareSolutions/DevSphere/issues/1 | Completed: Flutter shell spike passed criteria (a)-(f) in SAD 4.1; ADR-003 accepted |
 | SP-02 | #2 | https://github.com/Error404NotFoundSoftwareSolutions/DevSphere/issues/2 | Created and fields set successfully |
 | SP-03 | #3 | https://github.com/Error404NotFoundSoftwareSolutions/DevSphere/issues/3 | Created and fields set successfully |
 | SP-06 | #4 | https://github.com/Error404NotFoundSoftwareSolutions/DevSphere/issues/4 | Created and fields set successfully |
