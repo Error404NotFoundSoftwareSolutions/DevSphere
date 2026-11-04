@@ -19,7 +19,7 @@ Implemented here: Sprint 0: each spike ends with a written decision, then the co
 | SP-01 `flutter-shell/` | Do flutter_pty, re_editor, drift and secure storage build and package on Windows, Linux and macOS? | `RESULT.md` |
 | SP-02 `signin/` | Does PKCE + provider credential sign-in work from Flutter? | `RESULT.md` |
 | SP-03 `grader-sandbox/` | Can the hostile suite be contained at acceptable cost? | `RESULT.md` |
-| SP-04 | Provider and cost comparison (TBD-06, TBD-03) | `docs/DECISIONS.md` entry |
-| SP-05 | Legal review of age policy and retention (TBD-07, TBD-08) | `docs/DECISIONS.md` entry |
+| SP-04 `cost-vendors/` | Provider and cost comparison (TBD-06, TBD-13) | `RESULT.md`, `docs/DECISIONS.md` ADR-011 |
+| SP-05 `legal-review/` | Legal review of age policy and retention (TBD-08, TBD-09) | `RESULT.md`, `docs/DECISIONS.md` ADR-012 |
 
 Rule: spike code is throwaway. Record the decision in `docs/DECISIONS.md` and link it from the RESULT file.

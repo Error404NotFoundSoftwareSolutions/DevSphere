@@ -47,8 +47,34 @@ Format: **Status** (Proposed, Accepted, Superseded), **Context**, **Decision**, 
 ## ADR-010: SQLite in the local worker
 - **Status:** Accepted. **Decision:** Progress, cached bundle index and the sync outbox live in SQLite owned by the worker. No secrets, no protected material. **Consequences:** another native module in the build matrix.
 
-## ADR-011: Cloud stack
-- **Status:** Proposed (SP-04, TBD-06). **Decision:** Default hypothesis: managed identity, managed Postgres, a scale-to-zero container service for the API, a separate project for the grader. **Consequences:** the always-on database cost is compared against alternatives before the build starts.
+## ADR-011: Cloud stack and operational cost limits
+- **Status:** Accepted (4 Nov 2026). Closes TBD-06 and TBD-13.
+- **Context:** Select managed cloud services for authentication, database, queue, container runtime, object storage, and AI proxy, and pin default limits.
+- **Decision:**
+  1. Primary cloud: GCP with Cloud Run (scale-to-zero API and Grader), Cloud SQL PostgreSQL, Cloud Tasks, Cloud Storage (private buckets with signed URLs), and Firebase Auth.
+  2. AI proxy: Backend proxy to Gemini 1.5 Flash and Claude 3.5 Haiku with token rate-limiting.
+  3. Pinned resource limits: 10s task timeout, 200KB output limit (FR-EXEC-005, FR-EXEC-006); 50 AI queries/day per student (FR-AI-013); 5 submissions/hour, max 20/day per student (FR-GRADE-016).
+  4. Billing budget alert set at $50/month threshold.
+- **Consequences:** Fixed monthly infrastructure base kept under $35/month; per-submission cost ~$0.0028; predictable, capped operational expenditure.
 
-## ADR-012: Age policy
-- **Status:** Proposed (SP-05, TBD-08). **Decision:** Pilot restricted to students aged 18 or over, pending legal advice.
+## ADR-012: Student age policy and data retention schedule
+- **Status:** Accepted (4 Nov 2026). Closes TBD-08 and TBD-09.
+- **Context:** Legal compliance (COPPA, GDPR-K, UK Children's Code) and student data privacy lifecycle for the pilot.
+- **Decision:**
+  1. Pilot restricted to students aged 18 and older, confirmed via onboarding self-declaration without collecting date of birth (FR-PROF-001, FR-PROF-010).
+  2. Strict data minimization: no date of birth, phone numbers, or government IDs (FR-PROF-003).
+  3. AI prompt bodies and responses are ephemeral by default, purged immediately upon response generation. Retained only if student explicitly opts in for debugging (FR-AI-015).
+  4. Retention schedule: Student submissions and attempt logs retained for 180 days post-course completion, then archived/purged. Deletion requests executed within 30 days (FR-PROF-009). Non-PII audit trail preserved for 1 year.
+- **Consequences:** Avoids minor-consent compliance overhead in MVP; ensures strict privacy and GDPR compliance.
+
+## ADR-013: Grader container sandbox under user-space kernel (gVisor)
+- **Status:** Accepted (4 Nov 2026). Closes TBD-03.
+- **Context:** The Grader must execute untrusted student Python code without risking host escape, denial of service, secret leakage, or forged grading reports.
+- **Decision:** Run each submission in a disposable container backed by a user-space kernel sandbox (gVisor / `runsc`) with network completely disabled (`--network none`), read-only root filesystem, memory cap (512MB), CPU quota, process limit (`pids_limit=32`), and safe archive extraction. Pinned test manifests and trusted harnesses prevent in-container report tampering.
+- **Consequences:** Secure containment of hostile student submissions with p95 turnaround under 9s and compute cost under $0.003/submission.
+
+## ADR-014: Repository skeleton, CI skeleton and definition of done
+- **Status:** Accepted (4 Nov 2026). Closes SP-06.
+- **Context:** Monorepo architecture covering Dart Flutter client, Dart local worker, Python FastAPI backend, Python Grader, and lab content requires a reproducible CI and repository consistency harness.
+- **Decision:** Enforce mono-repository structure with `melos` for Dart and `uv` for Python. CI runs checks on pull requests and manual dispatch (disabling automatic run on every push to save runner minutes). Enforce Definition of Done with automated scripts (`tools/check_docs.py`, `check_sad.py`, `story_map.py`, `check_repo.py`).
+- **Consequences:** Unified tooling and continuous verification across all platforms without quota exhaustion.
