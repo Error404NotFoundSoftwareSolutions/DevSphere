@@ -189,3 +189,4 @@
 
 - [ ] **Step 3: Review git status and diff**
   Verify no unwanted files, secrets, or temporary files are present.
+

@@ -60,7 +60,7 @@ class _SignInScreenState extends State<SignInScreen> {
       if (widget.onSignInSuccess != null) {
         widget.onSignInSuccess!();
       } else if (mounted) {
-        context.go('/catalogue');
+        context.go('/profile');
       }
     } catch (e) {
       if (mounted) {
@@ -126,12 +126,20 @@ class _SignInScreenState extends State<SignInScreen> {
                 ],
                 if (_isLoading)
                   const CircularProgressIndicator()
-                else
+                else ...[
                   ElevatedButton.icon(
                     onPressed: _handleSignIn,
                     icon: const Icon(Icons.login),
                     label: Text(_error != null ? 'Retry Sign In' : 'Sign in with Google'),
                   ),
+                  const SizedBox(height: 12),
+                  OutlinedButton.icon(
+                    key: const Key('auth_enter_profile_button'),
+                    onPressed: () => context.go('/profile'),
+                    icon: const Icon(Icons.person_outline),
+                    label: const Text('Input Profile Details'),
+                  ),
+                ],
               ],
             ),
           ),
