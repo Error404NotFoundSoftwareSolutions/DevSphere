@@ -42,6 +42,14 @@ void _checkId(dynamic val, String field) {
   }
 }
 
+final RegExp _labIdPattern = RegExp(r'^[a-z0-9][a-z0-9_-]{0,63}$');
+
+void _checkLabId(dynamic val) {
+  if (val is! String || !_labIdPattern.hasMatch(val)) {
+    throw IpcValidationException('Field "labId" must be lowercase letters, digits, dash or underscore (max 64).');
+  }
+}
+
 final Map<String, ChannelSchema> channelSchemas = {
   "auth:signIn": ChannelSchema(
     allowedRequestKeys: {},
@@ -176,6 +184,31 @@ final Map<String, ChannelSchema> channelSchemas = {
         throw IpcValidationException('Field "confirmedFiles" must be a list.');
       }
     },
+  ),
+  // Companion VS Code extension (ADR-019). No call accepts a path or a command: only a lab id or an explicit approval.
+  "companion:status": ChannelSchema(
+    allowedRequestKeys: {},
+    requiredRequestKeys: {},
+    validateRequestData: (_) {},
+  ),
+  "companion:install": ChannelSchema(
+    allowedRequestKeys: {"approved"},
+    requiredRequestKeys: {"approved"},
+    validateRequestData: (d) {
+      if (d["approved"] is! bool) {
+        throw IpcValidationException('Field "approved" must be true or false.');
+      }
+    },
+  ),
+  "companion:launch": ChannelSchema(
+    allowedRequestKeys: {"labId"},
+    requiredRequestKeys: {"labId"},
+    validateRequestData: (d) => _checkLabId(d["labId"]),
+  ),
+  "companion:sessionState": ChannelSchema(
+    allowedRequestKeys: {"labId"},
+    requiredRequestKeys: {"labId"},
+    validateRequestData: (d) => _checkLabId(d["labId"]),
   ),
 };
 

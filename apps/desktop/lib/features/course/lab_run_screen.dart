@@ -1,27 +1,85 @@
 // User story: US-19 Follow a step-by-step guide (Sprint 5, MVP)
 // Requirements: FR-GUIDE-001..005, FR-GUIDE-006, FR-GRADE-002, NFR-USE-001
-// Implemented here: guided lab page in the Google-Skills pattern: breadcrumb, toolbar with step dropdown and
-// Practice score pill, instructions, and a "Lab setup and access" panel with copyable values. SAMPLE content.
-// Scores here are Practice (local). Only a Verified server result can earn a badge (TRU-01, TRU-02).
+// Capability: CAP-COURSE-PLAYER (ADR-019). Tests: TC-DES-003-10, TC-LNK-48, TC-LNK-49
+// Implemented here: the lab page in the app. The guided steps run in VS Code (BuildLoop Guide panel);
+// this page follows the open lab: Practice score and step states from the worker, the lab folder, and a
+// way to bring VS Code forward. Scores here are Practice. Only a Verified result can earn a badge.
 
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ui/ui.dart';
+import '../../api.dart';
+import '../../worker/worker_client.dart';
 import '../dashboard/dashboard_data.dart';
+import 'start_lab_flow.dart';
 
-class LabRunScreen extends StatefulWidget {
-  const LabRunScreen({super.key, required this.id});
+class LabRunScreen extends ConsumerStatefulWidget {
+  const LabRunScreen(
+      {super.key,
+      required this.id,
+      this.pollInterval = const Duration(seconds: 2)});
 
   final String id;
+  final Duration pollInterval;
 
   @override
-  State<LabRunScreen> createState() => _LabRunScreenState();
+  ConsumerState<LabRunScreen> createState() => _LabRunScreenState();
 }
 
-class _LabRunScreenState extends State<LabRunScreen> {
-  late String _step = SampleData.byId(widget.id).steps.first;
+class _LabRunScreenState extends ConsumerState<LabRunScreen> {
+  Timer? _timer;
+  bool _fetching = false;
+  bool _active = false;
+  String _labRoot = '';
+  List<Map<String, dynamic>> _steps = const [];
+  String? _busy;
   bool _panelOpen = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetch();
+    _timer = Timer.periodic(widget.pollInterval, (_) => _fetch());
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _fetch() async {
+    if (_fetching) return;
+    _fetching = true;
+    try {
+      final r = await ref
+          .read(workerClientProvider)
+          .send('companion:sessionState', {'labId': widget.id});
+      if (!mounted) return;
+      final steps = r['steps'];
+      setState(() {
+        _active = r['active'] == true;
+        _labRoot = '${r['labRoot'] ?? ''}';
+        _steps = steps is List
+            ? [
+                for (final s in steps)
+                  if (s is Map) s.cast<String, dynamic>()
+              ]
+            : const [];
+      });
+    } on WorkerException {
+      // The page keeps its last known state; the Start button reports problems in plain words.
+    } finally {
+      _fetching = false;
+    }
+  }
+
+  int get _passed => _steps.where((s) => s['state'] == 'pass').length;
+  int get _score =>
+      _steps.isEmpty ? 0 : ((_passed / _steps.length) * 100).round();
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +92,11 @@ class _LabRunScreenState extends State<LabRunScreen> {
           children: [
             _Breadcrumb(title: a.title),
             _Toolbar(
-              steps: a.steps,
-              value: _step,
-              onChanged: (v) => setState(() => _step = v ?? _step),
+              score: _score,
+              busy: _busy,
+              onOpenAgain: () => startLab(context, ref, widget.id, onBusy: (l) {
+                if (mounted) setState(() => _busy = l);
+              }),
               panelOpen: _panelOpen,
               onTogglePanel: () => setState(() => _panelOpen = !_panelOpen),
             ),
@@ -44,10 +104,20 @@ class _LabRunScreenState extends State<LabRunScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(child: _Instructions(step: _step, lab: a)),
+                  Expanded(
+                    child: _Body(
+                      active: _active,
+                      steps: _steps,
+                      onStart: () =>
+                          startLab(context, ref, widget.id, onBusy: (l) {
+                        if (mounted) setState(() => _busy = l);
+                      }),
+                      busy: _busy,
+                    ),
+                  ),
                   if (showPanel)
                     _SetupPanel(
-                        id: a.id,
+                        labRoot: _labRoot,
                         onClose: () => setState(() => _panelOpen = false)),
                 ],
               ),
@@ -92,17 +162,16 @@ class _Breadcrumb extends StatelessWidget {
 }
 
 class _Toolbar extends StatelessWidget {
-  const _Toolbar({
-    required this.steps,
-    required this.value,
-    required this.onChanged,
-    required this.panelOpen,
-    required this.onTogglePanel,
-  });
+  const _Toolbar(
+      {required this.score,
+      required this.busy,
+      required this.onOpenAgain,
+      required this.panelOpen,
+      required this.onTogglePanel});
 
-  final List<String> steps;
-  final String value;
-  final ValueChanged<String?> onChanged;
+  final int score;
+  final String? busy;
+  final VoidCallback onOpenAgain;
   final bool panelOpen;
   final VoidCallback onTogglePanel;
 
@@ -120,38 +189,18 @@ class _Toolbar extends StatelessWidget {
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           Container(
-            width: 300,
-            padding: const EdgeInsets.symmetric(horizontal: BL.space6),
-            decoration: BoxDecoration(
-              color: BL.surface,
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: BL.textSecondary),
-            ),
-            child: DropdownButton<String>(
-              value: value,
-              isExpanded: true,
-              underline: const SizedBox.shrink(),
-              items: [
-                for (final s in steps)
-                  DropdownMenuItem(
-                      value: s, child: Text(s, overflow: TextOverflow.ellipsis))
-              ],
-              onChanged: onChanged,
-            ),
-          ),
-          Container(
             padding: const EdgeInsets.symmetric(
                 horizontal: BL.space4, vertical: BL.space2),
             decoration: BoxDecoration(
                 color: const Color(0xFFD9F2E6),
                 borderRadius: BorderRadius.circular(BL.radiusMd)),
-            child: Text('Practice score: 0 / 100',
+            child: Text('Practice score: $score / 100',
                 style: text.labelLarge?.copyWith(color: BL.success)),
           ),
           OutlinedButton.icon(
-            onPressed: () {},
-            icon: const Icon(Icons.task_alt, size: 18),
-            label: const Text('Check my work'),
+            onPressed: busy == null ? onOpenAgain : null,
+            icon: const Icon(Icons.open_in_new, size: 18),
+            label: Text(busy ?? 'Open VS Code again'),
             style: OutlinedButton.styleFrom(shape: const StadiumBorder()),
           ),
           OutlinedButton(
@@ -165,11 +214,17 @@ class _Toolbar extends StatelessWidget {
   }
 }
 
-class _Instructions extends StatelessWidget {
-  const _Instructions({required this.step, required this.lab});
+class _Body extends StatelessWidget {
+  const _Body(
+      {required this.active,
+      required this.steps,
+      required this.onStart,
+      required this.busy});
 
-  final String step;
-  final SampleActivity lab;
+  final bool active;
+  final List<Map<String, dynamic>> steps;
+  final VoidCallback onStart;
+  final String? busy;
 
   @override
   Widget build(BuildContext context) {
@@ -182,45 +237,42 @@ class _Instructions extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(BL.space8),
             decoration: BoxDecoration(
-              color: BL.surface,
-              borderRadius: BorderRadius.circular(BL.radiusXl),
-              border: Border.all(color: BL.border),
-            ),
+                color: BL.surface,
+                borderRadius: BorderRadius.circular(BL.radiusXl),
+                border: Border.all(color: BL.border)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(step, style: text.headlineMedium),
-                const SizedBox(height: BL.space6),
-                Text('Before you begin', style: text.titleLarge),
-                const SizedBox(height: BL.space3),
-                Text(
-                  'Labs run on your own computer. Nothing changes on your machine without a plan you can read first and a click from you.',
-                  style: text.bodyLarge,
-                ),
-                const SizedBox(height: BL.space4),
-                Container(
-                  padding: const EdgeInsets.all(BL.space4),
-                  decoration: BoxDecoration(
-                      color: const Color(0xFFFBEFD9),
-                      borderRadius: BorderRadius.circular(BL.radiusMd)),
-                  child: Text(
-                    'Note: This is sample text. The real step content comes from the lab bundle once courses are connected.',
-                    style: text.bodyMedium,
+                if (!active) ...[
+                  Text('This lab is not open', style: text.headlineMedium),
+                  const SizedBox(height: BL.space3),
+                  Text(
+                      'Start it to open VS Code with your lab folder and the BuildLoop Guide. Your progress will show here.',
+                      style: text.bodyLarge),
+                  const SizedBox(height: BL.space6),
+                  ElevatedButton(
+                      onPressed: busy == null ? onStart : null,
+                      child: Text(busy ?? 'Start this lab')),
+                ] else ...[
+                  Text('Your lab is open in VS Code',
+                      style: text.headlineMedium),
+                  const SizedBox(height: BL.space3),
+                  Text(
+                    'Follow the BuildLoop Guide panel on the right side of VS Code. Press Check my work on each step. Results appear here too.',
+                    style: text.bodyLarge,
                   ),
-                ),
-                const SizedBox(height: BL.space6),
-                Text('Run this command in the lab folder',
-                    style: text.titleLarge),
-                const SizedBox(height: BL.space3),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(BL.space4),
-                  decoration: BoxDecoration(
-                      color: BL.editorBackground,
-                      borderRadius: BorderRadius.circular(BL.radiusMd)),
-                  child: Text('python3 -m pytest tests/visible',
-                      style: BL.codeStyle.copyWith(color: BL.editorText)),
-                ),
+                  const SizedBox(height: BL.space6),
+                  Text('Steps', style: text.titleLarge),
+                  const SizedBox(height: BL.space2),
+                  Column(
+                    key: const Key('lab-steps'),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      for (final s in steps)
+                        _StepRow(title: '${s['title']}', state: '${s['state']}')
+                    ],
+                  ),
+                ],
               ],
             ),
           ),
@@ -230,10 +282,38 @@ class _Instructions extends StatelessWidget {
   }
 }
 
-class _SetupPanel extends StatelessWidget {
-  const _SetupPanel({required this.id, required this.onClose});
+class _StepRow extends StatelessWidget {
+  const _StepRow({required this.title, required this.state});
 
-  final String id;
+  final String title;
+  final String state;
+
+  @override
+  Widget build(BuildContext context) {
+    final (icon, color, label) = switch (state) {
+      'pass' => (Icons.check_circle, BL.success, 'Passed'),
+      'fail' => (Icons.error_outline, BL.danger, 'Not yet'),
+      _ => (Icons.radio_button_unchecked, BL.textDisabled, 'To do'),
+    };
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        children: [
+          Icon(icon, size: 20, color: color),
+          const SizedBox(width: BL.space3),
+          Expanded(
+              child: Text(title, style: Theme.of(context).textTheme.bodyLarge)),
+          Text(label, style: Theme.of(context).textTheme.bodySmall),
+        ],
+      ),
+    );
+  }
+}
+
+class _SetupPanel extends StatelessWidget {
+  const _SetupPanel({required this.labRoot, required this.onClose});
+
+  final String labRoot;
   final VoidCallback onClose;
 
   @override
@@ -256,26 +336,41 @@ class _SetupPanel extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Expanded(
-                    child:
-                        Text('Lab setup and access', style: text.titleLarge)),
-                IconButton(
-                    onPressed: onClose,
-                    icon: const Icon(Icons.close),
-                    tooltip: 'Close'),
-              ],
-            ),
+            Row(children: [
+              Expanded(
+                  child: Text('Lab setup and access', style: text.titleLarge)),
+              IconButton(
+                  onPressed: onClose,
+                  icon: const Icon(Icons.close),
+                  tooltip: 'Close'),
+            ]),
             const SizedBox(height: BL.space2),
-            Text('Sample values. Use these to set up the lab on your computer.',
+            Text('Your lab files live on this computer.',
                 style: text.bodyMedium),
             const SizedBox(height: BL.space4),
-            _Field(label: 'Project folder', value: '~/BuildLoopLabs/$id'),
-            _Field(label: 'Python', value: 'python3 (3.12 or newer)'),
-            _Field(
-                label: 'Check command',
-                value: 'python3 -m pytest tests/visible'),
+            Text('Lab folder', style: text.labelSmall),
+            const SizedBox(height: BL.space1),
+            Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: BL.border),
+                  borderRadius: BorderRadius.circular(BL.radiusSm)),
+              child: Row(children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(BL.space3),
+                    child: Text(labRoot.isEmpty ? 'Not open yet' : labRoot,
+                        style: BL.codeStyle, overflow: TextOverflow.ellipsis),
+                  ),
+                ),
+                IconButton(
+                  onPressed: labRoot.isEmpty
+                      ? null
+                      : () => Clipboard.setData(ClipboardData(text: labRoot)),
+                  icon: const Icon(Icons.content_copy, size: 18),
+                  tooltip: 'Copy',
+                ),
+              ]),
+            ),
             const SizedBox(height: BL.space4),
             Container(
               padding: const EdgeInsets.all(BL.space4),
@@ -288,59 +383,14 @@ class _SetupPanel extends StatelessWidget {
                   const Icon(Icons.info_outline, color: BL.warning),
                   const SizedBox(width: BL.space3),
                   Expanded(
-                    child: Text(
-                      'Practice results stay on this computer. Only Verified results earn badges.',
-                      style: text.bodyMedium,
-                    ),
-                  ),
+                      child: Text(
+                          'Practice results stay on this computer. Only Verified results earn badges.',
+                          style: text.bodyMedium)),
                 ],
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _Field extends StatelessWidget {
-  const _Field({required this.label, required this.value});
-
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: BL.space3),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label, style: Theme.of(context).textTheme.labelSmall),
-          const SizedBox(height: BL.space1),
-          Container(
-            decoration: BoxDecoration(
-                border: Border.all(color: BL.border),
-                borderRadius: BorderRadius.circular(BL.radiusSm)),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(BL.space3),
-                    child: Text(value,
-                        style: BL.codeStyle, overflow: TextOverflow.ellipsis),
-                  ),
-                ),
-                IconButton(
-                  onPressed: () =>
-                      Clipboard.setData(ClipboardData(text: value)),
-                  icon: const Icon(Icons.content_copy, size: 18),
-                  tooltip: 'Copy',
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

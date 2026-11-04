@@ -45,12 +45,16 @@ Future<RunResult> runProcess(
   required String cwd,
   required Duration timeout,
   int maxOutput = 200000,
+  Map<String, String>? environment,
+  bool includeParentEnvironment = true,
 }) async {
   // runInShell: false means "; rm -rf" in an argument is just text (FR-EXEC-002).
   final process = await Process.start(
     exe,
     args,
     workingDirectory: cwd,
+    environment: environment,
+    includeParentEnvironment: includeParentEnvironment,
     runInShell: false,
   );
 

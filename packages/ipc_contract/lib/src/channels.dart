@@ -21,6 +21,10 @@ const List<String> channels = [
   "tutor:cancel",
   "submission:preview",
   "submission:submit",
+  "companion:status",
+  "companion:install",
+  "companion:launch",
+  "companion:sessionState",
 ];
 
 const List<String> events = [

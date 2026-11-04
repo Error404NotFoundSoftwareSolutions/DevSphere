@@ -4,12 +4,13 @@
 // Implemented here: Smoke test ensuring the BuildLoop desktop app launches cleanly
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:desktop/app.dart';
 
 void main() {
   testWidgets('BuildLoop desktop shell smoke test', (WidgetTester tester) async {
-    await tester.pumpWidget(BuildLoopApp());
+    await tester.pumpWidget(ProviderScope(child: BuildLoopApp()));
     await tester.pumpAndSettle();
 
     expect(find.text('BuildLoop'), findsWidgets);

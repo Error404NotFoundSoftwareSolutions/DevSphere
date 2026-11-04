@@ -22,6 +22,10 @@ The only calls the UI may make. Defined in `packages/ipc_contract` (`channels.da
 | `tutor:cancel` | Cancel a tutor request | US-23 |
 | `submission:preview` | List files to be uploaded | US-28 |
 | `submission:submit` | Upload a confirmed snapshot | US-28 |
+| `companion:status` | Find VS Code and say what the guide extension install would do (plain-language plan) | US-12 |
+| `companion:install` | Install the shipped guide extension; needs `approved: true` from a real click | US-12 |
+| `companion:launch` | Prepare the lab folder, start the private channel and open VS Code on it | US-15 |
+| `companion:sessionState` | Step results for an open lab (Practice only) | US-19 |
 
 ## Rules for each call
 

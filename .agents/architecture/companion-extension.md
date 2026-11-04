@@ -26,7 +26,7 @@ BuildLoop app (Flutter UI)        local worker (Dart process)                 VS
 2. Worker finds VS Code (section 5). Not found: the app shows install steps (no download by us).
 3. Worker checks whether the right extension version is installed. If not: the app shows a **plan** (what will be installed, from which local file, what it can do) and waits for a click (SEC-11).
 4. Worker installs the extension from the shipped `.vsix` (`code --install-extension <file> --force`, argument array, no shell).
-5. Worker creates a session (id, socket path), starts the channel server, then launches VS Code on the lab folder in a new window with the session id in a **private file**, not in the command line.
+5. Worker creates a session (id, socket path), starts the channel server, writes a **private session file** (mode 0600, in the per-user runtime directory), then launches VS Code on the lab folder in a new window. The extension finds the session file by lab folder (see `docs/EXTENSION_PROTOCOL.md` 2b).
 6. Extension activates on `workspaceContains:.buildloop/lab.json`, connects, receives the lab state, opens the side panel.
 7. Learner works. Extension requests checks; worker runs them; results appear in the panel and in the app's dashboard live.
 8. Finish: worker submits to the backend for a **Verified** result; the app shows the completion screen (badge only if the server says so).

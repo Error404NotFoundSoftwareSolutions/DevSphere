@@ -3,7 +3,6 @@
 import { isId } from './ids';
 
 export type WebviewMessage =
-  | { type: 'openCourse'; courseId: string }
   | { type: 'checkStep'; stepId: string }
   | { type: 'goStep'; stepId: string }
   | { type: 'openHome' }
@@ -18,8 +17,6 @@ export function parseMessage(raw: unknown): WebviewMessage | undefined {
   if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) return undefined;
   const m = raw as Record<string, unknown>;
   switch (m.type) {
-    case 'openCourse':
-      return onlyKeys(m, ['type', 'courseId']) && isId(m.courseId) ? { type: 'openCourse', courseId: m.courseId } : undefined;
     case 'checkStep':
       return onlyKeys(m, ['type', 'stepId']) && isId(m.stepId) ? { type: 'checkStep', stepId: m.stepId } : undefined;
     case 'goStep':

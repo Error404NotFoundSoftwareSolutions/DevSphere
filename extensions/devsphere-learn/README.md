@@ -1,25 +1,20 @@
-# devsphere-learn
+# BuildLoop Guide (extension `buildloop.devsphere-learn`)
 
-Walking skeleton of the DevSphere learning flow as a VS Code extension (Track B, milestone PL-IDE-06). It runs in stock VS Code today and moves unchanged into the DevSphere IDE fork later.
+Companion extension for the BuildLoop desktop app (ADR-019). When the app opens a lab in your VS Code, this extension shows the steps in a side panel, asks the app to run **Check my work**, and shows the app's answer. It is a thin guide: the app owns progress, checks, scoring and Verified submission.
 
-## What works
-- **Home**: courses, roadmap, badges (locked / pending verification / earned), weekly goal. Data is a bundled sample (`data/catalogue.sample.json`).
-- **Start a course**: copies the lab (learner files only) to `~/DevSphereLabs/<lab-id>` and opens it in a **new window**.
-- **Lab window**: guide panel with the steps, **Check my work** runs the lab's visible tests, results are labelled **Practice**.
-- **Finish**: completion screen. A badge shows as **pending verification** until a Verified (server) result exists. Verified grading is **not connected yet** (`NotConfiguredGrader`), so no badge is ever shown as earned from local data.
-- Progress is saved to the extension's storage and shown on Home when it regains focus.
+## What it does
+- Activates only in a lab folder (`.devsphere/lab.json`).
+- Finds the app's private session file for this folder (trusts only files owned by you and closed to others), connects to the local socket and says hello (`docs/EXTENSION_PROTOCOL.md`).
+- Renders the guide from the app's `labState` events; step text comes from the lab folder and is rendered as safe text.
+- Sends only requests (`goStep`, `runCheck`, `finishLab`). Results are Practice. A badge needs a Verified result from the server, which the app handles.
 
-## Security design (details: `docs/security/`)
-Strict nonce CSP, escaped dynamic text, validated `postMessage`, path confinement and link checks, allow-listed lab files (never protected tests or reference solutions), `spawn` without a shell and with a minimal environment, timeout and output cap, redaction of output, Workspace Trust honoured, no network, no telemetry, validated and quarantined local progress file.
+## What it never does
+Run your code, store progress, hold tokens, use the network, or accept scores from anywhere.
 
 ## Develop
 ```bash
 cd extensions/devsphere-learn
 npm ci --ignore-scripts
-npm test                      # compile + 51 tests
-code --extensionDevelopmentPath="$PWD"   # run in VS Code
+npm test        # compile + 35 tests (protocol fixtures, session discovery, channel client, webview safety)
 ```
-Practice checks need Python with pytest on `PATH` (for example `uv sync` then activate `.venv`).
-
-## Not done yet
-Real sign-in, catalogue and roadmap from the server, Verified submission, tutor, browser pane, branded fork build, Windows testing, UI automation tests.
+To try it with the real app flow, run the worker's launcher with `extraEditorArgs: ['--extensionDevelopmentPath=<this folder>']`. Packaging as a `.vsix` is not done yet.

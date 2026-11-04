@@ -28,4 +28,10 @@ export 'src/companion/protocol.dart';
 export 'src/companion/vscode_locator.dart';
 export 'src/companion/extension_installer.dart';
 export 'src/companion/adapters.dart';
+export 'src/companion/channel_server.dart';
+export 'src/companion/lab_session.dart';
+export 'src/companion/lab_files.dart';
+export 'src/companion/launcher.dart';
+export 'src/companion/guide_package.dart';
+export 'src/companion/service.dart';
 

@@ -6,7 +6,17 @@ import 'package:ipc_contract/ipc_contract.dart';
 import 'env/detect.dart';
 import 'env/setup_plan.dart';
 import 'snapshot/build_snapshot.dart';
+import 'companion/service.dart';
 import 'workspace/open_workspace.dart';
+
+/// Set by the worker's main() when it has the paths it needs. Null means the companion channels are off.
+CompanionService? companionService;
+
+CompanionService _companion() {
+  final s = companionService;
+  if (s == null) throw StateError('The VS Code connection is not set up in this build of BuildLoop.');
+  return s;
+}
 
 Future<Map<String, dynamic>> handleIpcRequest(String channel, Map<String, dynamic> data) async {
   validateRequest(channel, data);
@@ -57,6 +67,14 @@ Future<Map<String, dynamic>> handleIpcRequest(String channel, Map<String, dynami
       return {'files': sel.files, 'excluded': sel.excluded};
     case 'submission:submit':
       return {'submissionId': 'sub-${DateTime.now().millisecondsSinceEpoch}'};
+    case 'companion:status':
+      return Map<String, dynamic>.from(await _companion().status());
+    case 'companion:install':
+      return Map<String, dynamic>.from(await _companion().install(approved: data['approved'] as bool));
+    case 'companion:launch':
+      return Map<String, dynamic>.from(await _companion().launch(data['labId'] as String));
+    case 'companion:sessionState':
+      return Map<String, dynamic>.from(await _companion().sessionState(data['labId'] as String));
     default:
       throw IpcValidationException('Unhandled channel: $channel');
   }

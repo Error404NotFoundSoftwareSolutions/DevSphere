@@ -96,4 +96,21 @@ void main() {
     expect(errorEvent('busy', 'Wait for the current check.')['type'], 'error');
     expect(() => errorEvent('made-up-code', 'x'), throwsArgumentError);
   });
+
+  test('TC-CMP-01-09 event builders produce exactly the valid event fixtures', () {
+    final fx = {for (final f in loadFixtures('events')) (f.value as Map)['type'] as String: f.value};
+    expect(welcomeEvent('python-hello-001'), fx['welcome']);
+    expect(
+      labStateEvent(labId: 'python-hello-001', title: 'Hello, Python', currentStepId: 'setup', steps: [
+        (id: 'setup', title: 'Open the starter file', state: 'todo', contentRef: 'guide/01-setup.md'),
+        (id: 'greet', title: 'Write the greet function', state: 'fail', contentRef: 'guide/02-greet.md'),
+      ]),
+      fx['labState'],
+    );
+    expect(
+      checkResultEvent(stepId: 'greet', passed: false, summary: 'Some checks did not pass yet.', output: 'assert None == "Hello, Asha!"'),
+      fx['checkResult'],
+    );
+    expect(errorEvent('busy', 'Wait for the current check to finish.'), fx['error']);
+  });
 }

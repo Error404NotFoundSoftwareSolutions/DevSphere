@@ -1,4 +1,4 @@
-// Capability: CAP-HOME-DASHBOARD, CAP-COURSE-PLAYER, CAP-COMPLETION. Rules: SEC-21, SEC-27, TRU-02.
+// Capability: CAP-COMPANION-EXT, CAP-COMPLETION. Rules: SEC-21, SEC-27, TRU-02.
 // Tests: TC-SEC-05-01..06. Implemented here: webview pages. Every dynamic value is escaped; the page
 // has a nonce-based CSP, no inline event handlers, no remote resources, no innerHTML.
 import { randomBytes } from 'node:crypto';
@@ -73,51 +73,6 @@ export function pageShell(input: ShellInput): string {
 <style nonce="${nonce}">${STYLE}</style></head>
 <body>${body}
 <script nonce="${nonce}">${script}</script></body></html>`;
-}
-
-// ---------- Home ----------
-export interface HomeCourse {
-  id: string; title: string; topic: string; minutes: number; level: string;
-  status: 'not-started' | 'in-progress' | 'completed'; percent: number; available: boolean;
-}
-export interface HomeModel {
-  learner: string;
-  weeklyGoal: { target: number; done: number };
-  courses: HomeCourse[];
-  roadmap: { title: string; steps: { courseId: string; title: string; done: boolean }[] };
-  badges: { id: string; title: string; state: 'locked' | 'pending-verification' | 'earned' }[];
-}
-
-const STATUS_TEXT = { 'not-started': 'Not started', 'in-progress': 'In progress', completed: 'Practice complete' } as const;
-const BADGE_TEXT = { locked: 'Locked', 'pending-verification': 'Pending verification', earned: 'Earned' } as const;
-
-function pct(n: number): number {
-  return Math.max(0, Math.min(100, Math.round(Number(n) || 0)));
-}
-
-export function renderHome(m: HomeModel): string {
-  const e = escapeHtml;
-  const courses = m.courses.map((c) => `
-<div class="card">
-  <div class="muted">${e(c.topic)}</div>
-  <h2>${e(c.title)}</h2>
-  <div><span class="tag">${e(c.level)}</span><span class="tag">${Number(c.minutes) || 0} min</span></div>
-  <progress value="${pct(c.percent)}" max="100"></progress>
-  <p class="muted">${e(STATUS_TEXT[c.status])}</p>
-  <button data-action="openCourse" data-id="${e(c.id)}"${c.available ? '' : ' disabled'}>${c.available ? (c.status === 'not-started' ? 'Start' : 'Continue') : 'Coming soon'}</button>
-</div>`).join('');
-  const steps = m.roadmap.steps.map((s) => `<li>${s.done ? 'Done' : 'To do'}: ${e(s.title)}</li>`).join('');
-  const badges = m.badges.map((b) => `<div class="card"><strong>${e(b.title)}</strong><div class="muted">${e(BADGE_TEXT[b.state])}</div></div>`).join('');
-  const goalPct = m.weeklyGoal.target > 0 ? pct((m.weeklyGoal.done / m.weeklyGoal.target) * 100) : 0;
-  return `
-<h1>Welcome, ${e(m.learner)}</h1>
-<p class="muted">Practice results stay on this computer. A badge is earned only after a Verified result from the server.</p>
-<h2>Weekly goal</h2>
-<progress value="${goalPct}" max="100"></progress>
-<p>${Number(m.weeklyGoal.done) || 0} of ${Number(m.weeklyGoal.target) || 0} units this week</p>
-<h2>Roadmap: ${e(m.roadmap.title)}</h2><ol>${steps}</ol>
-<h2>Courses</h2><div class="grid">${courses}</div>
-<h2>Badges</h2><div class="grid">${badges}</div>`;
 }
 
 // ---------- Guide ----------

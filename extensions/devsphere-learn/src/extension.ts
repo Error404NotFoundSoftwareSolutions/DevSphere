@@ -1,254 +1,131 @@
-// Capability: CAP-HOME-DASHBOARD, CAP-COURSE-PLAYER, CAP-COMPLETION. Rules: SEC-21..SEC-27, TRU-01, TRU-02.
-// Implemented here: VS Code glue. Home window shows the dashboard; "Start" prepares the lab folder and
-// opens it in a NEW window, where the guide panel runs practice checks and shows the completion screen.
-// All decisions live in src/core (unit tested); this file only wires them to the VS Code API.
+// Capability: CAP-COMPANION-EXT, CAP-COMPLETION. Rules: SEC-21..SEC-27, TRU-01, TRU-02, ADR-019
+// Implemented here: VS Code glue for the BuildLoop Guide. In a lab folder it finds the app's private
+// session, connects to the channel and shows the guide panel from the worker's events. It never runs
+// the learner's code, stores progress or holds credentials: it only asks the app (Check my work, next
+// step, finish) and shows what the app answers. Results are Practice; Verified is the app's job.
 import fs from 'node:fs';
-import os from 'node:os';
-import path from 'node:path';
 import * as vscode from 'vscode';
-import { parseCatalogue, type Catalogue } from './core/catalogue';
-import { NotConfiguredGrader, type GraderClient } from './core/grader';
-import { isId } from './core/ids';
 import { renderMarkdownSafe } from './core/markdown';
-import { parseLabManifest, type LabManifest } from './core/manifest';
-import { parseMessage, type WebviewMessage } from './core/messages';
-import { badgeState, labSummary, recordPractice, type Progress } from './core/progress';
-import { redact } from './core/redact';
-import { buildPytestInvocation, minimalEnv, runLimited, summarisePytest } from './core/runner';
+import { parseMessage } from './core/messages';
+import { requests, type LabStateStep, type WorkerEvent } from './core/protocol';
 import { safeResolve } from './core/safePath';
-import { prepareLab, resolveLabsRoot } from './host/labs';
-import { ProgressStore } from './host/store';
-import {
-  clientScript, newNonce, pageShell, renderCompletion, renderGuide, renderHome,
-  type GuideModel, type HomeModel,
-} from './ui/html';
+import { ChannelClient } from './host/channel';
+import { defaultRuntimeDir, discoverSession } from './host/session';
+import { clientScript, escapeHtml, newNonce, pageShell, renderCompletion, renderGuide, type GuideModel } from './ui/html';
+
+interface Model {
+  labTitle: string;
+  steps: LabStateStep[];
+  current: string;
+  lastCheck: GuideModel['lastCheck'];
+  finished: boolean;
+  notice: string | undefined;
+}
 
 let log: vscode.OutputChannel;
-const grader: GraderClient = new NotConfiguredGrader();
+let panel: vscode.WebviewPanel | undefined;
+let client: ChannelClient | undefined;
 
-function createPanel(id: string, title: string, column: vscode.ViewColumn): vscode.WebviewPanel {
-  return vscode.window.createWebviewPanel(id, title, column, {
-    enableScripts: true,
-    enableCommandUris: false,
-    localResourceRoots: [],
-    retainContextWhenHidden: false,
+function show(p: vscode.WebviewPanel, title: string, body: string): void {
+  p.webview.html = pageShell({ title, body, nonce: newNonce(), cspSource: p.webview.cspSource, script: clientScript() });
+}
+
+function guideBody(folder: string, m: Model): string {
+  const step = m.steps.find((s) => s.id === m.current);
+  let contentHtml = '<p>This step could not be loaded.</p>';
+  if (step) {
+    try {
+      contentHtml = renderMarkdownSafe(fs.readFileSync(safeResolve(folder, `.devsphere/${step.contentRef}`), 'utf8'));
+    } catch { /* keep the plain fallback */ }
+  }
+  const model: GuideModel = {
+    labTitle: m.labTitle,
+    steps: m.steps.map((s) => ({ id: s.id, title: s.title, state: s.state, current: s.id === m.current })),
+    current: step ? { id: step.id, title: step.title, contentHtml } : undefined,
+    lastCheck: m.lastCheck,
+    trusted: vscode.workspace.isTrusted && m.notice === undefined,
+  };
+  const notice = m.notice ? `<p class="result fail">${escapeHtml(m.notice)}</p>` : '';
+  return notice + renderGuide(model);
+}
+
+async function start(ctx: vscode.ExtensionContext): Promise<void> {
+  const folder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+  if (!folder) return;
+  if (panel) { panel.reveal(); return; }
+  const session = discoverSession(folder, defaultRuntimeDir());
+  const model: Model = { labTitle: 'BuildLoop lab', steps: [], current: '', lastCheck: undefined, finished: false, notice: undefined };
+  const p = vscode.window.createWebviewPanel('buildloop.guide', 'BuildLoop Guide', { viewColumn: vscode.ViewColumn.Beside, preserveFocus: true }, {
+    enableScripts: true, enableCommandUris: false, localResourceRoots: [], retainContextWhenHidden: false,
   });
-}
-
-function show(panel: vscode.WebviewPanel, title: string, body: string): void {
-  panel.webview.html = pageShell({ title, body, nonce: newNonce(), cspSource: panel.webview.cspSource, script: clientScript() });
-}
-
-function loadCatalogue(ctx: vscode.ExtensionContext): Catalogue {
-  const file = path.join(ctx.extensionPath, 'data', 'catalogue.sample.json');
-  return parseCatalogue(JSON.parse(fs.readFileSync(file, 'utf8')) as unknown);
-}
-
-function contentRoot(ctx: vscode.ExtensionContext): string {
-  return path.resolve(ctx.extensionPath, '..', '..', 'content', 'labs');
-}
-
-function readManifest(root: string, labId: string): LabManifest | undefined {
-  try {
-    return parseLabManifest(fs.readFileSync(safeResolve(root, `${labId}/lab.yaml`), 'utf8'));
-  } catch {
-    return undefined;
-  }
-}
-
-// ---------------------------------------------------------------- Home
-function buildHomeModel(ctx: vscode.ExtensionContext, progress: Progress): HomeModel {
-  const cat = loadCatalogue(ctx);
-  const root = contentRoot(ctx);
-  const stepIds = new Map<string, string[]>();
-  for (const c of cat.courses) {
-    const m = c.available ? readManifest(root, c.id) : undefined;
-    if (m) stepIds.set(c.id, m.steps.map((s) => s.id));
-  }
-  const status = (id: string): { status: 'not-started' | 'in-progress' | 'completed'; percent: number } => {
-    const ids = stepIds.get(id) ?? [];
-    const s = labSummary(progress, id, ids);
-    if (s.total === 0 || s.passed === 0) return { status: 'not-started', percent: 0 };
-    return { status: s.complete ? 'completed' : 'in-progress', percent: Math.round((s.passed / s.total) * 100) };
-  };
-  const done = (id: string): boolean => status(id).status === 'completed';
-  return {
-    learner: cat.learner,
-    weeklyGoal: { target: cat.weeklyGoalTarget, done: cat.courses.filter((c) => done(c.id)).length },
-    courses: cat.courses.map((c) => ({ ...c, ...status(c.id) })),
-    roadmap: { title: cat.roadmap.title, steps: cat.roadmap.steps.map((s) => ({ ...s, done: done(s.courseId) })) },
-    badges: cat.badges.map((b) => ({ id: b.id, title: b.title, state: badgeState(progress, b.courseId, stepIds.get(b.courseId) ?? []) })),
-  };
-}
-
-let homePanel: vscode.WebviewPanel | undefined;
-
-function openHome(ctx: vscode.ExtensionContext, store: ProgressStore): void {
+  panel = p;
+  p.onDidDispose(() => { panel = undefined; client?.close(); client = undefined; });
   const render = (): void => {
-    if (homePanel) show(homePanel, 'DevSphere Home', renderHome(buildHomeModel(ctx, store.load())));
+    if (model.finished && model.steps.length > 0 && model.steps.every((s) => s.state === 'pass')) {
+      show(p, 'Lab complete', renderCompletion({
+        labTitle: model.labTitle,
+        skills: model.steps.map((s) => s.title),
+        verification: 'unavailable',
+        message: 'Go back to the BuildLoop app to submit for a Verified result. Practice results alone do not earn a badge.',
+        practicePassed: model.steps.length,
+        total: model.steps.length,
+      }));
+    } else {
+      show(p, 'Lab guide', guideBody(folder, model));
+    }
   };
-  if (homePanel) {
-    homePanel.reveal();
+  if (!session) {
+    model.notice = 'BuildLoop is not running for this lab. Open the lab again from the BuildLoop app.';
     render();
     return;
   }
-  homePanel = createPanel('devsphere.home', 'DevSphere Home', vscode.ViewColumn.One);
-  homePanel.onDidDispose(() => { homePanel = undefined; });
-  homePanel.webview.onDidReceiveMessage((raw: unknown) => {
+  const version = (ctx.extension.packageJSON as { version: string }).version;
+  const c = new ChannelClient(session, version);
+  client = c;
+  const onEvent = (e: WorkerEvent): void => {
+    if (e.type === 'labState') {
+      model.labTitle = e.title; model.steps = e.steps; model.current = e.currentStepId;
+    } else if (e.type === 'checkResult') {
+      model.lastCheck = { passed: e.passed, output: `${e.summary}\n\n${e.output}`.trim(), kind: 'Practice' };
+    } else if (e.type === 'error') {
+      model.lastCheck = { passed: false, output: e.message, kind: 'Practice' };
+    } else if (e.type === 'sessionClosed') {
+      model.notice = 'The BuildLoop app closed this lab session. Open the lab again from BuildLoop.';
+    }
+    render();
+  };
+  c.onEvent(onEvent);
+  c.onClose(() => { model.notice = 'The connection to BuildLoop ended. Open the lab again from BuildLoop.'; render(); });
+  try {
+    await c.connect();
+    log.appendLine('connected to the BuildLoop app');
+    c.send(requests.getLabState());
+  } catch (e) {
+    model.notice = (e as Error).message;
+    render();
+  }
+  p.webview.onDidReceiveMessage((raw: unknown) => {
     const msg = parseMessage(raw);
     if (!msg) { log.appendLine('dropped invalid webview message'); return; }
-    if (msg.type === 'openCourse') void startCourse(ctx, msg.courseId);
-    else if (msg.type === 'openHome') render();
-  });
-  // Lab windows are separate windows; refresh Home whenever it regains focus so new progress shows.
-  ctx.subscriptions.push(vscode.window.onDidChangeWindowState((s) => { if (s.focused) render(); }));
-  render();
-}
-
-async function startCourse(ctx: vscode.ExtensionContext, courseId: string): Promise<void> {
-  try {
-    const course = loadCatalogue(ctx).courses.find((c) => c.id === courseId);
-    if (!course || !course.available) throw new Error('This course is not available yet');
-    const cfg = vscode.workspace.getConfiguration('devsphere');
-    const labsRoot = resolveLabsRoot(cfg.get<string>('labsFolder', ''), os.homedir());
-    const { dest } = prepareLab(contentRoot(ctx), course.id, labsRoot);
-    log.appendLine(`lab prepared: ${course.id}`);
-    await vscode.commands.executeCommand('vscode.openFolder', vscode.Uri.file(dest), { forceNewWindow: true });
-  } catch (e) {
-    void vscode.window.showErrorMessage(`Could not start the course. ${(e as Error).message}`);
-  }
-}
-
-// ---------------------------------------------------------------- Lab guide (lab window)
-interface LabSession {
-  root: string;
-  manifest: LabManifest;
-  current: string;
-  lastCheck: GuideModel['lastCheck'];
-}
-
-function readLabSession(root: string): LabSession | undefined {
-  try {
-    const marker = JSON.parse(fs.readFileSync(safeResolve(root, '.devsphere/lab.json'), 'utf8')) as { labId?: unknown };
-    if (!isId(marker.labId)) return undefined;
-    const manifest = parseLabManifest(fs.readFileSync(safeResolve(root, '.devsphere/lab.yaml'), 'utf8'));
-    if (manifest.id !== marker.labId) return undefined;
-    return { root, manifest, current: manifest.steps[0]?.id ?? '', lastCheck: undefined };
-  } catch {
-    return undefined;
-  }
-}
-
-function guideModel(s: LabSession, progress: Progress): GuideModel {
-  const rec = progress.labs[s.manifest.id]?.steps ?? {};
-  const step = s.manifest.steps.find((x) => x.id === s.current);
-  let contentHtml = '';
-  if (step) {
     try {
-      contentHtml = renderMarkdownSafe(fs.readFileSync(safeResolve(s.root, `.devsphere/${step.contentRef}`), 'utf8'));
-    } catch {
-      contentHtml = '<p>This step could not be loaded.</p>';
-    }
-  }
-  return {
-    labTitle: s.manifest.title,
-    steps: s.manifest.steps.map((x) => ({
-      id: x.id, title: x.title, current: x.id === s.current,
-      state: rec[x.id]?.practice === 'pass' ? 'pass' : rec[x.id]?.practice === 'fail' ? 'fail' : 'todo',
-    })),
-    current: step ? { id: step.id, title: step.title, contentHtml } : undefined,
-    lastCheck: s.lastCheck,
-    trusted: vscode.workspace.isTrusted,
-  };
-}
-
-async function checkStep(s: LabSession, stepId: string, store: ProgressStore): Promise<void> {
-  const step = s.manifest.steps.find((x) => x.id === stepId);
-  if (!step) return;
-  if (!vscode.workspace.isTrusted) {
-    s.lastCheck = { passed: false, output: 'Trust this folder to run checks.', kind: 'Practice' };
-    return;
-  }
-  let passed = true;
-  let output = 'Marked as done.';
-  if (step.practiceCheck) {
-    try {
-      const py = vscode.workspace.getConfiguration('devsphere').get<string>('pythonCommand', 'python3');
-      const inv = buildPytestInvocation(s.root, py);
-      const r = await runLimited(inv.file, inv.args, { cwd: inv.cwd, env: minimalEnv(process.env), timeoutMs: 30_000, maxBytes: 64 * 1024 });
-      passed = r.code === 0 && !r.timedOut;
-      const detail = r.timedOut ? 'The check took too long and was stopped.' : redact(`${r.stdout}\n${r.stderr}`.trim()).slice(0, 4000);
-      output = `${summarisePytest(r.code, r.stdout, r.stderr)}\n\n${detail}`;
+      if (msg.type === 'goStep') c.send(requests.goStep(msg.stepId));
+      else if (msg.type === 'checkStep') { if (vscode.workspace.isTrusted) c.send(requests.runCheck(msg.stepId)); }
+      else if (msg.type === 'finish') { model.finished = true; c.send(requests.finishLab()); }
+      else if (msg.type === 'openHome') void vscode.commands.executeCommand('workbench.action.closeWindow');
     } catch (e) {
-      passed = false;
-      output = (e as Error).message;
+      model.notice = (e as Error).message;
+      render();
     }
-  }
-  s.lastCheck = { passed, output, kind: 'Practice' };
-  store.save(recordPractice(store.load(), s.manifest.id, step.id, passed ? 'pass' : 'fail', new Date().toISOString()));
-  log.appendLine(`practice check: ${s.manifest.id}/${step.id} ${passed ? 'pass' : 'fail'}`);
-}
-
-let guidePanel: vscode.WebviewPanel | undefined;
-
-function openGuide(store: ProgressStore): void {
-  const folder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
-  const session = folder ? readLabSession(folder) : undefined;
-  if (!session) {
-    void vscode.window.showInformationMessage('Open a DevSphere lab folder first (start a course from DevSphere Home).');
-    return;
-  }
-  if (guidePanel) { guidePanel.reveal(); return; }
-  const panel = createPanel('devsphere.guide', `Guide: ${session.manifest.title}`, vscode.ViewColumn.Beside);
-  guidePanel = panel;
-  panel.onDidDispose(() => { guidePanel = undefined; });
-  const render = (): void => show(panel, 'Lab guide', renderGuide(guideModel(session, store.load())));
-  panel.webview.onDidReceiveMessage((raw: unknown) => {
-    const msg: WebviewMessage | undefined = parseMessage(raw);
-    if (!msg) { log.appendLine('dropped invalid webview message'); return; }
-    void handleGuideMessage(msg, session, store, panel, render);
   });
   render();
 }
 
-async function handleGuideMessage(msg: WebviewMessage, s: LabSession, store: ProgressStore, panel: vscode.WebviewPanel, render: () => void): Promise<void> {
-  if (msg.type === 'goStep' && s.manifest.steps.some((x) => x.id === msg.stepId)) {
-    s.current = msg.stepId; s.lastCheck = undefined; render();
-  } else if (msg.type === 'checkStep') {
-    await checkStep(s, msg.stepId, store); render();
-  } else if (msg.type === 'finish') {
-    const ids = s.manifest.steps.map((x) => x.id);
-    const summary = labSummary(store.load(), s.manifest.id, ids);
-    if (!summary.complete) return;
-    const outcome = await grader.submit(s.manifest.id);
-    show(panel, 'Lab complete', renderCompletion({
-      labTitle: s.manifest.title,
-      skills: s.manifest.steps.map((x) => x.title),
-      verification: outcome.status === 'verified' ? 'verified' : outcome.status === 'failed' ? 'failed' : 'unavailable',
-      message: outcome.message,
-      practicePassed: summary.passed,
-      total: summary.total,
-    }));
-  } else if (msg.type === 'openHome') {
-    // Closing the lab window returns the learner to the Home window, which refreshes on focus.
-    await vscode.commands.executeCommand('workbench.action.closeWindow');
-  }
-}
-
-// ---------------------------------------------------------------- activation
 export function activate(ctx: vscode.ExtensionContext): void {
-  log = vscode.window.createOutputChannel('DevSphere');
-  ctx.subscriptions.push(log);
-  const store = new ProgressStore(ctx.globalStorageUri.fsPath);
-  ctx.subscriptions.push(
-    vscode.commands.registerCommand('devsphere.openHome', () => openHome(ctx, store)),
-    vscode.commands.registerCommand('devsphere.openGuide', () => openGuide(store)),
-  );
-  const folder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
-  if (folder && readLabSession(folder)) openGuide(store);
-  else if (!folder) openHome(ctx, store);
+  log = vscode.window.createOutputChannel('BuildLoop Guide');
+  ctx.subscriptions.push(log, vscode.commands.registerCommand('devsphere.openGuide', () => void start(ctx)));
+  void start(ctx);
 }
 
 export function deactivate(): void {
-  /* nothing to clean up: panels and the output channel are disposed through subscriptions */
+  client?.close();
 }

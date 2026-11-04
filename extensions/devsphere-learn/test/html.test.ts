@@ -2,7 +2,7 @@
 // Implemented here: TC-SEC-05-01..06 webview HTML safety, TC-LRN-30-01..02 safe markdown
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { escapeHtml, newNonce, pageShell, renderCompletion, renderGuide, renderHome } from '../src/ui/html';
+import { escapeHtml, newNonce, pageShell, renderCompletion, renderGuide } from '../src/ui/html';
 import { renderMarkdownSafe } from '../src/core/markdown';
 
 const XSS = [
@@ -34,18 +34,6 @@ function assertSafe(html: string, payload: string): void {
   if (/[<>"']/.test(payload)) assert.ok(!html.includes(payload), `raw payload present: ${payload}`);
   assert.doesNotMatch(html, /<(script|img|svg|iframe|style)\b/i, payload);
 }
-
-test('TC-SEC-05-04 home view escapes every dynamic field', () => {
-  for (const x of XSS) {
-    const html = renderHome({
-      learner: x, weeklyGoal: { target: 3, done: 1 },
-      courses: [{ id: 'python-hello-001', title: x, topic: x, minutes: 45, level: x, status: 'not-started', percent: 0, available: true }],
-      roadmap: { title: x, steps: [{ courseId: 'python-hello-001', title: x, done: false }] },
-      badges: [{ id: 'b1', title: x, state: 'locked' }],
-    });
-    assertSafe(html, x);
-  }
-});
 
 test('TC-SEC-05-05 guide and completion views escape dynamic fields and label Practice', () => {
   for (const x of XSS) {

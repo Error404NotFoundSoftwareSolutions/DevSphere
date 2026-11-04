@@ -5,14 +5,20 @@
 
 import 'package:desktop/app.dart';
 import 'package:desktop/router.dart';
+import 'package:desktop/api.dart';
+import 'package:desktop/worker/worker_client.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Future<void> pumpAt(WidgetTester tester, Size size, {String location = '/dashboard'}) async {
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.reset);
-  await tester.pumpWidget(BuildLoopApp(router: createRouter(initialLocation: location)));
+  await tester.pumpWidget(ProviderScope(
+    overrides: [workerClientProvider.overrideWithValue(MockWorkerClient())],
+    child: BuildLoopApp(router: createRouter(initialLocation: location)),
+  ));
   await tester.pumpAndSettle();
 }
 
@@ -106,12 +112,12 @@ void main() {
     expect(find.byKey(const Key('chip-0')), findsOneWidget);
   });
 
-  testWidgets('TC-DES-003-10 lab page has breadcrumb, step dropdown, Practice score pill and the setup panel', (tester) async {
+  testWidgets('TC-DES-003-10 lab page has breadcrumb, Practice score pill, Open VS Code again and the lab-folder panel; it never claims a badge', (tester) async {
     await pumpAt(tester, const Size(1440, 900), location: '/lab/python-hello-001');
     expect(find.byKey(const Key('breadcrumb')), findsOneWidget);
     final bar = find.byKey(const Key('lab-toolbar'));
-    expect(find.descendant(of: bar, matching: find.byType(DropdownButton<String>)), findsOneWidget);
     expect(find.descendant(of: bar, matching: find.textContaining('Practice score')), findsOneWidget);
+    expect(find.descendant(of: bar, matching: find.text('Open VS Code again')), findsOneWidget);
     expect(find.text('Lab setup and access'), findsOneWidget);
     expect(find.textContaining('Only Verified results earn badges'), findsOneWidget);
     expect(find.textContaining('Badge earned'), findsNothing);
@@ -120,7 +126,7 @@ void main() {
   testWidgets('TC-DES-003-11 sample data is labelled on the dashboard and the lab setup values are marked as samples', (tester) async {
     await pumpAt(tester, const Size(1440, 900));
     expect(find.textContaining('Sample data'), findsWidgets);
-    await pumpAt(tester, const Size(1440, 900), location: '/lab/python-hello-001');
-    expect(find.textContaining('Sample'), findsWidgets);
+    await pumpAt(tester, const Size(1440, 900), location: '/course/python-hello-001');
+    expect(find.textContaining('Sample data'), findsWidgets);
   });
 }

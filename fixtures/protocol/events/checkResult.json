@@ -1,0 +1,1 @@
+{"type":"checkResult","stepId":"greet","passed":false,"kind":"Practice","summary":"Some checks did not pass yet.","output":"assert None == \"Hello, Asha!\""}

@@ -5,7 +5,6 @@ import test from 'node:test';
 import { parseMessage } from '../src/core/messages';
 
 test('TC-SEC-19-01 accepts the known messages', () => {
-  assert.deepEqual(parseMessage({ type: 'openCourse', courseId: 'python-hello-001' }), { type: 'openCourse', courseId: 'python-hello-001' });
   assert.deepEqual(parseMessage({ type: 'checkStep', stepId: 'greet' }), { type: 'checkStep', stepId: 'greet' });
   assert.deepEqual(parseMessage({ type: 'goStep', stepId: 'setup' }), { type: 'goStep', stepId: 'setup' });
   assert.deepEqual(parseMessage({ type: 'openHome' }), { type: 'openHome' });
@@ -15,8 +14,7 @@ test('TC-SEC-19-01 accepts the known messages', () => {
 test('TC-SEC-19-02 drops unknown types, extra keys, bad ids and non-objects', () => {
   const bad: unknown[] = [
     null, 'x', 42, [], {}, { type: 'exec', cmd: 'rm -rf /' },
-    { type: 'openCourse' }, { type: 'openCourse', courseId: '../x' },
-    { type: 'openCourse', courseId: 'a b' }, { type: 'checkStep', stepId: 'x'.repeat(200) },
+    { type: 'openCourse', courseId: 'python-hello-001' }, { type: 'checkStep', stepId: 'x'.repeat(200) },
     { type: 'openHome', extra: 1 }, { type: 'checkStep', stepId: { $ne: 1 } },
   ];
   for (const b of bad) assert.equal(parseMessage(b), undefined, JSON.stringify(b));

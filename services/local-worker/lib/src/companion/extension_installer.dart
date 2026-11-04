@@ -28,13 +28,15 @@ typedef CommandRunner = Future<CommandResult> Function(String exe, List<String> 
 enum InstallAction { install, update, none }
 
 class InstallPlan {
-  const InstallPlan({required this.editor, required this.package, required this.action, required this.installedVersion, required this.lines});
+  const InstallPlan({required this.editor, required this.package, required this.action, required this.installedVersion, required this.lines, this.extraArgs = const []});
   final EditorInstall editor;
   final ExtensionPackage package;
   final InstallAction action;
   final String? installedVersion;
   /// Plain-language lines to show the learner before they approve.
   final List<String> lines;
+  /// Development only: extra editor arguments such as an isolated profile. Never from user input.
+  final List<String> extraArgs;
 }
 
 enum InstallStatus { installed, alreadyCurrent, failed }
@@ -60,8 +62,8 @@ void _validate(ExtensionPackage p) {
   }
 }
 
-Future<String?> _installedVersion(EditorInstall editor, ExtensionPackage p, CommandRunner runner) async {
-  final r = await runner(editor.path, ['--list-extensions', '--show-versions'], timeout: const Duration(seconds: 30));
+Future<String?> _installedVersion(EditorInstall editor, ExtensionPackage p, CommandRunner runner, List<String> extraArgs) async {
+  final r = await runner(editor.path, [...extraArgs, '--list-extensions', '--show-versions'], timeout: const Duration(seconds: 30));
   if (r.exitCode != 0 || r.timedOut) return null;
   for (final line in r.stdout.split('\n')) {
     final t = line.trim().toLowerCase();
@@ -73,9 +75,9 @@ Future<String?> _installedVersion(EditorInstall editor, ExtensionPackage p, Comm
   return null;
 }
 
-Future<InstallPlan> planInstall({required EditorInstall editor, required ExtensionPackage package, required CommandRunner runner}) async {
+Future<InstallPlan> planInstall({required EditorInstall editor, required ExtensionPackage package, required CommandRunner runner, List<String> extraArgs = const []}) async {
   _validate(package);
-  final installed = await _installedVersion(editor, package, runner);
+  final installed = await _installedVersion(editor, package, runner, extraArgs);
   final action = installed == null
       ? InstallAction.install
       : (compareVersions(installed, package.version) < 0 ? InstallAction.update : InstallAction.none);
@@ -89,7 +91,7 @@ Future<InstallPlan> planInstall({required EditorInstall editor, required Extensi
     'It talks only to BuildLoop on this computer and does not use the internet.',
     'The extension file is part of BuildLoop and its fingerprint is checked before it is installed.',
   ];
-  return InstallPlan(editor: editor, package: package, action: action, installedVersion: installed, lines: lines);
+  return InstallPlan(editor: editor, package: package, action: action, installedVersion: installed, lines: lines, extraArgs: extraArgs);
 }
 
 /// `userApproved` must come from a real click on the plan screen. Without it nothing runs.
@@ -112,7 +114,7 @@ Future<InstallOutcome> installExtension(
   }
   final run = await runner(
     plan.editor.path,
-    ['--install-extension', plan.package.vsixPath, '--force'],
+    [...plan.extraArgs, '--install-extension', plan.package.vsixPath, '--force'],
     timeout: const Duration(seconds: 120),
   );
   if (run.exitCode != 0 || run.timedOut) {
@@ -123,7 +125,7 @@ Future<InstallOutcome> installExtension(
           : '${plan.editor.displayName} could not install the guide. It may be blocked on this computer.',
     );
   }
-  final now = await _installedVersion(plan.editor, plan.package, runner);
+  final now = await _installedVersion(plan.editor, plan.package, runner, plan.extraArgs);
   if (now != plan.package.version) {
     return const InstallOutcome(InstallStatus.failed, 'The guide install finished but VS Code does not list it. Restart VS Code and try again.');
   }

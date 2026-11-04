@@ -25,9 +25,11 @@ Versions were current when this scaffold was created (3 Nov 2026). The lockfiles
 | Quality | `dart analyze`, Ruff, mypy | Consistent code |
 | CI | GitHub Actions on Windows, Ubuntu, macOS | 3-OS build matrix and automated test verification |
 | IDE extensions (Track B) | TypeScript 5.6.3 (strict), Node built-in test runner, `@types/vscode` 1.90.0, `@types/node` 22.9.0 (all exact-pinned, dev only) | Built-in extensions for the DevSphere IDE (`extensions/devsphere-learn`) |
-| YAML parsing (extension) | `yaml` 2.9.1 (ISC licence, exact-pinned) | Lab manifests are YAML; versions before 2.9.1 have a stack-overflow advisory, so the pin must not go lower |
 | UI font | Inter Regular/Medium/SemiBold (SIL OFL 1.1) copied from the system `fonts-inter` package into `apps/desktop/assets/fonts` with its licence text | Design system typeface, bundled so nothing is downloaded at runtime. JetBrains Mono is not bundled yet (not installed locally; needs a download approval) |
+| YAML parsing (worker) | `yaml` ^3.1.2 (Dart team, MIT) | Reads lab manifests in the worker; anchors/aliases are rejected before parsing |
+| Redaction (worker) | `redaction` (this repo, `packages/redaction`) | Redacts check output before it leaves the worker (SEC-10) |
 | Hashing (worker) | `crypto` ^3.0.3 (Dart team, BSD-3-Clause) | SHA-256 of the shipped extension file before install (`services/local-worker/lib/src/companion`) |
+| Extension packager (dev only) | `@vscode/vsce` 3.9.1 (MIT, exact-pinned, devDependency) | Packages the guide as a `.vsix`. `npm audit` reports moderate advisories in its glob/minimatch dependencies; accepted because it is build-time only, runs on our own files, and never ships. No high or critical findings; revisit on each update |
 | Security gate | `tools/check_security.py` (no third-party deps) | Secret patterns, unsafe code patterns, extension manifest hardening (`docs/security/`) |
 
 ## Rules for adding a dependency

@@ -1,0 +1,1 @@
+{"type":"labState","labId":"python-hello-001","title":"Hello, Python","currentStepId":"setup","steps":[{"id":"setup","title":"Open the starter file","state":"todo","contentRef":"guide/01-setup.md"},{"id":"greet","title":"Write the greet function","state":"fail","contentRef":"guide/02-greet.md"}]}

@@ -153,7 +153,7 @@ class SessionGate {
 // ---------------------------------------------------------------- events (worker -> extension)
 
 const Set<String> errorCodes = {
-  'protocol-mismatch', 'wrong-session', 'need-hello', 'duplicate-hello', 'unknown-step', 'invalid-message', 'busy',
+  'protocol-mismatch', 'wrong-session', 'need-hello', 'duplicate-hello', 'unknown-step', 'invalid-message', 'busy', 'steps-incomplete',
 };
 
 Map<String, Object?> welcomeEvent(String labId) => {'type': 'welcome', 'protocol': protocolVersion, 'labId': labId};
@@ -162,14 +162,14 @@ Map<String, Object?> labStateEvent({
   required String labId,
   required String title,
   required String currentStepId,
-  required List<({String id, String title, String state})> steps,
+  required List<({String id, String title, String state, String contentRef})> steps,
 }) =>
     {
       'type': 'labState',
       'labId': labId,
       'title': title,
       'currentStepId': currentStepId,
-      'steps': [for (final s in steps) {'id': s.id, 'title': s.title, 'state': s.state}],
+      'steps': [for (final s in steps) {'id': s.id, 'title': s.title, 'state': s.state, 'contentRef': s.contentRef}],
     };
 
 /// Only Practice results exist in this protocol. Verified results come from the server in a later milestone.

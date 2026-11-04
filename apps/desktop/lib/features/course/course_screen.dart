@@ -4,21 +4,23 @@
 // overview, in the Google-Skills pattern. SAMPLE data.
 
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ui/ui.dart';
 import '../dashboard/dashboard_data.dart';
+import 'start_lab_flow.dart';
 
-class CourseScreen extends StatefulWidget {
+class CourseScreen extends ConsumerStatefulWidget {
   const CourseScreen({super.key, required this.id});
 
   final String id;
 
   @override
-  State<CourseScreen> createState() => _CourseScreenState();
+  ConsumerState<CourseScreen> createState() => _CourseScreenState();
 }
 
-class _CourseScreenState extends State<CourseScreen> {
+class _CourseScreenState extends ConsumerState<CourseScreen> {
   bool _showBanner = true;
+  String? _busy;
 
   @override
   Widget build(BuildContext context) {
@@ -76,9 +78,13 @@ class _CourseScreenState extends State<CourseScreen> {
                     Row(
                       children: [
                         ElevatedButton.icon(
-                          onPressed: () => context.go('/lab/${a.id}'),
+                          onPressed: _busy != null
+                              ? null
+                              : () => startLab(context, ref, a.id, onBusy: (l) {
+                                    if (mounted) setState(() => _busy = l);
+                                  }),
                           icon: const Icon(Icons.play_arrow, size: 18),
-                          label: const Text('Start'),
+                          label: Text(_busy ?? 'Start'),
                           style: ElevatedButton.styleFrom(
                             shape: const StadiumBorder(),
                             backgroundColor: BL.selected,

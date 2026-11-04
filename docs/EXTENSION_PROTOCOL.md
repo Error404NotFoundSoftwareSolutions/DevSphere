@@ -12,6 +12,9 @@ Unix domain socket (Linux, macOS) or named pipe (Windows) in a per-user private 
 
 Frame = 4-byte big-endian unsigned length N, then N bytes of UTF-8 JSON. **N must be 1 to 65536**; anything else closes the connection.
 
+## 2b. Finding the session
+The worker writes `session-<sessionId>.json` (mode 0600) in the per-user runtime directory (`$XDG_RUNTIME_DIR/buildloop`, else `~/.buildloop/run`; directory mode 0700) containing `{sessionId, socketPath, labId, labRoot, protocol}`. The extension finds the file whose `labRoot` equals its workspace folder, checks that the file is owned by the current user and not readable by others, then connects. No environment variables are used: an already running VS Code would not pass them to a new window.
+
 ## 3. Identifiers
 `id` = `^[a-z0-9][a-z0-9_-]{0,63}$` (lab ids, step ids). `sessionId` = 32 lowercase hex characters. `extVersion` = `MAJOR.MINOR.PATCH` digits only.
 
@@ -30,9 +33,9 @@ No other keys are allowed in a request. `hello` must come first; a second `hello
 | type | fields |
 |---|---|
 | `welcome` | `protocol`, `labId` |
-| `labState` | `labId`, `title`, `currentStepId`, `steps` (list of `{id, title, state}` with state `todo`, `pass`, `fail`) |
+| `labState` | `labId`, `title`, `currentStepId`, `steps` (list of `{id, title, state, contentRef}`; state is `todo`, `pass` or `fail`; `contentRef` is a relative path like `guide/01-setup.md` that the extension reads from the lab folder) |
 | `checkResult` | `stepId`, `passed`, `kind` (always `"Practice"`), `summary`, `output` (redacted, max 4000 chars) |
-| `error` | `code` (`protocol-mismatch`, `wrong-session`, `need-hello`, `duplicate-hello`, `unknown-step`, `invalid-message`, `busy`), `message` (plain language) |
+| `error` | `code` (`protocol-mismatch`, `wrong-session`, `need-hello`, `duplicate-hello`, `unknown-step`, `invalid-message`, `busy`, `steps-incomplete`), `message` (plain language) |
 | `verifiedResult` | reserved for milestone PL-CMP-08; only from the server |
 | `sessionClosed` | none |
 

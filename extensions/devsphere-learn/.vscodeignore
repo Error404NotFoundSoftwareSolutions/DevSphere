@@ -1,5 +1,9 @@
 .vscode/**
 src/**
 test/**
-tsconfig.json
+dist/test/**
 **/*.map
+tsconfig.json
+package-lock.json
+node_modules/**
+.gitignore
