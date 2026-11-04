@@ -13,10 +13,10 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets('Learner first lab journey (TC-FR-WS-001-01)', (WidgetTester tester) async {
-    await tester.pumpWidget(const DevSphereApp());
+    await tester.pumpWidget(BuildLoopApp());
     await tester.pumpAndSettle();
 
     // App launches on sign-in screen
-    expect(find.text('DevSphere'), findsOneWidget);
+    expect(find.text('BuildLoop'), findsOneWidget);
   });
 }

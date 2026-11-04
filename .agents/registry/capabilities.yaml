@@ -13,9 +13,9 @@ capabilities:
   - { id: CAP-BROWSER-PREVIEW,   track: C, status: planned, owner: "devsphere-ide",                        uses: [EP-WORKBENCH-VIEW, EP-BROWSER-CAPABILITY], note: "Preview/reader pane" }
   - { id: CAP-BROWSER-AGENT,     track: C, status: planned, owner: "devsphere-ide",                        uses: [EP-AGENT-TOOL, EP-BROWSER-CAPABILITY, EP-APPROVAL-POLICY], note: "Agent-operable browser" }
   - { id: CAP-AGENT,             track: D, status: planned, owner: "extensions/devsphere-agent",           uses: [EP-PROVIDER, EP-AGENT-TOOL, EP-APPROVAL-POLICY, EP-EVENT-SINK], note: "Pair and Agent modes" }
-  - { id: CAP-HOME-DASHBOARD,    track: B, status: planned, owner: "extensions/devsphere-home",           uses: [EP-WORKBENCH-VIEW, EP-ROADMAP-SOURCE], note: "Home: courses, topics, roadmaps, badges, streaks, continue card" }
-  - { id: CAP-COURSE-PLAYER,     track: B, status: planned, owner: "extensions/devsphere-learn",          uses: [EP-WORKBENCH-VIEW, EP-UNIT-TYPE], note: "Runs a course unit by unit; opens the workspace in the same window" }
-  - { id: CAP-COMPLETION,        track: B, status: planned, owner: "extensions/devsphere-learn",          uses: [EP-WORKBENCH-VIEW], note: "Completion screen: destination, badge, skills gained, next step" }
+  - { id: CAP-HOME-DASHBOARD,    track: B, status: alpha, owner: "extensions/devsphere-learn",           uses: [EP-WORKBENCH-VIEW, EP-ROADMAP-SOURCE], note: "Home: courses, topics, roadmaps, badges, streaks, continue card" }
+  - { id: CAP-COURSE-PLAYER,     track: B, status: alpha, owner: "extensions/devsphere-learn",          uses: [EP-WORKBENCH-VIEW, EP-UNIT-TYPE], note: "Runs a course unit by unit; opens the workspace in the same window" }
+  - { id: CAP-COMPLETION,        track: B, status: alpha, owner: "extensions/devsphere-learn",          uses: [EP-WORKBENCH-VIEW], note: "Completion screen: destination, badge, skills gained, next step" }
   - { id: CAP-STREAKS,           track: E, status: planned, owner: "services/api",                         uses: [EP-API-ROUTE], note: "Weekly goal and week-streak, display only, never affects scores" }
   - { id: CAP-SKILL-GRAPH,       track: E, status: planned, owner: "content/skills + services/content-ci", uses: [EP-LAB-KIND, EP-SKILL-PACK], note: "Skills, prerequisites, packs" }
   - { id: CAP-ROADMAP,           track: E, status: planned, owner: "services/api + content",              uses: [EP-ROADMAP-SOURCE, EP-PROVIDER], note: "Prebuilt and generated roadmaps" }

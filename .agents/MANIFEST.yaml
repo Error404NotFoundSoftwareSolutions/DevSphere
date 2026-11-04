@@ -4,12 +4,12 @@ version: 1.0.0
 date: 2026-11-04
 entrypoints: [AGENTS.md, .agent/STATE.yaml, .agent/README.md]
 core: [STATE.yaml, INTERACTION_PROTOCOL.md, QUESTIONS.md, GOAL.md, RULES.md, WORKFLOW.md, PROJECT_MAP.md, CURRENT_SPRINT.md]
-rules: [rules/README.md, rules/10-security.md, rules/20-trust-and-scoring.md, rules/30-architecture-boundaries.md, rules/40-code-style.md, rules/50-testing.md, rules/60-docs-and-traceability.md, rules/70-git-and-prs.md, rules/80-ai-and-prompts.md, rules/90-dependencies-and-licensing.md, rules/95-ide-fork.md]
+rules: [rules/README.md, rules/10-security.md, rules/11-security-operations.md, rules/20-trust-and-scoring.md, rules/30-architecture-boundaries.md, rules/40-code-style.md, rules/50-testing.md, rules/60-docs-and-traceability.md, rules/70-git-and-prs.md, rules/80-ai-and-prompts.md, rules/90-dependencies-and-licensing.md, rules/95-ide-fork.md]
 personas: [orchestrator, architect, planner, implementer, test-engineer, reviewer, security-auditor, docs-writer, researcher, ide-fork-engineer, browser-engineer, release-manager]
 plans: [plans/00-master-plan.md, plans/10-agentic-kit-adoption.md, plans/20-ide-fork-plan.md, plans/30-integrated-browser-plan.md, plans/40-agent-runtime-plan.md, plans/50-extensibility-plan.md, plans/plan-template.md]
 architecture: [architecture/extension-fabric.md, architecture/ide-fork.md, architecture/integrated-browser.md, architecture/agent-runtime.md, architecture/repo-structure.md]
 registry: [registry/capabilities.yaml, registry/extension-points.yaml, registry/profiles.yaml, registry/flags.yaml]
 ideas: [ideas/README.md, ideas/INBOX.md, ideas/BOARD.md, ideas/rubric.md]
 tasks: [implement-story, add-ipc-call, add-api-endpoint, add-lab, add-bug-challenge, add-contribution-challenge, fix-defect, prepare-release, update-requirements, write-plan, write-adr, run-spike, triage-idea, add-extension-point, sync-upstream-ide, add-agent-tool, add-browser-capability, refactor]
-checklists: [definition_of_done, security_review, pr_review, new_dependency, upstream_sync, prompt_change]
+checklists: [definition_of_done, security_review, security_release_gate, pr_review, new_dependency, upstream_sync, prompt_change]
 integrations: {claude-code: CLAUDE.md, cursor: .cursor/rules/devsphere.mdc, copilot: .github/copilot-instructions.md, codex: AGENTS.md}

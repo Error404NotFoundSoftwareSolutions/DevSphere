@@ -29,6 +29,7 @@ python tools/check_docs.py     # documents stay consistent with each other
 | Formal baseline | `main/srs_v1.md` (requirements), `main/sad_v1.md` (design), `main/test_plan_v1.md` (tests) |
 | Backlog | `backlog/backlog_v1.md`, `backlog/backlog_v1.csv`, `backlog/STORY_MAP.md` |
 | Compliance | `compliance/PRIVACY_AND_RETENTION.md` |
+| Security programme | `security/README.md` and the documents it lists, `../SECURITY.md` |
 | Agents and future directions | `../AGENTS.md`, `../.agent/` (rules, personas, plans, architecture for the proposed IDE, browser and agent tracks, open questions) |
 
 The three files in `main/` are the contract. The other documents explain, summarise and track; if they disagree with `main/`, fix them.

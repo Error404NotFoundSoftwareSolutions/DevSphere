@@ -19,5 +19,5 @@ Future<void> main() async {
   } catch (e) {
     debugPrint('Firebase initialization note: $e');
   }
-  runApp(const ProviderScope(child: DevSphereApp()));
+  runApp(ProviderScope(child: BuildLoopApp()));
 }

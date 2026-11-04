@@ -7,8 +7,24 @@ updated: 2026-11-04
 
 # While true, agents may create or edit ONLY: *.md, *.yaml/*.yml under .agent/, docs/, and plans.
 # No source code, no tests, no dependency or lockfile changes, no CI changes, no generated files.
-code_freeze: true
-code_freeze_reason: >
+code_freeze: false
+# Owner lifted the freeze on 2026-11-04 for ONE slice only (walking skeleton of the learning flow). Agents may
+# create or edit files ONLY inside `active_scope`; anything else still needs a fresh owner yes.
+active_scope:
+  - extensions/devsphere-learn/
+  - apps/desktop/
+  - packages/ui/
+  - docs/DESIGN_SYSTEM.md
+  - tools/check_security.py
+  - tools/tests/
+  - docs/security/
+  - docs/SECURITY.md
+  - SECURITY.md
+  - docs/TECH_STACK.md
+  - .agent/
+  - .gitignore
+  - .github/workflows/ci.yml   # only to add the security and extension jobs
+code_freeze_reason_old: >
   Owner asked for the planning, rules and documentation layer first. Implementation starts
   only after the blocking questions in QUESTIONS.md are answered and this flag is set to false.
 
@@ -22,8 +38,8 @@ autonomy:
 # Which tracks exist and how far each has been agreed. Agents never build a track that is not Active.
 # Status: Proposed -> Accepted (ADR merged) -> Active (in current sprint) -> Frozen | Dropped
 tracks:
-  A-learning-platform:   { status: Accepted, adr: ADR-003, note: "Flutter desktop + Python services. Exists today." }
-  B-devsphere-ide:       { status: Accepted, adr: ADR-013, note: "Branded Code-OSS patch-set in separate repo devsphere-ide. Next: spikes SP-IDE-01..03." }
+  A-learning-platform:   { status: Active, adr: ADR-003, note: "Flutter desktop + Python services. Exists today." }
+  B-devsphere-ide:       { status: Paused,  adr: ADR-013, note: "Branded Code-OSS patch-set in separate repo devsphere-ide. Next: spikes SP-IDE-01..03." }
   C-integrated-browser:  { status: Accepted, adr: ADR-014, note: "Preview, reader, AI-operable, general browsing as capability. Depends on B." }
   D-agent-runtime:       { status: Accepted, adr: ADR-015, note: "Tutor/Pair/Agent by profile. Provider choice Q-013 open." }
   E-curriculum-roadmap:  { status: Proposed, adr: ADR-017, note: "Skill graph, prebuilt+generated roadmaps, OSS contribution sandbox, beginner->professional. Questions answered; awaiting owner's yes on ADR-017 and the MVP change request." }
@@ -33,3 +49,4 @@ tracks:
 # ADR-013/014/015 accepted 2026-11-04. Accepted is not Active: no track is built while code_freeze is true.
 blocking_questions: []   # remaining open (non-blocking): Q-009..Q-014, Q-016..Q-018   # see QUESTIONS.md
 active_plan: .agent/plans/00-master-plan.md
+active_slice: "BuildLoop Flutter shell: design system, theme, app shell and Overview screen (ADR-018)"

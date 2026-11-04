@@ -116,3 +116,9 @@ Format: **Status** (Proposed, Accepted, Superseded), **Context**, **Decision**, 
 - **Status:** Accepted (4 Nov 2026). Answers: Q-004, Q-005 (Tutor, Pair, Agent by profile). Provider choice (Q-013) still open; the provider port keeps it swappable.
 - **Decision:** One runtime with tool registry, approval engine, checkpoints, audit log and provider port; mode chosen by profile; Tutor guarantees of ADR-007 and `AI_TUTOR_POLICY.md` stay intact (`.agents/architecture/agent-runtime.md`).
 - **Consequences:** Rules TRU-05..TRU-10 and AIR-01..AIR-12 become release gates once accepted.
+
+## ADR-021: Flutter app is the BuildLoop shell; VS Code fork deferred
+- **Status:** Accepted (4 Nov 2026), owner decision. Revises the effect of Q-001 and ADR-018. Does not delete ADR-018.
+- **Context:** After seeing the Home screen inside VS Code, the owner wants a downloadable standalone desktop app with its own design (BuildLoop, "Quiet Engineering", `docs/DESIGN_SYSTEM.md`). The Flutter app (ADR-003) already is a standalone desktop app.
+- **Decision:** The Flutter app (`apps/desktop`) is the product shell: login, Overview, courses, roadmaps, progress, workspaces. Design tokens and theme live in `packages/ui`. ADR-018 (Code-OSS fork) is **paused**, not dropped; the VS Code extension `extensions/devsphere-learn` stays as a prototype and as a possible later "open in full IDE" path.
+- **Consequences:** The code editor and terminal question returns to the Flutter stack (spike SP-01: `re_editor`, `flutter_pty`); the earlier concerns about editor quality and an embeddable browser remain open risks and need a decision before the Workspace screen is built. Product display name becomes BuildLoop; repository and package names stay `devsphere` until a rename is approved.

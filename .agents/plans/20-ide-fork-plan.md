@@ -20,6 +20,7 @@ Web version; our own marketplace; replacing language servers; competing feature-
 | PL-IDE-03 | Repo and pipeline | `devsphere-ide` (or folder) with `upstream.lock`, patch tooling, CI job that fetch/apply/build/test; patch-health report |
 | PL-IDE-04 | Branding and defaults | Name, icons, data folder, welcome page, default settings per profile |
 | PL-IDE-04b | Home and learning mode | `devsphere-home` dashboard is the first screen; a lab opens in its own window with the learning layout; closing it returns to Home with the completion screen without losing files (`docs/APP_FLOW.md`) |
+| PL-IDE-06a | Walking skeleton as extensions (done 2026-11-04) | `extensions/devsphere-learn`: Home, lab window, guide, Practice checks, completion; 51 tests; activates in VS Code 1.144 without errors; Verified grading NOT connected |
 | PL-IDE-05 | `devsphere-welcome` | Environment check and consent plan (reuses US-11..US-14 behaviour), profile choice |
 | PL-IDE-06 | `devsphere-learn` skeleton | Lab catalogue from `services/api`; open a lab; guided steps view |
 | PL-IDE-07 | Practice checks | Run lab checks locally; label as Practice (TRU-02) |
