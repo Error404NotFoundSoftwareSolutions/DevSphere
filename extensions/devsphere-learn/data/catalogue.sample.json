@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "learner": "Learner",
+  "weeklyGoal": { "target": 3 },
+  "courses": [
+    { "id": "python-hello-001", "title": "Hello, Python", "topic": "Getting started", "minutes": 45, "level": "beginner", "available": true },
+    { "id": "terminal-basics-001", "title": "Terminal basics", "topic": "Terminal and Git", "minutes": 60, "level": "beginner", "available": false },
+    { "id": "git-first-commit-001", "title": "Your first Git commit", "topic": "Terminal and Git", "minutes": 60, "level": "beginner", "available": false },
+    { "id": "debug-a-traceback-001", "title": "Read a stack trace", "topic": "Debugging", "minutes": 60, "level": "beginner", "available": false },
+    { "id": "first-pull-request-001", "title": "Your first pull request", "topic": "Open-source contribution", "minutes": 90, "level": "intermediate", "available": false }
+  ],
+  "roadmap": {
+    "title": "First project: setup, install, run, Git",
+    "steps": [
+      { "courseId": "python-hello-001", "title": "Hello, Python" },
+      { "courseId": "terminal-basics-001", "title": "Terminal basics" },
+      { "courseId": "git-first-commit-001", "title": "Your first Git commit" },
+      { "courseId": "debug-a-traceback-001", "title": "Read a stack trace" },
+      { "courseId": "first-pull-request-001", "title": "Your first pull request" }
+    ]
+  },
+  "badges": [
+    { "id": "first-function", "title": "First function", "courseId": "python-hello-001" },
+    { "id": "terminal-ready", "title": "Terminal ready", "courseId": "terminal-basics-001" },
+    { "id": "first-commit", "title": "First commit", "courseId": "git-first-commit-001" },
+    { "id": "bug-reader", "title": "Bug reader", "courseId": "debug-a-traceback-001" },
+    { "id": "first-pr", "title": "First pull request", "courseId": "first-pull-request-001" }
+  ]
+}

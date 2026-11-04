@@ -1,0 +1,70 @@
+{
+  "name": "devsphere-learn",
+  "displayName": "DevSphere Learn",
+  "description": "Guided, scored engineering labs: Home dashboard, lab guide panel and completion screen.",
+  "version": "0.0.1",
+  "private": true,
+  "publisher": "devsphere",
+  "license": "UNLICENSED",
+  "engines": {
+    "vscode": "^1.90.0",
+    "node": ">=20"
+  },
+  "main": "./dist/src/extension.js",
+  "activationEvents": [
+    "onStartupFinished",
+    "workspaceContains:.devsphere/lab.json"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": "limited",
+      "description": "In an untrusted workspace the guide is read-only and practice checks do not run."
+    },
+    "virtualWorkspaces": false
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "devsphere.openHome",
+        "title": "DevSphere: Open Home"
+      },
+      {
+        "command": "devsphere.openGuide",
+        "title": "DevSphere: Open Lab Guide"
+      }
+    ],
+    "configuration": {
+      "title": "DevSphere",
+      "properties": {
+        "devsphere.labsFolder": {
+          "type": "string",
+          "default": "",
+          "scope": "machine",
+          "markdownDescription": "Folder where lab workspaces are created. Empty uses `~/DevSphereLabs`."
+        },
+        "devsphere.pythonCommand": {
+          "type": "string",
+          "enum": [
+            "python3",
+            "python",
+            "py"
+          ],
+          "default": "python3",
+          "scope": "machine",
+          "description": "Python command used for practice checks (name only, no paths)."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsc -p .",
+    "test": "tsc -p . && node --test dist/test/*.test.js",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@types/node": "22.9.0",
+    "@types/vscode": "1.90.0",
+    "typescript": "5.6.3",
+    "yaml": "2.9.1"
+  }
+}

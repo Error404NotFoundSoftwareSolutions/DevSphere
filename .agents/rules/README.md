@@ -7,6 +7,7 @@ Severity: **STOP** = defect even if tests pass. **MUST** = fix before merge. **S
 | File | Prefix | Scope |
 |---|---|---|
 | `10-security.md` | SEC | Secrets, processes, untrusted input, supply chain |
+| `11-security-operations.md` | SEC-20+ | Egress, webviews, logging, tokens, supply chain, CI, fail-closed |
 | `20-trust-and-scoring.md` | TRU | Practice vs Verified, tutor/agent limits |
 | `30-architecture-boundaries.md` | ARC | Layers, ports/adapters, contracts, extension points |
 | `40-code-style.md` | STY | Dart, Python, TypeScript conventions |
