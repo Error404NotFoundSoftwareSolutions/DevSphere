@@ -1,8 +1,9 @@
-// Capability: CAP-COMPANION-EXT, CAP-COMPLETION. Rules: SEC-21..SEC-27, TRU-01, TRU-02, ADR-019
-// Implemented here: VS Code glue for the BuildLoop Guide. In a lab folder it finds the app's private
-// session, connects to the channel and shows the guide panel from the worker's events. It never runs
-// the learner's code, stores progress or holds credentials: it only asks the app (Check my work, next
-// step, finish) and shows what the app answers. Results are Practice; Verified is the app's job.
+// Capability: CAP-COMPANION-EXT, CAP-COMPLETION. Rules: SEC-21..SEC-27, TRU-01, TRU-02, ADR-019. Tests: TC-CMP-13-xx
+// Implemented here: VS Code glue for the BuildLoop Guide. The guide is a webview VIEW in the Secondary Side
+// Bar (the chat area, like Copilot Chat), never a tab in the editor area. In a lab folder it finds the app's
+// private session, connects to the channel and renders the guide from the worker's events. It never runs the
+// learner's code, stores progress or holds credentials: it only asks the app (Check my work, next step,
+// finish) and shows what the app answers. Results are Practice; Verified is the app's job.
 import fs from 'node:fs';
 import * as vscode from 'vscode';
 import { renderMarkdownSafe } from './core/markdown';
@@ -12,6 +13,8 @@ import { safeResolve } from './core/safePath';
 import { ChannelClient } from './host/channel';
 import { defaultRuntimeDir, discoverSession } from './host/session';
 import { clientScript, escapeHtml, newNonce, pageShell, renderCompletion, renderGuide, type GuideModel } from './ui/html';
+
+const VIEW_ID = 'buildloop.guide';
 
 interface Model {
   labTitle: string;
@@ -23,109 +26,140 @@ interface Model {
 }
 
 let log: vscode.OutputChannel;
-let panel: vscode.WebviewPanel | undefined;
-let client: ChannelClient | undefined;
 
-function show(p: vscode.WebviewPanel, title: string, body: string): void {
-  p.webview.html = pageShell({ title, body, nonce: newNonce(), cspSource: p.webview.cspSource, script: clientScript() });
-}
+class GuideView implements vscode.WebviewViewProvider {
+  private view: vscode.WebviewView | undefined;
+  private client: ChannelClient | undefined;
+  private started = false;
+  private readonly model: Model = { labTitle: 'BuildLoop lab', steps: [], current: '', lastCheck: undefined, finished: false, notice: undefined };
 
-function guideBody(folder: string, m: Model): string {
-  const step = m.steps.find((s) => s.id === m.current);
-  let contentHtml = '<p>This step could not be loaded.</p>';
-  if (step) {
-    try {
-      contentHtml = renderMarkdownSafe(fs.readFileSync(safeResolve(folder, `.devsphere/${step.contentRef}`), 'utf8'));
-    } catch { /* keep the plain fallback */ }
+  constructor(private readonly version: string) {}
+
+  resolveWebviewView(view: vscode.WebviewView): void {
+    this.view = view;
+    view.webview.options = { enableScripts: true, enableCommandUris: false, localResourceRoots: [] };
+    view.onDidDispose(() => { this.view = undefined; });
+    view.webview.onDidReceiveMessage((raw: unknown) => this.onWebviewMessage(raw));
+    this.render();
+    void this.start();
   }
-  const model: GuideModel = {
-    labTitle: m.labTitle,
-    steps: m.steps.map((s) => ({ id: s.id, title: s.title, state: s.state, current: s.id === m.current })),
-    current: step ? { id: step.id, title: step.title, contentHtml } : undefined,
-    lastCheck: m.lastCheck,
-    trusted: vscode.workspace.isTrusted && m.notice === undefined,
-  };
-  const notice = m.notice ? `<p class="result fail">${escapeHtml(m.notice)}</p>` : '';
-  return notice + renderGuide(model);
-}
 
-async function start(ctx: vscode.ExtensionContext): Promise<void> {
-  const folder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
-  if (!folder) return;
-  if (panel) { panel.reveal(); return; }
-  const session = discoverSession(folder, defaultRuntimeDir());
-  const model: Model = { labTitle: 'BuildLoop lab', steps: [], current: '', lastCheck: undefined, finished: false, notice: undefined };
-  const p = vscode.window.createWebviewPanel('buildloop.guide', 'BuildLoop Guide', { viewColumn: vscode.ViewColumn.Beside, preserveFocus: true }, {
-    enableScripts: true, enableCommandUris: false, localResourceRoots: [], retainContextWhenHidden: false,
-  });
-  panel = p;
-  p.onDidDispose(() => { panel = undefined; client?.close(); client = undefined; });
-  const render = (): void => {
-    if (model.finished && model.steps.length > 0 && model.steps.every((s) => s.state === 'pass')) {
-      show(p, 'Lab complete', renderCompletion({
-        labTitle: model.labTitle,
-        skills: model.steps.map((s) => s.title),
+  dispose(): void { this.client?.close(); }
+
+  private folder(): string | undefined { return vscode.workspace.workspaceFolders?.[0]?.uri.fsPath; }
+
+  private show(title: string, body: string): void {
+    const v = this.view;
+    if (!v) return;
+    v.webview.html = pageShell({ title, body, nonce: newNonce(), cspSource: v.webview.cspSource, script: clientScript() });
+  }
+
+  private guideBody(folder: string): string {
+    const m = this.model;
+    const step = m.steps.find((s) => s.id === m.current);
+    let contentHtml = '<p>This step could not be loaded.</p>';
+    if (step) {
+      try {
+        contentHtml = renderMarkdownSafe(fs.readFileSync(safeResolve(folder, `.devsphere/${step.contentRef}`), 'utf8'));
+      } catch { /* keep the plain fallback */ }
+    }
+    const model: GuideModel = {
+      labTitle: m.labTitle,
+      steps: m.steps.map((s) => ({ id: s.id, title: s.title, state: s.state, current: s.id === m.current })),
+      current: step ? { id: step.id, title: step.title, contentHtml, showTitle: !contentHtml.trimStart().startsWith('<h1>') } : undefined,
+      lastCheck: m.lastCheck,
+      trusted: vscode.workspace.isTrusted && m.notice === undefined,
+    };
+    const notice = m.notice ? `<p class="result fail">${escapeHtml(m.notice)}</p>` : '';
+    return notice + renderGuide(model);
+  }
+
+  render(): void {
+    const folder = this.folder();
+    const m = this.model;
+    if (!folder) { this.show('Lab guide', '<p>Open a BuildLoop lab folder to see its guide.</p>'); return; }
+    if (m.finished && m.steps.length > 0 && m.steps.every((s) => s.state === 'pass')) {
+      this.show('Lab complete', renderCompletion({
+        labTitle: m.labTitle,
+        skills: m.steps.map((s) => s.title),
         verification: 'unavailable',
         message: 'Go back to the BuildLoop app to submit for a Verified result. Practice results alone do not earn a badge.',
-        practicePassed: model.steps.length,
-        total: model.steps.length,
+        practicePassed: m.steps.length,
+        total: m.steps.length,
       }));
     } else {
-      show(p, 'Lab guide', guideBody(folder, model));
+      this.show('Lab guide', this.guideBody(folder));
     }
-  };
-  if (!session) {
-    model.notice = 'BuildLoop is not running for this lab. Open the lab again from the BuildLoop app.';
-    render();
-    return;
   }
-  const version = (ctx.extension.packageJSON as { version: string }).version;
-  const c = new ChannelClient(session, version);
-  client = c;
-  const onEvent = (e: WorkerEvent): void => {
+
+  async start(): Promise<void> {
+    if (this.started) return;
+    this.started = true;
+    const folder = this.folder();
+    if (!folder) return;
+    const session = discoverSession(folder, defaultRuntimeDir());
+    if (!session) {
+      this.model.notice = 'BuildLoop is not running for this lab. Open the lab again from the BuildLoop app.';
+      this.render();
+      return;
+    }
+    const c = new ChannelClient(session, this.version);
+    this.client = c;
+    c.onEvent((e) => this.onEvent(e));
+    c.onClose(() => { this.model.notice = 'The connection to BuildLoop ended. Open the lab again from BuildLoop.'; this.render(); });
+    try {
+      await c.connect();
+      log.appendLine('connected to the BuildLoop app');
+      c.send(requests.getLabState());
+    } catch (e) {
+      this.model.notice = (e as Error).message;
+      this.render();
+    }
+  }
+
+  private onEvent(e: WorkerEvent): void {
+    const m = this.model;
     if (e.type === 'labState') {
-      model.labTitle = e.title; model.steps = e.steps; model.current = e.currentStepId;
+      m.labTitle = e.title; m.steps = e.steps; m.current = e.currentStepId;
     } else if (e.type === 'checkResult') {
-      model.lastCheck = { passed: e.passed, output: `${e.summary}\n\n${e.output}`.trim(), kind: 'Practice' };
+      m.lastCheck = { passed: e.passed, output: `${e.summary}\n\n${e.output}`.trim(), kind: 'Practice' };
     } else if (e.type === 'error') {
-      model.lastCheck = { passed: false, output: e.message, kind: 'Practice' };
+      m.lastCheck = { passed: false, output: e.message, kind: 'Practice' };
     } else if (e.type === 'sessionClosed') {
-      model.notice = 'The BuildLoop app closed this lab session. Open the lab again from BuildLoop.';
+      m.notice = 'The BuildLoop app closed this lab session. Open the lab again from BuildLoop.';
     }
-    render();
-  };
-  c.onEvent(onEvent);
-  c.onClose(() => { model.notice = 'The connection to BuildLoop ended. Open the lab again from BuildLoop.'; render(); });
-  try {
-    await c.connect();
-    log.appendLine('connected to the BuildLoop app');
-    c.send(requests.getLabState());
-  } catch (e) {
-    model.notice = (e as Error).message;
-    render();
+    this.render();
   }
-  p.webview.onDidReceiveMessage((raw: unknown) => {
+
+  private onWebviewMessage(raw: unknown): void {
     const msg = parseMessage(raw);
+    const c = this.client;
     if (!msg) { log.appendLine('dropped invalid webview message'); return; }
+    if (msg.type === 'openHome') { void vscode.commands.executeCommand('workbench.action.closeWindow'); return; }
+    if (!c) return;
     try {
       if (msg.type === 'goStep') c.send(requests.goStep(msg.stepId));
       else if (msg.type === 'checkStep') { if (vscode.workspace.isTrusted) c.send(requests.runCheck(msg.stepId)); }
-      else if (msg.type === 'finish') { model.finished = true; c.send(requests.finishLab()); }
-      else if (msg.type === 'openHome') void vscode.commands.executeCommand('workbench.action.closeWindow');
+      else if (msg.type === 'finish') { this.model.finished = true; c.send(requests.finishLab()); }
     } catch (e) {
-      model.notice = (e as Error).message;
-      render();
+      this.model.notice = (e as Error).message;
+      this.render();
     }
-  });
-  render();
+  }
 }
 
 export function activate(ctx: vscode.ExtensionContext): void {
   log = vscode.window.createOutputChannel('BuildLoop Guide');
-  ctx.subscriptions.push(log, vscode.commands.registerCommand('devsphere.openGuide', () => void start(ctx)));
-  void start(ctx);
+  const provider = new GuideView((ctx.extension.packageJSON as { version: string }).version);
+  ctx.subscriptions.push(
+    log,
+    { dispose: () => provider.dispose() },
+    vscode.window.registerWebviewViewProvider(VIEW_ID, provider, { webviewOptions: { retainContextWhenHidden: false } }),
+    vscode.commands.registerCommand('devsphere.openGuide', () => void vscode.commands.executeCommand(`${VIEW_ID}.focus`)),
+  );
+  // In a lab folder, show the guide straight away (this opens the Secondary Side Bar).
+  const folder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+  if (folder) void vscode.commands.executeCommand(`${VIEW_ID}.focus`);
 }
 
-export function deactivate(): void {
-  client?.close();
-}
+export function deactivate(): void { /* disposables are released through subscriptions */ }

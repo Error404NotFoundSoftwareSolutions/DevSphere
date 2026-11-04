@@ -2,12 +2,12 @@
   "name": "devsphere-learn",
   "displayName": "BuildLoop Guide",
   "description": "Guides each step of a BuildLoop lab in a side panel. Talks only to the BuildLoop app on this computer.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "publisher": "buildloop",
   "license": "UNLICENSED",
   "engines": {
-    "vscode": "^1.90.0",
+    "vscode": "^1.144.0",
     "node": ">=20"
   },
   "main": "./dist/src/extension.js",
@@ -22,6 +22,24 @@
     "virtualWorkspaces": false
   },
   "contributes": {
+    "viewsContainers": {
+      "secondarySidebar": [
+        {
+          "id": "buildloop",
+          "title": "BuildLoop Guide",
+          "icon": "media/guide.svg"
+        }
+      ]
+    },
+    "views": {
+      "buildloop": [
+        {
+          "type": "webview",
+          "id": "buildloop.guide",
+          "name": "Lab guide"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "devsphere.openGuide",

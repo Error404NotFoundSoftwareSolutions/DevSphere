@@ -16,6 +16,26 @@ mkdir -p "$OUT/guide-build"
 echo "== extension: install, test, package"
 (cd "$EXT" && npm ci --ignore-scripts >/dev/null && npm test >/dev/null && npx vsce package --no-dependencies --allow-missing-repository --skip-license -o "$OUT/guide-build/guide.vsix" >/dev/null)
 VERSION="$(python3 -c "import json;print(json.load(open('$EXT/package.json'))['version'])")"
+# Guard: the same version number must never ship different code. VS Code (and our install plan) treat an
+# equal version as "already installed", so a changed extension with an unchanged version would never update.
+python3 - "$EXT" "$VERSION" <<'PY'
+import hashlib, json, os, sys
+ext, version = sys.argv[1], sys.argv[2]
+h = hashlib.sha256()
+for root, _, files in sorted(os.walk(os.path.join(ext, "dist", "src"))):
+    for f in sorted(files):
+        if f.endswith(".js"):
+            h.update(open(os.path.join(root, f), "rb").read())
+for extra in ("package.json", "media/guide.svg"):
+    h.update(open(os.path.join(ext, extra), "rb").read())
+digest = h.hexdigest()
+path = os.path.join(ext, "RELEASES.json")
+known = json.load(open(path)) if os.path.exists(path) else {}
+if version in known and known[version] != digest:
+    sys.exit(f"ERROR: extension code changed but version {version} did not. Bump the version in extensions/devsphere-learn/package.json.")
+known[version] = digest
+json.dump(known, open(path, "w"), indent=2); open(path, "a").write("\n")
+PY
 EXT_ID="$(python3 -c "import json;d=json.load(open('$EXT/package.json'));print(d['publisher']+'.'+d['name'])")"
 VSIX="buildloop-guide-$VERSION.vsix"
 mv "$OUT/guide-build/guide.vsix" "$OUT/guide-build/$VSIX"

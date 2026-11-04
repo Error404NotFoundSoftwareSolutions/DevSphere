@@ -79,7 +79,7 @@ export function pageShell(input: ShellInput): string {
 export interface GuideModel {
   labTitle: string;
   steps: { id: string; title: string; state: 'todo' | 'pass' | 'fail'; current: boolean }[];
-  current: { id: string; title: string; contentHtml: string } | undefined;
+  current: { id: string; title: string; contentHtml: string; showTitle?: boolean } | undefined;
   lastCheck: { passed: boolean; output: string; kind: 'Practice' } | undefined;
   trusted: boolean;
 }
@@ -91,7 +91,7 @@ export function renderGuide(m: GuideModel): string {
   const list = m.steps.map((s) => `<li><button class="link" data-action="goStep" data-id="${e(s.id)}">${s.current ? '> ' : ''}${e(s.title)}</button> <span class="muted">${STEP_MARK[s.state]}</span></li>`).join('');
   const allPass = m.steps.length > 0 && m.steps.every((s) => s.state === 'pass');
   const cur = m.current
-    ? `<h1>${e(m.current.title)}</h1><div>${m.current.contentHtml}</div>
+    ? `${m.current.showTitle === false ? '' : `<h1>${e(m.current.title)}</h1>`}<div>${m.current.contentHtml}</div>
 <p><button data-action="checkStep" data-id="${e(m.current.id)}"${m.trusted ? '' : ' disabled'}>Check my work</button></p>`
     : '<p>Select a step.</p>';
   const trust = m.trusted ? '' : '<p class="result fail">This folder is not trusted, so checks are turned off. Trust the folder to run them.</p>';

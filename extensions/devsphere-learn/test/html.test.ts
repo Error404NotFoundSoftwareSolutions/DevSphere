@@ -72,3 +72,11 @@ test('TC-LRN-30-02 markdown links are shown as inert text', () => {
   assert.doesNotMatch(html, /<a |href=/i);
   assert.match(html, /click/);
 });
+
+test('TC-CMP-14-01 the step title is not repeated when the lesson text already starts with a heading', () => {
+  const withHeading = renderGuide({ labTitle: 'L', steps: [], current: { id: 'a', title: 'Open the starter file', contentHtml: '<h1>Open the starter file</h1><p>x</p>', showTitle: false }, lastCheck: undefined, trusted: true });
+  assert.equal((withHeading.match(/Open the starter file/g) ?? []).length, 1);
+  const without = renderGuide({ labTitle: 'L', steps: [], current: { id: 'a', title: 'Open the starter file', contentHtml: '<p>x</p>' }, lastCheck: undefined, trusted: true });
+  assert.match(without, /<h1>Open the starter file<\/h1>/);
+});
+

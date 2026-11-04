@@ -65,7 +65,7 @@ int compareVersions(String a, String b) {
 }
 
 class VsCodeLocator {
-  VsCodeLocator({required this.env, required this.files, required this.versionProbe, this.minVersion = '1.90.0'});
+  VsCodeLocator({required this.env, required this.files, required this.versionProbe, this.minVersion = '1.144.0'});
 
   final LocatorEnv env;
   final FileProbe files;

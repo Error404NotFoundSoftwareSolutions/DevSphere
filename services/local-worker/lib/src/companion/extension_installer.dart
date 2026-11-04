@@ -87,6 +87,7 @@ Future<InstallPlan> planInstall({required EditorInstall editor, required Extensi
     else
       'BuildLoop Guide ${package.version} will be installed into ${editor.displayName} ${editor.version} (${editor.path}).',
     if (action == InstallAction.update) 'An older version ($installed) is installed and will be replaced.',
+    if (action == InstallAction.update) 'If this lab is already open in VS Code, close that window first so the new guide loads.',
     'It adds a side panel that shows your lab steps. It is active only in lab folders.',
     'It talks only to BuildLoop on this computer and does not use the internet.',
     'The extension file is part of BuildLoop and its fingerprint is checked before it is installed.',

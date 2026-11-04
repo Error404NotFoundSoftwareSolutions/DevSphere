@@ -46,7 +46,9 @@ void main() {
 
   test('TC-CMP-03-02 plan says update for an older version and none for the same version', () async {
     final older = FakeRunner(listing: 'buildloop.devsphere-learn@0.0.9\nms-python.python@2024.1.0\n');
-    expect((await planInstall(editor: editor, package: pkg(), runner: older.call)).action, InstallAction.update);
+    final update = await planInstall(editor: editor, package: pkg(), runner: older.call);
+    expect(update.action, InstallAction.update);
+    expect(update.lines.join(' '), contains('close that window'));
     final same = FakeRunner(listing: 'buildloop.devsphere-learn@0.1.0\n');
     expect((await planInstall(editor: editor, package: pkg(), runner: same.call)).action, InstallAction.none);
   });

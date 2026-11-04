@@ -88,7 +88,7 @@ void main() {
     final l = locator(files: {'/usr/bin/code'}, outputs: {'/usr/bin/code': '1.60.0\n${'a' * 40}\nx64\n'});
     final r = await l.find();
     expect(r.install, isNull);
-    expect(r.rejected.single, contains('1.90.0'));
+    expect(r.rejected.single, contains('1.144.0'));
   });
 
   test('TC-CMP-02-07 a path chosen by the user is tried first and still verified', () async {
