@@ -1,6 +1,6 @@
 // User story: US-02 Privacy notice, consent and age check (Sprint 1, MVP)
 // User story: US-03 Student profile (Sprint 1, MVP)
-// Requirements: FR-PROF-001, FR-PROF-002, FR-PROF-010
+// Requirements: FR-PROF-001, FR-PROF-002..008, FR-PROF-010
 // Implemented here: Cloud Firestore data service for consent records, profiles, and lab activity
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -41,6 +41,7 @@ class StudentProfile {
   final String email;
   final String? college;
   final String? course;
+  final String? academicYear;
   final List<String> interests;
 
   const StudentProfile({
@@ -49,6 +50,7 @@ class StudentProfile {
     required this.email,
     this.college,
     this.course,
+    this.academicYear,
     this.interests = const [],
   });
 
@@ -60,6 +62,7 @@ class StudentProfile {
       email: data['email'] as String? ?? '',
       college: data['college'] as String?,
       course: data['course'] as String?,
+      academicYear: data['academicYear'] as String?,
       interests: List<String>.from(data['interests'] as List? ?? []),
     );
   }
@@ -70,8 +73,10 @@ class StudentProfile {
       'email': email,
       if (college != null) 'college': college,
       if (course != null) 'course': course,
+      if (academicYear != null) 'academicYear': academicYear,
       'interests': interests,
       'updatedAt': FieldValue.serverTimestamp(),
+      // Strictly NO dateOfBirth, phone, or address per FR-PROF-003
     };
   }
 }

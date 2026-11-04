@@ -13,7 +13,7 @@ This file is updated before each sprint by the repository owner with the sprint 
 | 1 | `US-01` | Sign in with Google | P0 | Complete |
 | 2 | `US-05` | Backend foundation | P0 | Not started |
 | 3 | `US-02` | Privacy notice, consent and age check | P0 | Complete |
-| 4 | `US-03` | Create and manage my profile | P0 | Not started |
+| 4 | `US-03` | Create and manage my profile | P0 | Complete |
 | 5 | `US-04` | Data export and deletion requests | P1 | Not started |
 
 Next sprint: Sprint 2.

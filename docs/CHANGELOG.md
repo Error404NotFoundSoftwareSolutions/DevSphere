@@ -11,6 +11,7 @@ Format: newest first. Group by Added, Changed, Fixed, Security.
 - UI layer architectural security rule enforced: `apps/desktop/lib/ui` and `lib/features` are strictly banned from `dart:io` `File` and `Process` APIs; all privileged work runs in `services/local-worker`.
 
 ### Added
+- Implemented student profile creation, field validation, and post-onboarding management (US-03, FR-PROF-002..008) with prefilled editable display name, optional academic details, strict data minimization (no DOB, phone, or address), token-derived user ID scoping, cross-student read denial, and audited operator profile inspection.
 - Integrated Firebase backend with project `devpilot-1a384`: enabled Firebase Authentication with Google Sign-In, configured Cloud Firestore database `(default)`, registered Flutter apps (macOS, Windows, Web), generated platform configuration (`firebase_options.dart`), deployed production Firestore Security Rules with user profile isolation and privacy consent logging without DOB collection, and provided Flutter services for Firebase Auth and Firestore.
 - Implemented Privacy Notice presentation, consent recording, and age policy confirmation (US-02, FR-PROF-001, FR-PROF-010) with notice version, timestamp, and age check outcome only (no date of birth collected).
 - Implemented Google sign-in with system browser and PKCE (US-01), token verification matrix, stable provider subject mapping, sign-out revocation, and OS secure storage fallback with error recovery actions.

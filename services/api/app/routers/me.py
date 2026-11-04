@@ -4,7 +4,7 @@
 # Requirements: FR-PROF-001, FR-PROF-010
 # User story: US-03 Create and manage my profile (Sprint 1, MVP)
 # Requirements: FR-PROF-002..008
-# Implemented here: own account, consent record and profile. Consent stores notice version and age-check outcome only (FR-PROF-001, FR-PROF-010)
+# Implemented here: own account, consent record and profile. Consent stores notice version and age-check outcome only (FR-PROF-001, FR-PROF-010). Profile fields are validated (FR-PROF-004), user ID in body is ignored (FR-PROF-005), and cross-student reads are rejected (FR-PROF-006, FR-PROF-007).
 
 from datetime import datetime, timezone
 
@@ -16,6 +16,7 @@ from app.core.auth import User, current_user
 from app.db import memory
 
 router = APIRouter(prefix="/v1/me")
+students_router = APIRouter(prefix="/v1/students")
 
 
 class Consent(BaseModel):
@@ -27,10 +28,16 @@ class Consent(BaseModel):
 
 class Profile(BaseModel):
     model_config = ConfigDict(extra="forbid")  # no date of birth, no phone number (FR-PROF-003)
-    display_name: str = Field(min_length=1, max_length=60)
-    college: str | None = None
-    course: str | None = None
-    interests: list[str] = []
+    display_name: str = Field(
+        min_length=1,
+        max_length=60,
+        pattern=r"^[\w\s.'(),-]+$",
+    )
+    college: str | None = Field(default=None, max_length=100)
+    course: str | None = Field(default=None, max_length=100)
+    academic_year: str | None = Field(default=None, max_length=50)
+    interests: list[str] = Field(default_factory=list, max_length=20)
+    user_id: str | None = None  # user ID in body is ignored per FR-PROF-005
 
 
 @router.get("")
@@ -85,5 +92,36 @@ def put_profile(body: Profile, user: User = Depends(current_user)) -> dict:
             },
         )
 
-    memory.USERS.setdefault(user.user_id, {})["profile"] = body.model_dump()
-    return body.model_dump()
+    # FR-PROF-005: Profile is created and updated for user ID from authenticated token; body user_id is ignored
+    profile_data = body.model_dump(exclude={"user_id"})
+    memory.USERS.setdefault(user.user_id, {})["profile"] = profile_data
+    return profile_data
+
+
+@students_router.get("/{user_id}/profile")
+def get_student_profile(user_id: str, user: User = Depends(current_user)) -> dict:
+    # FR-PROF-006: A student shall be able to read only their own profile; operator requires operator role and is audited
+    if user.role != "operator" and user.user_id != user_id:
+        raise HTTPException(
+            403,
+            detail={
+                "code": "forbidden",
+                "message": "You can read only your own profile.",
+                "recovery": "View your own profile at /v1/me/profile.",
+            },
+        )
+
+    if user.role == "operator":
+        audit.record(user.user_id, "operator_read_profile", user_id, "operator_inspection")
+
+    profile = memory.USERS.get(user_id, {}).get("profile")
+    if not profile:
+        raise HTTPException(
+            404,
+            detail={
+                "code": "not_found",
+                "message": "Student profile not found.",
+                "recovery": "Verify student ID.",
+            },
+        )
+    return profile
