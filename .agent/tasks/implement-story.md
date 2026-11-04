@@ -28,13 +28,16 @@ git switch -c <type>/<story-id>-<short-slug>
 - Manual checks get an inspection record in the matching doc, not a fake test.
 
 ## Phase 4 - Test loop (maximum 5 cycles)
-Run the story test first, then the full suite:
+Run the story test first, then the full verification suite:
 ```bash
+uv run ruff check .
 uv run pytest
 melos run check
 python tools/check_docs.py
+bash -n ./start.sh
 ```
 - Fix failures in the implementation, not by editing test expectations or skipping tests.
+- Keep `./start.sh` updated if dependencies, services, or configurations changed, and verify it starts cleanly.
 - **Strict attempt limit:** After 5 failed cycles, STOP. Commit nothing further. Write failing test names, sanitized error output, and hypothesis to `docs/backlog/blocked_<story-id>.md`, and report to the user.
 
 ## Phase 5 - Update docs
