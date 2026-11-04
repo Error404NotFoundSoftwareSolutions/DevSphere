@@ -27,7 +27,7 @@ Every agent working on DevSphere MUST invoke and apply the appropriate skills fr
 - Use skill: `writing-plans` (and `brainstorming` if designing new functionality).
 - Run `gh issue view <number> --json title,body,labels,milestone`.
 - Confirm the story ID, the sprint, the requirements and the test case list.
-- **Consult Knowledge Graph (`graphify-out/`):** To avoid token wastage from reading entire directories, query `graphify-out/graph.json` or run `/graphify query "<story-id or subsystem>"` to locate the exact subgraph of related symbols, calling functions, IPC channels, and requirement links.
+- **Consult Knowledge Graph (`.agents/graphify-out/`):** To avoid token wastage from reading entire directories, query `.agents/graphify-out/graph.json` or run `/graphify query "<story-id or subsystem>"` to locate the exact subgraph of related symbols, calling functions, IPC channels, and requirement links.
 - If the issue has no test cases or a requirement is missing a test case, stop and ask. Do not invent test cases.
 
 ## Phase 1 - Branch

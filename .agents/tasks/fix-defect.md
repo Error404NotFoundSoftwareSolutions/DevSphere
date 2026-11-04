@@ -4,7 +4,7 @@ Fixing a defect follows the standard issue workflow with type `fix`, applying th
 
 ## Phase 0 - Read the bug issue & Understand
 - Use skills: `using-superpowers`, `systematic-debugging` (problem diagnosis), and `writing-plans`.
-- Consult `graphify-out/graph.json` or `/graphify query "<defect-keywords>"` for token-efficient symbol and dependency lookup.
+- Consult `.agents/graphify-out/graph.json` or `/graphify query "<defect-keywords>"` for token-efficient symbol and dependency lookup.
 ```bash
 gh issue view <number> --json title,body,labels,milestone
 ```

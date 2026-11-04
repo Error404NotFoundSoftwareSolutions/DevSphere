@@ -4,7 +4,7 @@ Follow the standard issue workflow step by step, applying the required skills fr
 
 ## Phase 0 - Read the issue & Plan
 - Use skills: `using-superpowers`, `writing-plans` (and `brainstorming` for new capabilities).
-- Consult `graphify-out/graph.json` or `/graphify query "<story-id>"` for token-efficient symbol lookup.
+- Consult `.agents/graphify-out/graph.json` or `/graphify query "<story-id>"` for token-efficient symbol lookup.
 ```bash
 gh issue view <number> --json title,body,labels,milestone
 ```

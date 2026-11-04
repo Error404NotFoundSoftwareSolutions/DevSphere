@@ -27,12 +27,12 @@ This folder tells an agent what the project is for, what it must never do, where
 
 If two documents disagree, the SRS wins on behaviour and the SAD wins on design. Report the conflict instead of guessing.
 
-## Efficient Codebase Navigation & Knowledge Graph (`graphify-out/`)
+## Efficient Codebase Navigation & Knowledge Graph (`.agents/graphify-out/`)
 
-To prevent token wastage and context exhaustion across this multi-package monorepo (340+ files), **never blindly grep or read dozens of files**. The repository includes a pre-indexed knowledge graph in `graphify-out/`:
+To prevent token wastage and context exhaustion across this multi-package monorepo (340+ files), **never blindly grep or read dozens of files**. The repository includes a pre-indexed knowledge graph in `.agents/graphify-out/`:
 
-- **Audit & Architecture**: Consult [`graphify-out/GRAPH_REPORT.md`](../graphify-out/GRAPH_REPORT.md) for core abstractions ("God Nodes"), architectural bridges, and detected community clusters.
-- **Targeted Symbol & Dependency Queries**: Query `graphify-out/graph.json` or use `/graphify query "<topic>"` to retrieve only the relevant connected subgraph (providing a **20.1x token reduction** over reading raw source files).
+- **Audit & Architecture**: Consult [`GRAPH_REPORT.md`](graphify-out/GRAPH_REPORT.md) for core abstractions ("God Nodes"), architectural bridges, and detected community clusters.
+- **Targeted Symbol & Dependency Queries**: Query `.agents/graphify-out/graph.json` or use `/graphify query "<topic>"` to retrieve only the relevant connected subgraph (providing a **20.1x token reduction** over reading raw source files).
 - **Impact Analysis**: Use `/graphify path "<source_symbol>" "<target_symbol>"` to inspect dependencies, calling conventions, and shared data structures before modifying code.
 - **Incremental Updates**: After completing significant features, ADRs, or new services, run `/graphify --update` to refresh the graph index without re-indexing from scratch.
 
