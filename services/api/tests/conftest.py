@@ -4,11 +4,10 @@
 # Implemented here: shared test client and valid signed test credentials
 
 import pytest
-from fastapi.testclient import TestClient
-
 from app.core.auth import create_token, get_or_create_user
 from app.db import memory
 from app.main import app
+from fastapi.testclient import TestClient
 
 STUDENT_TOKEN = create_token(sub="student-sub-1", email="student1@example.com")
 OTHER_TOKEN = create_token(sub="student-sub-2", email="student2@example.com")
@@ -23,5 +22,7 @@ OPERATOR = {"Authorization": f"Bearer {OPERATOR_TOKEN}"}
 def client():
     memory.reset()
     # Server-side role provisioning for the operator (FR-AUTH-009)
-    get_or_create_user(provider="google", sub="op-sub-12345", email="operator@example.com", role="operator")
+    get_or_create_user(
+        provider="google", sub="op-sub-12345", email="operator@example.com", role="operator"
+    )
     return TestClient(app)
