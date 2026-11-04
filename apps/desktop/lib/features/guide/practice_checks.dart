@@ -41,9 +41,11 @@ class _PracticeChecksState extends State<PracticeChecks> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Local Practice Check',
-                  style: TextStyle(fontWeight: FontWeight.w600),
+                const Expanded(
+                  child: Text(
+                    'Local Practice Check',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
                 ),
                 if (_passed != null)
                   const ResultBadge(kind: ResultKind.practice),
