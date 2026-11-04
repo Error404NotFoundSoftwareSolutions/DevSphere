@@ -5,6 +5,7 @@
 import 'package:go_router/go_router.dart';
 import 'features/auth/sign_in_screen.dart';
 import 'features/catalogue/catalogue_screen.dart';
+import 'features/consent/consent_screen.dart';
 import 'features/workspace/workspace_view.dart';
 import 'features/profile/profile_screen.dart';
 
@@ -14,6 +15,13 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/',
       builder: (context, state) => const SignInScreen(),
+    ),
+    GoRoute(
+      path: '/consent',
+      builder: (context, state) => ConsentScreen(
+        onConsentCallback: () => context.go('/catalogue'),
+        onDecline: () => context.go('/'),
+      ),
     ),
     GoRoute(
       path: '/catalogue',

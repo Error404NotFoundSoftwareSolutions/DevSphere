@@ -75,7 +75,7 @@ fi
 # 3. Install & Sync Dependencies
 echo ""
 echo "--> Installing / syncing Python dependencies..."
-uv sync
+uv sync --all-packages
 
 echo ""
 echo "--> Bootstrapping Dart / Flutter workspace..."
