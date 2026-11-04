@@ -1,4 +1,4 @@
-# .agent: how an AI agent should work in this repository
+# .agents: how an AI agent should work in this repository
 
 This folder tells an agent what the project is for, what it must never do, where things live and how to carry out a task.
 
