@@ -1,7 +1,9 @@
+// User story: US-03 Create and manage my profile (Sprint 1, MVP)
 // User story: US-15 Open the lab workspace (Sprint 4, MVP)
-// Requirements: FR-WS-001..005, NFR-MAINT-005
-// Implemented here: top-level router configuration using go_router
+// Requirements: FR-PROF-002..008, FR-WS-001..005, NFR-MAINT-005
+// Implemented here: top-level router configuration using go_router with onboarding navigation
 
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'features/auth/sign_in_screen.dart';
 import 'features/catalogue/catalogue_screen.dart';
@@ -9,8 +11,16 @@ import 'features/consent/consent_screen.dart';
 import 'features/workspace/workspace_view.dart';
 import 'features/profile/profile_screen.dart';
 
+String _determineInitialRoute() {
+  final defaultRoute = WidgetsBinding.instance.platformDispatcher.defaultRouteName;
+  if (defaultRoute.isNotEmpty && defaultRoute != '/') {
+    return defaultRoute;
+  }
+  return '/';
+}
+
 final GoRouter appRouter = GoRouter(
-  initialLocation: '/',
+  initialLocation: _determineInitialRoute(),
   routes: [
     GoRoute(
       path: '/',
@@ -19,7 +29,7 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/consent',
       builder: (context, state) => ConsentScreen(
-        onConsentCallback: () => context.go('/catalogue'),
+        onConsentCallback: () => context.go('/profile'),
         onDecline: () => context.go('/'),
       ),
     ),
@@ -36,7 +46,13 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: '/profile',
-      builder: (context, state) => const ProfileScreen(),
+      builder: (context, state) => ProfileScreen(
+        isOnboarding: true,
+        initialDisplayName: 'Student User',
+        email: 'student@example.com',
+        uid: 'current-student',
+        onSave: (profile) => context.go('/catalogue'),
+      ),
     ),
   ],
 );

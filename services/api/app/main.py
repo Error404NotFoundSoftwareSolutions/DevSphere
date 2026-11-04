@@ -79,6 +79,7 @@ def create_app() -> FastAPI:
         operator,
     ):
         app.include_router(r.router)
+    app.include_router(me.students_router)
     return app
 
 

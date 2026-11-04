@@ -1,0 +1,16 @@
+{
+  "firestore": {
+    "database": "(default)",
+    "location": "nam5",
+    "rules": "infra/firebase/firestore.rules",
+    "indexes": "infra/firebase/firestore.indexes.json"
+  },
+  "auth": {
+    "providers": {
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "DevSphere",
+        "supportEmail": "cdbharath234@gmail.com"
+      }
+    }
+  }
+}

@@ -1,0 +1,1390 @@
+{
+  "/home/bharath/Desktop/projects/DevSphere/tools/gen_rtm.py": {
+    "mtime": 1793650072.0,
+    "hash": "7ef8bc3e51fb57369a808ed3122cc276"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/tools/make_issues.py": {
+    "mtime": 1793822261.0325916,
+    "hash": "77ef6d8af62c9b8d5a03da4ff3c3b926"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/tools/gen_test_plan.py": {
+    "mtime": 1793650072.0,
+    "hash": "e502764d6746e495befbad623b8dc249"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/tools/check_sad.py": {
+    "mtime": 1793650072.0,
+    "hash": "ee43d51dce55441b8980144646f7602c"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/tools/make_backlog.py": {
+    "mtime": 1793732052.383062,
+    "hash": "995dcdcf960daa4860ed1287596a1fde"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/tools/check_docs.py": {
+    "mtime": 1793650084.0,
+    "hash": "89f56866c2cc3e16f1bf413f182ad37c"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/tools/check_repo.py": {
+    "mtime": 1793732051.5415075,
+    "hash": "38fba38be38aaa8f755f52cbbacb8d46"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/tools/story_map.py": {
+    "mtime": 1793732052.5255084,
+    "hash": "e00b2911118f40f5bb2393f5c87406fb"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/tools/tests/test_repo.py": {
+    "mtime": 1793650072.0,
+    "hash": "aa992ef78164b7f4ff25e6beaff21ef9"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/my_application.cc": {
+    "mtime": 1793730078.6939402,
+    "hash": "518ff0a10ceb972d88bf1651f79f8fc9"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/main.cc": {
+    "mtime": 1793730078.6935375,
+    "hash": "0643b8609698e96b3abd63c210361a87"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/my_application.h": {
+    "mtime": 1793730078.6936674,
+    "hash": "7bd839b67ebee22174be9f4da4521b6f"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/generated_plugin_registrant.h": {
+    "mtime": 1793825477.6496754,
+    "hash": "d295462c9da9f7fef22dc86c34492318"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/generated_plugin_registrant.cc": {
+    "mtime": 1793825477.654919,
+    "hash": "72012884575add6913a793fbad5e2efe"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/flutter_linux.h": {
+    "mtime": 1793821236.096859,
+    "hash": "60f1cb9732749dba4c1ec30640f33994"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/fl_pixel_buffer_texture.h": {
+    "mtime": 1793821236.100859,
+    "hash": "fb73b65a52e89c14449cd8524058187b"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/fl_json_method_codec.h": {
+    "mtime": 1793821236.103859,
+    "hash": "c31254629784a8fd48a5ec671df85e64"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/fl_engine.h": {
+    "mtime": 1793821236.1048589,
+    "hash": "1cb444a4e10159155428882dc38a06bc"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/fl_plugin_registry.h": {
+    "mtime": 1793821236.1048589,
+    "hash": "9093dc992b7f0c62c899bb5ee75437bb"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/fl_method_channel.h": {
+    "mtime": 1793821236.1048589,
+    "hash": "5a5b80bcf4d72767c5fee74693a1140e"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/fl_json_message_codec.h": {
+    "mtime": 1793821236.106859,
+    "hash": "b550bdc7d3190030715e0fe3b4b7f014"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/fl_binary_messenger.h": {
+    "mtime": 1793821236.106859,
+    "hash": "d18aca92fddd9924e6bdefb1bb7c9a00"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/fl_binary_codec.h": {
+    "mtime": 1793821236.106859,
+    "hash": "5997440e26e079541337c498925226f1"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/fl_plugin_registrar.h": {
+    "mtime": 1793821236.106859,
+    "hash": "3d850b5432140f7e565baa806ee1f716"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/fl_standard_method_codec.h": {
+    "mtime": 1793821236.107859,
+    "hash": "09d4ac26822e07f1c2f16d89380b40dc"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/fl_method_codec.h": {
+    "mtime": 1793821236.107859,
+    "hash": "ea928ca76b491e0a1313d69a25103ee3"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/fl_value.h": {
+    "mtime": 1793821236.107859,
+    "hash": "92d2815c8f66f5196925998f9d4828a5"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/fl_texture_registrar.h": {
+    "mtime": 1793821236.107859,
+    "hash": "455c45888f33294a5054d8adacac5a2e"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/fl_standard_message_codec.h": {
+    "mtime": 1793821236.108859,
+    "hash": "c9ddf466fd4c06d0991614cd26dd74c5"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/fl_view.h": {
+    "mtime": 1793821236.108859,
+    "hash": "c7b190b936829056c464babb02ad0fe5"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/fl_dart_project.h": {
+    "mtime": 1793821236.108859,
+    "hash": "33df0b32edf5c119fff6fafaa8359145"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/fl_message_codec.h": {
+    "mtime": 1793821236.108859,
+    "hash": "44b9ac9a008150255bb2e40ad145b47c"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/fl_method_response.h": {
+    "mtime": 1793821236.108859,
+    "hash": "60251ce0dff9106f61b70c6c74b865aa"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/fl_string_codec.h": {
+    "mtime": 1793821236.109859,
+    "hash": "5edcd4ae8b7d3acb2e56bf8bfad75d4d"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/fl_method_call.h": {
+    "mtime": 1793821236.109859,
+    "hash": "96e3a074c3f1f33e88ad3ccc60d6f9d3"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/fl_texture.h": {
+    "mtime": 1793821236.109859,
+    "hash": "d1894650bbfe9ba65c6f0b195645a9a5"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/fl_basic_message_channel.h": {
+    "mtime": 1793821236.109859,
+    "hash": "6cba49677d30f16cadf943f2648123fc"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/fl_event_channel.h": {
+    "mtime": 1793821236.110859,
+    "hash": "defbac680fc3c78d98ef61319ff0dbb6"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/ephemeral/flutter_linux/fl_texture_gl.h": {
+    "mtime": 1793821236.110859,
+    "hash": "2ff91c9748bb7c022a2aeee861f51b81"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/windows/runner/flutter_window.h": {
+    "mtime": 1793730078.6907694,
+    "hash": "79bea736711adda00c49419a39a4a0b4"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/windows/runner/resource.h": {
+    "mtime": 1793730078.690908,
+    "hash": "c8f809a4f8d3f2f625e358fd90f72fee"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/windows/runner/main.cpp": {
+    "mtime": 1793730078.692142,
+    "hash": "f4f34edc321495b0a37bc2569c177edf"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/windows/runner/utils.cpp": {
+    "mtime": 1793730078.6910372,
+    "hash": "9b5697b276c8ad67a02ec12ad2c09851"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/windows/runner/utils.h": {
+    "mtime": 1793730078.691292,
+    "hash": "c741fb9cddbf3a62f4688b6cca39ddcc"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/windows/runner/win32_window.cpp": {
+    "mtime": 1793730078.6914468,
+    "hash": "928e86a2be27eca688669dce6c9177d9"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/windows/runner/flutter_window.cpp": {
+    "mtime": 1793730078.6919305,
+    "hash": "9b92b95a9eecce25e3e9d356688d0cb6"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/windows/runner/win32_window.h": {
+    "mtime": 1793730078.6920357,
+    "hash": "5a4cf051798d7e6931ee0405a4523c8f"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/windows/flutter/generated_plugin_registrant.h": {
+    "mtime": 1793825477.6576755,
+    "hash": "0ea33875f9f8e118f9c2ded03e2e2835"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/windows/flutter/generated_plugin_registrant.cc": {
+    "mtime": 1793825477.6586754,
+    "hash": "8dbcd7bfd7f473d7f837c9a4206a1c93"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/test/architecture_test.dart": {
+    "mtime": 1793731989.4095144,
+    "hash": "d3de04e34db734b5c981111a271c9004"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/test/auth_test.dart": {
+    "mtime": 1793819798.250427,
+    "hash": "75a073125fbc06f4cb054c513c9a7fd1"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/test/consent_test.dart": {
+    "mtime": 1793823673.6153731,
+    "hash": "d913392229c739e16b0773249f61ca1a"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/test/widget_test.dart": {
+    "mtime": 1793731990.1105137,
+    "hash": "d6dbcc054628513746b251d276ab023d"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/test/firebase_services_test.dart": {
+    "mtime": 1793824808.6673877,
+    "hash": "2854cb58ec3504dcabd24c229430754b"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/integration_test/platform_test.dart": {
+    "mtime": 1793731950.7915812,
+    "hash": "b4ac93a7845ec8f32e2a3831b622a7c5"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/integration_test/first_lab_test.dart": {
+    "mtime": 1793731986.4951067,
+    "hash": "6c6a8ffa600994698130e5210851dc86"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/integration_test/startup_test.dart": {
+    "mtime": 1793731950.8503516,
+    "hash": "0e2bce1e2d5e3783fbb5bdb78bf48c05"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/main.dart": {
+    "mtime": 1793824829.0840895,
+    "hash": "d08e708d9b0cd444423ab8052c31d442"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/api.dart": {
+    "mtime": 1793731950.9505806,
+    "hash": "8946c726266ded193e73b7bd9ce63913"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/firebase_options.dart": {
+    "mtime": 1793825190.3011622,
+    "hash": "643ff5bbe71ecb196393b5f7fd92eb98"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/app.dart": {
+    "mtime": 1793731951.0065806,
+    "hash": "bd5018a894db7a46ba025d4fb953858a"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/router.dart": {
+    "mtime": 1793823062.7121272,
+    "hash": "d226affdae59c6dc7125b9e68d9cfecf"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/worker/worker_client.dart": {
+    "mtime": 1793731953.2315993,
+    "hash": "cd2a2d33e966cc575f68900fe3282c38"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/updater/updater.dart": {
+    "mtime": 1793731953.1835754,
+    "hash": "eeee8f2365b62fe433aa0c46102b3e93"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/perf/startup_timer.dart": {
+    "mtime": 1793731952.9377615,
+    "hash": "fe8df3bf84b9c2a74c0579b041a7166f"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/ui/focus.dart": {
+    "mtime": 1793731953.0985756,
+    "hash": "630206fde9f0587582dc1e029860a981"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/ui/busy.dart": {
+    "mtime": 1793731953.0305758,
+    "hash": "e72afcfcb01d45e4bc355531b7177848"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/oss/template_repo.dart": {
+    "mtime": 1793731952.058578,
+    "hash": "f01f472052125ae9590c07c27b80be94"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/oss/points_view.dart": {
+    "mtime": 1793731951.9575784,
+    "hash": "619b9ee7247080da5914e6b376848e2c"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/oss/pull_request_tracker.dart": {
+    "mtime": 1793731952.011404,
+    "hash": "724042bb6139cc95686ce5cb8941308f"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/consent/consent_screen.dart": {
+    "mtime": 1793823673.524569,
+    "hash": "695be09809a678441c5b3813390ab2e3"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/guide/guide_panel.dart": {
+    "mtime": 1793731951.8595786,
+    "hash": "1a6960318424245f609adf69c9c3c2bf"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/guide/practice_checks.dart": {
+    "mtime": 1793821686.691315,
+    "hash": "ebf7dff26038517c1ed36718ccde2897"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/bugfix/investigation_tutor.dart": {
+    "mtime": 1793731951.5465794,
+    "hash": "ede626ad006400c7f30bdcdce9802809"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/bugfix/challenge_list.dart": {
+    "mtime": 1793731951.4385796,
+    "hash": "f0d6fce6cd4677b0f0d991fcd8dddabd"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/bugfix/bug_result.dart": {
+    "mtime": 1793731951.3863559,
+    "hash": "3be170c9a152de6cdfc0ca7a58d67b7d"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/bugfix/challenge_workspace.dart": {
+    "mtime": 1793731951.4875793,
+    "hash": "631649611c5929a77b1c2aa017018336"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/catalogue/catalogue_screen.dart": {
+    "mtime": 1793731951.615544,
+    "hash": "d297f9c99cca49d27acc79043edcce76"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/catalogue/new_version_banner.dart": {
+    "mtime": 1793731951.6415792,
+    "hash": "d489c6ae8b87c7eaa075043e040a1082"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/setup/readiness_panel.dart": {
+    "mtime": 1793731952.3935773,
+    "hash": "5834081c06ce7535abe2fa734e32f332"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/setup/setup_plan_dialog.dart": {
+    "mtime": 1793731952.436577,
+    "hash": "af576f3231fdaa4e40bc4bd4276b734a"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/setup/project_env_status.dart": {
+    "mtime": 1793731952.2945776,
+    "hash": "6d1c04b31f80c7285f306e1efaf66e94"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/auth/sign_in_screen.dart": {
+    "mtime": 1793819798.1334238,
+    "hash": "66538cbde46ed3abe15d9a007a5391bb"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/auth/firebase_auth_service.dart": {
+    "mtime": 1793824828.9375422,
+    "hash": "183f945632e244c3a0093b2f469d5084"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/auth/session_store.dart": {
+    "mtime": 1793819798.071347,
+    "hash": "207527946ace11f203d538b7a080bc0f"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/auth/sign_in_service.dart": {
+    "mtime": 1793819798.1914253,
+    "hash": "7a0d827ba04e0db905bf4596c241c917"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/profile/profile_screen.dart": {
+    "mtime": 1793731952.12268,
+    "hash": "3e3124e80887a7b4b39d8e1b979cfbab"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/firestore/firestore_service.dart": {
+    "mtime": 1793824808.5384326,
+    "hash": "ace3a040b0afdef623e697ea92c413e5"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/workspace/approval_dialog.dart": {
+    "mtime": 1793731952.6775765,
+    "hash": "0fd696c8eb43c04e0d89079767257266"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/workspace/workspace_view.dart": {
+    "mtime": 1793731952.8365762,
+    "hash": "f820ba6f020258e648efdaea856e229c"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/workspace/task_bar.dart": {
+    "mtime": 1793731952.7945764,
+    "hash": "7e2c6006eb8ad2c2de2c2f42e6a921c2"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/workspace/lab_view.dart": {
+    "mtime": 1793731952.7415764,
+    "hash": "79cb521460657ede52977ef7448a8cb5"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/git/git_readiness.dart": {
+    "mtime": 1793731951.804671,
+    "hash": "1aab63caac8134c64ff225215e525ae8"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/git/branch_checks.dart": {
+    "mtime": 1793731951.753876,
+    "hash": "b5cbfdc45659265eeac24e299edfffcc"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/progress/progress_view.dart": {
+    "mtime": 1793731952.165578,
+    "hash": "51da63dcbd566749f1501124967d5c46"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/progress/sync_status.dart": {
+    "mtime": 1793731952.2235777,
+    "hash": "6d3c13e97e17f268bc039fba1e376dd2"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/tutor/tutor_panel.dart": {
+    "mtime": 1793731952.6275768,
+    "hash": "729792077a75093e24332ae4be9c23cc"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/submission/result_view.dart": {
+    "mtime": 1793731952.483577,
+    "hash": "c362af8ba564e8dbb376ad5dcd40f56d"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/submission/submit_dialog.dart": {
+    "mtime": 1793731952.5808663,
+    "hash": "5a8bd66a4e94fba4f8cca43efc0b68ea"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/submission/score_breakdown.dart": {
+    "mtime": 1793731952.534577,
+    "hash": "8c28aaddaec930de04244620cdebf2b2"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/lib/features/account/data_requests.dart": {
+    "mtime": 1793731951.0495803,
+    "hash": "58338ae824b5f15662a41fb1f0c27283"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/macos/RunnerTests/RunnerTests.swift": {
+    "mtime": 1793730078.694432,
+    "hash": "97d3a20fd20a063c192e886d1822b4a8"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/macos/Runner/MainFlutterWindow.swift": {
+    "mtime": 1793730078.6948752,
+    "hash": "4a747b1f256d62a2bbb79bd976891eb5"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/macos/Runner/AppDelegate.swift": {
+    "mtime": 1793730078.6969028,
+    "hash": "43e630f8974625a25df2af9653bb6ac4"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/macos/Flutter/GeneratedPluginRegistrant.swift": {
+    "mtime": 1793825477.6566753,
+    "hash": "a6e2889a6e8b1792d71e5ae243d9633d"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/fixtures/hostile/H-01-network/submission/hello.py": {
+    "mtime": 1793650072.0,
+    "hash": "6fc58c8cd080097f5fbcb939c590df9d"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/content/labs/python-hello-001/reference/hello.py": {
+    "mtime": 1793650072.0,
+    "hash": "2560284e26f0f7eb2076c91697833cc9"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/content/labs/python-hello-001/starter/hello.py": {
+    "mtime": 1793650072.0,
+    "hash": "3db0bcbc5c07b39fd513b2de931b62b5"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/content/labs/python-hello-001/tests/visible/test_greet.py": {
+    "mtime": 1793650072.0,
+    "hash": "6e52b9e1a6e7945d7c5e016b9054de4b"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/content/labs/python-hello-001/tests/protected/test_greet_edge.py": {
+    "mtime": 1793650072.0,
+    "hash": "2b04d72158dd5f4a74289b20a0db18ae"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/content-ci/labcheck/__init__.py": {
+    "mtime": 1793650072.0,
+    "hash": "68b329da9893e34099c7d8ad5cb9c940"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/content-ci/labcheck/manifest.py": {
+    "mtime": 1793732002.494503,
+    "hash": "e8c687dcfd460732d9106fb6c2146b90"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/content-ci/labcheck/run_checks.py": {
+    "mtime": 1793650084.0,
+    "hash": "92aadf1187e5d544fa356ca7621d48ef"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/content-ci/labcheck/publish.py": {
+    "mtime": 1793650084.0,
+    "hash": "1a43cf96db1368d68d387f03b60e5a5e"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/content-ci/labcheck/cli.py": {
+    "mtime": 1793650072.0,
+    "hash": "3f7f17429ad1d580de638d9ea52c55bb"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/content-ci/tests/test_labcheck.py": {
+    "mtime": 1793650072.0,
+    "hash": "fcf885fd51c020ecaabfaa027d34ff91"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/bin/worker.dart": {
+    "mtime": 1793731957.1475666,
+    "hash": "8bdf2f46b3a0ba7c3274a8298fd91a95"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/test/safe_spawn_test.dart": {
+    "mtime": 1793732047.2376418,
+    "hash": "05f43569a52977a0d21cc64a94d46419"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/test/sync_client_test.dart": {
+    "mtime": 1793732047.7168872,
+    "hash": "c2aad1551dd5a7df95264530ecb546ff"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/test/branch_checks_test.dart": {
+    "mtime": 1793732045.7575033,
+    "hash": "720bf5a1d17dbfa616df99d0dbca1fe8"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/test/build_snapshot_test.dart": {
+    "mtime": 1793732046.778504,
+    "hash": "abb7d8a5b87a69149cefd023a923d442"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/lib/local_worker.dart": {
+    "mtime": 1793732002.863455,
+    "hash": "5069bec3604284bbf98f2f6cab2fa3a2"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/lib/src/handlers.dart": {
+    "mtime": 1793731982.0865233,
+    "hash": "b566b1660280f6a980c8f4e5c1a78e21"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/lib/src/store/db.dart": {
+    "mtime": 1793732006.6015005,
+    "hash": "156bd88ffa410ccbd96b7c8bf0da4e97"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/lib/src/store/outbox.dart": {
+    "mtime": 1793732006.9225004,
+    "hash": "7d785e62291c994b843a17be5c4ca316"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/lib/src/attempts/pinning.dart": {
+    "mtime": 1793731957.9985647,
+    "hash": "5da53855b701c4288444009805306832"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/lib/src/checks/practice.dart": {
+    "mtime": 1793731960.26556,
+    "hash": "80e8faccff91866c200c17191358de83"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/lib/src/snapshot/build_snapshot.dart": {
+    "mtime": 1793731990.9375129,
+    "hash": "201dfb1877c84e782d5e5a08519961d9"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/lib/src/platform/platform_adapter.dart": {
+    "mtime": 1793731984.7925198,
+    "hash": "735d7aac7bfe366e3bf2048134a61711"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/lib/src/bundles/verify_bundle.dart": {
+    "mtime": 1793731959.4785616,
+    "hash": "259b7affe97dd3d3bcc61d9cd0ec00a4"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/lib/src/bug/reset_workspace.dart": {
+    "mtime": 1793731958.7045634,
+    "hash": "7b91576ade2e2b2fe9685105b7e55d6e"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/lib/src/workspace/open_workspace.dart": {
+    "mtime": 1793732011.7794983,
+    "hash": "78fb3b07906096e9c18c75393c00848a"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/lib/src/git/git_readiness.dart": {
+    "mtime": 1793731979.279527,
+    "hash": "2afe44436681174018d12d6cef1b09ba"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/lib/src/git/branch_checks.dart": {
+    "mtime": 1793731976.0935316,
+    "hash": "6d8f14616ca0593ea36d37a9c9a8fa62"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/lib/src/progress/recorder.dart": {
+    "mtime": 1793731987.7085164,
+    "hash": "8d71936109d1cd9ddc8458ee8cc041a5"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/lib/src/exec/safe_spawn.dart": {
+    "mtime": 1793731973.0865364,
+    "hash": "4c11b240c69cb4eee02cc2aff4fb391d"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/lib/src/exec/approvals.dart": {
+    "mtime": 1793731967.8505454,
+    "hash": "37e02fab127736ee0060917f9fd644e7"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/lib/src/exec/run_task.dart": {
+    "mtime": 1793731970.1095414,
+    "hash": "30028e19fe3aaa5610b15a782c9edf7c"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/lib/src/sync/sync_client.dart": {
+    "mtime": 1793732007.3745,
+    "hash": "8c567143e46932013407ac28fdc2911a"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/lib/src/terminal/pty_service.dart": {
+    "mtime": 1793732008.9564993,
+    "hash": "d04b0434eede0d546be6ec17b29d4f7e"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/__init__.py": {
+    "mtime": 1793650072.0,
+    "hash": "68b329da9893e34099c7d8ad5cb9c940"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/main.py": {
+    "mtime": 1793819798.6684384,
+    "hash": "49f1fd80a963bd2a1674df4d8b68dcec"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/webhooks.py": {
+    "mtime": 1793650084.0,
+    "hash": "090f43076b19691a7b728a34563c2e00"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/core/settings.py": {
+    "mtime": 1793819112.0278032,
+    "hash": "eaa6ee2842c01c692e2f2c41782a428a"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/core/audit.py": {
+    "mtime": 1793650084.0,
+    "hash": "28adf2cac3ea1b6bda4a8f658322cc22"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/core/__init__.py": {
+    "mtime": 1793650072.0,
+    "hash": "68b329da9893e34099c7d8ad5cb9c940"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/core/auth.py": {
+    "mtime": 1793822260.8134243,
+    "hash": "8a713df3da556309b632f7424cb9b22d"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/core/redaction.py": {
+    "mtime": 1793650084.0,
+    "hash": "87879daa9877e8a7c2be3dd3ef9bba3f"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/tutor/__init__.py": {
+    "mtime": 1793650072.0,
+    "hash": "68b329da9893e34099c7d8ad5cb9c940"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/tutor/policy.py": {
+    "mtime": 1793650084.0,
+    "hash": "c4ce52e0b6b5c60b60b14b4dd0c8e029"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/tutor/provider.py": {
+    "mtime": 1793650084.0,
+    "hash": "100122a1ed69599243b993a6c2ba34e2"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/db/memory.py": {
+    "mtime": 1793819798.6024368,
+    "hash": "f7fe1f54170d01a0bc64540a8e2a0c70"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/db/__init__.py": {
+    "mtime": 1793650072.0,
+    "hash": "68b329da9893e34099c7d8ad5cb9c940"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/routers/submissions.py": {
+    "mtime": 1793650129.0,
+    "hash": "3ae19dafb74a1c27d1ca71b967d47c31"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/routers/__init__.py": {
+    "mtime": 1793650072.0,
+    "hash": "68b329da9893e34099c7d8ad5cb9c940"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/routers/tutor.py": {
+    "mtime": 1793650084.0,
+    "hash": "b2ccd0104eee36682121b000002cd666"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/routers/internal_grader.py": {
+    "mtime": 1793650084.0,
+    "hash": "513944a78633ba4a71e9e4b81d98225f"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/routers/auth.py": {
+    "mtime": 1793820200.2365024,
+    "hash": "e6b7d64ec14e53cc865c3d3e8cf4a13d"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/routers/data_requests.py": {
+    "mtime": 1793650084.0,
+    "hash": "0960bfb0d147e6fd4af3d8c681470057"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/routers/operator.py": {
+    "mtime": 1793650084.0,
+    "hash": "95b71e3945727be9f04aeccf345e30c5"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/routers/labs.py": {
+    "mtime": 1793650084.0,
+    "hash": "d39e69f403398ee9c95a1df50833db66"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/routers/config.py": {
+    "mtime": 1793650084.0,
+    "hash": "1d741651076e7c6a38ceb0eb7e637e8a"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/routers/attempts.py": {
+    "mtime": 1793650084.0,
+    "hash": "796e3d9d39d3cae82bcdfbd8d79427e4"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/routers/me.py": {
+    "mtime": 1793823673.8523757,
+    "hash": "8499ae55637710ff5e7ab856b5cda24f"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/app/routers/health.py": {
+    "mtime": 1793650072.0,
+    "hash": "4c4d720ba36d9063e5877dfcc4ca88ff"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/tests/test_auth.py": {
+    "mtime": 1793822260.9286594,
+    "hash": "98060bce30325f0361d57d229fd81266"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/tests/test_tutor.py": {
+    "mtime": 1793650084.0,
+    "hash": "c97acf0265ccd075e413004c5850fc99"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/tests/test_grader_results.py": {
+    "mtime": 1793650084.0,
+    "hash": "cdc72a1699b269ece6cff13c1b28d5c6"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/tests/test_attempts.py": {
+    "mtime": 1793650084.0,
+    "hash": "c457b6dbc26349349b8389ca8992cc48"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/tests/test_health.py": {
+    "mtime": 1793650084.0,
+    "hash": "648d7a3883c6fad96bc47fd012c02254"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/tests/test_consent.py": {
+    "mtime": 1793823673.9196992,
+    "hash": "52a3efa2918a346443e7fd0ed01347ae"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/tests/test_webhooks.py": {
+    "mtime": 1793650072.0,
+    "hash": "990c230a3dc626c476ce5c9ca973af76"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/tests/conftest.py": {
+    "mtime": 1793822260.8656974,
+    "hash": "df003e87f8c5d310bcb2f7b5808ce1eb"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/tests/test_profile.py": {
+    "mtime": 1793822965.4433262,
+    "hash": "542ed54fec65bd47a46807aa6d096f48"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/grader/grader/scoring.py": {
+    "mtime": 1793650084.0,
+    "hash": "5c2160ef823b957f51bb57be349e3518"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/grader/grader/__init__.py": {
+    "mtime": 1793650072.0,
+    "hash": "68b329da9893e34099c7d8ad5cb9c940"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/grader/grader/repeatability.py": {
+    "mtime": 1793650072.0,
+    "hash": "22e57cf821e06bf4e349d66ed38dba50"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/grader/grader/runner/__init__.py": {
+    "mtime": 1793650072.0,
+    "hash": "68b329da9893e34099c7d8ad5cb9c940"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/grader/grader/runner/run.py": {
+    "mtime": 1793650084.0,
+    "hash": "6235f0d0dc439b5b97c32079c3ea8cca"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/grader/grader/orchestrator/__init__.py": {
+    "mtime": 1793650072.0,
+    "hash": "68b329da9893e34099c7d8ad5cb9c940"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/grader/grader/orchestrator/job.py": {
+    "mtime": 1793650084.0,
+    "hash": "72f1b3f08e2288a15ff026110f7c461c"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/grader/grader/orchestrator/signing.py": {
+    "mtime": 1793650084.0,
+    "hash": "91c2cf03e1458de9c43fa3bfb921873a"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/grader/tests/test_signing.py": {
+    "mtime": 1793650084.0,
+    "hash": "36d650f91260989dca5c60ba4ec3c4ed"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/grader/tests/test_scoring.py": {
+    "mtime": 1793650072.0,
+    "hash": "5eb1622270c757adcfe95fba1df5d074"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/grader/tests/test_repeatability.py": {
+    "mtime": 1793650072.0,
+    "hash": "4e74a0ad911e284846bee0b05245ef9a"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/grader/tests/test_hostile.py": {
+    "mtime": 1793650084.0,
+    "hash": "254faf56c4b3a9b61065997ecd689310"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/packages/lab_schema/test/validate_test.dart": {
+    "mtime": 1793732001.6205037,
+    "hash": "d2624d03b3ada88c7fe81b947a9acc50"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/packages/lab_schema/lib/lab_schema.dart": {
+    "mtime": 1793731955.6745698,
+    "hash": "4be0a83f8ba083769a7a0afb2dcf0e3c"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/packages/ui/test/labels_test.dart": {
+    "mtime": 1793731956.448568,
+    "hash": "61d4fd1fa6f5398a761fd21d0522d4d0"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/packages/ui/lib/ui.dart": {
+    "mtime": 1793731956.3185685,
+    "hash": "60ee9bb15fe461403ba82d16e0882a58"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/packages/ui/lib/src/status_badge.dart": {
+    "mtime": 1793731956.2675686,
+    "hash": "d538d175f1535488d8a43d51696a6321"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/packages/ui/lib/src/labels.dart": {
+    "mtime": 1793731956.1355689,
+    "hash": "dc301543299f7ef55d82b2112480f6b5"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/packages/ui/lib/src/result_badge.dart": {
+    "mtime": 1793731956.2045686,
+    "hash": "a9da41558c391c1fb958df9793f822dd"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/packages/api_client/test/api_client_test.dart": {
+    "mtime": 1793731955.108571,
+    "hash": "6f5edab20cadea4cf65684e4ee7c172d"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/packages/api_client/lib/api_client.dart": {
+    "mtime": 1793731954.9315715,
+    "hash": "02a6bd1907bc72890c4a6f36bc966b79"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/packages/ipc_contract/test/contract_test.dart": {
+    "mtime": 1793731955.60457,
+    "hash": "ed99edcb1d04e419401992b2bcad2dff"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/packages/ipc_contract/lib/ipc_contract.dart": {
+    "mtime": 1793731955.1773512,
+    "hash": "17ecdc0b5bdc7d7acc5f1b01c4812cc7"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/packages/ipc_contract/lib/src/channels.dart": {
+    "mtime": 1793731955.222571,
+    "hash": "9c1d072516aeba2514c60bb7b56f34aa"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/packages/ipc_contract/lib/src/schemas.dart": {
+    "mtime": 1793731955.3035707,
+    "hash": "090e66f56747853599506a031b28d4b8"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/packages/ipc_contract/lib/src/validate.dart": {
+    "mtime": 1793731955.3765705,
+    "hash": "512d0738ce417080f5c718c37e24aa91"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/packages/redaction/test/redact_test.dart": {
+    "mtime": 1793731956.071569,
+    "hash": "d3c19319f4747ffb6b5d5803c3f9681c"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/packages/redaction/lib/redaction.dart": {
+    "mtime": 1793732002.2915032,
+    "hash": "356539f5fd64105fd12a8b7fa5c5fb60"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/AGENTS.md": {
+    "mtime": 1793822615.575299,
+    "hash": "760a7b08a4955e0b3388384aa117a7e9"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/README.md": {
+    "mtime": 1793731986.0738277,
+    "hash": "661a8bcb6a0ecf3ac337c6c109403c1d"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/pubspec.yaml": {
+    "mtime": 1793731956.511568,
+    "hash": "b389a7b35b0a13e9716116a504b407f6"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/CLAUDE.md": {
+    "mtime": 1793650072.0,
+    "hash": "1bcba9f9a9c091e8db2b2f37c6ecaf1b"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/melos.yaml": {
+    "mtime": 1793731954.8795717,
+    "hash": "3b53f87331ceada097f6bf3ce753f754"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/spikes/README.md": {
+    "mtime": 1793818722.8519115,
+    "hash": "ccf99ce3dcfbfdccef2e4db70b849eb8"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/spikes/legal-review/RESULT.md": {
+    "mtime": 1793818722.8521843,
+    "hash": "7a60956d74323ccbb02d28c673a65fc5"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/spikes/signin/RESULT.md": {
+    "mtime": 1793818722.852454,
+    "hash": "b5884036e806f21f8eac533dc8d280aa"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/spikes/cost-vendors/RESULT.md": {
+    "mtime": 1793818722.8519115,
+    "hash": "57f0a029d53d8be938154de88935378a"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/spikes/grader-sandbox/RESULT.md": {
+    "mtime": 1793818722.8521843,
+    "hash": "2abe4d6d0bd740e7ce8fe4db62d32ff5"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/spikes/flutter-shell/RESULT.md": {
+    "mtime": 1793817338.9938486,
+    "hash": "e80ef5cf0ba7a3e4b0d999f5739ca785"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/infra/README.md": {
+    "mtime": 1793650072.0,
+    "hash": "b41dfb34ffe6cb53134a9bf1bf048e78"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/infra/budgets/budgets.md": {
+    "mtime": 1793650072.0,
+    "hash": "073b38227303d5ad98d528273f779027"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/infra/backup/RUNBOOK.md": {
+    "mtime": 1793650072.0,
+    "hash": "f5e5db66597cb0842ed1f2ffa2f27c3c"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/tools/README.md": {
+    "mtime": 1793721676.0,
+    "hash": "c67f64b2add00c10681cbac707eeb227"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/tools/test_plan_prose.md": {
+    "mtime": 1793732052.5262046,
+    "hash": "3e68fbe838575a772ffb3d923e8069c9"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/MVP_SCOPE.md": {
+    "mtime": 1793731993.9810343,
+    "hash": "0140eba13c4af8e42872fb3d8b2d4e6a"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/LAB_AUTHORING_GUIDE.md": {
+    "mtime": 1793650072.0,
+    "hash": "9815897533db8c219f1e1bc9fd890650"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/README.md": {
+    "mtime": 1793731994.4425223,
+    "hash": "06b7ad26a93a559fdf7d5c80093108d1"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/OS_COMPATIBILITY.md": {
+    "mtime": 1793731994.3265574,
+    "hash": "3b1dcc3f664e7f48a5f23c0d68881ac3"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/LAB_MANIFEST_SPEC.md": {
+    "mtime": 1793650072.0,
+    "hash": "5ef5df346c519de43e7218b019a4344e"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/TECH_STACK.md": {
+    "mtime": 1793825097.8542142,
+    "hash": "06f682f1229eba518015a872a2244487"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/EVALUATION_RUBRICS.md": {
+    "mtime": 1793650072.0,
+    "hash": "c530e9bd183e6f763ef036092d1adab6"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/SECURITY.md": {
+    "mtime": 1793731995.5720315,
+    "hash": "b8ef08f9b74d358e5c445d8ca59031d6"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/TEST_PLAN.md": {
+    "mtime": 1793731999.790505,
+    "hash": "53ba9f8c4a5ceb2494ade51c33e6db30"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/IPC_API.md": {
+    "mtime": 1793731993.5664775,
+    "hash": "803240a19b53119f138546269b1cf3ac"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/ROADMAP.md": {
+    "mtime": 1793731995.5675085,
+    "hash": "e2472ec81a15a2fc9400aa4e8b0d6550"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/DECISIONS.md": {
+    "mtime": 1793825134.240178,
+    "hash": "68d67d0bd823e3833a4effca8f11d694"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/ARCHITECTURE.md": {
+    "mtime": 1793731991.3417308,
+    "hash": "d78a6eec6f39062926a49d48715af470"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/RELEASE_CHECKLIST.md": {
+    "mtime": 1793731994.6665092,
+    "hash": "ce74ca8cfe5d27868825ca4b26d4c123"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/AI_TUTOR_POLICY.md": {
+    "mtime": 1793650072.0,
+    "hash": "a28c8f9634234ef45277e22e7bf1855f"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/CONTRIBUTING.md": {
+    "mtime": 1793731992.4405112,
+    "hash": "5882d02a8984f6a5376c87b963a5f03f"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/CHANGELOG.md": {
+    "mtime": 1793825110.6501992,
+    "hash": "ae9a07cbe9eb95429634e154b167e164"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/USER_TESTING_LOG.md": {
+    "mtime": 1793650072.0,
+    "hash": "7b0599fc16caa8117c045de147455ba2"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/RISKS.md": {
+    "mtime": 1793731995.2419991,
+    "hash": "ca884d0f120474cab87d3981c91e2712"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/BACKEND_API.md": {
+    "mtime": 1793650072.0,
+    "hash": "095635434bb4f143a8868cf6ce02378c"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/GLOSSARY.md": {
+    "mtime": 1793650072.0,
+    "hash": "d28bbddf1e4feb937242b83d84de79ff"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/VISION.md": {
+    "mtime": 1793650072.0,
+    "hash": "f24300ffbffc43532054424726e5bc30"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/DEV_SETUP.md": {
+    "mtime": 1793731993.3744397,
+    "hash": "373f3660f067783ca39934598d674214"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/creation_log.md": {
+    "mtime": 1793823673.7190652,
+    "hash": "431b00f4b59d00b4a9d811d6dc0a5cd4"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/STORY_MAP.md": {
+    "mtime": 1793825223.5828562,
+    "hash": "b8a4dc98f0f369ce2e8213378d17e2d2"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/backlog_v1.md": {
+    "mtime": 1793731049.4278517,
+    "hash": "90acf5bb33384b884d40ee5e7b80d88f"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/PRIORITY_ORDER.md": {
+    "mtime": 1793740684.9738586,
+    "hash": "647c5e331f6071d8f35f03c0c65c28a5"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-27.md": {
+    "mtime": 1793740684.9712245,
+    "hash": "baae8493632d379969435b49ff6743ba"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-R3-5.md": {
+    "mtime": 1793740684.9721029,
+    "hash": "63f8b1f080a68f02f5fbf7795657618d"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/SP-02.md": {
+    "mtime": 1793818722.849578,
+    "hash": "b3b9e2cc6d30631e83ca3fda41d07b25"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-41.md": {
+    "mtime": 1793740684.9717474,
+    "hash": "3325f474c9731335fb3444afc3c7564c"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-21.md": {
+    "mtime": 1793740684.9709818,
+    "hash": "2af9022d4d14d23f307151d81970a2fa"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-24.md": {
+    "mtime": 1793740684.9711394,
+    "hash": "4c605a65ddc72d5bd3d692735ac9910f"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-29.md": {
+    "mtime": 1793740684.9713213,
+    "hash": "1299e5962280a36c2b93980b17ae7172"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/SP-04.md": {
+    "mtime": 1793818722.849578,
+    "hash": "758d42c9e8381a2ba9ef3d3054a7db00"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/SP-01.md": {
+    "mtime": 1793817338.993704,
+    "hash": "cd0d8d9c1889d657a6d11709d7a3beb6"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-03.md": {
+    "mtime": 1793740684.9700577,
+    "hash": "c1acd561d795345f3983e9b100ef9834"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-25.md": {
+    "mtime": 1793740684.9711902,
+    "hash": "0f890be4b16434c27cad5132b3c9ecc5"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/PL-01.md": {
+    "mtime": 1793740684.9717872,
+    "hash": "16beced2cd7566e82348130bbfaf3d30"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-30.md": {
+    "mtime": 1793740684.9713626,
+    "hash": "4dc7d8a2eac734d070d3675f27ff72a2"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-R2-2.md": {
+    "mtime": 1793740684.9718528,
+    "hash": "677dea764843e95f75bf111c38c357ed"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-10.md": {
+    "mtime": 1793740684.9703996,
+    "hash": "e5ae749b98ff3b3e4dedbc3f9f4fbb4a"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-07.md": {
+    "mtime": 1793740684.970152,
+    "hash": "25b48ad436e0f6846949d24f668b4cbe"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-R2-4.md": {
+    "mtime": 1793740684.9719174,
+    "hash": "850d9c8ae2270c558f8070b17231f6ff"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-31.md": {
+    "mtime": 1793740684.9713986,
+    "hash": "3da0fa30c659dcd43b82d58745922cb6"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-20.md": {
+    "mtime": 1793740684.9709396,
+    "hash": "bcad36590f9ea2ec8747b75f142c14fa"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-R2-1.md": {
+    "mtime": 1793740684.97182,
+    "hash": "90930b1cb65902abfe72febb8a97e32a"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-35.md": {
+    "mtime": 1793740684.9715338,
+    "hash": "d60235c9f00c1c6b6c85a0346947de8b"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-R3-4.md": {
+    "mtime": 1793740684.9720721,
+    "hash": "6351dae731deaff27fc8b3a5f63aa5e8"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-37.md": {
+    "mtime": 1793740684.9716072,
+    "hash": "9b9fbd33d1c39f6987c3e7391d96a29f"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/SP-03.md": {
+    "mtime": 1793818722.849578,
+    "hash": "b70beefb7e31f31c011251722537a713"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/SP-06.md": {
+    "mtime": 1793818722.849578,
+    "hash": "87d9365cf0606a63bf5b20c166744f49"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-32.md": {
+    "mtime": 1793740684.9714715,
+    "hash": "0975606aa0c6e5642aa5b9d78fb53eee"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-04.md": {
+    "mtime": 1793740684.9701037,
+    "hash": "fd2fc82a2819d97090a14144536f1a86"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-19.md": {
+    "mtime": 1793740684.9709046,
+    "hash": "313f1228b543f34f4e53596e10bab87f"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-R3-7.md": {
+    "mtime": 1793740684.9721906,
+    "hash": "0c38f2fc6c64d7e45975cb70d7523208"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-R2-3.md": {
+    "mtime": 1793740684.971886,
+    "hash": "9e045b7fdb829dae7e7021ea54195d62"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/SP-05.md": {
+    "mtime": 1793818722.849578,
+    "hash": "87dffefe985625ab6816aa49a02fb73a"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-33.md": {
+    "mtime": 1793740684.9714363,
+    "hash": "08e5d87e52fe9bdb8aa3d0b5fa0513b2"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-28.md": {
+    "mtime": 1793740684.9712667,
+    "hash": "3f064ec4c3deaded212317a168dfe21a"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-R3-1.md": {
+    "mtime": 1793740684.971982,
+    "hash": "98a7bdf5f159f7b6de86dd21d25b592c"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-13.md": {
+    "mtime": 1793740684.970614,
+    "hash": "af4a596fea5dee482c58bd6615561c9c"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-26.md": {
+    "mtime": 1793740684.971059,
+    "hash": "94c2ec722d07029b141f322f131f5f5d"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-18.md": {
+    "mtime": 1793740684.9708576,
+    "hash": "dd11b38b88089a153225bb4c2e18245c"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-22.md": {
+    "mtime": 1793740684.971024,
+    "hash": "beac29889debb7628b8620c5e34d215b"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-40.md": {
+    "mtime": 1793740684.9717035,
+    "hash": "da2a50c928bc469748f2219c298a92bb"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-38.md": {
+    "mtime": 1793740684.9716432,
+    "hash": "408944ee3b5d8bbbc44495a09cd97d1a"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-39.md": {
+    "mtime": 1793740684.9716735,
+    "hash": "ff15ba7c409f867c4716e0b97f071079"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-23.md": {
+    "mtime": 1793740684.9710934,
+    "hash": "00c2e413ebdb789782f768bdc935c80c"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-R2-5.md": {
+    "mtime": 1793740684.9719503,
+    "hash": "86f08bc99306807c1b6e4c9125cc40c3"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-01.md": {
+    "mtime": 1793819798.4424324,
+    "hash": "d84fa123f614b34f36ef4ded76fbb2ed"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-R3-6.md": {
+    "mtime": 1793740684.9721546,
+    "hash": "211e79c1a36b3c7e567670df42b6f694"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-08.md": {
+    "mtime": 1793740684.970252,
+    "hash": "f25082e3979e23b8716725e6d76804f2"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-14.md": {
+    "mtime": 1793740684.9706895,
+    "hash": "e06db527c8f069b70703028c6f229350"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-16.md": {
+    "mtime": 1793740684.9707384,
+    "hash": "5dd50bda45e2350e1abb5cf2fcd70375"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-12.md": {
+    "mtime": 1793740684.9705305,
+    "hash": "c99c2791b3fdaf9b1f9ebdc5ed564f23"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-R3-3.md": {
+    "mtime": 1793740684.9720416,
+    "hash": "ce9791497611cfd7aeb1ca9e9f1997e2"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-05.md": {
+    "mtime": 1793740684.9699907,
+    "hash": "1c0b00d27b475da90fbb6be8cfa30dd6"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-06.md": {
+    "mtime": 1793740684.970201,
+    "hash": "cc192cec23b11eb5d4a23448648668af"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-15.md": {
+    "mtime": 1793740684.9708223,
+    "hash": "b73a741409550c890c4a1d243b315092"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-17.md": {
+    "mtime": 1793740684.9707866,
+    "hash": "3e3d75d886583d72533a679a75b8009a"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-02.md": {
+    "mtime": 1793823673.8033752,
+    "hash": "d9c90ba28f102080248f602e6f97d911"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-11.md": {
+    "mtime": 1793740684.970462,
+    "hash": "488afc9d60ca53e7e5fd46bf78d420c6"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-36.md": {
+    "mtime": 1793740684.9715717,
+    "hash": "adea92053e3c32d6c9e4828c83f19288"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-09.md": {
+    "mtime": 1793740684.97032,
+    "hash": "8b0b8dd72a5aa95f8f5d0f9fbe1a5f93"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-R3-2.md": {
+    "mtime": 1793740684.9720116,
+    "hash": "8d1ac284edee5dacbe3d5434eb6ead86"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/backlog/issues/US-34.md": {
+    "mtime": 1793740684.971502,
+    "hash": "e99583409cb0668cef1dbfda2f3f864a"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/compliance/PRIVACY_AND_RETENTION.md": {
+    "mtime": 1793650072.0,
+    "hash": "8090f75e101f3f5675bf603c84c4f7a1"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/main/srs_v1.md": {
+    "mtime": 1793818722.8517742,
+    "hash": "f31974bce184f17e54cc1dd59579155c"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/main/sad_v1.md": {
+    "mtime": 1793818722.8499408,
+    "hash": "bf0db2733900790c7d65b70ed8049dde"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/docs/main/test_plan_v1.md": {
+    "mtime": 1793731798.3517559,
+    "hash": "e14267c67b8dcae0ad86e08c6ebd0a64"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/pubspec.yaml": {
+    "mtime": 1793824359.5439467,
+    "hash": "6fc8522e85913293775ed698b5a62d9d"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/pubspec_overrides.yaml": {
+    "mtime": 1793822721.0907362,
+    "hash": "8e0ec42de2d71d80627319249f4761c6"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/CMakeLists.txt": {
+    "mtime": 1793822062.7013435,
+    "hash": "183f4048c35a1f67a7ab97f1f26e9d48"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/linux/flutter/CMakeLists.txt": {
+    "mtime": 1793730078.6930575,
+    "hash": "46690fb8ffaf7d227d8bc4713f31140d"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/windows/CMakeLists.txt": {
+    "mtime": 1793730078.6927204,
+    "hash": "719ba7b9a78f8389e87abdb300674fb4"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/windows/runner/CMakeLists.txt": {
+    "mtime": 1793730078.691222,
+    "hash": "e99a99b5cc82a168fc557eb23b8d5a96"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/windows/flutter/CMakeLists.txt": {
+    "mtime": 1793730078.6922247,
+    "hash": "0c500410e3259a9a053797dc1c28070e"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/resources/README.md": {
+    "mtime": 1793650072.0,
+    "hash": "3ab8bee0503c865dba6762e4b989e602"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/fixtures/README.md": {
+    "mtime": 1793650072.0,
+    "hash": "ed99ef3bbb0c8130a15c58b58b35bef4"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/fixtures/hostile/README.md": {
+    "mtime": 1793650072.0,
+    "hash": "9699259e0f7ca5ec52be161db99a9ef5"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/content/labs/python-hello-001/README.md": {
+    "mtime": 1793650072.0,
+    "hash": "0e184b51dd578f23e3d882d3eb96c8a2"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/content/labs/python-hello-001/lab.yaml": {
+    "mtime": 1793650072.0,
+    "hash": "a4e46196312d21f23f46216b0209b18b"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/content/labs/python-hello-001/guide/02-greet.md": {
+    "mtime": 1793650072.0,
+    "hash": "16c601ee04bd5cadde8261fee110be18"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/content/labs/python-hello-001/guide/01-setup.md": {
+    "mtime": 1793650084.0,
+    "hash": "39394e5f2bfaeac12a449e7434896984"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/content/challenges/README.md": {
+    "mtime": 1793650072.0,
+    "hash": "43ade8eadf791df0fd1769f94633d8ab"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/content/challenges/bug-example-001/issue.md": {
+    "mtime": 1793650072.0,
+    "hash": "29004a4ed2a31bbe7ad6ad056a034b37"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/content/challenges/bug-example-001/challenge.yaml": {
+    "mtime": 1793650083.0,
+    "hash": "f494f3e90a50ff705220968ee4797535"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/content-ci/README.md": {
+    "mtime": 1793650072.0,
+    "hash": "0cd6a4228308e826d1d6b82aaca9372a"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/pubspec.yaml": {
+    "mtime": 1793732043.4555018,
+    "hash": "acec4e1321235f61474be2dbd5a37866"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/local-worker/pubspec_overrides.yaml": {
+    "mtime": 1793822721.0967362,
+    "hash": "9da378a4520b7ce609dfb9d75fae8a1e"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/api/README.md": {
+    "mtime": 1793650072.0,
+    "hash": "1d085376a79897be9bb76dd07fe14a68"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/services/grader/README.md": {
+    "mtime": 1793650072.0,
+    "hash": "0ce8918c11f73f9e816a6c0ea1de0e15"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/packages/lab_schema/pubspec.yaml": {
+    "mtime": 1793731955.7494776,
+    "hash": "f13e304fcb8d38a909101e508b4985ed"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/packages/ui/pubspec.yaml": {
+    "mtime": 1793731956.3695683,
+    "hash": "04779815a4650c0a689325ce904a4f81"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/packages/api_client/pubspec.yaml": {
+    "mtime": 1793731955.0363545,
+    "hash": "e6ff3f10a3e74a9f83ef3303efcdd421"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/packages/ipc_contract/pubspec.yaml": {
+    "mtime": 1793731955.4505703,
+    "hash": "084c9b0678253e891d78aff5f18a7082"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/packages/redaction/pubspec.yaml": {
+    "mtime": 1793731956.004569,
+    "hash": "35cd368f5ac45cd07226573978d991b0"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/tests/README.md": {
+    "mtime": 1793732051.374987,
+    "hash": "61fdaaf8ca401b4503846c289dd9ca30"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/tests/perf/README.md": {
+    "mtime": 1793650072.0,
+    "hash": "6a97f1b5796a1847738a3577dbcf3277"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/tests/usability/feedback_form.md": {
+    "mtime": 1793650072.0,
+    "hash": "1b91cde6be4d44b0b492a72ed89fe6f5"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/tests/usability/PILOT_SCRIPT.md": {
+    "mtime": 1793650072.0,
+    "hash": "f20d10b837b7b4d37577308ef3040c9a"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_256.png": {
+    "mtime": 1793730078.695477,
+    "hash": "dfe2c93d1536ae02f085cc63faa3430e"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_512.png": {
+    "mtime": 1793730078.6961253,
+    "hash": "0ad44039155424738917502c69667699"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_128.png": {
+    "mtime": 1793730078.6962578,
+    "hash": "3ded30823804caaa5ccc944067c54a36"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_32.png": {
+    "mtime": 1793730078.6953382,
+    "hash": "8e0ae58e362a6636bdfccbc04da2c58c"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_16.png": {
+    "mtime": 1793730078.6955967,
+    "hash": "8bf511604bc6ed0a6aeb380c5113fdcf"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_1024.png": {
+    "mtime": 1793730078.6958995,
+    "hash": "c9becc9105f8cabce934d20c7bfb6aac"
+  },
+  "/home/bharath/Desktop/projects/DevSphere/apps/desktop/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_64.png": {
+    "mtime": 1793730078.6963677,
+    "hash": "04e7b6ef05346c70b663ca1d97de3ad5"
+  }
+}

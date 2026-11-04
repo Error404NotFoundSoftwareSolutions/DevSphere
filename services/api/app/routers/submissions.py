@@ -1,8 +1,10 @@
+# User story: US-03 Create and manage my profile (Sprint 1, MVP)
+# Requirements: FR-PROF-006
 # User story: US-28 Submit my work for verification (Sprint 7, MVP)
 # Requirements: FR-GRADE-003..004, NFR-SEC-014
 # User story: US-30 Compute official scores on the server (Sprint 7, MVP)
 # Requirements: FR-GRADE-001, FR-GRADE-008..011
-# Implemented here: create a submission, confirm upload, read the verified result (FR-GRADE-004, FR-GRADE-005)
+# Implemented here: create a submission, confirm upload, read the verified result (FR-GRADE-004, FR-GRADE-005, FR-PROF-006)
 
 import uuid
 
@@ -59,6 +61,17 @@ def complete(submission_id: str, user: User = Depends(current_user)) -> dict:
 def get_submission(submission_id: str, user: User = Depends(current_user)) -> dict:
     sub = memory.SUBMISSIONS.get(submission_id)
     if not sub:
+        raise HTTPException(
+            404,
+            detail={
+                "code": "not_found",
+                "message": "Submission not found.",
+                "recovery": "Submit again.",
+            },
+        )
+    # FR-PROF-006: A student shall be able to read only their own records
+    attempt = memory.ATTEMPTS.get(sub.get("attempt_id"))
+    if not attempt or (attempt["user_id"] != user.user_id and user.role != "operator"):
         raise HTTPException(
             404,
             detail={

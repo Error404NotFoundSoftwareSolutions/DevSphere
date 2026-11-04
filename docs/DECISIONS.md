@@ -78,3 +78,13 @@ Format: **Status** (Proposed, Accepted, Superseded), **Context**, **Decision**, 
 - **Context:** Monorepo architecture covering Dart Flutter client, Dart local worker, Python FastAPI backend, Python Grader, and lab content requires a reproducible CI and repository consistency harness.
 - **Decision:** Enforce mono-repository structure with `melos` for Dart and `uv` for Python. CI runs checks on pull requests and manual dispatch (disabling automatic run on every push to save runner minutes). Enforce Definition of Done with automated scripts (`tools/check_docs.py`, `check_sad.py`, `story_map.py`, `check_repo.py`).
 - **Consequences:** Unified tooling and continuous verification across all platforms without quota exhaustion.
+
+## ADR-015: Firebase integration for backend identity and document store
+- **Status:** Accepted (5 Nov 2026).
+- **Context:** The application requires scalable identity authentication with Google sign-in and document persistence for user profiles, consent logs, and learning progress.
+- **Decision:**
+  1. Use Firebase project `devpilot-1a384` as the managed identity and Firestore document database.
+  2. Register Flutter client applications across target platforms and configure via FlutterFire CLI (`lib/firebase_options.dart`).
+  3. Author and deploy production Cloud Firestore Security Rules (`firestore.rules`) enforcing student-only data isolation (`request.auth.uid == uid`), audit-immutable consent logs with strict exclusion of date-of-birth (FR-PROF-001, FR-PROF-010), and read-only educational catalogue access with default-deny.
+  4. Encapsulate client interactions within clean service abstractions (`FirebaseAuthService`, `FirestoreService`).
+- **Consequences:** Enables secure, seamless Google sign-in and real-time document synchronization with end-to-end data boundary enforcement.

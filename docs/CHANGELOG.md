@@ -11,6 +11,8 @@ Format: newest first. Group by Added, Changed, Fixed, Security.
 - UI layer architectural security rule enforced: `apps/desktop/lib/ui` and `lib/features` are strictly banned from `dart:io` `File` and `Process` APIs; all privileged work runs in `services/local-worker`.
 
 ### Added
+- Implemented student profile creation, field validation, and post-onboarding management (US-03, FR-PROF-002..008) with prefilled editable display name, optional academic details, strict data minimization (no DOB, phone, or address), token-derived user ID scoping, cross-student read denial, and audited operator profile inspection.
+- Integrated Firebase backend with project `devpilot-1a384`: enabled Firebase Authentication with Google Sign-In, configured Cloud Firestore database `(default)`, registered Flutter apps (macOS, Windows, Web), generated platform configuration (`firebase_options.dart`), deployed production Firestore Security Rules with user profile isolation and privacy consent logging without DOB collection, and provided Flutter services for Firebase Auth and Firestore.
 - Implemented Privacy Notice presentation, consent recording, and age policy confirmation (US-02, FR-PROF-001, FR-PROF-010) with notice version, timestamp, and age check outcome only (no date of birth collected).
 - Implemented Google sign-in with system browser and PKCE (US-01), token verification matrix, stable provider subject mapping, sign-out revocation, and OS secure storage fallback with error recovery actions.
 - Completed Grader sandbox spike (SP-03) validating container user-space sandbox isolation (gVisor) against hostile submissions; documented in `spikes/grader-sandbox/RESULT.md` and ADR-013.
@@ -19,5 +21,5 @@ Format: newest first. Group by Added, Changed, Fixed, Security.
 - Completed Legal review spike (SP-05) approving 18+ pilot age threshold, data minimization, and retention schedule; documented in `spikes/legal-review/RESULT.md` and ADR-012.
 - Completed Sign-in spike (SP-02) validating Google sign-in via system browser with PKCE, loopback redirect, and OS secure storage against SAD S2 criteria; documented in `spikes/signin/RESULT.md` and ADR-008.
 - Completed Flutter shell spike (SP-01) validating Option B Flutter desktop shell against SAD Section 4.1 (S1) criteria; documented in `spikes/flutter-shell/RESULT.md` and ADR-003.
-- Repository scaffold: monorepo layout, documentation set, starter code for MVP stories, `.agent/` guidance.
+- Repository scaffold: monorepo layout, documentation set, starter code for MVP stories, `.agents/` guidance.
 - Historical client shell decision: Electron (ADR-001, superseded); SRS 1.2 and SAD 1.1.

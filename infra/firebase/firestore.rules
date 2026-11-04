@@ -1,0 +1,207 @@
+rules_version = '2';
+
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// Collection: users/{uid}
+// Document ID: Firebase Auth UID
+// Fields:
+//   - displayName: string (optional, 1..100 chars) - Student's display name
+//   - email: string (optional, valid email format, <= 255 chars) - Student's email
+//   - college: string (optional, 1..200 chars) - Associated college/university
+//   - course: string (optional, 1..200 chars) - Academic program/course
+//   - interests: list of strings (optional, <= 50 items) - Topics of interest
+//   - updatedAt: timestamp (optional) - Last update server timestamp
+//   - uid: string (optional, immutable, must equal request.auth.uid)
+//   - STRICTLY FORBIDDEN: dateOfBirth, dob, birthDate (FR-PROF-003, FR-PROF-010)
+//   - STRICTLY FORBIDDEN: role, isAdmin (Privilege escalation prevention)
+//
+// Collection: consents/{uid} AND Subcollection: users/{uid}/consent/{consentId}
+// Document ID: Firebase Auth UID or consent record ID
+// Fields:
+//   - noticeVersion: string (required, 1..50 chars) - Privacy notice version agreed to
+//   - timestamp: string or timestamp (required, <= 100 chars if string) - Time of consent
+//   - ageCheckPassed: bool (required) - Confirmation student is 18+
+//   - uid: string (optional, must equal request.auth.uid)
+//   - STRICTLY FORBIDDEN: dateOfBirth, dob, birthDate (FR-PROF-010 age policy: outcome only)
+//
+// Collection: progress/{uid} AND Subcollection: users/{uid}/progress/{labId}
+// Document ID: Firebase Auth UID or lab identifier
+// Fields:
+//   - labId: string (optional, 1..100 chars)
+//   - status: string (optional, 1..50 chars)
+//   - score: number (optional, 0..1000)
+//   - completed: bool (optional)
+//   - currentStep: int (optional, >= 0)
+//   - totalSteps: int (optional, >= 0)
+//   - completedSteps: list (optional, <= 100 items)
+//   - updatedAt: timestamp (optional)
+//   - uid: string (optional, must equal request.auth.uid)
+//
+// Collection: labs/{labId} AND Collection: catalogue/{labId}
+// Document ID: Lab ID / Catalogue item ID
+// Read-only educational catalogue. Read allowed for any authenticated user.
+// Write access strictly denied to all clients (backend/admin managed).
+//
+// Default Deny: All other paths denied by default.
+// ===============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    // Check if the request is from an authenticated user
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Check if user owns the resource based on path UID
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Ensure uid field is unchanged on create if provided
+    function uidUnchanged() {
+      return !('uid' in request.resource.data) ||
+        request.resource.data.uid == request.auth.uid;
+    }
+
+    // Ensure uid field is not modified on update
+    function uidNotModified() {
+      return !('uid' in request.resource.data) ||
+        request.resource.data.uid == resource.data.uid;
+    }
+
+
+    // Validate email format
+    function isValidEmail(email) {
+      return email is string &&
+        email.size() <= 255 &&
+        email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+
+    // Domain validator for student consent records (FR-PROF-001, FR-PROF-010)
+    function isValidConsent(data) {
+      return data.keys().hasAll(['noticeVersion', 'timestamp', 'ageCheckPassed']) &&
+             data.keys().hasOnly(['noticeVersion', 'timestamp', 'ageCheckPassed', 'uid']) &&
+             !('dateOfBirth' in data) &&
+             !('dob' in data) &&
+             !('birthDate' in data) &&
+             !('role' in data) &&
+             !('isAdmin' in data) &&
+             data.noticeVersion is string &&
+             data.noticeVersion.size() >= 1 &&
+             data.noticeVersion.size() <= 50 &&
+             data.ageCheckPassed is bool &&
+             ((data.timestamp is string && data.timestamp.size() >= 1 && data.timestamp.size() <= 100) ||
+              data.timestamp is timestamp) &&
+             (!('uid' in data) || data.uid == request.auth.uid);
+    }
+
+    // Domain validator for student user profile (FR-PROF-002, FR-PROF-003, FR-PROF-010)
+    function isValidUserProfile(data) {
+      return data.keys().hasOnly(['displayName', 'email', 'college', 'course', 'interests', 'updatedAt', 'uid']) &&
+             !('dateOfBirth' in data) &&
+             !('dob' in data) &&
+             !('birthDate' in data) &&
+             !('role' in data) &&
+             !('isAdmin' in data) &&
+             (!('displayName' in data) || (data.displayName is string && data.displayName.size() >= 1 && data.displayName.size() <= 100)) &&
+             (!('email' in data) || isValidEmail(data.email)) &&
+             (!('college' in data) || (data.college is string && data.college.size() <= 200)) &&
+             (!('course' in data) || (data.course is string && data.course.size() <= 200)) &&
+             (!('interests' in data) || (data.interests is list && data.interests.size() <= 50)) &&
+             (!('updatedAt' in data) || (data.updatedAt is timestamp)) &&
+             (!('uid' in data) || (data.uid is string && data.uid == request.auth.uid));
+    }
+
+    // Domain validator for progress records
+    function isValidProgress(data) {
+      return data.keys().size() <= 50 &&
+             !('role' in data) &&
+             !('isAdmin' in data) &&
+             (!('uid' in data) || data.uid == request.auth.uid) &&
+             (!('labId' in data) || (data.labId is string && data.labId.size() <= 100)) &&
+             (!('status' in data) || (data.status is string && data.status.size() <= 50)) &&
+             (!('score' in data) || (data.score is number && data.score >= 0 && data.score <= 1000)) &&
+             (!('completed' in data) || (data.completed is bool)) &&
+             (!('currentStep' in data) || (data.currentStep is int && data.currentStep >= 0 && data.currentStep <= 1000)) &&
+             (!('totalSteps' in data) || (data.totalSteps is int && data.totalSteps >= 0 && data.totalSteps <= 1000)) &&
+             (!('completedSteps' in data) || (data.completedSteps is list && data.completedSteps.size() <= 100));
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    // 1. Student Users: users/{uid}
+    match /users/{uid} {
+      allow read: if isOwner(uid);
+      allow create: if isOwner(uid) && uidUnchanged() && isValidUserProfile(request.resource.data);
+      allow update: if isOwner(uid) && uidNotModified() && isValidUserProfile(request.resource.data);
+      allow delete: if isOwner(uid);
+
+      // Subcollection: users/{uid}/consent/{consentId}
+      match /consent/{consentId} {
+        allow read: if isOwner(uid);
+        allow create: if isOwner(uid) && isValidConsent(request.resource.data);
+      }
+
+      // Subcollection: users/{uid}/progress/{labId}
+      match /progress/{labId} {
+        allow read: if isOwner(uid);
+        allow create: if isOwner(uid) && isValidProgress(request.resource.data);
+        allow update: if isOwner(uid) && isValidProgress(request.resource.data);
+        allow delete: if isOwner(uid);
+      }
+    }
+
+    // Top-level Consents: consents/{uid}
+    match /consents/{uid} {
+      allow read: if isOwner(uid);
+      allow create: if isOwner(uid) && isValidConsent(request.resource.data);
+    }
+
+    // Top-level Progress: progress/{uid}
+    match /progress/{uid} {
+      allow read: if isOwner(uid);
+      allow create: if isOwner(uid) && isValidProgress(request.resource.data);
+      allow update: if isOwner(uid) && isValidProgress(request.resource.data);
+      allow delete: if isOwner(uid);
+    }
+
+    // 2. Read-Only Educational Catalogue: labs/{labId} and catalogue/{labId}
+    match /labs/{labId} {
+      allow read: if isAuthenticated();
+      allow write: if false;
+
+      match /{allSubcollections=**} {
+        allow read: if isAuthenticated();
+        allow write: if false;
+      }
+    }
+
+    match /catalogue/{labId} {
+      allow read: if isAuthenticated();
+      allow write: if false;
+
+      match /{allSubcollections=**} {
+        allow read: if isAuthenticated();
+        allow write: if false;
+      }
+    }
+
+    // 3. Default Deny: all other collections and paths
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

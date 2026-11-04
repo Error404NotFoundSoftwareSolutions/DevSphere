@@ -10,6 +10,8 @@ Conventions: HTTPS only, JSON, URL-versioned (`/v1`). Bearer token on every prot
 | `GET /v1/me` | User, role, consent state | US-01 |
 | `PUT /v1/me/consent` | Record notice version and age-check outcome | US-02 |
 | `GET, PUT /v1/me/profile` | Own profile | US-03 |
+| `GET /v1/students/{id}/profile` | Read student profile (own or audited operator) | US-03 |
+| `GET /v1/operator/students/{id}/profile` | Audited operator inspection of student profile | US-03, US-35 |
 | `POST /v1/me/export-request`, `POST /v1/me/deletion-request` | Data requests | US-04 |
 | `GET /v1/labs` | Catalogue | US-06 |
 | `GET /v1/labs/{id}/versions/{v}/bundle` | Signed bundle URL | US-07 |

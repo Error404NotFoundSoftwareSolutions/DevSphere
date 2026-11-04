@@ -16,7 +16,7 @@ Use the template. A PR needs: the story ID, requirement IDs, tests named `TC-<ID
 
 ## Code style
 
-Dart strict analysis; Python: Ruff and type hints. Comments explain why. No secrets, ever (see `.agent/RULES.md`). UI layer (`apps/desktop/lib/ui` & `lib/features`) must never import `dart:io` or access `Process`/`File` APIs directly.
+Dart strict analysis; Python: Ruff and type hints. Comments explain why. No secrets, ever (see `.agents/RULES.md`). UI layer (`apps/desktop/lib/ui` & `lib/features`) must never import `dart:io` or access `Process`/`File` APIs directly.
 
 ## Changing requirements or design
 

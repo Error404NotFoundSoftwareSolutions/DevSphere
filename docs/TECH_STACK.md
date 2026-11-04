@@ -17,6 +17,7 @@ Versions were current when this scaffold was created (3 Nov 2026). The lockfiles
 | Backend | Python, FastAPI, Pydantic v2, SQLAlchemy 2, Alembic | Same language as graders and lab tooling |
 | Database | Managed PostgreSQL | Relational data with uniqueness constraints |
 | Identity | Managed provider with Google sign-in (TBD-06) | PKCE in system browser, loopback redirect, no password storage |
+| Firebase Backend Services | Firebase Core, Firebase Auth, Cloud Firestore, Google Sign-In | Managed identity authentication, Google sign-in provider, and cloud document storage |
 | Queue | Managed HTTP task queue | Retries and delay for grading jobs |
 | Grader | Container per submission under a user-space kernel sandbox, separate project | Isolation justified by the threat model (TBD-03) |
 | Python tooling for students | uv (venv + pip fallback), pytest | Reproducible lab environments |

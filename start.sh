@@ -151,5 +151,24 @@ echo ""
 echo "--> Launching DevSphere Client on target: $TARGET_DEVICE..."
 cd "$ROOT_DIR/apps/desktop"
 
-flutter run -d "$TARGET_DEVICE"
+EXTRA_ARGS=()
+for arg in "$@"; do
+  if [ "$arg" = "profile" ] || [ "$arg" = "/profile" ]; then
+    EXTRA_ARGS+=("--route=/profile")
+  elif [[ "$arg" == --route=* ]]; then
+    EXTRA_ARGS+=("$arg")
+  else
+    EXTRA_ARGS+=("$arg")
+  fi
+done
+
+if [ -n "${DEVSPHERE_ROUTE:-}" ]; then
+  EXTRA_ARGS+=("--route=${DEVSPHERE_ROUTE}")
+fi
+
+if [ ${#EXTRA_ARGS[@]} -gt 0 ]; then
+  flutter run -d "$TARGET_DEVICE" "${EXTRA_ARGS[@]}"
+else
+  flutter run -d "$TARGET_DEVICE"
+fi
 
