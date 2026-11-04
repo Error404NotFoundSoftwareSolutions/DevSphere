@@ -11,6 +11,7 @@ Format: newest first. Group by Added, Changed, Fixed, Security.
 - UI layer architectural security rule enforced: `apps/desktop/lib/ui` and `lib/features` are strictly banned from `dart:io` `File` and `Process` APIs; all privileged work runs in `services/local-worker`.
 
 ### Added
+- Completed Sign-in spike (SP-02) validating Google sign-in via system browser with PKCE, loopback redirect, and OS secure storage against SAD S2 criteria; documented in `spikes/signin/RESULT.md` and ADR-008.
 - Completed Flutter shell spike (SP-01) validating Option B Flutter desktop shell against SAD Section 4.1 (S1) criteria; documented in `spikes/flutter-shell/RESULT.md` and ADR-003.
 - Repository scaffold: monorepo layout, documentation set, starter code for MVP stories, `.agent/` guidance.
 - Historical client shell decision: Electron (ADR-001, superseded); SRS 1.2 and SAD 1.1.

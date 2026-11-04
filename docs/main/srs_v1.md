@@ -744,7 +744,7 @@ All MVP requirements shall have a recorded passing verification, or an approved 
 | ID | Decision | Needed by | Depends on | Resolution rule |
 |---|---|---|---|---|
 | TBD-01 | Client shell: VS Code extension (A) or custom desktop app (B) | Before MVP build | TBD-06 | Spike (1–2 weeks). **RESOLVED 3 Nov 2026: Option B (Flutter desktop app with native Dart re_editor and local worker)**, superseding Electron (see `DECISIONS.md` ADR-003). |
-| TBD-02 | Sign-in implementation with the identity provider's standard system-browser flow, including refresh and revocation | Before MVP build | TBD-01, TBD-06 | Working sign-in on two OSes; avoid custom token bridges unless the standard flow fails. |
+| TBD-02 | Sign-in implementation with the identity provider's standard system-browser flow, including refresh and revocation | Before MVP build | TBD-01, TBD-06 | Working sign-in on two OSes; avoid custom token bridges unless the standard flow fails. **RESOLVED 4 Nov 2026: Authorization Code with PKCE via system browser, loopback redirect, and OS secure storage** (see `DECISIONS.md` ADR-008). |
 | TBD-03 | Grader sandbox technology and isolation level | Before MVP build | TBD-06 | Prototype against hostile test submissions; choose isolation justified by threat model. |
 | TBD-04 | Supported OS versions, second OS, architecture policy | Before MVP build | TBD-01 | Product decision after TBD-01. **RESOLVED 3 Nov 2026:** Windows, Linux (Ubuntu LTS), and macOS are all supported in MVP (ADR-003). |
 | TBD-05 | Python versions supported by MVP labs | Before lab authoring | - | Engineering decision. |
