@@ -36,7 +36,10 @@ Format: **Status** (Proposed, Accepted, Superseded), **Context**, **Decision**, 
 - **Status:** Accepted. **Decision:** The app never holds a provider key; the backend applies policy, level cap, limits and a second redaction pass. **Consequences:** the tutor needs connectivity; other features keep working without it.
 
 ## ADR-008: Sign-in with the provider's credential flow
-- **Status:** Proposed (spike SP-02). **Decision:** Authorization Code with PKCE in the system browser, then the identity provider's sign-in-with-credential call. **Consequences:** fallback is a thin token-exchange endpoint, chosen only if the spike fails.
+- **Status:** Accepted (4 Nov 2026). Closes TBD-02.
+- **Context:** The application must allow students to sign in with Google without embedding secrets (FR-AUTH-002), without using webviews for authentication (FR-AUTH-001), and support silent refresh, secure session persistence, revocation, and graceful error handling on Windows, Linux, and macOS.
+- **Decision:** Use Google OAuth 2.0 Authorization Code flow with PKCE (`S256`) through the system default browser with a loopback redirect on `127.0.0.1`. Store refresh tokens exclusively in OS-backed secure storage (`flutter_secure_storage`). Background silent refresh renews tokens before expiry. Sign-out revokes refresh tokens at the provider and purges local storage. The backend derives internal identity from provider subject (`sub`) and enforces roles strictly from server-side database records.
+- **Consequences:** Eliminates embedded credentials, prevents CSRF/state injection, ensures consistent authentication across all three desktop operating systems, and strictly enforces server-controlled role authority.
 
 ## ADR-009: At-least-once sync
 - **Status:** Accepted. **Decision:** Events carry client-generated IDs; the server processes each idempotently. **Consequences:** every write path needs a unique key.
