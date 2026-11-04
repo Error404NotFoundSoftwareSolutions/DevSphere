@@ -27,6 +27,7 @@ Versions were current when this scaffold was created (3 Nov 2026). The lockfiles
 | IDE extensions (Track B) | TypeScript 5.6.3 (strict), Node built-in test runner, `@types/vscode` 1.90.0, `@types/node` 22.9.0 (all exact-pinned, dev only) | Built-in extensions for the DevSphere IDE (`extensions/devsphere-learn`) |
 | YAML parsing (extension) | `yaml` 2.9.1 (ISC licence, exact-pinned) | Lab manifests are YAML; versions before 2.9.1 have a stack-overflow advisory, so the pin must not go lower |
 | UI font | Inter Regular/Medium/SemiBold (SIL OFL 1.1) copied from the system `fonts-inter` package into `apps/desktop/assets/fonts` with its licence text | Design system typeface, bundled so nothing is downloaded at runtime. JetBrains Mono is not bundled yet (not installed locally; needs a download approval) |
+| Hashing (worker) | `crypto` ^3.0.3 (Dart team, BSD-3-Clause) | SHA-256 of the shipped extension file before install (`services/local-worker/lib/src/companion`) |
 | Security gate | `tools/check_security.py` (no third-party deps) | Secret patterns, unsafe code patterns, extension manifest hardening (`docs/security/`) |
 
 ## Rules for adding a dependency

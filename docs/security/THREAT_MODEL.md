@@ -48,6 +48,16 @@ Curious or malicious **student** (cheating, probing); **malicious lab/repo/exten
 | T17 | Prompt injection to approval fatigue | Many harmless prompts then a harmful one | Dangerous actions always ask with clear destination/payload; allowances time-limited | TC-SEC-16 evals |
 | T18 | Local data theft | Other malware reads progress DB | No secrets in local DB; OS file permissions; optional encryption at rest later | TC-SEC-17 |
 
+### Companion-extension threats (ADR-019)
+| # | Threat | Example | Required controls | Test |
+|---|---|---|---|---|
+| T19 | Forged channel messages | Learner code or malware connects to the socket and sends "check passed" or "finish lab" | Channel carries requests only; scores/badges never accepted from it; Practice results computed by the worker; Verified only from the server; session scoped to one lab | TC-SEC-20 |
+| T20 | Channel hijack | Another local user or process connects | Per-user private directory (0700) and socket file (0600), named pipe ACL on Windows, random session id, idle timeout, one connection per session | TC-SEC-21 |
+| T21 | Malicious or swapped VSIX | Attacker replaces the shipped extension file | VSIX shipped inside the signed app bundle, hash checked before install, installed only after a visible plan and a click | TC-SEC-22 |
+| T22 | Fake `code` binary | A script named `code` on PATH runs arbitrary commands | Verify path, executable bit and `--version` output; pin the path for the session; run with argument arrays and a minimal environment; allow manual override only by the user | TC-SEC-23 |
+| T23 | Secret exposure through VS Code environment | Learner's terminal inherits secrets | Launch VS Code with a minimal environment; no tokens in env, args, files inside the lab folder | TC-SEC-24 |
+| T24 | Protocol downgrade or version skew | Old extension talks to new worker | Protocol version in `hello`; mismatch shows "update" and refuses privileged requests | TC-SEC-25 |
+
 ## 5. Abuse cases that must have automated tests
 - Lab with zip-slip entry, symlink, absolute path, `..`, 10 GB expansion.
 - Lab text with `<img onerror>`, `javascript:` links, SVG with script, markdown raw HTML.

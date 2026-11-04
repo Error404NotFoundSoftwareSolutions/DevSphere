@@ -13,6 +13,11 @@ code_freeze: false
 active_scope:
   - extensions/devsphere-learn/
   - apps/desktop/
+  - services/local-worker/lib/src/companion/
+  - services/local-worker/test/companion_*
+  - services/local-worker/pubspec.yaml
+  - fixtures/protocol/
+  - docs/EXTENSION_PROTOCOL.md
   - packages/ui/
   - docs/DESIGN_SYSTEM.md
   - tools/check_security.py
@@ -39,9 +44,9 @@ autonomy:
 # Status: Proposed -> Accepted (ADR merged) -> Active (in current sprint) -> Frozen | Dropped
 tracks:
   A-learning-platform:   { status: Active, adr: ADR-003, note: "Flutter desktop + Python services. Exists today." }
-  B-devsphere-ide:       { status: Paused,  adr: ADR-013, note: "Branded Code-OSS patch-set in separate repo devsphere-ide. Next: spikes SP-IDE-01..03." }
-  C-integrated-browser:  { status: Accepted, adr: ADR-014, note: "Preview, reader, AI-operable, general browsing as capability. Depends on B." }
-  D-agent-runtime:       { status: Accepted, adr: ADR-015, note: "Tutor/Pair/Agent by profile. Provider choice Q-013 open." }
+  B-companion-extension: { status: Active, adr: ADR-019, note: "BuildLoop app + guide extension in the learner's VS Code. Supersedes the fork (ADR-013)." }
+  C-integrated-browser:  { status: Deferred, adr: ADR-014, note: "Re-plan on the companion model; VS Code has a Simple Browser." }
+  D-agent-runtime:       { status: Deferred, adr: ADR-015, note: "Tutor first via the extension panel; Pair/Agent later." }
   E-curriculum-roadmap:  { status: Proposed, adr: ADR-017, note: "Skill graph, prebuilt+generated roadmaps, OSS contribution sandbox, beginner->professional. Questions answered; awaiting owner's yes on ADR-017 and the MVP change request." }
   X-extension-fabric:    { status: Accepted, adr: ADR-016, note: "Ports/adapters/registries so any later idea plugs in." }
 
@@ -49,4 +54,4 @@ tracks:
 # ADR-013/014/015 accepted 2026-11-04. Accepted is not Active: no track is built while code_freeze is true.
 blocking_questions: []   # remaining open (non-blocking): Q-009..Q-014, Q-016..Q-018   # see QUESTIONS.md
 active_plan: .agent/plans/00-master-plan.md
-active_slice: "BuildLoop Flutter shell: design system, theme, app shell and Overview screen (ADR-018)"
+active_slice: "Companion extension: docs done; next M1 launcher + installer + channel (plans/70-companion-extension-plan.md)"

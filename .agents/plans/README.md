@@ -9,6 +9,7 @@ A plan turns an accepted decision into ordered, verifiable work. Plans are docum
 | `20-ide-fork-plan.md` | B | Accepted (not yet Active) |
 | `30-integrated-browser-plan.md` | C | Accepted (not yet Active) |
 | `40-agent-runtime-plan.md` | D | Accepted (not yet Active) |
+| `70-companion-extension-plan.md` | B | Accepted, Active |
 | `60-curriculum-and-roadmap-plan.md` | E | Proposed |
 | `50-extensibility-plan.md` | X | Active (docs and registries first) |
 | `plan-template.md` | - | Copy for new plans |

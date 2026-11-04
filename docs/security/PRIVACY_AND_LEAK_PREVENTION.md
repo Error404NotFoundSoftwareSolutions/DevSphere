@@ -22,6 +22,7 @@ Complements `../compliance/PRIVACY_AND_RETENTION.md` (Track A policy).
 | Host | Purpose | Component | Status |
 |---|---|---|---|
 | (none) | The learn extension makes no network calls; sample data only. Only partly enforced: `tools/check_security.py` blocks plain-http URLs but cannot detect https calls, so code review must confirm there are none | extensions/devsphere-learn | current |
+| Local socket / loopback (no network) | App worker to the extension in the learner's VS Code; user-private path; never a public interface | worker, extension | planned |
 | Backend API (TBD) | Sign-in, catalogue, submissions, tutor gateway | learn extension | planned |
 | Open VSX (TBD) | Extension gallery | IDE | planned |
 | Update server (TBD) | Signed updates | IDE | planned |

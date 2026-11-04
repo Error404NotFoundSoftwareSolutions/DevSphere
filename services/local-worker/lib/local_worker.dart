@@ -24,4 +24,8 @@ export 'src/git/git_readiness.dart';
 export 'src/git/branch_checks.dart';
 export 'src/bug/reset_workspace.dart';
 export 'src/handlers.dart';
+export 'src/companion/protocol.dart';
+export 'src/companion/vscode_locator.dart';
+export 'src/companion/extension_installer.dart';
+export 'src/companion/adapters.dart';
 

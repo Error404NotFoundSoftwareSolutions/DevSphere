@@ -16,6 +16,7 @@ extension_points:
   - { id: EP-EXTENSION-GALLERY,  track: B, stability: experimental, contract: "ExtensionGallery port",          note: "Open VSX default" }
   - { id: EP-CONTENT-SOURCE,     track: A, stability: experimental, contract: "content-source port",            note: "Where labs/challenges come from" }
   - { id: EP-UNIT-TYPE,          track: B, stability: experimental, contract: "unit type schema",              note: "Read, quiz, guided workspace, challenge, contribution, reflection" }
+  - { id: EP-APP-CHANNEL,        track: B, stability: experimental, contract: "docs/EXTENSION_PROTOCOL.md (to write)", note: "Messages between the local worker and the VS Code companion extension" }
   - { id: EP-SKILL-PACK,         track: E, stability: experimental, contract: "skill pack schema",              note: "A set of labs + final verified task for one skill" }
   - { id: EP-ROADMAP-SOURCE,     track: E, stability: experimental, contract: "roadmap schema",                 note: "Prebuilt or generated roadmaps; catalogue-only" }
   - { id: EP-REVIEWER,           track: E, stability: experimental, contract: "review rubric + comment schema", note: "Automated/AI/human PR reviewers; advisory only" }

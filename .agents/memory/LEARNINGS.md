@@ -2,6 +2,7 @@
 
 Newest first. One fact per entry.
 
+- 2026-11-04: VS Code `--version` prints three lines (version, 40-hex commit, arch); the locator relies on that exact shape to reject fake `code` programs. Windows `.cmd` launchers need a shell and are skipped until PL-CMP-09.
 - 2026-11-04: On Ubuntu 26.04 (newer clang) `flutter build linux` fails in `flutter_secure_storage_linux` (`json.hpp`, -Wdeprecated-literal-operator). Worked around in `apps/desktop/linux/CMakeLists.txt` with `-Wno-deprecated-literal-operator` for clang; remove when the plugin is upgraded.
 - 2026-11-04: A Wayland session returns black screenshots from `scrot`/`import`. To review UI, render widgets to PNG in a temporary `flutter test` (load Inter from `assets/fonts` and MaterialIcons from the SDK, `RepaintBoundary.toImage`) and view the PNG.
 - 2026-11-04: `tools/check_repo.py` scans only `apps/desktop/lib/ui` and `lib/features` for `dart:io`/`Process` use, and compares `packages/ipc_contract/lib/src/channels.dart` with `docs/IPC_API.md`. Adding files under `.agent/` or `docs/` does not affect it; adding a channel in code without documenting it fails CI.

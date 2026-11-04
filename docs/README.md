@@ -21,7 +21,7 @@ python tools/check_docs.py     # documents stay consistent with each other
 
 | Group | Files |
 |---|---|
-| Product and planning | `README.md`, `VISION.md`, `CORE_IDEA.md`, `APP_FLOW.md`, `ROADMAP.md`, `MVP_SCOPE.md`, `DECISIONS.md` |
+| Product and planning | `README.md`, `VISION.md`, `CORE_IDEA.md`, `APP_FLOW.md`, `DESIGN_SYSTEM.md`, `ROADMAP.md`, `MVP_SCOPE.md`, `DECISIONS.md` |
 | Architecture and design | `ARCHITECTURE.md`, `TECH_STACK.md`, `SECURITY.md`, `AI_TUTOR_POLICY.md`, `IPC_API.md`, `BACKEND_API.md` |
 | Content formats | `LAB_MANIFEST_SPEC.md`, `LAB_AUTHORING_GUIDE.md`, `EVALUATION_RUBRICS.md` |
 | Engineering process | `CONTRIBUTING.md`, `DEV_SETUP.md`, `TEST_PLAN.md`, `RELEASE_CHECKLIST.md`, `CHANGELOG.md` |
