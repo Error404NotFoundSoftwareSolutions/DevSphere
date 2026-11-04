@@ -19,6 +19,7 @@ Web version; our own marketplace; replacing language servers; competing feature-
 | PL-IDE-02 | Spike: rebrand + gallery + no telemetry | SP-IDE-02 RESULT.md: first launch makes zero requests to non-allow-listed hosts (network capture attached) |
 | PL-IDE-03 | Repo and pipeline | `devsphere-ide` (or folder) with `upstream.lock`, patch tooling, CI job that fetch/apply/build/test; patch-health report |
 | PL-IDE-04 | Branding and defaults | Name, icons, data folder, welcome page, default settings per profile |
+| PL-IDE-04b | Home and learning mode | `devsphere-home` dashboard is the first screen; a lab opens in its own window with the learning layout; closing it returns to Home with the completion screen without losing files (`docs/APP_FLOW.md`) |
 | PL-IDE-05 | `devsphere-welcome` | Environment check and consent plan (reuses US-11..US-14 behaviour), profile choice |
 | PL-IDE-06 | `devsphere-learn` skeleton | Lab catalogue from `services/api`; open a lab; guided steps view |
 | PL-IDE-07 | Practice checks | Run lab checks locally; label as Practice (TRU-02) |

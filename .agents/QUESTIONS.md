@@ -52,7 +52,7 @@ Open source (which licence?), source-available, or closed? Affects ADR-006 (cont
 ### Q-008 Name and branding  `Answered 2026-11-04: undecided; "DevSphere" is a working name`
 Is "DevSphere" the final product name for the IDE? A fork must not use Microsoft's name/logo. Need: final name, icon source, colours.
 
-### Q-009 Platforms  `Open`
+### Q-009 Platforms  `Answered 2026-11-04: desktop only, no web. First release Windows and Ubuntu; macOS later`
 Windows, Ubuntu, macOS (current MVP list) for the IDE too? Web/remote (code-server style) ever? Recommended: three desktop OSes first, web later behind the same contracts.
 
 ### Q-010 Team, time, money  `Open`

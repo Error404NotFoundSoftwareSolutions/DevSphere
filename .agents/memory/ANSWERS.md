@@ -4,6 +4,8 @@ Newest first. Format: `date | Q-id | answer | applied in`.
 
 | Date | Question | Answer | Applied in |
 |---|---|---|---|
+| 2026-11-04 | Q-009 + shell details | First release Windows + Ubuntu (macOS later). Home window + one lab window per lab. Unit types: read+quiz, guided workspace, challenge, contribution. Weekly goal instead of daily streak. | `docs/APP_FLOW.md` |
+| 2026-11-04 | (app shape) | NO web. One desktop app: login -> dashboard (courses, topics, roadmaps, badges, streaks) -> pick course -> IDE opens inside the app when a unit needs it -> guided side panel -> score -> workspace closes -> destination reached, badge earned, skill gained. | `docs/APP_FLOW.md` |
 | 2026-11-04 | Q-023 | Skill levels + badges from Verified results; no leaderboards | `plans/60-curriculum-and-roadmap-plan.md`, ADR-017 |
 | 2026-11-04 | Q-022 | First packs: setup/install/run, terminal+Git/GitHub, debugging+reading code, OSS contribution flow (ordered by prerequisite) | `plans/60-curriculum-and-roadmap-plan.md` PL-CUR-01 |
 | 2026-11-04 | Q-021 | Prebuilt practice repo with per-student fork, seeded issues, AI maintainer reviewer; real projects later | `docs/CORE_IDEA.md` section 6 |

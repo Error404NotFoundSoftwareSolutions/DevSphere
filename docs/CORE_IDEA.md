@@ -61,11 +61,14 @@ Bridge to the real world: after the practice repo, a curated list of real projec
 
 Levels share one platform and differ by **profile** (ARC-05): Foundations -> Practitioner -> Professional. Professional content: code review, working in a team repository, CI/CD and releases, debugging in production-like systems, design and testing practice, on-call basics, using AI agents safely at work. Professional users get the Pair/Agent modes and the full IDE; beginners get Tutor mode and guided steps (ADR-015).
 
+## 7b. One desktop app (owner, 2026-11-04)
+No web portal. Login, dashboard, courses, roadmaps, badges and streaks, the workspace and the completion screen all live in one desktop app. See `APP_FLOW.md`.
+
 ## 8. Conflicts with the current MVP scope (need a change request, not an agent decision)
 
 | MVP says "Out" | Core idea needs |
 |---|---|
-| Leaderboards and achievements | Badges and levels (not necessarily leaderboards) |
+| Leaderboards and achievements | Badges, levels and streaks (no leaderboards) |
 | Arbitrary public repositories | Later bridge to real projects; practice repo is a prebuilt one (already Mode 3) |
 | Developer-services module as ordinary labs later | Skill packs beyond Python |
 | Instructor features | Possibly mentors/reviewers later |
