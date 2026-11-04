@@ -24,10 +24,15 @@ Breaking a rule marked **STOP** is a defect even if tests pass.
 2. Never push to `main`. Never merge your own pull request.
 3. Attempt limit: 5 fix-and-test cycles per story, then stop and report.
 4. Tests first for logic. Name tests `TC-<requirement ID>-<nn>` (in the test title or docstring). Never weaken an assertion or edit test expectations to make a test pass.
-5. Before pushing, the full test suite (`melos run check`, `uv run pytest`) and `python tools/check_docs.py` must pass locally.
-6. Keep changes small. No new dependency without a story that needs it and a note in `docs/TECH_STACK.md`.
-7. Keep generated files generated: do not hand-edit counts or the traceability matrix; run the tools.
-8. Update the docs you touch (`IPC_API.md`, `BACKEND_API.md`, `LAB_MANIFEST_SPEC.md`, `CHANGELOG.md`, `DECISIONS.md`).
-9. Use plain language in user-facing messages: say what happened and what to do next.
-10. Code comments explain why, not what.
-11. If you are unsure, stop and ask. Do not guess requirements.
+5. Before pushing, the full test and verification suite must pass locally:
+   - `uv run ruff check .`
+   - `uv run pytest`
+   - `melos run check`
+   - `python tools/check_docs.py`
+6. Every time changes are made (adding/modifying dependencies, services, ports, build settings, or runtime configurations), update [`./start.sh`](file:///home/bharath/Desktop/projects/DevSphere/start.sh) and verify it (`bash -n ./start.sh` and execute test) to ensure the application starts cleanly across Linux, macOS, and Windows.
+7. Keep changes small. No new dependency without a story that needs it and a note in `docs/TECH_STACK.md`.
+8. Keep generated files generated: do not hand-edit counts or the traceability matrix; run the tools.
+9. Update the docs you touch (`IPC_API.md`, `BACKEND_API.md`, `LAB_MANIFEST_SPEC.md`, `CHANGELOG.md`, `DECISIONS.md`).
+10. Use plain language in user-facing messages: say what happened and what to do next.
+11. Code comments explain why, not what.
+12. If you are unsure, stop and ask. Do not guess requirements.

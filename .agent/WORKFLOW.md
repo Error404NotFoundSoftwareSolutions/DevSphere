@@ -16,6 +16,7 @@ Every new issue follows one standard workflow: branch, change, test until green,
 - Change only the files the story needs. Keep the `User story:` header comment at the top of every new file, naming the story and its requirement IDs.
 - Do not change requirement text, IDs or test case IDs to make a test pass. If a requirement looks wrong, stop and report it.
 - Keep secrets out of code, tests, fixtures and logs. Never write a real token, key or student data.
+- If dependencies, services, ports, runtime configuration, or desktop platform settings are added or modified, update [`./start.sh`](file:///home/bharath/Desktop/projects/DevSphere/start.sh) to reflect the new requirements.
 
 ## Phase 3 - Write the tests
 - For each test case listed in the issue (`TC-<requirement>-<nn>`), write a test with that exact ID in its name. Put it in the matching folder (`services/...`, `apps/desktop/...`, `packages/...`, `tests/...`).
@@ -23,10 +24,12 @@ Every new issue follows one standard workflow: branch, change, test until green,
 - A test case marked as a manual check (usability, inspection, demonstration) gets a written record in the matching file, not a fake automated test.
 
 ## Phase 4 - Test loop (the attempt limit is strict)
-- Run the tests for this story only, then the full suite:
-  - Python: `uv run pytest`
-  - Dart/Flutter: `melos run analyze` and `melos run test` (or `melos run check`)
+- Run the tests for this story only, then the full verification suite:
+  - Python linting: `uv run ruff check .`
+  - Python tests: `uv run pytest`
+  - Dart/Flutter: `melos run check` (or `melos run analyze` and `melos run test`)
   - Docs and consistency: `python tools/check_docs.py`
+  - Startup script verification: validate [`./start.sh`](file:///home/bharath/Desktop/projects/DevSphere/start.sh) with `bash -n ./start.sh` and ensure application starts cleanly.
 - If a test fails, read the failure, fix the cause in the implementation, and run again.
 - **Attempt limit:** at most 5 fix-and-test cycles per story. After 5 failed cycles, stop. Commit nothing further. Write the failing test names, the last error output (secrets removed) and your best hypothesis in `docs/backlog/blocked_<story-id>.md`, then report to the user.
 - Never mark a test as skipped, xfail or deleted to get a green run. The only exception is a test that the issue itself says is skipped until a later spike (write the reason in the test).

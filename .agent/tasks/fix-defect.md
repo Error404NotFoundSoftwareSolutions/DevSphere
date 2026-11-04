@@ -24,12 +24,15 @@ git switch -c fix/<issue-number>-<short-slug>
 
 ## Phase 4 - Fix and test loop (maximum 5 cycles)
 - Fix the root cause in the implementation, not just the symptom.
-- Run the test and full suite:
+- Run the test and full verification suite:
 ```bash
+uv run ruff check .
 uv run pytest
 melos run check
 python tools/check_docs.py
+bash -n ./start.sh
 ```
+- Verify `./start.sh` remains functional and up to date.
 - **Strict attempt limit:** After 5 failed cycles, STOP. Write failing test names, sanitized error output, and hypothesis to `docs/backlog/blocked_fix_<issue-number>.md`, and report to the user.
 - Never weaken assertions or delete tests to get a pass.
 
