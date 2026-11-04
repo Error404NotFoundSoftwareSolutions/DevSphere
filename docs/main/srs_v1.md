@@ -744,18 +744,18 @@ All MVP requirements shall have a recorded passing verification, or an approved 
 | ID | Decision | Needed by | Depends on | Resolution rule |
 |---|---|---|---|---|
 | TBD-01 | Client shell: VS Code extension (A) or custom desktop app (B) | Before MVP build | TBD-06 | Spike (1–2 weeks). **RESOLVED 3 Nov 2026: Option B (Flutter desktop app with native Dart re_editor and local worker)**, superseding Electron (see `DECISIONS.md` ADR-003). |
-| TBD-02 | Sign-in implementation with the identity provider's standard system-browser flow, including refresh and revocation | Before MVP build | TBD-01, TBD-06 | Working sign-in on two OSes; avoid custom token bridges unless the standard flow fails. |
-| TBD-03 | Grader sandbox technology and isolation level | Before MVP build | TBD-06 | Prototype against hostile test submissions; choose isolation justified by threat model. |
+| TBD-02 | Sign-in implementation with the identity provider's standard system-browser flow, including refresh and revocation | Before MVP build | TBD-01, TBD-06 | Working sign-in on two OSes; avoid custom token bridges unless the standard flow fails. **RESOLVED 4 Nov 2026: Authorization Code with PKCE via system browser, loopback redirect, and OS secure storage** (see `DECISIONS.md` ADR-008). |
+| TBD-03 | Grader sandbox technology and isolation level | Before MVP build | TBD-06 | Prototype against hostile test submissions; choose isolation justified by threat model. **RESOLVED 4 Nov 2026: Disposable container under user-space kernel sandbox (gVisor / runsc) with network disabled** (see `DECISIONS.md` ADR-013). |
 | TBD-04 | Supported OS versions, second OS, architecture policy | Before MVP build | TBD-01 | Product decision after TBD-01. **RESOLVED 3 Nov 2026:** Windows, Linux (Ubuntu LTS), and macOS are all supported in MVP (ADR-003). |
 | TBD-05 | Python versions supported by MVP labs | Before lab authoring | - | Engineering decision. |
-| TBD-06 | Specific cloud vendors for auth, database, API, grader, AI | Before MVP build | - | Cost and operations comparison. |
+| TBD-06 | Specific cloud vendors for auth, database, API, grader, AI | Before MVP build | - | Cost and operations comparison. **RESOLVED 4 Nov 2026: Managed GCP stack (Cloud Run, Cloud SQL Postgres, Cloud Tasks, GCS, Firebase Auth)** (see `DECISIONS.md` ADR-011). |
 | TBD-07 | Reference machine specification for performance targets | Before test planning | TBD-04 | QA decision. |
-| TBD-08 | Age policy; legal review of privacy law and minors | Before pilot | - | Qualified legal advice. |
-| TBD-09 | Data retention schedule and deletion procedure | Before pilot | TBD-08 | Approved by product owner and legal. |
+| TBD-08 | Age policy; legal review of privacy law and minors | Before pilot | - | Qualified legal advice. **RESOLVED 4 Nov 2026: Pilot restricted to students aged 18 and older; self-declaration without DoB** (see `DECISIONS.md` ADR-012). |
+| TBD-09 | Data retention schedule and deletion procedure | Before pilot | TBD-08 | Approved by product owner and legal. **RESOLVED 4 Nov 2026: Submissions retained 180 days; AI prompts ephemeral; 30-day deletion fulfillment** (see `DECISIONS.md` ADR-012). |
 | TBD-10 | Pilot capacity assumptions (students, concurrent grading) and verified-grading latency target | Before pilot | - | Based on cohort plan. |
 | TBD-11 | N, number of repeat runs in CI for determinism | Before lab authoring | - | Engineering decision. |
 | TBD-12 | Stale-content threshold for third-party references | Before lab authoring | - | Content owner decision. |
-| TBD-13 | Default task time/output limits; per-student AI and grading limits | Before MVP build | TBD-03, TBD-06 | Cost and UX review. |
+| TBD-13 | Default task time/output limits; per-student AI and grading limits | Before MVP build | TBD-03, TBD-06 | Cost and UX review. **RESOLVED 4 Nov 2026: 10s task timeout, 200KB output, 50 AI queries/day, 20 submissions/day** (see `DECISIONS.md` ADR-011). |
 | TBD-14 | Usability success threshold | Before pilot | - | Product decision. |
 | TBD-15 | GitHub organisation, template strategy and cleanup policy (R3) | Before R3 | R2 results | Product and security decision. |
 

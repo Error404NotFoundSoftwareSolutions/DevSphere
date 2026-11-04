@@ -702,10 +702,10 @@ It described a very large Electron-based product (all three modes, admin portal,
 | TBD | Lean | What would change it |
 |---|---|---|
 | TBD-01 | Resolved: Option B (Flutter desktop app, ADR-003) | A failed S1 build matrix on one OS would reduce the MVP to the OSes that pass |
-| TBD-02 | Provider SDK sign-in-with-credential | SDK cannot run in the extension host with custom persistence |
-| TBD-03 | Container under a user-space kernel sandbox, separate project, no network | Hostile suite shows escape or cross-submission leakage; then use a VM-level boundary |
-| TBD-06 | One managed cloud for auth, database, queue and API | Cost comparison shows the database fixed cost is out of budget |
-| TBD-08 | Pilot for ages 18 and over only | Legal advice differs |
+| TBD-02 | Resolved: System browser PKCE with loopback redirect & OS secure storage (ADR-008) | A failed flow on one OS would require a fallback token exchange bridge |
+| TBD-03 | Resolved: Disposable container under gVisor user-space sandbox (ADR-013) | If hostile escape occurs, move to hypervisor/VM-level boundary |
+| TBD-06 | Resolved: GCP Cloud Run, Cloud SQL, Cloud Tasks, GCS, Firebase Auth (ADR-011) | Cost exceeds budget threshold |
+| TBD-08 | Resolved: Pilot restricted to students aged 18 and over (ADR-012) | Expansion to secondary schools in later release |
 
 ---
 
@@ -715,11 +715,11 @@ Each spike has a time box, a written result and a link back to the decision it c
 
 | Spike | Closes | Time box | Pass criteria |
 |---|---|---|---|
-| S1 Client shell | TBD-01 (resolved as Option B) | 1 to 2 weeks | Pass criteria (a) to (f) in Section 4.1. |
-| S2 Sign-in | TBD-02 | 3 to 5 days | Sign-in, silent refresh, revocation and sign-out on both OSes; no embedded secret; wrong `state` rejected; cancelled flow handled. |
-| S3 Grader | TBD-03 | 1 to 2 weeks | Hostile suite (escape attempts, resource exhaustion, traversal, link archives, report forgery, early exit, network and metadata reach) is contained; result p95 within the NFR-PERF-005 target on a sample lab; cost per submission recorded. |
-| S4 Cost and vendors | TBD-06, TBD-13 | 3 days | Monthly fixed cost at pilot size; cost per submission and per tutor session; budget alert tested. |
-| S5 Legal | TBD-08, TBD-09 | Per counsel | Age policy, retention schedule and notice approved. |
+| S1 Client shell | TBD-01 (resolved, ADR-003) | 1 to 2 weeks | Pass criteria (a) to (f) in Section 4.1. |
+| S2 Sign-in | TBD-02 (resolved, ADR-008) | 3 to 5 days | Sign-in, silent refresh, revocation and sign-out on both OSes; no embedded secret; wrong `state` rejected; cancelled flow handled. |
+| S3 Grader | TBD-03 (resolved, ADR-013) | 1 to 2 weeks | Hostile suite (escape attempts, resource exhaustion, traversal, link archives, report forgery, early exit, network and metadata reach) is contained; result p95 within the NFR-PERF-005 target on a sample lab; cost per submission recorded. |
+| S4 Cost and vendors | TBD-06, TBD-13 (resolved, ADR-011) | 3 days | Monthly fixed cost at pilot size; cost per submission and per tutor session; budget alert tested. |
+| S5 Legal | TBD-08, TBD-09 (resolved, ADR-012) | Per counsel | Age policy, retention schedule and notice approved. |
 
 ---
 
