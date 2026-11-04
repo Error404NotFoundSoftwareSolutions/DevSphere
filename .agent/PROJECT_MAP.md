@@ -19,6 +19,7 @@
 | `spikes/` | Sprint 0 spikes with written results | SP-01 to SP-05 |
 | `tools/` | Scripts that generate and check docs, backlog and test plan | US-05 |
 | `docs/` | All documentation | all |
+| `graphify-out/` | Pre-indexed codebase knowledge graph (`graph.html`, `graph.json`, `GRAPH_REPORT.md`) for 20x token-efficient navigation and dependency tracing | All stories |
 
 Every source file begins with a comment naming the user story and requirement IDs it implements. `docs/backlog/STORY_MAP.md` lists them all.
 

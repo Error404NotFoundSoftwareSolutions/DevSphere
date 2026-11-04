@@ -27,6 +27,26 @@ This folder tells an agent what the project is for, what it must never do, where
 
 If two documents disagree, the SRS wins on behaviour and the SAD wins on design. Report the conflict instead of guessing.
 
+## Efficient Codebase Navigation & Knowledge Graph (`graphify-out/`)
+
+To prevent token wastage and context exhaustion across this multi-package monorepo (340+ files), **never blindly grep or read dozens of files**. The repository includes a pre-indexed knowledge graph in `graphify-out/`:
+
+- **Audit & Architecture**: Consult [`graphify-out/GRAPH_REPORT.md`](../graphify-out/GRAPH_REPORT.md) for core abstractions ("God Nodes"), architectural bridges, and detected community clusters.
+- **Targeted Symbol & Dependency Queries**: Query `graphify-out/graph.json` or use `/graphify query "<topic>"` to retrieve only the relevant connected subgraph (providing a **20.1x token reduction** over reading raw source files).
+- **Impact Analysis**: Use `/graphify path "<source_symbol>" "<target_symbol>"` to inspect dependencies, calling conventions, and shared data structures before modifying code.
+- **Incremental Updates**: After completing significant features, ADRs, or new services, run `/graphify --update` to refresh the graph index without re-indexing from scratch.
+
+## Agent Skills (`~/.agents/skills/`)
+
+Agents solving issues in DevSphere must proactively use the installed skills from `~/.agents/skills/` (`obra/superpowers`) to produce reliable, high-quality results:
+
+- **Orientation & Inception**: Use `using-superpowers` at session start, `brainstorming` for creative/architectural decisions, and `writing-plans` for multi-step specifications.
+- **Execution & Isolation**: Use `using-git-worktrees` when isolating branch environments, and execute plans via `executing-plans`, `subagent-driven-development`, or `dispatching-parallel-agents`.
+- **Test-Driven Development (Mandatory)**: Follow `test-driven-development` to write and verify failing tests (`TC-<req>-<nn>`) before writing any logic.
+- **Systematic Debugging (Mandatory on Failure)**: Follow `systematic-debugging` upon encountering test failures; do not guess root causes or apply trial-and-error fixes.
+- **Evidence-Based Verification (Mandatory)**: Follow `verification-before-completion` to run all verification checks (`ruff`, `pytest`, `melos run check`, `check_docs.py`, `./start.sh`) and confirm outputs before claiming task completion.
+- **Review & Completion**: Follow `requesting-code-review`, `receiving-code-review`, and `finishing-a-development-branch` when preparing and delivering PRs.
+
 ## When unsure
 
 Ask. Do not invent a requirement, a dependency, an endpoint or a security shortcut. A small, correct change that follows the rules is better than a large one that does not.

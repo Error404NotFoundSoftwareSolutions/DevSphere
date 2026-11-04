@@ -36,3 +36,4 @@ Breaking a rule marked **STOP** is a defect even if tests pass.
 10. Use plain language in user-facing messages: say what happened and what to do next.
 11. Code comments explain why, not what.
 12. If you are unsure, stop and ask. Do not guess requirements.
+13. Proactively apply the specialized skills from `~/.agents/skills/` (`obra/superpowers`): apply `test-driven-development` before logic, `systematic-debugging` on test failures, `verification-before-completion` with tangible output evidence before concluding, and `using-superpowers` / `writing-plans` for structured task execution.

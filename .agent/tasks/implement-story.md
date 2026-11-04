@@ -1,8 +1,10 @@
 # Task: Implement a user story
 
-Follow the standard issue workflow step by step:
+Follow the standard issue workflow step by step, applying the required skills from `~/.agents/skills/` (`obra/superpowers`):
 
-## Phase 0 - Read the issue
+## Phase 0 - Read the issue & Plan
+- Use skills: `using-superpowers`, `writing-plans` (and `brainstorming` for new capabilities).
+- Consult `graphify-out/graph.json` or `/graphify query "<story-id>"` for token-efficient symbol lookup.
 ```bash
 gh issue view <number> --json title,body,labels,milestone
 ```
@@ -10,6 +12,7 @@ gh issue view <number> --json title,body,labels,milestone
 - If test cases are missing, STOP and ask. Never invent test cases.
 
 ## Phase 1 - Branch
+- Use skill: `using-git-worktrees` if isolated worktrees are preferred.
 ```bash
 git fetch origin && git switch main && git pull --ff-only
 git switch -c <type>/<story-id>-<short-slug>
@@ -17,17 +20,19 @@ git switch -c <type>/<story-id>-<short-slug>
 - `<type>` is `feature`, `fix`, or `spike` (e.g. `feature/US-16-run-tasks-with-limits`).
 - Never work on `main`. Never reuse a branch from another issue.
 
-## Phase 2 - Implement
+## Phase 2 & 3 - TDD & Implementation
+- Use skills: `test-driven-development` (**Mandatory: Write failing test first**), `executing-plans`, and `subagent-driven-development`.
+- For each test case in the issue, write a test named `TC-<requirement>-<nn>` in the matching folder (`services/`, `apps/desktop/`, `packages/`, `tests/`).
+- Confirm test fails for the expected reason, then write implementation.
 - Change only the files listed for this story in `docs/backlog/STORY_MAP.md`.
 - Keep or add the `User story: <story-id> (<requirements>)` header comment at the top of every modified or new file.
 - Keep secrets, tokens, keys and student data out of code, tests, fixtures, and logs.
-
-## Phase 3 - Write the tests
-- For each test case in the issue, write a test named `TC-<requirement>-<nn>` in the matching folder (`services/`, `apps/desktop/`, `packages/`, `tests/`).
 - Protected tests (`tests/protected/` inside labs, and grader hidden tests) must NEVER be edited or copied.
 - Manual checks get an inspection record in the matching doc, not a fake test.
 
-## Phase 4 - Test loop (maximum 5 cycles)
+## Phase 4 - Test loop & Verification (maximum 5 cycles)
+- Use skill: `systematic-debugging` if tests fail (find root causes, do not guess).
+- Use skill: `verification-before-completion` before declaring work done.
 Run the story test first, then the full verification suite:
 ```bash
 uv run ruff check .
@@ -65,6 +70,7 @@ Refs: #<issue-number>
 ```
 
 ## Phase 7 - Push and pull request
+- Use skills: `requesting-code-review`, `receiving-code-review`, and `finishing-a-development-branch`.
 ```bash
 git push -u origin <branch>
 gh pr create --base main --head <branch> --title "[<story-id>] <title>" --body-file <file>

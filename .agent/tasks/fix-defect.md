@@ -1,8 +1,10 @@
 # Task: Fix a defect
 
-Fixing a defect follows the standard issue workflow with type `fix`:
+Fixing a defect follows the standard issue workflow with type `fix`, applying the required skills from `~/.agents/skills/` (`obra/superpowers`):
 
-## Phase 0 - Read the bug issue
+## Phase 0 - Read the bug issue & Understand
+- Use skills: `using-superpowers`, `systematic-debugging` (problem diagnosis), and `writing-plans`.
+- Consult `graphify-out/graph.json` or `/graphify query "<defect-keywords>"` for token-efficient symbol and dependency lookup.
 ```bash
 gh issue view <number> --json title,body,labels,milestone
 ```
@@ -10,6 +12,7 @@ gh issue view <number> --json title,body,labels,milestone
 - Severity 1 (security, integrity, data loss) blocks the release; note this in the PR.
 
 ## Phase 1 - Branch
+- Use skill: `using-git-worktrees` if isolated worktrees are preferred.
 ```bash
 git fetch origin && git switch main && git pull --ff-only
 git switch -c fix/<issue-number>-<short-slug>
@@ -17,12 +20,14 @@ git switch -c fix/<issue-number>-<short-slug>
 - Never work on `main`. Never reuse a branch from another issue.
 
 ## Phase 2 & 3 - Reproduce with a failing test
-- Write a failing test first that reproduces the exact defect.
+- Use skills: `systematic-debugging` and `test-driven-development` (**Mandatory: Write failing test first**).
+- Write a failing test first that reproduces the exact defect before changing implementation code.
 - Name the test after the defect/requirement, placing it in the matching test folder.
 - If applicable, add the regression case to the relevant suite (hostile suite, secret-leak suite, fault injection).
 - Run the test to confirm it fails for the expected reason.
 
 ## Phase 4 - Fix and test loop (maximum 5 cycles)
+- Use skills: `systematic-debugging` (pinpoint root causes) and `verification-before-completion` (verify with actual test runs).
 - Fix the root cause in the implementation, not just the symptom.
 - Run the test and full verification suite:
 ```bash
@@ -56,7 +61,8 @@ fix(<issue-number>): <short summary>
 Refs: #<issue-number>
 ```
 
-## Phase 7 - Push and pull request
+## Phase 7 - Push, Review and Pull Request
+- Use skills: `requesting-code-review`, `receiving-code-review`, and `finishing-a-development-branch`.
 ```bash
 git push -u origin <branch>
 gh pr create --base main --head <branch> --title "[FIX-#<issue-number>] <title>" --body-file <file>
