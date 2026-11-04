@@ -11,6 +11,7 @@ Format: newest first. Group by Added, Changed, Fixed, Security.
 - UI layer architectural security rule enforced: `apps/desktop/lib/ui` and `lib/features` are strictly banned from `dart:io` `File` and `Process` APIs; all privileged work runs in `services/local-worker`.
 
 ### Added
+- Implemented Google sign-in with system browser and PKCE (US-01), token verification matrix, stable provider subject mapping, sign-out revocation, and OS secure storage fallback with error recovery actions.
 - Completed Grader sandbox spike (SP-03) validating container user-space sandbox isolation (gVisor) against hostile submissions; documented in `spikes/grader-sandbox/RESULT.md` and ADR-013.
 - Completed Repository, CI skeleton and Definition of Done spike (SP-06) with multi-platform matrix and automated consistency checks; documented in ADR-014.
 - Completed Cost and vendor comparison spike (SP-04) selecting GCP managed stack and pinning default limits; documented in `spikes/cost-vendors/RESULT.md` and ADR-011.

@@ -8,7 +8,7 @@
 | SP-06 | #4 | https://github.com/Error404NotFoundSoftwareSolutions/DevSphere/issues/4 | Completed: Repository skeleton, CI workflows and definition of done set up; ADR-014 accepted |
 | SP-04 | #5 | https://github.com/Error404NotFoundSoftwareSolutions/DevSphere/issues/5 | Completed: Cost and vendor comparison passed S4 criteria; ADR-011 accepted |
 | SP-05 | #6 | https://github.com/Error404NotFoundSoftwareSolutions/DevSphere/issues/6 | Completed: Legal review passed S5 criteria; ADR-012 accepted |
-| US-01 | #7 | https://github.com/Error404NotFoundSoftwareSolutions/DevSphere/issues/7 | Created and fields set successfully |
+| US-01 | #7 | https://github.com/Error404NotFoundSoftwareSolutions/DevSphere/issues/7 | Completed: Google sign-in via system browser with PKCE, session token matrix, and OS secure storage |
 | US-05 | #8 | https://github.com/Error404NotFoundSoftwareSolutions/DevSphere/issues/8 | Created and fields set successfully |
 | US-02 | #9 | https://github.com/Error404NotFoundSoftwareSolutions/DevSphere/issues/9 | Created and fields set successfully |
 | US-03 | #10 | https://github.com/Error404NotFoundSoftwareSolutions/DevSphere/issues/10 | Created and fields set successfully |
