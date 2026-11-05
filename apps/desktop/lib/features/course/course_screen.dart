@@ -5,6 +5,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ui/ui.dart';
 import '../dashboard/dashboard_data.dart';
 import 'start_lab_flow.dart';
@@ -40,6 +41,24 @@ class _CourseScreenState extends ConsumerState<CourseScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: BL.space3),
+                  child: TextButton.icon(
+                    key: const Key('course_back_button'),
+                    onPressed: () {
+                      if (Navigator.of(context).canPop()) {
+                        Navigator.of(context).pop();
+                      } else {
+                        context.go('/dashboard');
+                      }
+                    },
+                    icon: const Icon(Icons.arrow_back, size: 18),
+                    label: const Text('Back to Dashboard'),
+                  ),
+                ),
+              ),
               Container(
                 key: const Key('course-header'),
                 padding: const EdgeInsets.all(BL.space8),

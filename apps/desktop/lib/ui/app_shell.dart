@@ -69,6 +69,21 @@ class _Header extends StatelessWidget {
           border: Border(bottom: BorderSide(color: BL.border))),
       child: Row(
         children: [
+          IconButton(
+            key: const Key('shell_back_button'),
+            tooltip: 'Go back',
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              if (Navigator.of(context).canPop()) {
+                Navigator.of(context).pop();
+              } else if (context.canPop()) {
+                context.pop();
+              } else {
+                context.go('/');
+              }
+            },
+          ),
+          const SizedBox(width: BL.space1),
           const IconButton(
               onPressed: null, tooltip: 'Menu', icon: Icon(Icons.menu)),
           const SizedBox(width: BL.space2),

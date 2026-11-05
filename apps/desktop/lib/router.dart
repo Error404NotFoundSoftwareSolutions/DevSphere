@@ -11,6 +11,7 @@ import 'features/consent/consent_screen.dart';
 import 'features/course/course_screen.dart';
 import 'features/course/lab_run_screen.dart';
 import 'features/dashboard/dashboard_screen.dart';
+import 'features/landing/landing_screen.dart';
 import 'features/placeholder/section_placeholder.dart';
 import 'features/profile/profile_screen.dart';
 import 'features/workspace/workspace_view.dart';
@@ -56,7 +57,19 @@ GoRouter createRouter({String? initialLocation}) {
     routes: [
       GoRoute(
         path: '/',
-        builder: (context, state) => const SignInScreen(),
+        builder: (context, state) {
+          final autoLaunch = state.uri.queryParameters['launch'] == 'true';
+          final mode = state.uri.queryParameters['mode'];
+          final initialCreateAccount = mode == 'signin' ? false : true;
+          return SignInScreen(
+            autoLaunch: autoLaunch,
+            initialCreateAccount: initialCreateAccount,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/landing',
+        builder: (context, state) => const LandingScreen(),
       ),
       GoRoute(
         path: '/consent',

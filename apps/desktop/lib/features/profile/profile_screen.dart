@@ -3,6 +3,7 @@
 // Implemented here: view and update student profile with prefilled editable display name, optional college/academic fields, and privacy notice
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../firestore/firestore_service.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -126,6 +127,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          key: const Key('profile_back_button'),
+          icon: const Icon(Icons.arrow_back),
+          tooltip: 'Back',
+          onPressed: () {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            } else {
+              context.go(widget.isOnboarding ? '/' : '/dashboard');
+            }
+          },
+        ),
         title: Text(widget.isOnboarding ? 'Set Up Your Profile' : 'My Profile'),
       ),
       body: Center(
@@ -239,17 +252,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 12),
                   ],
 
-                  // Save action button
-                  FilledButton(
-                    key: const Key('profile_save_button'),
-                    onPressed: _isSaving ? null : _handleSave,
-                    child: _isSaving
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : Text(widget.isOnboarding ? 'Save & Continue' : 'Save Changes'),
+                  // Action buttons
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          key: const Key('profile_cancel_back_button'),
+                          onPressed: () {
+                            if (Navigator.of(context).canPop()) {
+                              Navigator.of(context).pop();
+                            } else {
+                              context.go(widget.isOnboarding ? '/' : '/dashboard');
+                            }
+                          },
+                          icon: const Icon(Icons.arrow_back, size: 18),
+                          label: const Text('Back'),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: FilledButton(
+                          key: const Key('profile_save_button'),
+                          onPressed: _isSaving ? null : _handleSave,
+                          child: _isSaving
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                )
+                              : Text(widget.isOnboarding ? 'Save & Continue' : 'Save Changes'),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

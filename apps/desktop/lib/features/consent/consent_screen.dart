@@ -3,6 +3,7 @@
 // Implemented here: privacy disclosure, age policy confirmation (18+), and student consent recording without date of birth
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ConsentScreen extends StatefulWidget {
   static const String currentNoticeVersion = '1.0';
@@ -57,6 +58,18 @@ class _ConsentScreenState extends State<ConsentScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          key: const Key('consent_back_button'),
+          icon: const Icon(Icons.arrow_back),
+          tooltip: 'Back',
+          onPressed: () {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            } else {
+              context.go('/');
+            }
+          },
+        ),
         title: const Text('DevSphere Privacy Notice & Consent'),
       ),
       body: Center(

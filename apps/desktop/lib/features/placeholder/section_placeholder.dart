@@ -3,6 +3,7 @@
 // Implemented here: honest placeholder for rail sections whose stories are not built yet
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ui/ui.dart';
 
 class SectionPlaceholder extends StatelessWidget {
@@ -31,6 +32,19 @@ class SectionPlaceholder extends StatelessWidget {
           const SizedBox(height: BL.space6),
           Text('Not built yet. This section is planned and has no content.',
               style: text.bodyMedium),
+          const SizedBox(height: BL.space4),
+          OutlinedButton.icon(
+            key: Key('placeholder_back_${slug}'),
+            onPressed: () {
+              if (Navigator.of(context).canPop()) {
+                Navigator.of(context).pop();
+              } else {
+                context.go('/dashboard');
+              }
+            },
+            icon: const Icon(Icons.arrow_back, size: 18),
+            label: const Text('Back to Dashboard'),
+          ),
         ],
       ),
     );

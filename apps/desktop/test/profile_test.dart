@@ -179,6 +179,21 @@ void main() {
       expect(updatedProfile!.interests, equals(['Python', 'Machine Learning', 'Go']));
       expect(find.text('Profile saved successfully.'), findsOneWidget);
     });
+
+    testWidgets('backward navigation buttons exist on profile screen', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: ProfileScreen(
+            uid: 'student-123',
+            email: 'student@example.com',
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const Key('profile_back_button')), findsOneWidget);
+      expect(find.byKey(const Key('profile_cancel_back_button')), findsOneWidget);
+    });
   });
 }
 

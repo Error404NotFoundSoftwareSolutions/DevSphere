@@ -145,6 +145,19 @@ class _Breadcrumb extends StatelessWidget {
           border: Border(bottom: BorderSide(color: BL.border))),
       child: Row(
         children: [
+          IconButton(
+            key: const Key('lab_back_button'),
+            icon: const Icon(Icons.arrow_back, size: 20),
+            tooltip: 'Back',
+            onPressed: () {
+              if (Navigator.of(context).canPop()) {
+                Navigator.of(context).pop();
+              } else {
+                context.go('/dashboard');
+              }
+            },
+          ),
+          const SizedBox(width: BL.space2),
           InkWell(
               onTap: () => context.go('/dashboard'),
               child: const Icon(Icons.home_outlined, size: 22)),

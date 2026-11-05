@@ -1,69 +1,72 @@
 // User story: US-01 Sign in with Google (Sprint 1, MVP)
 // Requirements: FR-AUTH-001..009, NFR-SEC-004, NFR-SEC-006
-// Implemented here: Firebase Authentication service with Google Sign-In and session state management
+// Implemented here: Firebase Authentication service backed by Identity Toolkit REST API client and session management
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'firebase_auth_rest_client.dart';
 import 'sign_in_service.dart';
 
 class FirebaseAuthService {
-  final FirebaseAuth? _customAuth;
-  final GoogleSignIn? _customGoogleSignIn;
+  final FirebaseAuthRestClient _restClient;
+  FirebaseUserResult? _currentUser;
 
   FirebaseAuthService({
-    FirebaseAuth? auth,
-    GoogleSignIn? googleSignIn,
-  })  : _customAuth = auth,
-        _customGoogleSignIn = googleSignIn;
+    FirebaseAuthRestClient? restClient,
+  }) : _restClient = restClient ?? FirebaseAuthRestClient();
 
-  FirebaseAuth get _auth => _customAuth ?? FirebaseAuth.instance;
-
-  GoogleSignIn get _googleSignIn =>
-      _customGoogleSignIn ??
-      GoogleSignIn(
-        scopes: const ['openid', 'profile', 'email'],
-      );
-
-  Stream<User?> get authStateChanges => _auth.authStateChanges();
-
-  User? get currentUser => _auth.currentUser;
+  FirebaseUserResult? get currentUser => _currentUser;
+  bool get isAuthenticated => _currentUser != null;
 
   /// Signs in with Google using Firebase Authentication.
-  /// Uses signInWithPopup on web and GoogleSignIn on desktop/mobile.
-  Future<UserCredential?> signInWithGoogle() async {
+  Future<FirebaseUserResult> signInWithGoogle({String? googleIdToken}) async {
     try {
-      if (kIsWeb) {
-        final GoogleAuthProvider authProvider = GoogleAuthProvider();
-        return await _auth.signInWithPopup(authProvider);
-      } else {
-        final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-        if (googleUser == null) {
-          throw AuthException.cancelled();
-        }
-        final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          idToken: googleAuth.idToken,
-          accessToken: googleAuth.accessToken,
-        );
-        return await _auth.signInWithCredential(credential);
-      }
+      final result = await _restClient.signInWithGoogle(googleIdToken: googleIdToken);
+      _currentUser = result;
+      return result;
     } catch (e) {
       debugPrint('FirebaseAuthService signInWithGoogle error: $e');
       throw SignInService().classifyError(e);
     }
   }
 
-  /// Signs out from both Google Sign-In and Firebase Authentication.
-  Future<void> signOut() async {
+  /// Creates a new user account with email and password via Firebase Authentication.
+  Future<FirebaseUserResult> signUpWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
     try {
-      if (!kIsWeb) {
-        await _googleSignIn.signOut();
-      }
-      await _auth.signOut();
+      final result = await _restClient.signUpWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      _currentUser = result;
+      return result;
     } catch (e) {
-      debugPrint('FirebaseAuthService signOut error: $e');
-      rethrow;
+      debugPrint('FirebaseAuthService signUpWithEmailAndPassword error: $e');
+      throw SignInService().classifyError(e);
     }
+  }
+
+  /// Signs in an existing user with email and password via Firebase Authentication.
+  Future<FirebaseUserResult> signInWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final result = await _restClient.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      _currentUser = result;
+      return result;
+    } catch (e) {
+      debugPrint('FirebaseAuthService signInWithEmailAndPassword error: $e');
+      throw SignInService().classifyError(e);
+    }
+  }
+
+  /// Signs out from Firebase Authentication and clears active user session.
+  Future<void> signOut() async {
+    _currentUser = null;
   }
 }

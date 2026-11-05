@@ -2,12 +2,17 @@
 // Requirements: FR-AUTH-001..009, NFR-SEC-004, NFR-SEC-006
 // Implemented here: tests for browser sign-in, cancellation, scope inspection, secret scanning, secure storage, error recovery
 
+import 'dart:convert';
 import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart' as http_testing;
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:desktop/features/auth/firebase_auth_rest_client.dart';
+import 'package:desktop/features/auth/firebase_auth_service.dart';
 import 'package:desktop/features/auth/session_store.dart';
 import 'package:desktop/features/auth/sign_in_screen.dart';
 import 'package:desktop/features/auth/sign_in_service.dart';
@@ -109,8 +114,9 @@ void main() {
         ),
       );
 
-      // Initially shows 'Sign in with Google'
+      // Initially shows 'Sign in with Google' and logo emblem
       expect(find.text('Sign in with Google'), findsOneWidget);
+      expect(find.byKey(const Key('auth_logo_image')), findsOneWidget);
 
       // Tap Sign in button
       await tester.tap(find.text('Sign in with Google'));
@@ -239,6 +245,245 @@ void main() {
       expect(unverified.type, equals(AuthErrorType.unverifiedEmail));
       expect(unverified.message, equals('Your email address is not verified by Google.'));
       expect(unverified.recoveryAction, equals('Verify your email address with Google and retry sign-in.'));
+    });
+  });
+
+  group('TC-FR-AUTH-010 Create Account & Sign In sections, password confirmation, and profile removal', () {
+    testWidgets('profile button is removed from auth screen', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: SignInScreen(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const Key('auth_enter_profile_button')), findsNothing);
+      expect(find.widgetWithText(OutlinedButton, 'Profile'), findsNothing);
+    });
+
+    testWidgets('initial section is Create account with password confirmation and Google option', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: SignInScreen(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Create an account'), findsWidgets);
+      expect(find.byKey(const Key('auth_first_name_field')), findsOneWidget);
+      expect(find.byKey(const Key('auth_last_name_field')), findsOneWidget);
+      expect(find.byKey(const Key('auth_email_field')), findsOneWidget);
+      expect(find.byKey(const Key('auth_password_field')), findsOneWidget);
+      expect(find.byKey(const Key('auth_confirm_password_field')), findsOneWidget);
+      expect(find.byKey(const Key('auth_terms_checkbox')), findsOneWidget);
+      expect(find.text('Create account'), findsOneWidget);
+      expect(find.text('Sign in with Google'), findsOneWidget);
+    });
+
+    testWidgets('requires matching password confirmation for create account', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: SignInScreen(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byKey(const Key('auth_email_field')), 'test@example.com');
+      await tester.enterText(find.byKey(const Key('auth_password_field')), 'password123');
+      await tester.enterText(find.byKey(const Key('auth_confirm_password_field')), 'differentPassword');
+
+      final submitFinder = find.byKey(const Key('auth_submit_button'));
+      await tester.ensureVisible(submitFinder);
+      await tester.tap(submitFinder);
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const Key('auth_error_container')), findsOneWidget);
+      expect(find.text('Passwords do not match.'), findsOneWidget);
+    });
+
+    testWidgets('removes top-right Sign in and Website buttons from sign in screen', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: SignInScreen(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Rocket emblem is present in the card before launch
+      expect(find.byKey(const Key('auth_launching_rocket_image')), findsOneWidget);
+      expect(find.text('AI Active'), findsNothing);
+
+      // Top-right Sign in and Website buttons are removed
+      expect(find.byKey(const Key('auth_top_right_signin_button')), findsNothing);
+      expect(find.text('Website'), findsNothing);
+
+      // Back navigation button is present
+      expect(find.byKey(const Key('auth_back_button')), findsOneWidget);
+    });
+
+    testWidgets('autoLaunch flag triggers rocket launch sequence on mount and reveals product slideshow', (tester) async {
+      tester.view.physicalSize = const Size(1280, 800);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: SignInScreen(autoLaunch: true, initialCreateAccount: false),
+        ),
+      );
+      await tester.pump(); // Triggers addPostFrameCallback
+
+      // Verify sign in mode initialized
+      expect(find.byKey(const Key('auth_screen_title')), findsOneWidget);
+      expect(find.text('Sign in'), findsWidgets);
+
+      // Advance animation through Phase 1 ignition & Phase 2 blast off
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pump(const Duration(milliseconds: 1600));
+      await tester.pumpAndSettle();
+
+      // Product slideshow illustration is revealed after rocket launch!
+      expect(find.text('AI Active'), findsOneWidget);
+      expect(find.text('devpilot_tutor.py'), findsOneWidget);
+
+      // Slideshow navigation operates interactively
+      await tester.tap(find.byKey(const Key('auth_next_slide_button')));
+      await tester.pumpAndSettle();
+
+      expect(find.text('DevSphere Cloud Sandbox'), findsOneWidget);
+      expect(find.text('ISOLATED'), findsOneWidget);
+
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('switches between Create account and Sign in sections', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: SignInScreen(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Switch to Sign In
+      await tester.tap(find.byKey(const Key('auth_switch_mode_button')));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const Key('auth_screen_title')), findsOneWidget);
+      expect(find.text('Sign in'), findsWidgets);
+      expect(find.text("Don't have an account? "), findsOneWidget);
+      expect(find.byKey(const Key('auth_confirm_password_field')), findsNothing);
+      expect(find.byKey(const Key('auth_terms_checkbox')), findsNothing);
+
+      // Switch back to Create Account
+      await tester.tap(find.byKey(const Key('auth_switch_mode_button')));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Create an account'), findsWidgets);
+      expect(find.byKey(const Key('auth_confirm_password_field')), findsOneWidget);
+    });
+
+    testWidgets('Firebase Authentication blocks access on invalid credentials and displays error without bypassing', (tester) async {
+      tester.view.physicalSize = const Size(1280, 800);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      final failingClient = FirebaseAuthRestClient(
+        client: http_testing.MockClient((request) async {
+          return http.Response(
+            jsonEncode({
+              'error': {
+                'code': 400,
+                'message': 'INVALID_LOGIN_CREDENTIALS',
+              }
+            }),
+            400,
+            headers: {'content-type': 'application/json'},
+          );
+        }),
+      );
+
+      final sessionStore = SessionStore(storage: FakeSecureStorage());
+      bool successCalled = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: SignInScreen(
+            firebaseAuthService: FirebaseAuthService(restClient: failingClient),
+            sessionStore: sessionStore,
+            initialCreateAccount: false,
+            onSignInSuccess: () => successCalled = true,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Fill in credentials
+      await tester.enterText(find.byKey(const Key('auth_email_field')), 'wrong@example.com');
+      await tester.enterText(find.byKey(const Key('auth_password_field')), 'wrongpass');
+
+      // Tap Sign in
+      final submitFinder = find.byKey(const Key('auth_submit_button'));
+      await tester.ensureVisible(submitFinder);
+      await tester.tap(submitFinder);
+      await tester.pumpAndSettle();
+
+      // Error message is displayed on screen
+      expect(find.byKey(const Key('auth_error_container')), findsOneWidget);
+      expect(find.text('Invalid email or password.'), findsOneWidget);
+
+      // Session store has NO token saved and success callback was NOT invoked
+      expect(await sessionStore.readToken(), isNull);
+      expect(successCalled, isFalse);
+    });
+
+    testWidgets('Firebase Authentication saves real session token and calls onSignInSuccess on successful auth', (tester) async {
+      tester.view.physicalSize = const Size(1280, 800);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      final successClient = FirebaseAuthRestClient(
+        client: http_testing.MockClient((request) async {
+          return http.Response(
+            jsonEncode({
+              'localId': 'user-uid-verified-1',
+              'email': 'realuser@example.com',
+              'idToken': 'real-firebase-jwt-token-999',
+              'refreshToken': 'real-refresh-token',
+            }),
+            200,
+            headers: {'content-type': 'application/json'},
+          );
+        }),
+      );
+
+      final sessionStore = SessionStore(storage: FakeSecureStorage());
+      bool successCalled = false;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: SignInScreen(
+            firebaseAuthService: FirebaseAuthService(restClient: successClient),
+            sessionStore: sessionStore,
+            initialCreateAccount: false,
+            onSignInSuccess: () => successCalled = true,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      // Fill in credentials
+      await tester.enterText(find.byKey(const Key('auth_email_field')), 'realuser@example.com');
+      await tester.enterText(find.byKey(const Key('auth_password_field')), 'correctpass');
+
+      // Tap Sign in
+      final submitFinder = find.byKey(const Key('auth_submit_button'));
+      await tester.ensureVisible(submitFinder);
+      await tester.tap(submitFinder);
+      await tester.pumpAndSettle();
+
+      // Real token saved and success callback triggered
+      expect(await sessionStore.readToken(), 'real-firebase-jwt-token-999');
+      expect(successCalled, isTrue);
     });
   });
 }

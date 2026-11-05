@@ -13,7 +13,7 @@ void main() {
     await tester.pumpWidget(ProviderScope(child: BuildLoopApp()));
     await tester.pumpAndSettle();
 
-    expect(find.text('BuildLoop'), findsWidgets);
+    expect(find.text('Devpilot'), findsWidgets);
     expect(find.text('Learn by building.'), findsOneWidget);
     expect(find.text('Sign in with Google'), findsOneWidget);
     expect(find.byIcon(Icons.login), findsOneWidget);

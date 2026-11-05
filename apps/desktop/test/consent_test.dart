@@ -126,5 +126,16 @@ void main() {
         findsOneWidget,
       );
     });
+
+    testWidgets('backward navigation button exists on consent screen', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: ConsentScreen(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const Key('consent_back_button')), findsOneWidget);
+    });
   });
 }

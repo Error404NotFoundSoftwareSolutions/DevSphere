@@ -129,4 +129,18 @@ void main() {
     await pumpAt(tester, const Size(1440, 900), location: '/course/python-hello-001');
     expect(find.textContaining('Sample data'), findsWidgets);
   });
+
+  testWidgets('TC-DES-003-12 backward navigation buttons exist across shell, course, lab, and placeholders', (tester) async {
+    await pumpAt(tester, const Size(1440, 900), location: '/dashboard');
+    expect(find.byKey(const Key('shell_back_button')), findsOneWidget);
+
+    await pumpAt(tester, const Size(1440, 900), location: '/course/python-hello-001');
+    expect(find.byKey(const Key('course_back_button')), findsOneWidget);
+
+    await pumpAt(tester, const Size(1440, 900), location: '/lab/python-hello-001');
+    expect(find.byKey(const Key('lab_back_button')), findsOneWidget);
+
+    await pumpAt(tester, const Size(1440, 900), location: '/catalog');
+    expect(find.byKey(const Key('placeholder_back_catalog')), findsOneWidget);
+  });
 }

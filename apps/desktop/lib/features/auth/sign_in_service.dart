@@ -52,9 +52,16 @@ class AuthException implements Exception {
 }
 
 class SignInService {
-  // Public desktop application client ID (not confidential, no secret - FR-AUTH-002)
+  // Public desktop application client ID (not confidential, no secret - FR-AUTH-002).
+  // Replace with your real Google Cloud OAuth 2.0 Client ID once configured.
+  // Instructions: https://console.cloud.google.com/apis/credentials?project=devpilot-1a384
   static const String defaultClientId =
-      'devsphere-desktop-client.apps.googleusercontent.com';
+      '608221930150-dkgr99kbg4nc79upn8of030uvc22fng0.apps.googleusercontent.com';
+
+  /// Returns true when [clientId] is still the placeholder (not yet configured)
+  /// AND no custom [urlLauncher] was injected (i.e. production mode, not tests).
+  bool get isPlaceholderClientId =>
+      clientId == defaultClientId && urlLauncher == null;
 
   // Strictly identity scopes only (FR-AUTH-003)
   static const List<String> identityScopes = ['openid', 'profile', 'email'];
@@ -92,6 +99,11 @@ class SignInService {
     if (urlLauncher != null) {
       return urlLauncher!(authUri, mode: LaunchMode.externalApplication);
     }
+    // In local development or prototype mode when using placeholder client ID,
+    // bypass external browser launch to prevent Google HTTP 400 (malformed request) error.
+    if (isPlaceholderClientId) {
+      return true;
+    }
     if (await canLaunchUrl(authUri)) {
       return launchUrl(authUri, mode: LaunchMode.externalApplication);
     }
@@ -118,6 +130,36 @@ class SignInService {
     }
     if (str.contains('unverified') || str.contains('email_verified')) {
       return AuthException.unverifiedEmail();
+    }
+    if (str.contains('email-already-in-use') || str.contains('already in use')) {
+      return const AuthException(
+        type: AuthErrorType.unknown,
+        message: 'An account with this email already exists.',
+        recoveryAction: 'Log in with your existing account or use another email.',
+      );
+    }
+    if (str.contains('weak-password') || str.contains('weak password')) {
+      return const AuthException(
+        type: AuthErrorType.unknown,
+        message: 'Password must be at least 6 characters.',
+        recoveryAction: 'Please enter a stronger password with 6 or more characters.',
+      );
+    }
+    if (str.contains('user-not-found') ||
+        str.contains('wrong-password') ||
+        str.contains('invalid-credential')) {
+      return const AuthException(
+        type: AuthErrorType.unknown,
+        message: 'Invalid email or password.',
+        recoveryAction: 'Please check your login credentials and try again.',
+      );
+    }
+    if (str.contains('invalid-email')) {
+      return const AuthException(
+        type: AuthErrorType.unknown,
+        message: 'The email address is badly formatted.',
+        recoveryAction: 'Please enter a valid email address (e.g. name@example.com).',
+      );
     }
     return const AuthException(
       type: AuthErrorType.unknown,
