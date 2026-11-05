@@ -61,7 +61,7 @@ GoRouter createRouter({String? initialLocation}) {
       GoRoute(
         path: '/consent',
         builder: (context, state) => ConsentScreen(
-          onConsentCallback: () => context.go('/profile'),
+          onConsentCallback: () => context.go('/dashboard'),
           onDecline: () => context.go('/'),
         ),
       ),
@@ -104,7 +104,7 @@ GoRouter createRouter({String? initialLocation}) {
           initialDisplayName: 'Student User',
           email: 'student@example.com',
           uid: 'current-student',
-          onSave: (profile) => context.go('/catalogue'),
+          onSave: (profile) => context.go('/dashboard'),
         ),
       ),
     ],

@@ -16,6 +16,14 @@ class CatalogueScreen extends StatelessWidget {
         title: const Text('DevSphere Labs'),
         actions: [
           IconButton(
+            key: const Key('catalogue_dashboard_button'),
+            icon: const Icon(Icons.dashboard_outlined),
+            tooltip: 'BuildLoop Dashboard',
+            onPressed: () {
+              context.go('/dashboard');
+            },
+          ),
+          IconButton(
             key: const Key('catalogue_profile_button'),
             icon: const Icon(Icons.person),
             tooltip: 'My Profile',

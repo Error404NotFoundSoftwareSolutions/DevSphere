@@ -61,7 +61,7 @@ class _SignInScreenState extends State<SignInScreen> {
       if (widget.onSignInSuccess != null) {
         widget.onSignInSuccess!();
       } else if (mounted) {
-        context.go('/profile');
+        context.go('/dashboard');
       }
     } catch (e) {
       if (mounted) {

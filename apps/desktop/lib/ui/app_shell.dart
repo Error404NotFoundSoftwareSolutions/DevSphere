@@ -118,13 +118,17 @@ class _Header extends StatelessWidget {
           const SizedBox(width: BL.space4),
           const Icon(Icons.help_outline),
           const SizedBox(width: BL.space4),
-          const CircleAvatar(
-            key: Key('profile'),
-            radius: 17,
-            backgroundColor: BL.selected,
-            child: Text('L',
-                style:
-                    TextStyle(color: BL.primary, fontWeight: FontWeight.w600)),
+          InkWell(
+            onTap: () => context.go('/profile'),
+            borderRadius: BorderRadius.circular(17),
+            child: const CircleAvatar(
+              key: Key('profile'),
+              radius: 17,
+              backgroundColor: BL.selected,
+              child: Text('L',
+                  style:
+                      TextStyle(color: BL.primary, fontWeight: FontWeight.w600)),
+            ),
           ),
           const SizedBox(width: BL.space3),
         ],
