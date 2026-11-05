@@ -4,7 +4,7 @@ Mechanical enforcement of rules so they do not depend on memory. Planned as PL-K
 
 | Hook | Trigger | Check | Fails when |
 |---|---|---|---|
-| freeze-guard | before any file write by an agent | `STATE.yaml: code_freeze` | path is not `*.md`/`*.yaml` under `.agent/` or `docs/` |
+| freeze-guard | before any file write by an agent | `STATE.yaml: code_freeze` | path is not `*.md`/`*.yaml` under `.agents/` or `docs/` |
 | secret-scan | pre-commit, CI | patterns from `fixtures/secrets/corpus.json` | any match outside fixtures |
 | protected-content | pre-commit, CI | no files under `content/**/protected` in bundles/docs/fixtures | found |
 | registry-drift | CI | every `CAP-*` has an existing owner path; every `EP-*` has a contract | missing |

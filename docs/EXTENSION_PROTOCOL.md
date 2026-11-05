@@ -1,6 +1,6 @@
 # Extension protocol v1 (BuildLoop app worker <-> BuildLoop Guide extension)
 
-Status: Draft v1 (2026-11-04), milestone PL-CMP-01. Architecture: `.agent/architecture/companion-extension.md`. Threats: `docs/security/THREAT_MODEL.md` T19-T24. Shared test fixtures: `fixtures/protocol/valid` and `fixtures/protocol/invalid` (used by both the Dart worker and the TypeScript extension, ARC-03).
+Status: Draft v1 (2026-11-04), milestone PL-CMP-01. Architecture: `.agents/architecture/companion-extension.md`. Threats: `docs/security/THREAT_MODEL.md` T19-T24. Shared test fixtures: `fixtures/protocol/valid` and `fixtures/protocol/invalid` (used by both the Dart worker and the TypeScript extension, ARC-03).
 
 ## 1. Principles
 1. The extension is an **untrusted client**. It sends **requests**; the worker decides. Nothing the extension says can create a score, a badge or a Verified result.

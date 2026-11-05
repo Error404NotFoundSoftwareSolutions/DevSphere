@@ -1,6 +1,6 @@
 # Security programme
 
-Status: Draft v1 (2026-11-04). Owner: security owner named in `.github/CODEOWNERS`. These documents are binding for every contributor and every AI agent. Rule IDs (`SEC-nn`) are defined in `.agent/rules/10-security.md` and `11-security-operations.md`.
+Status: Draft v1 (2026-11-04). Owner: security owner named in `.github/CODEOWNERS`. These documents are binding for every contributor and every AI agent. Rule IDs (`SEC-nn`) are defined in `.agents/rules/10-security.md` and `11-security-operations.md`.
 
 ## 1. Honest goal
 No system can promise "no breach". The goal is: **make a breach hard, make leaks structurally impossible where we can, detect what slips through, limit the damage, and recover fast and openly.** Every claim in these documents must be testable. Anything we cannot test we do not promise.
@@ -30,9 +30,9 @@ No system can promise "no breach". The goal is: **make a breach hard, make leaks
 | `VULNERABILITY_MANAGEMENT.md` | Severity, fix deadlines, disclosure, advisories |
 | `INCIDENT_RESPONSE.md` | Roles, steps, templates, post-incident |
 | `../../SECURITY.md` | Public reporting policy |
-| `../../.agent/checklists/security_release_gate.md` | Go/no-go list before any release |
+| `../../.agents/checklists/security_release_gate.md` | Go/no-go list before any release |
 
 ## 4. Automated enforcement (what is checked by machines today)
-- `python tools/check_security.py` (secret patterns, unsafe code patterns, extension manifest hardening). Runs in CI and pre-commit design (`.agent/hooks/README.md`).
+- `python tools/check_security.py` (secret patterns, unsafe code patterns, extension manifest hardening). Runs in CI and pre-commit design (`.agents/hooks/README.md`).
 - Existing: `tools/check_repo.py` (UI boundary), hostile grader suite (`fixtures/hostile`), redaction corpus tests.
 - Planned: dependency audit and licence check in CI, SBOM, signed releases, network-capture test on first launch.

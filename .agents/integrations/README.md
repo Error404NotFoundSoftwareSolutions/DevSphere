@@ -1,6 +1,6 @@
 # Tool integrations
 
-`.agent/` and `AGENTS.md` are the single source. Each AI tool gets a thin pointer so nothing is duplicated. Do not copy rules into tool-specific files.
+`.agents/` and `AGENTS.md` are the single source. Each AI tool gets a thin pointer so nothing is duplicated. Do not copy rules into tool-specific files.
 
 | Tool | Entry file | Status |
 |---|---|---|
@@ -12,6 +12,6 @@
 | Windsurf / others | add pointer on request | Not created |
 
 ## Adding a tool
-1. Create the tool's entry file containing only: "Read `AGENTS.md` and `.agent/STATE.yaml` first. Those are the only instructions for this repository."
+1. Create the tool's entry file containing only: "Read `AGENTS.md` and `.agents/STATE.yaml` first. Those are the only instructions for this repository."
 2. List it in this table and in `MANIFEST.yaml`.
 3. If the tool supports hooks, map them from `hooks/README.md` (after the freeze lifts).

@@ -2,7 +2,7 @@
 
 | ID | Sev | Rule |
 |---|---|---|
-| DOC-01 | MUST | Docs ship with the change that makes them true. A PR that changes a contract updates `IPC_API.md`, `BACKEND_API.md`, `LAB_MANIFEST_SPEC.md` or the relevant `.agent/architecture/*` file. |
+| DOC-01 | MUST | Docs ship with the change that makes them true. A PR that changes a contract updates `IPC_API.md`, `BACKEND_API.md`, `LAB_MANIFEST_SPEC.md` or the relevant `.agents/architecture/*` file. |
 | DOC-02 | MUST | Every real decision gets an ADR entry in `docs/DECISIONS.md`. Accepted ADRs are never edited; supersede them. |
 | DOC-03 | MUST | Generated files stay generated (counts, traceability matrix, story map). Run the tools; never hand-edit. |
 | DOC-04 | MUST | `docs/main/*` is the contract. Other docs summarise it and must not contradict it. A conflict is reported, not resolved by guessing. |
@@ -23,10 +23,10 @@
 | `FR-`, `NFR-`, `BR-`, `TBD-` | Track A requirements | `docs/main/srs_v1.md` |
 | `TC-` | Test cases | `docs/main/test_plan_v1.md` |
 | `ADR-` | Decisions | `docs/DECISIONS.md` |
-| `Q-` | Owner questions | `.agent/QUESTIONS.md` |
-| `RFC-` | Proposals | `.agent/templates/rfc.md`, `docs/rfc/` |
-| `IDEA-` | Raw ideas | `.agent/ideas/INBOX.md` |
-| `CAP-` | Capabilities | `.agent/registry/capabilities.yaml` |
-| `EP-` | Extension points (also epics are `EPIC-`) | `.agent/registry/extension-points.yaml` |
-| `PL-IDE-`, `PL-BRW-`, `PL-AGT-` | Proposed stories for Tracks B, C, D | `.agent/plans/*` until promoted to the backlog |
+| `Q-` | Owner questions | `.agents/QUESTIONS.md` |
+| `RFC-` | Proposals | `.agents/templates/rfc.md`, `docs/rfc/` |
+| `IDEA-` | Raw ideas | `.agents/ideas/INBOX.md` |
+| `CAP-` | Capabilities | `.agents/registry/capabilities.yaml` |
+| `EP-` | Extension points (also epics are `EPIC-`) | `.agents/registry/extension-points.yaml` |
+| `PL-IDE-`, `PL-BRW-`, `PL-AGT-` | Proposed stories for Tracks B, C, D | `.agents/plans/*` until promoted to the backlog |
 | `A`n (in a session report) | Agent assumptions | session log |

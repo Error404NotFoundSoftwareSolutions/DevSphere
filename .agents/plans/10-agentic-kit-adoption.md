@@ -11,7 +11,7 @@ Writing product code. Wiring tool-specific automation (hooks/CI) before the owne
 ## Milestones
 | ID | Milestone | Exit criteria | Status |
 |---|---|---|---|
-| PL-KIT-01 | Kit skeleton | `.agent/` tree exists; `AGENTS.md` routes to it; `STATE.yaml` has code freeze | Done 2026-11-04 |
+| PL-KIT-01 | Kit skeleton | `.agents/` tree exists; `AGENTS.md` routes to it; `STATE.yaml` has code freeze | Done 2026-11-04 |
 | PL-KIT-02 | Rules set | `rules/*` with IDs; severity; precedence | Done 2026-11-04 |
 | PL-KIT-03 | Interaction protocol + questions | Session report format; `QUESTIONS.md` with options and defaults | Done 2026-11-04 |
 | PL-KIT-04 | Personas, prompts, task playbooks, checklists, templates | Each has when-to-use, inputs, outputs, forbidden | Done 2026-11-04 |
@@ -24,7 +24,7 @@ Writing product code. Wiring tool-specific automation (hooks/CI) before the owne
 
 ## Verification
 - Read test: a fresh agent session given only `AGENTS.md` can correctly answer "what may I do right now?" (answer: docs and plans only, ask before anything else) and "where do I add a new idea?" (answer: `ideas/INBOX.md`).
-- Link check: every file referenced from `.agent/README.md` exists (manual now; script after PL-KIT-08).
+- Link check: every file referenced from `.agents/README.md` exists (manual now; script after PL-KIT-08).
 - Existing repo checks still pass: `python tools/check_docs.py`.
 
 ## Risks
@@ -32,7 +32,7 @@ Writing product code. Wiring tool-specific automation (hooks/CI) before the owne
 |---|---|
 | Rules ignored because there are too many | Short `AGENTS.md`; severity tags; retro prunes noise |
 | Docs drift from code | PL-KIT-08 mechanical checks; DOC-01 |
-| Tool-specific features lock us in | Neutral source in `.agent/`; adapters are thin and generated |
+| Tool-specific features lock us in | Neutral source in `.agents/`; adapters are thin and generated |
 
 ## Open questions
 Q-011, Q-012.

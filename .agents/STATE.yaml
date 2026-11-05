@@ -5,7 +5,7 @@
 kit_version: 1.0.0
 updated: 2026-11-04
 
-# While true, agents may create or edit ONLY: *.md, *.yaml/*.yml under .agent/, docs/, and plans.
+# While true, agents may create or edit ONLY: *.md, *.yaml/*.yml under .agents/, docs/, and plans.
 # No source code, no tests, no dependency or lockfile changes, no CI changes, no generated files.
 code_freeze: false
 # Owner lifted the freeze on 2026-11-04 for ONE slice only (walking skeleton of the learning flow). Agents may
@@ -26,7 +26,7 @@ active_scope:
   - docs/SECURITY.md
   - SECURITY.md
   - docs/TECH_STACK.md
-  - .agent/
+  - .agents/
   - .gitignore
   - .github/workflows/ci.yml   # only to add the security and extension jobs
 code_freeze_reason_old: >
@@ -53,5 +53,5 @@ tracks:
 # Answered 2026-11-04: Q-001 (IDE hosts learning platform), Q-002 (patch-set on pinned tag), Q-003, Q-005 (Tutor+Pair+Agent by profile), Q-004, Q-006, Q-007, Q-015.
 # ADR-013/014/015 accepted 2026-11-04. Accepted is not Active: no track is built while code_freeze is true.
 blocking_questions: []   # remaining open (non-blocking): Q-009..Q-014, Q-016..Q-018   # see QUESTIONS.md
-active_plan: .agent/plans/00-master-plan.md
+active_plan: .agents/plans/00-master-plan.md
 active_slice: "Companion extension: docs done; next M1 launcher + installer + channel (plans/70-companion-extension-plan.md)"

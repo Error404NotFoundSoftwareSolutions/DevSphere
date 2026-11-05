@@ -35,7 +35,7 @@ STRIDE table in `main/sad_v1.md` section 9.1. It must be reviewed before the pil
 
 ## Security programme (strict, binding)
 
-The full programme is in `docs/security/` (threat model, secure development, secrets, supply chain, extension and webview security, privacy and leak prevention, vulnerability management, incident response). Public reporting policy: `/SECURITY.md`. Rules: `.agent/rules/10-security.md` and `11-security-operations.md`. Check: `python tools/check_security.py`. No document may claim the product is "secure" or "leak-proof"; state what is tested (SEC-38).
+The full programme is in `docs/security/` (threat model, secure development, secrets, supply chain, extension and webview security, privacy and leak prevention, vulnerability management, incident response). Public reporting policy: `/SECURITY.md`. Rules: `.agents/rules/10-security.md` and `11-security-operations.md`. Check: `python tools/check_security.py`. No document may claim the product is "secure" or "leak-proof"; state what is tested (SEC-38).
 
 ## Reporting
 

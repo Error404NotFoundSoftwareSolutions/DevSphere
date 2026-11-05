@@ -2,7 +2,7 @@
 
 Status: Draft (2026-11-04), from the owner's description. **No web version.** Everything the learner sees lives in one desktop application (the DevSphere IDE, Track B). Source idea: `CORE_IDEA.md`.
 
-> **Update 2026-11-04 (ADR-019):** the "lab window" is the learner's installed VS Code opened by the app, with the BuildLoop guide extension in a right-hand side panel. The app stays the Home window. Details: `.agent/architecture/companion-extension.md`. Where this document says "IDE" read "VS Code plus the companion extension".
+> **Update 2026-11-04 (ADR-019):** the "lab window" is the learner's installed VS Code opened by the app, with the BuildLoop guide extension in a right-hand side panel. The app stays the Home window. Details: `.agents/architecture/companion-extension.md`. Where this document says "IDE" read "VS Code plus the companion extension".
 
 ## 1. The journey
 

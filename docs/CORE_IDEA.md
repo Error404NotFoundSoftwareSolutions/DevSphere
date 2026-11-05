@@ -73,4 +73,4 @@ No web portal. Login, dashboard, courses, roadmaps, badges and streaks, the work
 | Developer-services module as ordinary labs later | Skill packs beyond Python |
 | Instructor features | Possibly mentors/reviewers later |
 
-Resolution path: capture as stories under a new Track E (`.agent/plans/60-curriculum-and-roadmap-plan.md`), then the owner decides what enters the SRS.
+Resolution path: capture as stories under a new Track E (`.agents/plans/60-curriculum-and-roadmap-plan.md`), then the owner decides what enters the SRS.

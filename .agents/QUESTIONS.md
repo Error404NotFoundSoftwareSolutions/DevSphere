@@ -63,7 +63,7 @@ Number of people/agents, weekly hours, target date for first usable IDE build, m
 ## Agentic kit and process
 
 ### Q-011 Which AI coding tools must the kit support?  `Open`  *(multi-select)*
-Claude Code, Cursor, GitHub Copilot, OpenAI Codex CLI, Gemini CLI, Windsurf, others. The kit is written tool-neutral in `.agent/`; `integrations/` holds thin adapters. Tell me which to generate first.
+Claude Code, Cursor, GitHub Copilot, OpenAI Codex CLI, Gemini CLI, Windsurf, others. The kit is written tool-neutral in `.agents/`; `integrations/` holds thin adapters. Tell me which to generate first.
 
 ### Q-012 Default autonomy  `Open`
 Keep `STATE.yaml` defaults (docs L2, code L1, outward-facing L0) or change?

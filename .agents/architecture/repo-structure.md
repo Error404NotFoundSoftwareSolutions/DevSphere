@@ -5,7 +5,7 @@ The aim is a layout where each idea has an obvious home, where agents can find e
 ## 1. Today (Track A, unchanged)
 ```
 AGENTS.md  CLAUDE.md  README.md  melos.yaml  pyproject.toml
-.agent/            agent kit (this folder)
+.agents/            agent kit (this folder)
 apps/desktop       Flutter desktop app
 services/          local-worker (Dart), api, grader, content-ci (Python)
 packages/          ipc_contract, lab_schema, redaction, api_client, ui (Dart)
@@ -17,7 +17,7 @@ infra/  tools/  tests/  spikes/  docs/
 ## 2. Target (only after owner answers Q-001, Q-002, Q-015)
 ```
 devsphere/                           (this monorepo: product brain, services, contracts, content)
-  .agent/                            kit
+  .agents/                            kit
   apps/
     desktop/                         Flutter app (Track A; keep, freeze or archive per Q-014)
     ide/                             POINTER ONLY: README + upstream.lock + link to devsphere-ide repo, or the fork if Q-015 = monorepo
@@ -34,7 +34,7 @@ devsphere/                           (this monorepo: product brain, services, co
   docs/
     main/                            SRS, SAD, test plan (contract)
     adr/ rfc/ ...                    optional split of DECISIONS.md when it grows
-  registry/  -> lives in .agent/registry for now; moves to repo root if non-agent tooling needs it
+  registry/  -> lives in .agents/registry for now; moves to repo root if non-agent tooling needs it
 
 devsphere-ide/                       (separate repo, recommended)
   upstream.lock  patches/  src-devsphere/  extensions/  branding/  product.overlay.json  scripts/  docs/UPSTREAM_SYNC.md
@@ -47,6 +47,6 @@ devsphere-ide/                       (separate repo, recommended)
 - Every top-level folder gets a `README.md` stating owner, purpose, how to test, and which capability IDs it implements.
 
 ## 4. Agent-facing indexes (the only three files an agent must read to navigate)
-1. `.agent/PROJECT_MAP.md` - where code lives.
-2. `.agent/registry/capabilities.yaml` - what features exist and who owns them.
-3. `.agent/registry/extension-points.yaml` - where new behaviour attaches.
+1. `.agents/PROJECT_MAP.md` - where code lives.
+2. `.agents/registry/capabilities.yaml` - what features exist and who owns them.
+3. `.agents/registry/extension-points.yaml` - where new behaviour attaches.

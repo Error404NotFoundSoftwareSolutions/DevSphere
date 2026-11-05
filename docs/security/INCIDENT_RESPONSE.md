@@ -17,7 +17,7 @@ Confirmed or suspected: secret exposure, protected content exposure, score tampe
 3. **Assess.** Scope, data affected, duration, attacker capability. Preserve evidence (logs, artefacts, hashes); do not destroy it.
 4. **Eradicate and recover.** Fix root cause; rebuild from clean sources; re-sign; ship.
 5. **Notify.** Affected users and, where required, authorities, within legal deadlines; plain language; what happened, what data, what we did, what they should do.
-6. **Learn.** Blameless postmortem within 5 business days (`.agent/templates/postmortem.md`); new tests, rule or threat-model updates; track actions to done.
+6. **Learn.** Blameless postmortem within 5 business days (`.agents/templates/postmortem.md`); new tests, rule or threat-model updates; track actions to done.
 
 ## 4. Specific playbooks
 - **Secret in git:** SECRETS_MANAGEMENT section 4.

@@ -2,7 +2,7 @@
 kit: devsphere-agent-kit
 version: 1.0.0
 date: 2026-11-04
-entrypoints: [AGENTS.md, .agent/STATE.yaml, .agent/README.md]
+entrypoints: [AGENTS.md, .agents/STATE.yaml, .agents/README.md]
 core: [STATE.yaml, INTERACTION_PROTOCOL.md, QUESTIONS.md, GOAL.md, RULES.md, WORKFLOW.md, PROJECT_MAP.md, CURRENT_SPRINT.md]
 rules: [rules/README.md, rules/10-security.md, rules/11-security-operations.md, rules/20-trust-and-scoring.md, rules/30-architecture-boundaries.md, rules/40-code-style.md, rules/50-testing.md, rules/60-docs-and-traceability.md, rules/70-git-and-prs.md, rules/80-ai-and-prompts.md, rules/90-dependencies-and-licensing.md, rules/95-ide-fork.md]
 personas: [orchestrator, architect, planner, implementer, test-engineer, reviewer, security-auditor, docs-writer, researcher, ide-fork-engineer, browser-engineer, release-manager]
