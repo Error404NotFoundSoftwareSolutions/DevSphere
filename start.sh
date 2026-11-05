@@ -83,6 +83,9 @@ melos bootstrap
 
 # OS-Specific Pre-flight checks
 if [ "$TARGET_DEVICE" = "linux" ]; then
+  # Workaround for GTK3 Wayland settings-daemon schema crash on GNOME 40+
+  export GDK_BACKEND="${GDK_BACKEND:-x11}"
+
   echo ""
   echo "--> Checking Linux build requirements..."
   if ! command -v ninja &> /dev/null; then
