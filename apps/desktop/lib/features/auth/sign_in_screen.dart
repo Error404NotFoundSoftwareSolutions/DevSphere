@@ -14,6 +14,7 @@ import '../../ui/neon_background.dart';
 import '../../services/google_token_exchange.dart';
 import '../../services/oauth_loopback_server.dart';
 import 'firebase_auth_service.dart';
+import 'auth_session.dart';
 import 'launching_rocket_card.dart';
 import 'session_store.dart';
 import 'sign_in_service.dart';
@@ -229,6 +230,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
       // --- Step 7: Save Firebase session token ---
       await _sessionStore.saveToken(result.idToken);
+      AuthSession.instance.signIn(AuthUser.fromFirebase(result));
 
       if (widget.onSignInSuccess != null) {
         widget.onSignInSuccess!();
@@ -321,6 +323,7 @@ class _SignInScreenState extends State<SignInScreen> {
       }
 
       await _sessionStore.saveToken(userResult.idToken);
+      AuthSession.instance.signIn(AuthUser.fromFirebase(userResult));
 
       if (widget.onSignInSuccess != null) {
         widget.onSignInSuccess!();
@@ -389,6 +392,7 @@ class _SignInScreenState extends State<SignInScreen> {
       }
 
       await _sessionStore.saveToken(userResult.idToken);
+      AuthSession.instance.signIn(AuthUser.fromFirebase(userResult));
 
       if (widget.onSignInSuccess != null) {
         widget.onSignInSuccess!();

@@ -6,6 +6,7 @@
 import 'package:desktop/app.dart';
 import 'package:desktop/router.dart';
 import 'package:desktop/api.dart';
+import 'package:desktop/features/auth/auth_session.dart';
 import 'package:desktop/worker/worker_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -45,7 +46,9 @@ void main() {
     expect(icon.dy, lessThan(label.dy));
   });
 
-  testWidgets('TC-DES-003-03 header has menu, wordmark, pill search, streak, help and profile', (tester) async {
+  testWidgets('TC-DES-003-03 header has menu, wordmark, pill search, streak, help and the signed-in profile', (tester) async {
+    AuthSession.instance.signIn(const AuthUser(uid: 'u', email: 'asha@example.com', displayName: 'Asha Rao'));
+    addTearDown(AuthSession.instance.signOut);
     await pumpAt(tester, const Size(1440, 900));
     final bar = find.byKey(const Key('topbar'));
     expect(find.descendant(of: bar, matching: find.byIcon(Icons.menu)), findsOneWidget);
