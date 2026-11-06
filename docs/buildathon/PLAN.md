@@ -48,9 +48,9 @@ flowchart LR
 | VS Code guide extension + local worker + private channel | Built and verified on Linux |
 | Security programme, scanner, threat model | Built |
 | Grader (server-side Verified scoring) | Designed and partly built in `services/grader`; not wired to the app |
-| **AI gateway on Google Cloud (Gemini, redaction, limits)** | **To build** |
-| **Roadmap Planner, Lab Generator, verifier job** | **To build** |
-| **Tutor in the guide panel + language setting** | **To build** |
+| AI gateway code in `services/api` (provider port, Gemini adapter, limits, redaction) | Built and unit-tested with a fake model; **not run against live Gemini or deployed** |
+| Roadmap Planner and Lab Generator with generate-and-verify (code) | Built and tested with a fake model; production verifier job and the app screens still to build |
+| Tutor language setting in the API | Built; the guide panel does not call it yet |
 Rules that stay: the app never holds a provider key (ADR-007); everything sent to Gemini is redacted first (SEC-10); model output is schema-validated before use (AIR-08); AI never decides a score (TRU-03).
 
 ## 6. Timeline (7 days to apply, then the event)

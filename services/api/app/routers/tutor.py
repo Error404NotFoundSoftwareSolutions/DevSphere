@@ -7,6 +7,7 @@
 # Implemented here: tutor proxy: the server decides the hint level, redacts again, applies limits and returns a clear message when AI is down (FR-AI-006, FR-AI-007, FR-AI-009)
 
 from collections import defaultdict
+from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, ConfigDict, Field
@@ -28,6 +29,7 @@ class TutorMessage(BaseModel):
     question: str = Field(max_length=2000)
     level: int = Field(ge=1, le=6)
     code: str | None = None  # only present if the student chose to share it
+    language: Literal["en", "hi", "kn", "ta", "te", "ml", "mr", "bn", "gu"] = "en"
 
 
 @router.post("/messages")
@@ -56,7 +58,7 @@ def message(body: TutorMessage, user: User = Depends(current_user)) -> dict:
     level = effective_level(
         body.level, lab["max_assistance_level"]
     )  # a higher client level is ignored
-    prompt = build_prompt(level, redact(body.question), redact(body.code) if body.code else None)
+    prompt = build_prompt(level, redact(body.question), redact(body.code) if body.code else None, body.language)
     try:
         return {"answer": ask_model(prompt), "level": level}
     except ProviderDown as err:

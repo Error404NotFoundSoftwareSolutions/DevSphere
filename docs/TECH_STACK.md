@@ -30,6 +30,7 @@ Versions were current when this scaffold was created (3 Nov 2026). The lockfiles
 | Redaction (worker) | `redaction` (this repo, `packages/redaction`) | Redacts check output before it leaves the worker (SEC-10) |
 | Hashing (worker) | `crypto` ^3.0.3 (Dart team, BSD-3-Clause) | SHA-256 of the shipped extension file before install (`services/local-worker/lib/src/companion`) |
 | Extension packager (dev only) | `@vscode/vsce` 3.9.1 (MIT, exact-pinned, devDependency) | Packages the guide as a `.vsix`. `npm audit` reports moderate advisories in its glob/minimatch dependencies; accepted because it is build-time only, runs on our own files, and never ships. No high or critical findings; revisit on each update |
+| AI model SDK (API service) | `google-genai` (Google, Apache-2.0) | Gemini through one provider port; Vertex AI service identity on Google Cloud, API key only for local development |
 | Security gate | `tools/check_security.py` (no third-party deps) | Secret patterns, unsafe code patterns, extension manifest hardening (`docs/security/`) |
 
 ## Rules for adding a dependency

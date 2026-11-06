@@ -18,6 +18,15 @@ OTHER = {"Authorization": f"Bearer {OTHER_TOKEN}"}
 OPERATOR = {"Authorization": f"Bearer {OPERATOR_TOKEN}"}
 
 
+@pytest.fixture(autouse=True)
+def _fake_ai_provider():
+    from app.ai import provider as prov
+
+    prov.set_provider(prov.FakeProvider())
+    yield
+    prov.set_provider(None)
+
+
 @pytest.fixture()
 def client():
     memory.reset()

@@ -18,10 +18,17 @@ def effective_level(requested: int, lab_cap: int) -> int:
     return max(1, min(requested, lab_cap))
 
 
-def build_prompt(level: int, question: str, code: str | None) -> str:
+LANGUAGES = {
+    "en": "English", "hi": "Hindi", "kn": "Kannada", "ta": "Tamil", "te": "Telugu",
+    "ml": "Malayalam", "mr": "Marathi", "bn": "Bengali", "gu": "Gujarati",
+}
+
+
+def build_prompt(level: int, question: str, code: str | None, language: str = "en") -> str:
     # The system instruction is fixed text. Student text is data, never instructions (FR-AI-008).
     parts = [
         f"You are a patient programming tutor. Rule: {LEVELS[level]}",
+        f"Reply in {LANGUAGES.get(language, 'English')}. Keep code, commands and file names in English.",
         f"<student_question>{question}</student_question>",
     ]
     if code:

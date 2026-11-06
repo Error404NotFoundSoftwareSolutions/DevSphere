@@ -11,6 +11,8 @@ REVOKED_USERS: set[str] = set()
 ATTEMPTS: dict[str, dict] = {}
 EVENTS: dict[str, dict] = {}  # event_id -> event (idempotency: the id is the key)
 SUBMISSIONS: dict[str, dict] = {}
+GENERATED_LABS: dict[str, dict] = {}  # AI-generated drafts that passed verification; never auto-published
+AI_USAGE: dict[tuple[str, str], int] = {}  # (user_id, feature) -> count today
 LABS: dict[str, dict] = {
     "python-hello-001": {
         "id": "python-hello-001",
@@ -24,7 +26,7 @@ LABS: dict[str, dict] = {
 
 
 def reset() -> None:
-    for d in (USERS, SUBJECT_MAP, ATTEMPTS, EVENTS, SUBMISSIONS):
+    for d in (USERS, SUBJECT_MAP, ATTEMPTS, EVENTS, SUBMISSIONS, GENERATED_LABS, AI_USAGE):
         d.clear()
     REVOKED_TOKENS.clear()
     REVOKED_USERS.clear()
