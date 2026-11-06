@@ -23,6 +23,7 @@ active_scope:
   - tools/check_security.py
   - tools/tests/
   - docs/security/
+  - docs/buildathon/
   - docs/SECURITY.md
   - SECURITY.md
   - docs/TECH_STACK.md
