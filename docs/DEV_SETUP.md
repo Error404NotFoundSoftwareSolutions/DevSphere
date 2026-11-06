@@ -1,6 +1,6 @@
 # Developer setup
 
-Required on every OS: Git, Flutter SDK (3.24+), Dart (3.5+), Melos (`dart pub global activate melos`), Python 3.12 and uv.
+Required on every OS: Git, Flutter SDK **3.38.7** (the version CI uses; it bundles Dart 3.10), Melos (`dart pub global activate melos`), Python 3.12 and uv.
 
 ## Windows 10/11
 

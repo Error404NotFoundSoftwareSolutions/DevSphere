@@ -5,7 +5,7 @@ Versions were current when this scaffold was created (3 Nov 2026). The lockfiles
 | Layer | Choice | Why |
 |---|---|---|
 | Monorepo | Melos workspace (Dart/Flutter); uv workspace for Python | One repo, shared contracts, multi-package management |
-| Desktop shell | Flutter (Dart) for Windows, Linux, macOS | High-performance, cross-platform native client in MVP |
+| Desktop shell | Flutter 3.38.7 (Dart 3.10) for Windows, Linux, macOS; the same version is pinned in CI and release workflows and in the pubspecs | High-performance, cross-platform native client in MVP |
 | Language | Dart (strict analysis) for client; Python 3.12 for backend/services | Type safety, native compilation, clean async handling |
 | UI | Flutter Material 3 | Accessible, responsive, cross-platform components |
 | State and Routing | Riverpod, go_router | Predictable state management and declarative navigation |

@@ -48,7 +48,7 @@ ThemeData buildLoopTheme() {
       labelMedium: _t(12, FontWeight.w500, BL.textSecondary),
       labelSmall: _t(12, FontWeight.w500, BL.textSecondary), // labels
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: BL.surface,
       elevation: 0,
       margin: EdgeInsets.zero,
@@ -112,13 +112,13 @@ ThemeData buildLoopTheme() {
       decoration: BoxDecoration(color: BL.navy, borderRadius: BorderRadius.circular(BL.radiusSm)),
       textStyle: _t(12, FontWeight.w500, Colors.white),
     ),
-    dialogTheme: DialogTheme(
+    dialogTheme: DialogThemeData(
       backgroundColor: BL.surface,
       elevation: 8,
       shadowColor: const Color(0x1A183153),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(BL.radiusLg)),
     ),
-    tabBarTheme: const TabBarTheme(
+    tabBarTheme: const TabBarThemeData(
       labelColor: BL.primary,
       unselectedLabelColor: BL.textSecondary,
       indicatorColor: BL.primary,
