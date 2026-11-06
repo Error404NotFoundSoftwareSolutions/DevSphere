@@ -1,6 +1,6 @@
 // User story: US-12 Prepare the environment with consent (Sprint 3, MVP)
 // Requirements: FR-ENV-001..005, NFR-SEC-002
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Tests: TC-CMP-02-xx. Threat T22 (fake `code` binary)
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Tests: TC-CMP-02-xx. Threat T22 (fake `code` binary)
 // Implemented here: find the learner's VS Code and prove it is VS Code before trusting the path.
 // A candidate must be an executable file AND print the three-line `--version` format at or above
 // the minimum version. Nothing is run from a path that is not an executable file. No shell.

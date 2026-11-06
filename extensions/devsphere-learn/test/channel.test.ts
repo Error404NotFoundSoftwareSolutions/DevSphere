@@ -1,4 +1,4 @@
-// Capability: CAP-APP-EXT-CHANNEL (ADR-019). Rules: SEC-24, SEC-26. Threats T19, T20
+// Capability: CAP-APP-EXT-CHANNEL (ADR-022). Rules: SEC-24, SEC-26. Threats T19, T20
 // Implemented here: TC-CMP-10-01..07 finding the session file safely, TC-CMP-11-01..07 the channel client
 import assert from 'node:assert/strict';
 import fs from 'node:fs';

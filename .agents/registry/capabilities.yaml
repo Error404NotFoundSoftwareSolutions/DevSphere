@@ -8,12 +8,12 @@ capabilities:
   - { id: CAP-TUTOR,             track: A, status: alpha,   owner: "services/api (proxy) + apps/desktop",  uses: [EP-PROVIDER],                note: "Advisory tutor with visible context controls" }
   - { id: CAP-CONTENT-CI,        track: A, status: alpha,   owner: "services/content-ci",                  uses: [EP-LAB-KIND],                note: "Lab validation and publication" }
   - { id: CAP-REDACTION,         track: A, status: alpha,   owner: "packages/redaction",                   uses: [],                           note: "Secret redaction before logs and AI requests" }
-  - { id: CAP-IDE-SHELL,         track: B, status: dropped, owner: "deferred (ADR-019)",                        uses: [EP-WORKBENCH-VIEW, EP-EXTENSION-GALLERY], note: "Branded Code-OSS build" }
+  - { id: CAP-IDE-SHELL,         track: B, status: dropped, owner: "deferred (ADR-022)",                        uses: [EP-WORKBENCH-VIEW, EP-EXTENSION-GALLERY], note: "Branded Code-OSS build" }
   - { id: CAP-IDE-LEARN,         track: B, status: planned, owner: "extensions/devsphere-learn",           uses: [EP-WORKBENCH-VIEW, EP-LAB-KIND], note: "Labs inside the IDE" }
-  - { id: CAP-BROWSER-PREVIEW,   track: C, status: planned, owner: "deferred (ADR-019)",                        uses: [EP-WORKBENCH-VIEW, EP-BROWSER-CAPABILITY], note: "Preview/reader pane" }
-  - { id: CAP-BROWSER-AGENT,     track: C, status: planned, owner: "deferred (ADR-019)",                        uses: [EP-AGENT-TOOL, EP-BROWSER-CAPABILITY, EP-APPROVAL-POLICY], note: "Agent-operable browser" }
+  - { id: CAP-BROWSER-PREVIEW,   track: C, status: planned, owner: "deferred (ADR-022)",                        uses: [EP-WORKBENCH-VIEW, EP-BROWSER-CAPABILITY], note: "Preview/reader pane" }
+  - { id: CAP-BROWSER-AGENT,     track: C, status: planned, owner: "deferred (ADR-022)",                        uses: [EP-AGENT-TOOL, EP-BROWSER-CAPABILITY, EP-APPROVAL-POLICY], note: "Agent-operable browser" }
   - { id: CAP-AGENT,             track: D, status: planned, owner: "extensions/devsphere-agent",           uses: [EP-PROVIDER, EP-AGENT-TOOL, EP-APPROVAL-POLICY, EP-EVENT-SINK], note: "Pair and Agent modes" }
-  - { id: CAP-COMPANION-EXT,     track: B, status: alpha,   owner: "extensions/devsphere-learn",           uses: [EP-WORKBENCH-VIEW, EP-APP-CHANNEL], note: "Guide panel in the learner's VS Code (ADR-019)" }
+  - { id: CAP-COMPANION-EXT,     track: B, status: alpha,   owner: "extensions/devsphere-learn",           uses: [EP-WORKBENCH-VIEW, EP-APP-CHANNEL], note: "Guide panel in the learner's VS Code (ADR-022)" }
   - { id: CAP-VSCODE-LAUNCHER,   track: A, status: planned, owner: "services/local-worker",                uses: [EP-IPC-CHANNEL], note: "Detect VS Code, install extension after consent, launch lab window" }
   - { id: CAP-APP-EXT-CHANNEL,   track: A, status: planned, owner: "services/local-worker + extension",    uses: [EP-APP-CHANNEL], note: "Local socket protocol, request-only untrusted client" }
   - { id: CAP-HOME-DASHBOARD,    track: A, status: alpha, owner: "apps/desktop",           uses: [EP-WORKBENCH-VIEW, EP-ROADMAP-SOURCE], note: "Home: courses, topics, roadmaps, badges, streaks, continue card" }

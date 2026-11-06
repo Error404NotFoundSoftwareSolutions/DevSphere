@@ -1,6 +1,6 @@
 // User story: US-15 Open the lab workspace (Sprint 4, MVP)
 // Requirements: FR-WS-001..005, FR-CONT-001, NFR-SEC-004, NFR-SEC-006
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Tests: TC-CMP-06-xx. Rules SEC-04, SEC-07, SEC-26
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Tests: TC-CMP-06-xx. Rules SEC-04, SEC-07, SEC-26
 // Implemented here: build the learner's lab folder from a published lab bundle. Only allow-listed
 // learner files are copied (never protected tests or reference solutions), symlinks are skipped,
 // existing files are never overwritten, and the manifest is validated as untrusted input.

@@ -1,6 +1,6 @@
 // User story: US-12 Prepare the environment with consent (Sprint 3, MVP)
 // Requirements: FR-ENV-001..005, NFR-SEC-002, NFR-SEC-005
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Test IDs: TC-CMP-07-01..06, TC-CMP-08-01. Threats T22, T23
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Test IDs: TC-CMP-07-01..06, TC-CMP-08-01. Threats T22, T23
 // Implemented here: start a lab session and open the learner's VS Code on the lab folder
 
 import 'dart:convert';

@@ -1,6 +1,6 @@
 // User story: US-15 Open the lab workspace (Sprint 4, MVP)
 // Requirements: FR-WS-001..005, FR-CONT-001, NFR-SEC-004, NFR-SEC-006
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Test IDs: TC-CMP-06-01..07. Rules SEC-04, SEC-07, SEC-26
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Test IDs: TC-CMP-06-01..07. Rules SEC-04, SEC-07, SEC-26
 // Implemented here: prepare the learner's lab folder (learner files only) and read the lab manifest
 
 import 'dart:io';

@@ -1,6 +1,6 @@
 // User story: US-15 Open the lab workspace (Sprint 4, MVP)
 // Requirements: FR-ENV-001..005, FR-WS-001..005, NFR-USE-001
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Test IDs: TC-LNK-40..49
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Test IDs: TC-LNK-40..49
 // Implemented here: what the learner sees when they press Start: detect VS Code, plan, approve, install, open
 
 import 'package:desktop/api.dart';

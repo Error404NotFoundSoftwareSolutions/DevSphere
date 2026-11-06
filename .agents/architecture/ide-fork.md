@@ -1,4 +1,4 @@
-# Architecture: DevSphere IDE (Track B, Proposed - ADR-013)
+# Architecture: DevSphere IDE (Track B, Proposed - ADR-018)
 
 Status: **Proposed.** Needs Q-001, Q-002, Q-006, Q-007, Q-008. Do not build until `STATE.yaml` says `Active`.
 

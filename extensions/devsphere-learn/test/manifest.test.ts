@@ -1,4 +1,4 @@
-// Capability: CAP-COMPANION-EXT (ADR-019). Tests: TC-CMP-13-01..03
+// Capability: CAP-COMPANION-EXT (ADR-022). Tests: TC-CMP-13-01..03
 // Implemented here: the guide must live in the Secondary Side Bar (the chat area), never in the editor area
 import assert from 'node:assert/strict';
 import fs from 'node:fs';

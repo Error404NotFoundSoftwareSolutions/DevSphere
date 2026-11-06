@@ -1,7 +1,7 @@
 // User story: US-12 Prepare the environment with consent (Sprint 3, MVP)
 // User story: US-15 Open the lab workspace (Sprint 4, MVP)
 // Requirements: FR-ENV-001..005, FR-WS-001..005, NFR-USE-001
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Tests: TC-LNK-40..47
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Tests: TC-LNK-40..47
 // Implemented here: what happens when the learner presses Start. Find VS Code; if the guide extension
 // needs installing, show a plain-language plan and wait for a click; then install, then open the lab.
 // Nothing is installed or opened without that click. No dart:io: everything goes through the worker client.

@@ -1,6 +1,6 @@
 // User story: US-16 Run lab tasks with limits (Sprint 4, MVP)
 // Requirements: FR-EXEC-001..003, FR-EXEC-005..006, FR-EXEC-009, NFR-SEC-002..003
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Tests: TC-LNK-20..27
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Tests: TC-LNK-20..27
 // Implemented here: the real client for the local worker process. It starts the worker program, talks
 // JSON lines (one request per line, answers matched by id), validates every request against the IPC
 // contract first, fails pending calls if the worker stops, and restarts it on the next call.

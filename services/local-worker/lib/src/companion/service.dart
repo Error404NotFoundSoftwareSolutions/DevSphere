@@ -1,6 +1,6 @@
 // User story: US-15 Open the lab workspace (Sprint 4, MVP)
 // Requirements: FR-ENV-001..005, FR-WS-001..005, NFR-SEC-002
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Tests: TC-LNK-01..12
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Tests: TC-LNK-01..12
 // Implemented here: the service behind the companion:* IPC channels. status() finds VS Code and writes
 // the install plan in plain words; install() needs an explicit approval; launch() never installs by
 // itself and refuses until the guide is current; sessionState() reports Practice progress for the app.

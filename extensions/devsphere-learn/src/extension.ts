@@ -1,4 +1,4 @@
-// Capability: CAP-COMPANION-EXT, CAP-COMPLETION. Rules: SEC-21..SEC-27, TRU-01, TRU-02, ADR-019. Tests: TC-CMP-13-xx
+// Capability: CAP-COMPANION-EXT, CAP-COMPLETION. Rules: SEC-21..SEC-27, TRU-01, TRU-02, ADR-022. Tests: TC-CMP-13-xx
 // Implemented here: VS Code glue for the DevPilot Guide. The guide is a webview VIEW in the Secondary Side
 // Bar (the chat area, like Copilot Chat), never a tab in the editor area. In a lab folder it finds the app's
 // private session, connects to the channel and renders the guide from the worker's events. It never runs the

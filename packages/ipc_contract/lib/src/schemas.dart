@@ -185,7 +185,7 @@ final Map<String, ChannelSchema> channelSchemas = {
       }
     },
   ),
-  // Companion VS Code extension (ADR-019). No call accepts a path or a command: only a lab id or an explicit approval.
+  // Companion VS Code extension (ADR-022). No call accepts a path or a command: only a lab id or an explicit approval.
   "companion:status": ChannelSchema(
     allowedRequestKeys: {},
     requiredRequestKeys: {},

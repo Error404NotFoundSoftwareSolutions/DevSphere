@@ -1,4 +1,4 @@
-// Capability: CAP-APP-EXT-CHANNEL (ADR-019). Rules: SEC-24, SEC-26. Threats T19, T20. Tests: TC-CMP-10-xx
+// Capability: CAP-APP-EXT-CHANNEL (ADR-022). Rules: SEC-24, SEC-26. Threats T19, T20. Tests: TC-CMP-10-xx
 // Implemented here: find the worker's session for THIS lab folder, trusting only private files: the
 // runtime directory and the session file must belong to the current user and be closed to everyone
 // else, the file must not be a symlink, and its content is validated.

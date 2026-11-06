@@ -1,6 +1,6 @@
 // User story: US-12 Prepare the environment with consent (Sprint 3, MVP)
 // Requirements: FR-ENV-001..005, NFR-SEC-002, NFR-SEC-005
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Test IDs: TC-CMP-03-01..08, threat T21
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Test IDs: TC-CMP-03-01..08, threat T21
 // Implemented here: installing the shipped extension file only after a visible plan and a click
 
 import 'package:local_worker/src/companion/extension_installer.dart';

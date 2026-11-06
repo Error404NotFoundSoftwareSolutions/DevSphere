@@ -1,6 +1,6 @@
 // User story: US-16 Run lab tasks with limits (Sprint 4, MVP)
 // Requirements: FR-EXEC-001..003, NFR-SEC-002
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Test IDs: TC-LNK-30..33
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Test IDs: TC-LNK-30..33
 // Implemented here: where the app looks for its worker, lab content and guide extension
 
 import 'package:desktop/worker/worker_locator.dart';

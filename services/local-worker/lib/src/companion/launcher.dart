@@ -1,6 +1,6 @@
 // User story: US-12 Prepare the environment with consent (Sprint 3, MVP)
 // Requirements: FR-ENV-001..005, NFR-SEC-002, NFR-SEC-005
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Tests: TC-CMP-07-xx, TC-CMP-08-01. Threats T22, T23
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Tests: TC-CMP-07-xx, TC-CMP-08-01. Threats T22, T23
 // Implemented here: start a lab session. Prepare the folder, start the private channel, write a private
 // session file, then open the learner's VS Code on the lab folder with a minimal environment. If any
 // step fails the session is torn down and the learner gets a plain message. The extension install

@@ -1,6 +1,6 @@
 # Plan: DevSphere IDE from Code-OSS (Track B)
 
-Status: **Accepted** (2026-11-04), not yet Active. Architecture: `../architecture/ide-fork.md`. Rules: `../rules/95-ide-fork.md`. Decision record: ADR-013 (Accepted).
+Status: **Accepted** (2026-11-04), not yet Active. Architecture: `../architecture/ide-fork.md`. Rules: `../rules/95-ide-fork.md`. Decision record: ADR-018 (Accepted).
 
 ## Goal
 A signed, branded desktop IDE built from open-source VS Code, with DevSphere's learning flow, tutor and (later) agent built in, no Microsoft telemetry or branding, Open VSX extensions, and an upgrade path that costs days, not weeks, each month.
@@ -14,7 +14,7 @@ Web version; our own marketplace; replacing language servers; competing feature-
 ## Milestones
 | ID | Milestone | Exit criteria |
 |---|---|---|
-| PL-IDE-00 | Decisions | Q-001, Q-002, Q-006, Q-007, Q-008, Q-015 answered; ADR-013 Accepted |
+| PL-IDE-00 | Decisions | Q-001, Q-002, Q-006, Q-007, Q-008, Q-015 answered; ADR-018 Accepted |
 | PL-IDE-01 | Spike: unmodified build | SP-IDE-01 RESULT.md: reproducible build on 3 OSes, time, disk, RAM, known snags |
 | PL-IDE-02 | Spike: rebrand + gallery + no telemetry | SP-IDE-02 RESULT.md: first launch makes zero requests to non-allow-listed hosts (network capture attached) |
 | PL-IDE-03 | Repo and pipeline | `devsphere-ide` (or folder) with `upstream.lock`, patch tooling, CI job that fetch/apply/build/test; patch-health report |

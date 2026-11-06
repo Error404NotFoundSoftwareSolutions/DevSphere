@@ -1,6 +1,6 @@
 // User story: US-12 Prepare the environment with consent (Sprint 3, MVP)
 // Requirements: FR-ENV-001..005, FR-WS-001..005, NFR-SEC-002
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Test IDs: TC-LNK-01..12
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Test IDs: TC-LNK-01..12
 // Implemented here: the service behind the companion:* IPC channels (status, install, launch, sessionState)
 
 import 'dart:convert';

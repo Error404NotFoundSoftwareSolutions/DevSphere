@@ -1,6 +1,6 @@
-# Architecture: DevPilot app + companion VS Code extension (ADR-019)
+# Architecture: DevPilot app + companion VS Code extension (ADR-022)
 
-Status: **Accepted** 2026-11-04 (owner idea). Replaces the Code-OSS fork (ADR-013, superseded). Security detail: `docs/security/THREAT_MODEL.md` T19-T24.
+Status: **Accepted** 2026-11-04 (owner idea). Replaces the Code-OSS fork (ADR-018, superseded). Security detail: `docs/security/THREAT_MODEL.md` T19-T24.
 
 ## 1. Idea in one paragraph
 The DevPilot desktop app (Flutter) is the product: sign-in, dashboard, courses, roadmaps, scores, badges. When a learner starts a lab that needs code, the app opens the learner's **own installed VS Code** on the lab folder. A small **companion extension** (`extensions/devsphere-learn`, renamed DevPilot Guide later) sits in VS Code's right-hand side panel, where Copilot's chat usually sits, and guides each step. The extension is a thin guide. The app does the thinking, checking and scoring.
@@ -60,7 +60,7 @@ VS Code missing or too old; `code` on PATH is not VS Code; extension install ref
 ## 9. Alternatives considered
 | Option | Why not chosen |
 |---|---|
-| Fork VS Code (ADR-013) | Large build, constant upstream merges, legal and branding overhead |
+| Fork VS Code (ADR-018) | Large build, constant upstream merges, legal and branding overhead |
 | Extension only, no app | Loses the dashboard, roadmaps and badges experience the owner wants |
-| Own editor in Flutter | Weak editor/terminal ecosystem (ADR-018 risk) |
+| Own editor in Flutter | Weak editor/terminal ecosystem (ADR-021 risk) |
 | Chat participant in Copilot's slot | Depends on chat availability and sign-in; revisit after verification |

@@ -1,6 +1,6 @@
 // User story: US-15 Open the lab workspace (Sprint 4, MVP)
 // Requirements: FR-WS-001..005, NFR-SEC-002, NFR-SEC-003
-// Capability: CAP-APP-EXT-CHANNEL (ADR-019). Test IDs: TC-CMP-01-01..08
+// Capability: CAP-APP-EXT-CHANNEL (ADR-022). Test IDs: TC-CMP-01-01..08
 // Implemented here: extension protocol v1: strict request parsing, framing, handshake gate
 
 import 'dart:convert';

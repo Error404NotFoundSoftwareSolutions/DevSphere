@@ -1,4 +1,4 @@
-// Capability: CAP-APP-EXT-CHANNEL (ADR-019). Rules: SEC-21, SEC-26. Threat T19. Tests: TC-CMP-11-xx
+// Capability: CAP-APP-EXT-CHANNEL (ADR-022). Rules: SEC-21, SEC-26. Threat T19. Tests: TC-CMP-11-xx
 // Implemented here: the channel client. Connects to the worker's private socket, says hello, waits for
 // welcome, then relays only valid events and sends only valid requests. It holds no credentials.
 import net from 'node:net';

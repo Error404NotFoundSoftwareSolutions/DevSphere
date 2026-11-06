@@ -1,6 +1,6 @@
 # Plan: in-product agent runtime (Track D)
 
-Status: **Accepted** (2026-11-04), not yet Active. Architecture: `../architecture/agent-runtime.md`. ADR-015 (Accepted).
+Status: **Accepted** (2026-11-04), not yet Active. Architecture: `../architecture/agent-runtime.md`. ADR-020 (Accepted).
 
 ## Goal
 Safe AI assistance in three modes (Tutor, Pair, Agent) selected by profile, with approvals, checkpoints, audit and evals, without weakening any Track A trust guarantee.
@@ -8,7 +8,7 @@ Safe AI assistance in three modes (Tutor, Pair, Agent) selected by profile, with
 ## Milestones
 | ID | Milestone | Exit criteria |
 |---|---|---|
-| PL-AGT-00 | Decide scope | Q-004, Q-005, Q-013 answered; ADR-015 Accepted |
+| PL-AGT-00 | Decide scope | Q-004, Q-005, Q-013 answered; ADR-020 Accepted |
 | PL-AGT-01 | Contracts | Tool schema, approval policy schema, audit event schema in `packages/contracts` |
 | PL-AGT-02 | Provider port + gateway | Two adapters (real, fake); redaction pass; limits |
 | PL-AGT-03 | Tool registry + read-only tools | `fs.read`, `search`, `tests.run`; registry completeness test |

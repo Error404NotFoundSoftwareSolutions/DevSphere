@@ -1,6 +1,6 @@
 // User story: US-12 Prepare the environment with consent (Sprint 3, MVP)
 // Requirements: FR-ENV-001..005, NFR-SEC-002, NFR-SEC-005
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Tests: TC-CMP-03-xx. Threat T21 (swapped extension file)
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Tests: TC-CMP-03-xx. Threat T21 (swapped extension file)
 // Implemented here: plan then install the shipped .vsix. The plan is plain language; the install
 // refuses without the user's approval, checks the file's SHA-256 before running anything, uses an
 // argument array (no shell) and verifies the result by listing installed extensions.

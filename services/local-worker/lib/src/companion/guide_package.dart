@@ -1,6 +1,6 @@
 // User story: US-12 Prepare the environment with consent (Sprint 3, MVP)
 // Requirements: FR-ENV-001..005, NFR-SEC-002, NFR-SEC-005
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Tests: TC-LNK-12. Threat T21
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Tests: TC-LNK-12. Threat T21
 // Implemented here: read the guide extension's metadata shipped next to the .vsix inside the app
 // (devpilot-guide.json: id, version, SHA-256, file name). The file name must be a bare name, the
 // fingerprint a SHA-256, and the file must exist. Anything else means "no guide available".

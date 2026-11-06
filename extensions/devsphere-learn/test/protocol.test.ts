@@ -1,4 +1,4 @@
-// Capability: CAP-APP-EXT-CHANNEL (ADR-019). Rules: SEC-21, SEC-26, ARC-03. Spec: docs/EXTENSION_PROTOCOL.md
+// Capability: CAP-APP-EXT-CHANNEL (ADR-022). Rules: SEC-21, SEC-26, ARC-03. Spec: docs/EXTENSION_PROTOCOL.md
 // Implemented here: TC-CMP-09-01..06 extension-side protocol: strict event parsing, framing, shared fixtures
 import assert from 'node:assert/strict';
 import fs from 'node:fs';

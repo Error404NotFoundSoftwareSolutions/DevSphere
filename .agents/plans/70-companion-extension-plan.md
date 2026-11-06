@@ -1,4 +1,4 @@
-# Plan: companion extension (Track B, ADR-019)
+# Plan: companion extension (Track B, ADR-022)
 
 Status: **Accepted** 2026-11-04, Active. Architecture: `../architecture/companion-extension.md`. Security: `docs/security/THREAT_MODEL.md` T19-T24.
 

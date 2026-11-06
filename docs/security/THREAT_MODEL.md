@@ -48,7 +48,7 @@ Curious or malicious **student** (cheating, probing); **malicious lab/repo/exten
 | T17 | Prompt injection to approval fatigue | Many harmless prompts then a harmful one | Dangerous actions always ask with clear destination/payload; allowances time-limited | TC-SEC-16 evals |
 | T18 | Local data theft | Other malware reads progress DB | No secrets in local DB; OS file permissions; optional encryption at rest later | TC-SEC-17 |
 
-### Companion-extension threats (ADR-019)
+### Companion-extension threats (ADR-022)
 | # | Threat | Example | Required controls | Test |
 |---|---|---|---|---|
 | T19 | Forged channel messages | Learner code or malware connects to the socket and sends "check passed" or "finish lab" | Channel carries requests only; scores/badges never accepted from it; Practice results computed by the worker; Verified only from the server; session scoped to one lab | TC-SEC-20 |

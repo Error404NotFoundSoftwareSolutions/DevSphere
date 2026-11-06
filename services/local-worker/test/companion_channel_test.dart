@@ -1,6 +1,6 @@
 // User story: US-15 Open the lab workspace (Sprint 4, MVP)
 // Requirements: FR-WS-001..005, NFR-SEC-002, NFR-SEC-003
-// Capability: CAP-APP-EXT-CHANNEL (ADR-019). Test IDs: TC-CMP-04-01..11. Threats T19, T20
+// Capability: CAP-APP-EXT-CHANNEL (ADR-022). Test IDs: TC-CMP-04-01..11. Threats T19, T20
 // Implemented here: the local channel server: private socket, handshake, strict parsing, limits
 
 import 'dart:io';

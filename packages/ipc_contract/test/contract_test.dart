@@ -40,7 +40,7 @@ void main() {
     });
   });
 
-  group('TC-CMP-12 companion channels (ADR-019)', () {
+  group('TC-CMP-12 companion channels (ADR-022)', () {
     test('TC-CMP-12-01 status takes no fields', () {
       expect(() => validateRequest('companion:status', {}), returnsNormally);
       expect(() => validateRequest('companion:status', {'path': '/usr/bin/code'}), throwsA(isA<IpcValidationException>()));

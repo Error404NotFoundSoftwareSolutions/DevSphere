@@ -1,4 +1,4 @@
-# Architecture: integrated browser (Track C, Proposed - ADR-014)
+# Architecture: integrated browser (Track C, Proposed - ADR-019)
 
 Status: **Proposed.** Needs Q-003. Depends on Track B (or, for a Flutter-only variant, a webview package; not recommended).
 

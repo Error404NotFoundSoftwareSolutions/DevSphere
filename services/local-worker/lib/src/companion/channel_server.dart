@@ -1,6 +1,6 @@
 // User story: US-15 Open the lab workspace (Sprint 4, MVP)
 // Requirements: FR-WS-001..005, NFR-SEC-002, NFR-SEC-003
-// Capability: CAP-APP-EXT-CHANNEL (ADR-019). Spec: docs/EXTENSION_PROTOCOL.md. Tests: TC-CMP-04-xx. Threats T19, T20
+// Capability: CAP-APP-EXT-CHANNEL (ADR-022). Spec: docs/EXTENSION_PROTOCOL.md. Tests: TC-CMP-04-xx. Threats T19, T20
 // Implemented here: the local channel server. Unix socket in a private directory (0700, socket 0600),
 // one client at a time, handshake first, strict parsing, three invalid messages and out you go,
 // rate limit, idle timeout. The client is untrusted: the handler decides everything.

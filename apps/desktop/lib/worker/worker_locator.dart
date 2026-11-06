@@ -1,6 +1,6 @@
 // User story: US-16 Run lab tasks with limits (Sprint 4, MVP)
 // Requirements: FR-EXEC-001..003, NFR-SEC-002
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Tests: TC-LNK-30..34
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Tests: TC-LNK-30..34
 // Implemented here: where the app looks for its worker program, the lab content and the bundled guide
 // extension. Only absolute paths that exist are accepted. The UI never supplies these paths.
 

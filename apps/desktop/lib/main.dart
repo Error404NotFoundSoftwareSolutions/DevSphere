@@ -1,7 +1,7 @@
 // User story: US-16 Run lab tasks with limits (Sprint 4, MVP)
 // User story: US-38 Fast start and detection (Sprint 9, MVP)
 // Requirements: FR-EXEC-001..003, NFR-PERF-001..002
-// Implemented here: app entry point. Wires the real worker client (ADR-019). If the worker program is
+// Implemented here: app entry point. Wires the real worker client (ADR-022). If the worker program is
 // missing the app uses a client that says so plainly instead of pretending to work.
 
 import 'package:firebase_core/firebase_core.dart';

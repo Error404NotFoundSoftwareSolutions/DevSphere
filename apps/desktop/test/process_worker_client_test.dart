@@ -1,6 +1,6 @@
 // User story: US-16 Run lab tasks with limits (Sprint 4, MVP)
 // Requirements: FR-EXEC-001..003, NFR-SEC-002..003
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Test IDs: TC-LNK-20..27
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Test IDs: TC-LNK-20..27
 // Implemented here: the app's real client for the worker process (JSON lines, one id per request)
 
 import 'package:desktop/worker/process_worker_client.dart';

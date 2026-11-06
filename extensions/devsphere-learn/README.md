@@ -1,6 +1,6 @@
 # DevPilot Guide (extension `devpilot.devsphere-learn`)
 
-Companion extension for the DevPilot desktop app (ADR-019). When the app opens a lab in your VS Code, this extension shows the steps in a side panel, asks the app to run **Check my work**, and shows the app's answer. It is a thin guide: the app owns progress, checks, scoring and Verified submission.
+Companion extension for the DevPilot desktop app (ADR-022). When the app opens a lab in your VS Code, this extension shows the steps in a side panel, asks the app to run **Check my work**, and shows the app's answer. It is a thin guide: the app owns progress, checks, scoring and Verified submission.
 
 ## What it does
 - Shows the guide in the **Secondary Side Bar** (the chat area, next to Chat), as a view named "DevPilot Guide". Needs VS Code 1.144 or newer.
