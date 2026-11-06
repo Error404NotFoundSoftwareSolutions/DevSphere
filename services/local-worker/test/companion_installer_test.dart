@@ -10,11 +10,12 @@ import 'package:test/test.dart';
 const editor = EditorInstall(path: '/usr/bin/code', version: '1.144.0', kind: EditorKind.vscode);
 const hash = 'a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f90';
 
-ExtensionPackage pkg({String vsix = '/opt/buildloop/guide-0.1.0.vsix', String sha = hash, String version = '0.1.0'}) =>
-    ExtensionPackage(id: 'buildloop.devsphere-learn', version: version, vsixPath: vsix, sha256: sha);
+ExtensionPackage pkg({String vsix = '/opt/devpilot/guide-0.1.0.vsix', String sha = hash, String version = '0.1.0'}) =>
+    ExtensionPackage(id: 'devpilot.devsphere-learn', version: version, vsixPath: vsix, sha256: sha);
 
 class FakeRunner {
-  FakeRunner({this.listing = '', this.installExit = 0, this.afterInstallListing});
+  FakeRunner({this.listing = '', this.installExit = 0, this.afterInstallListing, this.uninstallExit = 0});
+  int uninstallExit;
   String listing;
   String? afterInstallListing;
   int installExit;
@@ -26,6 +27,16 @@ class FakeRunner {
     if (args.contains('--install-extension')) {
       if (installExit == 0 && afterInstallListing != null) listing = afterInstallListing!;
       return CommandResult(exitCode: installExit, stdout: '', stderr: installExit == 0 ? '' : 'failed');
+    }
+    if (args.contains('--uninstall-extension')) {
+      if (uninstallExit == 0) {
+        final id = args[args.indexOf('--uninstall-extension') + 1];
+        listing = listing.split('\n').where((l) => !l.startsWith('$id@')).join('\n');
+        if (afterInstallListing != null) {
+          afterInstallListing = afterInstallListing!.split('\n').where((l) => !l.startsWith('$id@')).join('\n');
+        }
+      }
+      return CommandResult(exitCode: uninstallExit);
     }
     return const CommandResult(exitCode: 1);
   }
@@ -39,17 +50,17 @@ void main() {
     final plan = await planInstall(editor: editor, package: pkg(), runner: FakeRunner().call);
     expect(plan.action, InstallAction.install);
     final text = plan.lines.join('\n');
-    expect(text, contains('BuildLoop Guide'));
+    expect(text, contains('DevPilot Guide'));
     expect(text, contains('/usr/bin/code'));
     expect(text, contains('does not use the internet'));
   });
 
   test('TC-CMP-03-02 plan says update for an older version and none for the same version', () async {
-    final older = FakeRunner(listing: 'buildloop.devsphere-learn@0.0.9\nms-python.python@2024.1.0\n');
+    final older = FakeRunner(listing: 'devpilot.devsphere-learn@0.0.9\nms-python.python@2024.1.0\n');
     final update = await planInstall(editor: editor, package: pkg(), runner: older.call);
     expect(update.action, InstallAction.update);
     expect(update.lines.join(' '), contains('close that window'));
-    final same = FakeRunner(listing: 'buildloop.devsphere-learn@0.1.0\n');
+    final same = FakeRunner(listing: 'devpilot.devsphere-learn@0.1.0\n');
     expect((await planInstall(editor: editor, package: pkg(), runner: same.call)).action, InstallAction.none);
   });
 
@@ -75,12 +86,12 @@ void main() {
   });
 
   test('TC-CMP-03-05 install uses an argument array and verifies the result by listing', () async {
-    final r = FakeRunner(afterInstallListing: 'buildloop.devsphere-learn@0.1.0\n');
+    final r = FakeRunner(afterInstallListing: 'devpilot.devsphere-learn@0.1.0\n');
     final plan = await planInstall(editor: editor, package: pkg(), runner: r.call);
     r.calls.clear();
     final out = await installExtension(plan, userApproved: true, runner: r.call, sha256Of: sameHash);
     expect(out.status, InstallStatus.installed);
-    expect(r.calls.first, ['/usr/bin/code', '--install-extension', '/opt/buildloop/guide-0.1.0.vsix', '--force']);
+    expect(r.calls.first, ['/usr/bin/code', '--install-extension', '/opt/devpilot/guide-0.1.0.vsix', '--force']);
     expect(r.calls.any((c) => c.contains('--list-extensions')), isTrue);
   });
 
@@ -97,7 +108,7 @@ void main() {
   });
 
   test('TC-CMP-03-07 nothing is run when the plan says none', () async {
-    final r = FakeRunner(listing: 'buildloop.devsphere-learn@0.1.0\n');
+    final r = FakeRunner(listing: 'devpilot.devsphere-learn@0.1.0\n');
     final plan = await planInstall(editor: editor, package: pkg(), runner: r.call);
     r.calls.clear();
     final out = await installExtension(plan, userApproved: true, runner: r.call, sha256Of: sameHash);
@@ -117,5 +128,55 @@ void main() {
     ]) {
       expect(() => planInstall(editor: editor, package: bad, runner: FakeRunner().call), throwsArgumentError);
     }
+  });
+
+  const legacyId = 'buildloop.devsphere-learn'; // the extension id from before the product was renamed to DevPilot
+
+  test('TC-CMP-03-09 an old BuildLoop Guide is part of the plan, even if the new guide is already current', () async {
+    final r = FakeRunner(listing: '$legacyId@0.2.0\nms-python.python@2024.1.0\n');
+    final plan = await planInstall(editor: editor, package: pkg(), runner: r.call);
+    expect(plan.legacyInstalled, [legacyId]);
+    expect(plan.lines.join(' '), contains('old BuildLoop Guide'));
+    final both = FakeRunner(listing: '$legacyId@0.2.0\ndevpilot.devsphere-learn@0.1.0\n');
+    final plan2 = await planInstall(editor: editor, package: pkg(), runner: both.call);
+    expect(plan2.action, isNot(InstallAction.none)); // still needs the approved step so the old one is removed
+  });
+
+  test('TC-CMP-03-10 install adds the new guide first, verifies it, then removes the old one', () async {
+    final r = FakeRunner(listing: '$legacyId@0.2.0\n', afterInstallListing: '$legacyId@0.2.0\ndevpilot.devsphere-learn@0.1.0\n');
+    final plan = await planInstall(editor: editor, package: pkg(), runner: r.call);
+    r.calls.clear();
+    final out = await installExtension(plan, userApproved: true, runner: r.call, sha256Of: sameHash);
+    expect(out.status, InstallStatus.installed);
+    final installAt = r.calls.indexWhere((c) => c.contains('--install-extension'));
+    final uninstallAt = r.calls.indexWhere((c) => c.contains('--uninstall-extension'));
+    expect(installAt, greaterThanOrEqualTo(0));
+    expect(uninstallAt, greaterThan(installAt));
+    expect(r.calls[uninstallAt], ['/usr/bin/code', '--uninstall-extension', legacyId]);
+  });
+
+  test('TC-CMP-03-11 if the old guide cannot be removed the install still succeeds and says what to do', () async {
+    final r = FakeRunner(listing: '$legacyId@0.2.0\n', afterInstallListing: '$legacyId@0.2.0\ndevpilot.devsphere-learn@0.1.0\n', uninstallExit: 1);
+    final plan = await planInstall(editor: editor, package: pkg(), runner: r.call);
+    final out = await installExtension(plan, userApproved: true, runner: r.call, sha256Of: sameHash);
+    expect(out.status, InstallStatus.installed);
+    expect(out.message, contains('remove the old'));
+  });
+
+  test('TC-CMP-03-12 without an old guide nothing is uninstalled', () async {
+    final r = FakeRunner(afterInstallListing: 'devpilot.devsphere-learn@0.1.0\n');
+    final plan = await planInstall(editor: editor, package: pkg(), runner: r.call);
+    r.calls.clear();
+    await installExtension(plan, userApproved: true, runner: r.call, sha256Of: sameHash);
+    expect(r.calls.any((c) => c.contains('--uninstall-extension')), isFalse);
+  });
+
+  test('TC-CMP-03-13 the old guide is kept if the new one could not be installed', () async {
+    final r = FakeRunner(listing: '$legacyId@0.2.0\n');
+    final plan = await planInstall(editor: editor, package: pkg(), runner: r.call);
+    r.calls.clear();
+    final out = await installExtension(plan, userApproved: true, runner: r.call, sha256Of: otherHash); // file changed
+    expect(out.status, InstallStatus.failed);
+    expect(r.calls.any((c) => c.contains('--uninstall-extension')), isFalse);
   });
 }

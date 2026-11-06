@@ -1,10 +1,10 @@
 // User story: US-37 Usability and accessibility (Sprint 9, MVP)
 // Requirements: NFR-USE-001
-// Implemented here: BuildLoop design tokens (docs/DESIGN_SYSTEM.md). Single source of colour, spacing and type.
+// Implemented here: DevPilot design tokens (docs/DESIGN_SYSTEM.md). Single source of colour, spacing and type.
 
 import 'package:flutter/material.dart';
 
-/// BuildLoop design tokens. Names follow tokens.css in the design system.
+/// DevPilot design tokens. Names follow tokens.css in the design system.
 abstract final class BL {
   // Surfaces
   static const Color background = Color(0xFFF4F6FA);

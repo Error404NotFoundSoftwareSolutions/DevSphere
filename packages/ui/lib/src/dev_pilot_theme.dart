@@ -1,6 +1,6 @@
 // User story: US-37 Usability and accessibility (Sprint 9, MVP)
 // Requirements: NFR-USE-001
-// Implemented here: BuildLoop light theme built only from tokens (docs/DESIGN_SYSTEM.md)
+// Implemented here: DevPilot light theme built only from tokens (docs/DESIGN_SYSTEM.md)
 
 import 'package:flutter/material.dart';
 import 'tokens.dart';
@@ -14,7 +14,7 @@ TextStyle _t(double size, FontWeight weight, Color color) => TextStyle(
       height: 1.4,
     );
 
-ThemeData buildLoopTheme() {
+ThemeData devPilotTheme() {
   const scheme = ColorScheme.light(
     primary: BL.primary,
     onPrimary: Colors.white,

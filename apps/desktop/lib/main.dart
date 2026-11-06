@@ -27,10 +27,10 @@ Future<void> main() async {
   final paths = realAppPaths();
   final WorkerClient client = paths.worker == null
       ? UnavailableWorkerClient(
-          'BuildLoop could not find its helper program, so it cannot open labs in VS Code.')
+          'DevPilot could not find its helper program, so it cannot open labs in VS Code.')
       : ProcessWorkerClient(executable: paths.worker!, args: workerArgs(paths));
   runApp(ProviderScope(
     overrides: [workerClientProvider.overrideWithValue(client)],
-    child: BuildLoopApp(),
+    child: DevPilotApp(),
   ));
 }

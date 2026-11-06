@@ -1,7 +1,7 @@
 // User story: US-37 Usability and accessibility (Sprint 9, MVP)
 // Requirements: NFR-USE-001 (consistent, accessible visual system)
 // Test ID: TC-DES-001-01..05
-// Implemented here: BuildLoop design tokens and theme match docs/DESIGN_SYSTEM.md
+// Implemented here: DevPilot design tokens and theme match docs/DESIGN_SYSTEM.md
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -32,7 +32,7 @@ void main() {
   });
 
   test('TC-DES-001-03 light theme uses canvas background and primary blue', () {
-    final t = buildLoopTheme();
+    final t = devPilotTheme();
     expect(t.brightness, Brightness.light);
     expect(t.scaffoldBackgroundColor, BL.background);
     expect(t.colorScheme.primary, BL.primary);
@@ -40,7 +40,7 @@ void main() {
   });
 
   test('TC-DES-001-04 cards are 24px radius with a 1px border; buttons 40px and 9px radius', () {
-    final t = buildLoopTheme();
+    final t = devPilotTheme();
     final card = t.cardTheme.shape as RoundedRectangleBorder;
     expect(card.borderRadius, BorderRadius.circular(24));
     expect(card.side.width, 1);
@@ -51,7 +51,7 @@ void main() {
   });
 
   test('TC-DES-001-05 text scale: body 14, secondary 13, label 12, code font is mono', () {
-    final t = buildLoopTheme();
+    final t = devPilotTheme();
     expect(t.textTheme.bodyMedium!.fontSize, 14);
     expect(t.textTheme.bodySmall!.fontSize, 13);
     expect(t.textTheme.labelSmall!.fontSize, 12);

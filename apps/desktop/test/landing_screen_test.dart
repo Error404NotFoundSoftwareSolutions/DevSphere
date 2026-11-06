@@ -58,7 +58,7 @@ void main() {
           overrides: [
             workerClientProvider.overrideWithValue(MockWorkerClient()),
           ],
-          child: BuildLoopApp(router: router),
+          child: DevPilotApp(router: router),
         ),
       );
       await tester.pumpAndSettle();
@@ -85,7 +85,7 @@ void main() {
           overrides: [
             workerClientProvider.overrideWithValue(MockWorkerClient()),
           ],
-          child: BuildLoopApp(router: router),
+          child: DevPilotApp(router: router),
         ),
       );
       await tester.pumpAndSettle();

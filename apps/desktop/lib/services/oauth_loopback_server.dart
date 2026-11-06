@@ -75,7 +75,7 @@ class OAuthLoopbackServer {
           request,
           title: 'Sign-in successful!',
           body:
-              'You have signed in successfully. You may close this tab and return to Devpilot.',
+              'You have signed in successfully. You may close this tab and return to DevPilot.',
           statusCode: HttpStatus.ok,
         );
 

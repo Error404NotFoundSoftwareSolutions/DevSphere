@@ -1,9 +1,9 @@
-# BuildLoop Guide (extension `buildloop.devsphere-learn`)
+# DevPilot Guide (extension `devpilot.devsphere-learn`)
 
-Companion extension for the BuildLoop desktop app (ADR-019). When the app opens a lab in your VS Code, this extension shows the steps in a side panel, asks the app to run **Check my work**, and shows the app's answer. It is a thin guide: the app owns progress, checks, scoring and Verified submission.
+Companion extension for the DevPilot desktop app (ADR-019). When the app opens a lab in your VS Code, this extension shows the steps in a side panel, asks the app to run **Check my work**, and shows the app's answer. It is a thin guide: the app owns progress, checks, scoring and Verified submission.
 
 ## What it does
-- Shows the guide in the **Secondary Side Bar** (the chat area, next to Chat), as a view named "BuildLoop Guide". Needs VS Code 1.144 or newer.
+- Shows the guide in the **Secondary Side Bar** (the chat area, next to Chat), as a view named "DevPilot Guide". Needs VS Code 1.144 or newer.
 - Activates only in a lab folder (`.devsphere/lab.json`).
 - Finds the app's private session file for this folder (trusts only files owned by you and closed to others), connects to the local socket and says hello (`docs/EXTENSION_PROTOCOL.md`).
 - Renders the guide from the app's `labState` events; step text comes from the lab folder and is rendered as safe text.

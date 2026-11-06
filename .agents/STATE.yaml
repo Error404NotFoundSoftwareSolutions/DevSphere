@@ -45,7 +45,7 @@ autonomy:
 # Status: Proposed -> Accepted (ADR merged) -> Active (in current sprint) -> Frozen | Dropped
 tracks:
   A-learning-platform:   { status: Active, adr: ADR-003, note: "Flutter desktop + Python services. Exists today." }
-  B-companion-extension: { status: Active, adr: ADR-019, note: "BuildLoop app + guide extension in the learner's VS Code. Supersedes the fork (ADR-013)." }
+  B-companion-extension: { status: Active, adr: ADR-019, note: "DevPilot app + guide extension in the learner's VS Code. Supersedes the fork (ADR-013)." }
   C-integrated-browser:  { status: Deferred, adr: ADR-014, note: "Re-plan on the companion model; VS Code has a Simple Browser." }
   D-agent-runtime:       { status: Deferred, adr: ADR-015, note: "Tutor first via the extension panel; Pair/Agent later." }
   E-curriculum-roadmap:  { status: Proposed, adr: ADR-017, note: "Skill graph, prebuilt+generated roadmaps, OSS contribution sandbox, beginner->professional. Questions answered; awaiting owner's yes on ADR-017 and the MVP change request." }

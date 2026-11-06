@@ -57,7 +57,7 @@ class _MainState extends State<_Main> {
             listenable: AuthSession.instance,
             builder: (context, _) {
               final u = AuthSession.instance.user;
-              return Text(u == null ? 'Welcome to BuildLoop' : 'Welcome, ${u.label}',
+              return Text(u == null ? 'Welcome to DevPilot' : 'Welcome, ${u.label}',
                   style: text.headlineMedium);
             },
           ),

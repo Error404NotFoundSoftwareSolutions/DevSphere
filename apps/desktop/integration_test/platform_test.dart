@@ -15,9 +15,9 @@ void main() {
     final isSupportedOS = Platform.isWindows || Platform.isLinux || Platform.isMacOS;
     expect(isSupportedOS, isTrue);
 
-    await tester.pumpWidget(BuildLoopApp());
+    await tester.pumpWidget(DevPilotApp());
     await tester.pumpAndSettle();
-    expect(find.byType(BuildLoopApp), findsOneWidget);
+    expect(find.byType(DevPilotApp), findsOneWidget);
   });
 }
 

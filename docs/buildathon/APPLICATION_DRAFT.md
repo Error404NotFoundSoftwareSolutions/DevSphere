@@ -3,7 +3,7 @@
 Status: Draft 2026-11-06. Fill every [TO FILL]. Do not publish claims you cannot show. Only the facts in the "Built today" table are true now.
 
 ## One-line pitch
-Tell BuildLoop the job you want. Gemini plans your path, generates and verifies the labs, and coaches you in your language. A server-run test, never the AI, awards the badge.
+Tell DevPilot the job you want. Gemini plans your path, generates and verifies the labs, and coaches you in your language. A server-run test, never the AI, awards the badge.
 
 ## The problem
 Engineering students and recent graduates arrive at placements without practical tool skills: setting up a project, using Git and the terminal, reading errors, contributing through pull requests, and checking what AI writes for them. Courses and DSA practice don't teach this, and recruiters can't verify it. [TO FILL: your own story and 1-2 sourced statistics, with links]
@@ -23,7 +23,7 @@ A desktop app with a guide inside the student's own VS Code. Learners get a pers
 Never: grade work, hold keys on the learner's device, or see secrets.
 
 ## Built today (true now)
-Desktop app with sign-in and BuildLoop design; VS Code guide extension in the right sidebar; local worker with a private channel; lab folder preparation that never copies protected tests; security programme (threat model, scanner, release gate); 80+ app tests, 70+ worker tests and 39 extension tests. Courses on the dashboard are sample data. [Update this table before submitting.]
+Desktop app with sign-in and DevPilot design; VS Code guide extension in the right sidebar; local worker with a private channel; lab folder preparation that never copies protected tests; security programme (threat model, scanner, release gate); 80+ app tests, 70+ worker tests and 39 extension tests. Courses on the dashboard are sample data. [Update this table before submitting.]
 
 ## Architecture
 See `PLAN.md` section 5 (diagram and status table). Key points: separation of the app, the local worker and the guide; server-side signed scoring; AI gateway on Google Cloud with Gemini on Vertex AI; no provider keys on the device.

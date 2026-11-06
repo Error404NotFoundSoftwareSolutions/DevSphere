@@ -80,7 +80,7 @@ void main() {
   test('TC-CMP-06-04 the labs root must be absolute and not the disk root', () {
     expect(() => resolveLabsRoot('relative/dir', '/home/u'), throwsArgumentError);
     expect(() => resolveLabsRoot('/', '/home/u'), throwsArgumentError);
-    expect(resolveLabsRoot('', '/home/u'), '/home/u/BuildLoopLabs');
+    expect(resolveLabsRoot('', '/home/u'), '/home/u/DevPilotLabs');
     expect(resolveLabsRoot('/data/labs', '/home/u'), '/data/labs');
   });
 

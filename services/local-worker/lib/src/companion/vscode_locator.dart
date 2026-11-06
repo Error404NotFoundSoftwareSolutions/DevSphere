@@ -120,7 +120,7 @@ class VsCodeLocator {
     order.addAll(candidates().where((c) => c != userPath));
     for (final path in order) {
       if (path.toLowerCase().endsWith('.cmd') || path.toLowerCase().endsWith('.bat')) {
-        rejected.add('$path is a Windows script launcher, which BuildLoop cannot start safely yet.');
+        rejected.add('$path is a Windows script launcher, which DevPilot cannot start safely yet.');
         continue;
       }
       if (!files.isExecutableFile(path)) continue;
@@ -131,7 +131,7 @@ class VsCodeLocator {
         continue;
       }
       if (compareVersions(info.version, minVersion) < 0) {
-        rejected.add('$path is version ${info.version}; BuildLoop needs $minVersion or newer.');
+        rejected.add('$path is version ${info.version}; DevPilot needs $minVersion or newer.');
         continue;
       }
       final kind = path.toLowerCase().contains('codium') ? EditorKind.vscodium : EditorKind.vscode;

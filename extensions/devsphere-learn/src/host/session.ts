@@ -17,8 +17,8 @@ export interface SessionInfo {
 
 export function defaultRuntimeDir(env: NodeJS.ProcessEnv = process.env, home: string = os.homedir()): string {
   const xdg = env.XDG_RUNTIME_DIR;
-  if (xdg && path.isAbsolute(xdg)) return path.join(xdg, 'buildloop');
-  return path.join(home, '.buildloop', 'run');
+  if (xdg && path.isAbsolute(xdg)) return path.join(xdg, 'devpilot');
+  return path.join(home, '.devpilot', 'run');
 }
 
 const FILE_RE = /^session-([a-f0-9]{32})\.json$/;

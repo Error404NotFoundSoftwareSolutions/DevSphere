@@ -53,7 +53,7 @@ Future<bool> startLab(BuildContext context, WidgetRef ref, String labId,
     }
     if (guide['available'] != true) {
       onBusy?.call(null);
-      await _notice(context, 'BuildLoop Guide is missing',
+      await _notice(context, 'DevPilot Guide is missing',
           _lines(guide['lines']).join('\n'));
       return false;
     }
@@ -64,7 +64,7 @@ Future<bool> startLab(BuildContext context, WidgetRef ref, String labId,
         context: context,
         builder: (c) => AlertDialog(
           title:
-              const Text('Install the BuildLoop Guide in Visual Studio Code?'),
+              const Text('Install the DevPilot Guide in Visual Studio Code?'),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,

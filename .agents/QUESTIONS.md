@@ -49,7 +49,7 @@ Open source (which licence?), source-available, or closed? Affects ADR-006 (cont
 ### Q-007 Extension marketplace  `Answered 2026-11-04: Open VSX`
 1. **Open VSX (recommended default).**  2. Our own registry later.  3. None, bundle only what we ship.  Note: Microsoft's Marketplace terms restrict use to Microsoft's own products, and several Microsoft extensions are proprietary; plan on Open VSX and verify current terms before shipping (legal task, see SP-05).
 
-### Q-008 Name and branding  `Answered 2026-11-04: undecided; "DevSphere" is a working name`
+### Q-008 Name and branding  `Answered 2026-11-06: DevPilot (ADR-023)`
 Is "DevSphere" the final product name for the IDE? A fork must not use Microsoft's name/logo. Need: final name, icon source, colours.
 
 ### Q-009 Platforms  `Answered 2026-11-04: desktop only, no web. First release Windows and Ubuntu; macOS later`

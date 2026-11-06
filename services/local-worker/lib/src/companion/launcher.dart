@@ -30,8 +30,8 @@ Map<String, String> launcherEnvironment(Map<String, String> parent) => {
 
 String defaultRuntimeDir(Map<String, String> env) {
   final xdg = env['XDG_RUNTIME_DIR'];
-  if (xdg != null && xdg.startsWith('/')) return '$xdg/buildloop';
-  return '${env['HOME'] ?? Directory.systemTemp.path}/.buildloop/run';
+  if (xdg != null && xdg.startsWith('/')) return '$xdg/devpilot';
+  return '${env['HOME'] ?? Directory.systemTemp.path}/.devpilot/run';
 }
 
 typedef SpawnDetached = Future<bool> Function(String exe, List<String> args, Map<String, String> env);
@@ -105,7 +105,7 @@ class LabLauncher {
     final located = await findEditor();
     final editor = located.install;
     if (editor == null) {
-      return LaunchResult.failed('BuildLoop could not find VS Code on this computer. Install Visual Studio Code from code.visualstudio.com, then try again. ${located.rejected.join(' ')}'.trim());
+      return LaunchResult.failed('DevPilot could not find VS Code on this computer. Install Visual Studio Code from code.visualstudio.com, then try again. ${located.rejected.join(' ')}'.trim());
     }
     final String labRoot;
     final LabInfo info;
@@ -117,7 +117,7 @@ class LabLauncher {
     } on FormatException catch (e) {
       return LaunchResult.failed('This lab could not be opened: ${e.message}');
     } on FileSystemException {
-      return const LaunchResult.failed('BuildLoop could not create your lab folder. Check that you have space and permission, then try again.');
+      return const LaunchResult.failed('DevPilot could not create your lab folder. Check that you have space and permission, then try again.');
     }
     final sessionId = _newSessionId();
     final controller = LabSessionController(
@@ -131,7 +131,7 @@ class LabLauncher {
     try {
       socketPath = await server.start();
     } catch (_) {
-      return const LaunchResult.failed('BuildLoop could not start its private connection to VS Code.');
+      return const LaunchResult.failed('DevPilot could not start its private connection to VS Code.');
     }
     final sessionFile = '$runtimeDir/session-$sessionId.json';
     final session = LabSession(sessionId: sessionId, labRoot: labRoot, socketPath: socketPath, sessionFile: sessionFile, controller: controller, server: server);
@@ -146,7 +146,7 @@ class LabLauncher {
       makePrivateFile(sessionFile);
     } catch (_) {
       await session.close();
-      return const LaunchResult.failed('BuildLoop could not prepare the session. Try again.');
+      return const LaunchResult.failed('DevPilot could not prepare the session. Try again.');
     }
     final opened = await spawnDetached(editor.path, [...extraEditorArgs, '--new-window', labRoot], launcherEnvironment(parentEnvironment));
     if (!opened) {

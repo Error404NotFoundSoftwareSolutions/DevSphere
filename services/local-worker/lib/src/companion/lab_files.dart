@@ -19,7 +19,7 @@ const int _maxManifestBytes = 64 * 1024;
 const int _maxSteps = 50;
 
 String resolveLabsRoot(String configured, String home) {
-  final root = configured.trim().isEmpty ? '$home/BuildLoopLabs' : configured.trim();
+  final root = configured.trim().isEmpty ? '$home/DevPilotLabs' : configured.trim();
   if (!root.startsWith('/') && !RegExp(r'^[A-Za-z]:[\\/]').hasMatch(root)) {
     throw ArgumentError('The labs folder must be a full path.');
   }
@@ -110,7 +110,7 @@ bool _plain(Object? v, int max) =>
 LabInfo loadLabInfo(String labFolder) {
   final markerFile = File('$labFolder/.devsphere/lab.json');
   final manifestFile = File('$labFolder/.devsphere/lab.yaml');
-  if (!markerFile.existsSync() || !manifestFile.existsSync()) throw const FormatException('This is not a BuildLoop lab folder.');
+  if (!markerFile.existsSync() || !manifestFile.existsSync()) throw const FormatException('This is not a DevPilot lab folder.');
   if (manifestFile.lengthSync() > _maxManifestBytes) throw const FormatException('Lab manifest is too large.');
   final text = manifestFile.readAsStringSync();
   if (RegExp(r'(^|[\s\[{,])[&*][A-Za-z0-9_-]+', multiLine: true).hasMatch(text)) {

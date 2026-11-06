@@ -511,7 +511,7 @@ class _SignInScreenState extends State<SignInScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Devpilot',
+                  'DevPilot',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 26,
@@ -618,7 +618,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'Devpilot',
+                                'DevPilot',
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: Colors.white,
@@ -1525,7 +1525,7 @@ class _AiCompanionIllustration extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '    # Devpilot: SIMD auto-vectorized',
+                  '    # DevPilot: SIMD auto-vectorized',
                   style: TextStyle(
                     color: Colors.white38,
                     fontSize: 10,
@@ -1851,7 +1851,7 @@ class _RoadmapIllustration extends StatelessWidget {
           _stepRow(
               Icons.check_circle, '2. Backend APIs', 'Verified pass', true),
           const SizedBox(height: 6),
-          _stepRow(Icons.radio_button_checked, '3. Devpilot Studio Labs',
+          _stepRow(Icons.radio_button_checked, '3. DevPilot Studio Labs',
               'In Progress', false,
               isCurrent: true),
           const SizedBox(height: 6),

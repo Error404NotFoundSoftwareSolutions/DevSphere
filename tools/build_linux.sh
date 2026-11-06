@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Build the BuildLoop desktop app for Linux, including everything the "open lab in VS Code" flow needs:
+# Build the DevPilot desktop app for Linux, including everything the "open lab in VS Code" flow needs:
 #   - the guide extension packaged as a .vsix, with a metadata file holding its SHA-256
 #   - the local worker compiled to a single executable
 #   - the Flutter app bundle, with `worker` and `guide/` placed next to the app binary
-# Output: release/buildloop-linux-x64.tar.gz and release/bundle/ (git-ignored).
+# Output: release/devpilot-linux-x64.tar.gz and release/bundle/ (git-ignored).
 # Lab content is NOT bundled: protected tests and reference solutions must never ship in the app (SEC-04).
-# In development the app finds ../../content/labs by walking up from the bundle; set BUILDLOOP_CONTENT_ROOT otherwise.
+# In development the app finds ../../content/labs by walking up from the bundle; set DEVPILOT_CONTENT_ROOT otherwise.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OUT="$ROOT/release"
@@ -37,10 +37,10 @@ known[version] = digest
 json.dump(known, open(path, "w"), indent=2); open(path, "a").write("\n")
 PY
 EXT_ID="$(python3 -c "import json;d=json.load(open('$EXT/package.json'));print(d['publisher']+'.'+d['name'])")"
-VSIX="buildloop-guide-$VERSION.vsix"
+VSIX="devpilot-guide-$VERSION.vsix"
 mv "$OUT/guide-build/guide.vsix" "$OUT/guide-build/$VSIX"
 SHA="$(sha256sum "$OUT/guide-build/$VSIX" | cut -d' ' -f1)"
-printf '{"id":"%s","version":"%s","sha256":"%s","vsix":"%s"}\n' "$EXT_ID" "$VERSION" "$SHA" "$VSIX" > "$OUT/guide-build/buildloop-guide.json"
+printf '{"id":"%s","version":"%s","sha256":"%s","vsix":"%s"}\n' "$EXT_ID" "$VERSION" "$SHA" "$VSIX" > "$OUT/guide-build/devpilot-guide.json"
 
 echo "== worker: compile"
 (cd "$ROOT/services/local-worker" && dart pub get >/dev/null && dart compile exe bin/worker.dart -o "$OUT/guide-build/worker" >/dev/null)
@@ -51,8 +51,8 @@ echo "== app: flutter build linux"
 echo "== assemble"
 cp -r "$ROOT/apps/desktop/build/linux/x64/release/bundle" "$OUT/bundle"
 mkdir -p "$OUT/bundle/guide"
-cp "$OUT/guide-build/$VSIX" "$OUT/guide-build/buildloop-guide.json" "$OUT/bundle/guide/"
+cp "$OUT/guide-build/$VSIX" "$OUT/guide-build/devpilot-guide.json" "$OUT/bundle/guide/"
 cp "$OUT/guide-build/worker" "$OUT/bundle/worker"
 chmod +x "$OUT/bundle/worker"
-tar -czf "$OUT/buildloop-linux-x64.tar.gz" -C "$OUT" bundle
-echo "Built: $OUT/bundle/buildloop  ($(du -sh "$OUT/bundle" | cut -f1)), tarball $(du -sh "$OUT/buildloop-linux-x64.tar.gz" | cut -f1)"
+tar -czf "$OUT/devpilot-linux-x64.tar.gz" -C "$OUT" bundle
+echo "Built: $OUT/bundle/devpilot  ($(du -sh "$OUT/bundle" | cut -f1)), tarball $(du -sh "$OUT/devpilot-linux-x64.tar.gz" | cut -f1)"

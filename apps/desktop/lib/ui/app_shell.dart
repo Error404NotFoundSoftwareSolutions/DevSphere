@@ -1,6 +1,6 @@
 // User story: US-15 Open the lab workspace (Sprint 4, MVP)
 // Requirements: FR-WS-001..005, NFR-USE-001
-// Implemented here: BuildLoop shell in the Google-Skills pattern: 64px header (menu, wordmark, pill
+// Implemented here: DevPilot shell in the Google-Skills pattern: 64px header (menu, wordmark, pill
 // search, streak, help, avatar) and a 104px icon rail with a pale-blue pill on the selected item.
 // No dart:io: privileged work stays behind the worker channel (SEC-03).
 
@@ -89,7 +89,7 @@ class _Header extends StatelessWidget {
           const IconButton(
               onPressed: null, tooltip: 'Menu', icon: Icon(Icons.menu)),
           const SizedBox(width: BL.space2),
-          Text('BuildLoop',
+          Text('DevPilot',
               style: text.titleLarge
                   ?.copyWith(color: BL.navy, fontWeight: FontWeight.w600)),
           const SizedBox(width: BL.space8),

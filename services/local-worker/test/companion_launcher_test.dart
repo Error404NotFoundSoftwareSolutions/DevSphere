@@ -49,10 +49,10 @@ void main() {
   test('TC-CMP-07-01 the VS Code environment is an allow-list with no tokens or keys (T23)', () {
     final env = launcherEnvironment(const {
       'PATH': '/usr/bin', 'HOME': '/h', 'DISPLAY': ':0', 'WAYLAND_DISPLAY': 'w', 'XDG_RUNTIME_DIR': '/run/user/1000',
-      'GITHUB_TOKEN': 'a', 'AWS_SECRET_ACCESS_KEY': 'b', 'OPENAI_API_KEY': 'c', 'SSH_AUTH_SOCK': '/s', 'BUILDLOOP_TOKEN': 'd',
+      'GITHUB_TOKEN': 'a', 'AWS_SECRET_ACCESS_KEY': 'b', 'OPENAI_API_KEY': 'c', 'SSH_AUTH_SOCK': '/s', 'DEVPILOT_TOKEN': 'd',
     });
     expect(env.keys, containsAll(['PATH', 'HOME', 'DISPLAY', 'WAYLAND_DISPLAY', 'XDG_RUNTIME_DIR']));
-    for (final k in ['GITHUB_TOKEN', 'AWS_SECRET_ACCESS_KEY', 'OPENAI_API_KEY', 'SSH_AUTH_SOCK', 'BUILDLOOP_TOKEN']) {
+    for (final k in ['GITHUB_TOKEN', 'AWS_SECRET_ACCESS_KEY', 'OPENAI_API_KEY', 'SSH_AUTH_SOCK', 'DEVPILOT_TOKEN']) {
       expect(env.containsKey(k), isFalse, reason: k);
     }
   });

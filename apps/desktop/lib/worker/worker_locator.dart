@@ -26,7 +26,7 @@ AppPaths locateAppPaths(
     required Map<String, String> env,
     required bool Function(String path) exists}) {
   String? worker;
-  final w = _env(env, 'BUILDLOOP_WORKER');
+  final w = _env(env, 'DEVPILOT_WORKER');
   if (w != null && exists(w)) {
     worker = w;
   } else {
@@ -35,9 +35,9 @@ AppPaths locateAppPaths(
   }
   final guideCandidate = '$exeDir/guide';
   final guideDir =
-      exists('$guideCandidate/buildloop-guide.json') ? guideCandidate : null;
+      exists('$guideCandidate/devpilot-guide.json') ? guideCandidate : null;
   String? content;
-  final c = _env(env, 'BUILDLOOP_CONTENT_ROOT');
+  final c = _env(env, 'DEVPILOT_CONTENT_ROOT');
   if (c != null && exists(c)) {
     content = c;
   } else {

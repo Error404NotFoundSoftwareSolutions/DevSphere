@@ -31,7 +31,7 @@ class UnavailableWorkerClient implements WorkerClient {
     throw WorkerException(
         code: 'unavailable',
         message: message,
-        recovery: 'Reinstall BuildLoop.');
+        recovery: 'Reinstall DevPilot.');
   }
 }
 

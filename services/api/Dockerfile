@@ -1,4 +1,4 @@
-# Cloud Run image for the DevSphere/BuildLoop API and AI gateway.
+# Cloud Run image for the DevSphere/DevPilot API and AI gateway.
 # NOT built or deployed from this repository yet (see docs/buildathon/DEPLOY_CLOUD_RUN.md for what must change first).
 FROM python:3.12-slim
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1

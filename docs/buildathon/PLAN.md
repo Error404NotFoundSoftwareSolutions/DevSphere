@@ -21,7 +21,7 @@ Status: Draft 2026-11-06. Owner: founders. Source of truth for rules: startupbui
 | Use of Google AI | Gemini drives roadmap planning, lab generation and tutoring; deployed on Google Cloud | Live demo of all three on Google Cloud |
 
 ## 3. The one-line story
-**"Get placement-ready with proof."** Tell BuildLoop the job you want. Gemini builds your path, generates and verifies the labs, and coaches you in your language. Only a server-run test can award a badge, so AI never grades.
+**"Get placement-ready with proof."** Tell DevPilot the job you want. Gemini builds your path, generates and verifies the labs, and coaches you in your language. Only a server-run test can award a badge, so AI never grades.
 
 ## 4. Scope: two engines and a tutor (this makes your five features one build)
 1. **Roadmap Planner** (input: a job description, a role, or a topic/subject) -> an ordered path of labs. It picks existing verified labs and lists gaps to generate. Output is validated against a schema, never free text.
@@ -32,7 +32,7 @@ Status: Draft 2026-11-06. Owner: founders. Source of truth for rules: startupbui
 ```mermaid
 flowchart LR
   subgraph Laptop
-    APP[BuildLoop desktop app] <--> W[Local worker]
+    APP[DevPilot desktop app] <--> W[Local worker]
     W <-- private socket --> EXT[VS Code guide extension]
   end
   APP -- HTTPS + Firebase ID token --> GW[AI gateway on Cloud Run]

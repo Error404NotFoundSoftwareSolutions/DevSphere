@@ -1,16 +1,16 @@
-# Architecture: BuildLoop app + companion VS Code extension (ADR-019)
+# Architecture: DevPilot app + companion VS Code extension (ADR-019)
 
 Status: **Accepted** 2026-11-04 (owner idea). Replaces the Code-OSS fork (ADR-013, superseded). Security detail: `docs/security/THREAT_MODEL.md` T19-T24.
 
 ## 1. Idea in one paragraph
-The BuildLoop desktop app (Flutter) is the product: sign-in, dashboard, courses, roadmaps, scores, badges. When a learner starts a lab that needs code, the app opens the learner's **own installed VS Code** on the lab folder. A small **companion extension** (`extensions/devsphere-learn`, renamed BuildLoop Guide later) sits in VS Code's right-hand side panel, where Copilot's chat usually sits, and guides each step. The extension is a thin guide. The app does the thinking, checking and scoring.
+The DevPilot desktop app (Flutter) is the product: sign-in, dashboard, courses, roadmaps, scores, badges. When a learner starts a lab that needs code, the app opens the learner's **own installed VS Code** on the lab folder. A small **companion extension** (`extensions/devsphere-learn`, renamed DevPilot Guide later) sits in VS Code's right-hand side panel, where Copilot's chat usually sits, and guides each step. The extension is a thin guide. The app does the thinking, checking and scoring.
 
 ```
-BuildLoop app (Flutter UI)        local worker (Dart process)                 VS Code (learner's install)
-  dashboard, courses  --IPC-->      launcher, installer, checks,   <--socket-->  BuildLoop Guide extension
+DevPilot app (Flutter UI)        local worker (Dart process)                 VS Code (learner's install)
+  dashboard, courses  --IPC-->      launcher, installer, checks,   <--socket-->  DevPilot Guide extension
   login, Verified submit            progress store, sync, secrets                  side panel, editor, terminal
         |                                   |
-        '------------- HTTPS -------------> BuildLoop backend (api, grader, tutor gateway)
+        '------------- HTTPS -------------> DevPilot backend (api, grader, tutor gateway)
 ```
 
 ## 2. Who does what
@@ -27,7 +27,7 @@ BuildLoop app (Flutter UI)        local worker (Dart process)                 VS
 3. Worker checks whether the right extension version is installed. If not: the app shows a **plan** (what will be installed, from which local file, what it can do) and waits for a click (SEC-11).
 4. Worker installs the extension from the shipped `.vsix` (`code --install-extension <file> --force`, argument array, no shell).
 5. Worker creates a session (id, socket path), starts the channel server, writes a **private session file** (mode 0600, in the per-user runtime directory), then launches VS Code on the lab folder in a new window. The extension finds the session file by lab folder (see `docs/EXTENSION_PROTOCOL.md` 2b).
-6. Extension activates on `workspaceContains:.buildloop/lab.json`, connects, receives the lab state, opens the side panel.
+6. Extension activates on `workspaceContains:.devpilot/lab.json`, connects, receives the lab state, opens the side panel.
 7. Learner works. Extension requests checks; worker runs them; results appear in the panel and in the app's dashboard live.
 8. Finish: worker submits to the backend for a **Verified** result; the app shows the completion screen (badge only if the server says so).
 
@@ -50,10 +50,10 @@ BuildLoop app (Flutter UI)        local worker (Dart process)                 VS
 - No telemetry, no network, no credentials.
 
 ## 7. Failure modes (all must have a plain message and a test)
-VS Code missing or too old; `code` on PATH is not VS Code; extension install refused or fails; extension blocked by policy (managed machines); channel cannot start; extension and app version mismatch (show "update BuildLoop" or reinstall extension); learner closes the panel; learner edits the lab marker; two lab windows for one lab (second one focuses the first).
+VS Code missing or too old; `code` on PATH is not VS Code; extension install refused or fails; extension blocked by policy (managed machines); channel cannot start; extension and app version mismatch (show "update DevPilot" or reinstall extension); learner closes the panel; learner edits the lab marker; two lab windows for one lab (second one focuses the first).
 
 ## 8. Reuse and changes in the repo
-- `extensions/devsphere-learn`: keep the core modules (safe path, manifest, markdown, html, messages). Replace direct test running and local progress with channel requests; add a channel client. Rename to BuildLoop Guide when branding work happens.
+- `extensions/devsphere-learn`: keep the core modules (safe path, manifest, markdown, html, messages). Replace direct test running and local progress with channel requests; add a channel client. Rename to DevPilot Guide when branding work happens.
 - `services/local-worker` (Dart): add launcher, installer, channel server, check runner. Document channels in `docs/IPC_API.md` for UI-to-worker calls (existing rule) and the new socket protocol in a new `docs/EXTENSION_PROTOCOL.md`.
 - `apps/desktop`: lab screen shows launch state (finding VS Code, installing, starting, connected).
 

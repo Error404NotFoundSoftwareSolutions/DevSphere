@@ -34,7 +34,7 @@ Future<void> pump(WidgetTester tester, {String location = '/dashboard'}) async {
   addTearDown(tester.view.reset);
   await tester.pumpWidget(ProviderScope(
     overrides: [workerClientProvider.overrideWithValue(MockWorkerClient())],
-    child: BuildLoopApp(router: createRouter(initialLocation: location)),
+    child: DevPilotApp(router: createRouter(initialLocation: location)),
   ));
   await tester.pumpAndSettle();
 }
