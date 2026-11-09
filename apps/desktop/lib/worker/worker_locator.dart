@@ -31,11 +31,60 @@ AppPaths locateAppPaths(
     worker = w;
   } else {
     final candidate = '$exeDir/worker${Platform.isWindows ? '.exe' : ''}';
-    if (exists(candidate)) worker = candidate;
+    if (exists(candidate)) {
+      worker = candidate;
+    } else {
+      // In development builds (e.g. running via flutter run), walk up to find the compiled worker
+      var dir = exeDir;
+      for (var i = 0; i < 12 && worker == null; i++) {
+        final relCand =
+            '$dir/release/guide-build/worker${Platform.isWindows ? '.exe' : ''}';
+        if (exists(relCand)) {
+          worker = relCand;
+          break;
+        }
+        final bundleCand =
+            '$dir/release/bundle/worker${Platform.isWindows ? '.exe' : ''}';
+        if (exists(bundleCand)) {
+          worker = bundleCand;
+          break;
+        }
+        final parent =
+            dir.contains('/') ? dir.substring(0, dir.lastIndexOf('/')) : '';
+        if (parent.isEmpty || parent == dir) break;
+        dir = parent;
+      }
+    }
   }
-  final guideCandidate = '$exeDir/guide';
-  final guideDir =
-      exists('$guideCandidate/buildloop-guide.json') ? guideCandidate : null;
+
+  String? guideDir;
+  final g = _env(env, 'BUILDLOOP_GUIDE_DIR');
+  if (g != null && exists('$g/buildloop-guide.json')) {
+    guideDir = g;
+  } else {
+    final guideCandidate = '$exeDir/guide';
+    if (exists('$guideCandidate/buildloop-guide.json')) {
+      guideDir = guideCandidate;
+    } else {
+      // In development builds, walk up to find the guide package directory
+      var dir = exeDir;
+      for (var i = 0; i < 12 && guideDir == null; i++) {
+        if (exists('$dir/release/guide-build/buildloop-guide.json')) {
+          guideDir = '$dir/release/guide-build';
+          break;
+        }
+        if (exists('$dir/release/bundle/guide/buildloop-guide.json')) {
+          guideDir = '$dir/release/bundle/guide';
+          break;
+        }
+        final parent =
+            dir.contains('/') ? dir.substring(0, dir.lastIndexOf('/')) : '';
+        if (parent.isEmpty || parent == dir) break;
+        dir = parent;
+      }
+    }
+  }
+
   String? content;
   final c = _env(env, 'BUILDLOOP_CONTENT_ROOT');
   if (c != null && exists(c)) {

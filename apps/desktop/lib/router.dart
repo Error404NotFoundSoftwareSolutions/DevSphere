@@ -51,73 +51,153 @@ const List<({String slug, String label, String blurb})> sections = [
   ),
 ];
 
+/// Builds a smooth custom page transition (fade + subtle upward slide).
+CustomTransitionPage<T> buildSmoothTransitionPage<T>({
+  required GoRouterState state,
+  required Widget child,
+  LocalKey? key,
+  Duration duration = const Duration(milliseconds: 260),
+  Duration reverseDuration = const Duration(milliseconds: 220),
+}) {
+  return CustomTransitionPage<T>(
+    key: key ?? state.pageKey,
+    child: child,
+    transitionDuration: duration,
+    reverseTransitionDuration: reverseDuration,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      final curvedAnimation = CurvedAnimation(
+        parent: animation,
+        curve: Curves.easeOutCubic,
+        reverseCurve: Curves.easeInCubic,
+      );
+      final curvedSecondary = CurvedAnimation(
+        parent: secondaryAnimation,
+        curve: Curves.easeOutCubic,
+        reverseCurve: Curves.easeInCubic,
+      );
+
+      return FadeTransition(
+        opacity: curvedAnimation,
+        child: SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0.0, 0.015),
+            end: Offset.zero,
+          ).animate(curvedAnimation),
+          child: FadeTransition(
+            opacity: Tween<double>(begin: 1.0, end: 0.9).animate(curvedSecondary),
+            child: child,
+          ),
+        ),
+      );
+    },
+  );
+}
+
 GoRouter createRouter({String? initialLocation}) {
   return GoRouter(
     initialLocation: initialLocation ?? _determineInitialRoute(),
     routes: [
       GoRoute(
         path: '/',
-        builder: (context, state) {
+        pageBuilder: (context, state) {
           final autoLaunch = state.uri.queryParameters['launch'] == 'true';
           final mode = state.uri.queryParameters['mode'];
           final initialCreateAccount = mode == 'signin' ? false : true;
-          return SignInScreen(
-            autoLaunch: autoLaunch,
-            initialCreateAccount: initialCreateAccount,
+          return buildSmoothTransitionPage(
+            state: state,
+            child: SignInScreen(
+              autoLaunch: autoLaunch,
+              initialCreateAccount: initialCreateAccount,
+            ),
           );
         },
       ),
       GoRoute(
         path: '/landing',
-        builder: (context, state) => const LandingScreen(),
+        pageBuilder: (context, state) => buildSmoothTransitionPage(
+          state: state,
+          child: const LandingScreen(),
+        ),
       ),
       GoRoute(
         path: '/consent',
-        builder: (context, state) => ConsentScreen(
-          onConsentCallback: () => context.go('/dashboard'),
-          onDecline: () => context.go('/'),
+        pageBuilder: (context, state) => buildSmoothTransitionPage(
+          state: state,
+          child: ConsentScreen(
+            onConsentCallback: () => context.go('/dashboard'),
+            onDecline: () => context.go('/'),
+          ),
         ),
       ),
       ShellRoute(
-        builder: (context, state, child) =>
-            AppShell(location: state.uri.path, child: child),
+        pageBuilder: (context, state, child) => buildSmoothTransitionPage(
+          state: state,
+          key: const ValueKey('buildloop_shell_page'),
+          child: AppShell(location: state.uri.path, child: child),
+        ),
         routes: [
           GoRoute(
-              path: '/dashboard',
-              builder: (context, state) => const DashboardScreen()),
+            path: '/dashboard',
+            pageBuilder: (context, state) => buildSmoothTransitionPage(
+              state: state,
+              child: const DashboardScreen(),
+            ),
+          ),
           for (final s in sections.skip(1))
             GoRoute(
               path: '/${s.slug}',
-              builder: (context, state) => SectionPlaceholder(
-                  slug: s.slug, title: s.label, blurb: s.blurb),
+              pageBuilder: (context, state) => buildSmoothTransitionPage(
+                state: state,
+                child: SectionPlaceholder(
+                  slug: s.slug,
+                  title: s.label,
+                  blurb: s.blurb,
+                ),
+              ),
             ),
           GoRoute(
-              path: '/course/:id',
-              builder: (context, state) =>
-                  CourseScreen(id: state.pathParameters['id'] ?? '')),
+            path: '/course/:id',
+            pageBuilder: (context, state) => buildSmoothTransitionPage(
+              state: state,
+              child: CourseScreen(id: state.pathParameters['id'] ?? ''),
+            ),
+          ),
           GoRoute(
-              path: '/lab/:id',
-              builder: (context, state) =>
-                  LabRunScreen(id: state.pathParameters['id'] ?? '')),
+            path: '/lab/:id',
+            pageBuilder: (context, state) => buildSmoothTransitionPage(
+              state: state,
+              child: LabRunScreen(id: state.pathParameters['id'] ?? ''),
+            ),
+          ),
         ],
       ),
       GoRoute(
         path: '/catalogue',
-        builder: (context, state) => const CatalogueScreen(),
+        pageBuilder: (context, state) => buildSmoothTransitionPage(
+          state: state,
+          child: const CatalogueScreen(),
+        ),
       ),
       GoRoute(
         path: '/workspace/:attemptId',
-        builder: (context, state) => WorkspaceView(
-            attemptId: state.pathParameters['attemptId'] ?? 'default'),
+        pageBuilder: (context, state) => buildSmoothTransitionPage(
+          state: state,
+          child: WorkspaceView(
+            attemptId: state.pathParameters['attemptId'] ?? 'default',
+          ),
+        ),
       ),
       GoRoute(
         path: '/profile',
-        builder: (context, state) => ProfileScreen(
-          isOnboarding: true,
-          initialDisplayName: 'Student User',
-          email: 'student@example.com',
-          uid: 'current-student',
-          onSave: (profile) => context.go('/dashboard'),
+        pageBuilder: (context, state) => buildSmoothTransitionPage(
+          state: state,
+          child: ProfileScreen(
+            isOnboarding: true,
+            initialDisplayName: 'Student User',
+            email: 'student@example.com',
+            uid: 'current-student',
+            onSave: (profile) => context.go('/dashboard'),
+          ),
         ),
       ),
     ],

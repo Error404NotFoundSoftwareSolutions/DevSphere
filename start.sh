@@ -149,6 +149,18 @@ for i in {1..30}; do
   sleep 0.5
 done
 
+# Ensure local worker is compiled and available in development
+if [ ! -f "$ROOT_DIR/release/guide-build/worker" ]; then
+  echo ""
+  echo "--> Compiling local worker..."
+  mkdir -p "$ROOT_DIR/release/guide-build"
+  (cd "$ROOT_DIR/services/local-worker" && dart compile exe bin/worker.dart -o "$ROOT_DIR/release/guide-build/worker")
+fi
+
+export BUILDLOOP_WORKER="${BUILDLOOP_WORKER:-$ROOT_DIR/release/guide-build/worker}"
+export BUILDLOOP_GUIDE_DIR="${BUILDLOOP_GUIDE_DIR:-$ROOT_DIR/release/guide-build}"
+export BUILDLOOP_CONTENT_ROOT="${BUILDLOOP_CONTENT_ROOT:-$ROOT_DIR/content/labs}"
+
 # 5. Launch the Complete Client Application
 echo ""
 echo "--> Launching DevSphere Client on target: $TARGET_DEVICE..."

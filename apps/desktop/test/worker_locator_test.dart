@@ -41,4 +41,17 @@ void main() {
     expect(args, ['--content-root=/c', '--guide-dir=/g']);
     expect(workerArgs(const AppPaths(worker: '/w')), isEmpty);
   });
+
+  test('TC-LNK-35 in development builds worker and guide are discovered by walking up folders', () {
+    const devExe = '/home/u/repo/apps/desktop/build/linux/x64/debug/intermediates_do_not_run';
+    final fs = {
+      '/home/u/repo/release/guide-build/worker',
+      '/home/u/repo/release/guide-build/buildloop-guide.json',
+      '/home/u/repo/content/labs',
+    };
+    final paths = locateAppPaths(exeDir: devExe, env: {}, exists: fs.contains);
+    expect(paths.worker, '/home/u/repo/release/guide-build/worker');
+    expect(paths.guideDir, '/home/u/repo/release/guide-build');
+    expect(paths.contentRoot, '/home/u/repo/content/labs');
+  });
 }

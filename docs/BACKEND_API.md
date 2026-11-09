@@ -25,4 +25,26 @@ Conventions: HTTPS only, JSON, URL-versioned (`/v1`). Bearer token on every prot
 | `POST /internal/grader/results` | Signed result from the Orchestrator (not public) | US-30 |
 | `GET /v1/config` | Minimum client version, flags | US-05 |
 
+## Open-source contribution endpoints (proposed, ADR-023, R3)
+
+Status: proposed, pending owner approval. Stories: US-R3-8 to US-R3-13 in `docs/backlog/oss_flow_proposals.md`. All `/v1/oss/*` calls need a bearer token. The extension uses an attempt-scoped session that works only for its own `/v1/oss/attempts/{id}/*`. A user ID, score, trust level or milestone state supplied by a client is ignored.
+
+| Method and path | Purpose | Trust of what it records |
+|---|---|---|
+| `POST /v1/oss/attempts` | Create the OSS attempt (the app calls this) and return a single-use, 5-minute launch code for `vscode://` | n/a |
+| `POST /v1/oss/session` | Exchange a launch code for the attempt-scoped session | n/a |
+| `POST /v1/oss/link` | Start GitHub link. Returns the authorize URL (state, PKCE). Needs a recorded age-check outcome | n/a |
+| `GET /v1/oss/link/callback` | GitHub redirects here (public, state checked). Stores numeric ID and login, discards the user token, redirects to the `vscode://` link-back with no secrets | High (account linked) |
+| `GET /v1/oss/attempts/{id}` | Milestone list: milestone, status, source, trust (`high` or `hint`), label (`Verified` or `Practice (unverified)`), evidence time | n/a |
+| `POST /v1/oss/attempts/{id}/quiz` | Submit quiz answers; the backend scores them against server-held keys | High (lesson understood) |
+| `POST /v1/oss/attempts/{id}/practice-repo` | Body: repository full name. Verifies owner ID, generated from the approved template, not a fork, App installed; creates the issue from the stored variant once | High (repo created, issue created) |
+| `POST /v1/oss/attempts/{id}/events` | Extension hints (cloned, branch seen, commit count). Body: `{event_id, type, data}`. At-least-once and idempotent on `event_id`. Always stored as hint | Hint only |
+| `GET /v1/oss/attempts/{id}/score` | Score from High milestones and the signed grader result, with the evidence behind each point and the label `Verified` | n/a |
+| `POST /v1/webhooks/github` | GitHub `push` and `pull_request` deliveries (public). Signature checked first, deduplicated by delivery ID, unlinked repos ignored | High after the backend re-reads GitHub |
+| `POST /internal/grader/results` | Existing endpoint, accepts the new job type `contribution` with a result bound to the head SHA | Signed result |
+
+Conventions that apply here: `Idempotency-Key` on `POST` calls that change state; errors use `{ code, message, recovery, correlation_id }` in plain language (for example "GitHub is not installed on this repository yet. Open the install link and choose only this repository."); rate limits apply to link, quiz, events and practice-repo.
+
+One row per attempt and milestone in the milestone store, with `source` and `trust`. A hint may be upgraded once to High by verified evidence; a High row is never changed or downgraded; a repeated event never awards points twice.
+
 Operator actions (role change, score correction, data export and deletion) use a separate router that requires the `operator` role and writes an audit event.
