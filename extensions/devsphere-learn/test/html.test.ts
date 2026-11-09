@@ -80,3 +80,16 @@ test('TC-CMP-14-01 the step title is not repeated when the lesson text already s
   assert.match(without, /<h1>Open the starter file<\/h1>/);
 });
 
+
+test('TC-LRN-30-03 markdown renders lists and quotes with every item escaped', () => {
+  const html = renderMarkdownSafe('Steps:\n\n- first `a<b>`\n- second **bold**\n  continued\n\n1. one\n2. two\n\n> note <script>x</script>\n');
+  assert.match(html, /<ul><li>first <code>a&lt;b&gt;<\/code><\/li><li>second <strong>bold<\/strong> continued<\/li><\/ul>/);
+  assert.match(html, /<ol><li>one<\/li><li>two<\/li><\/ol>/);
+  assert.match(html, /<blockquote><p>note &lt;script&gt;x&lt;\/script&gt;<\/p><\/blockquote>/);
+  assert.doesNotMatch(html, /<script/i);
+});
+
+test('TC-LRN-30-04 a list item that looks like a link or html never becomes active', () => {
+  const html = renderMarkdownSafe('- [click](javascript:alert(1))\n- <img src=x onerror=alert(1)>');
+  assert.doesNotMatch(html, /<a\b|<img|href=/i);
+});

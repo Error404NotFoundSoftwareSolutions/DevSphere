@@ -70,3 +70,5 @@ jobs:
       - uses: astral-sh/setup-uv@v5
       - run: uv sync --all-packages
       - run: uv run labcheck content/labs/python-hello-001
+      - run: uv run labcheck content/labs/oss-first-contribution-001
+      - run: uv run pytest services/content-ci -q

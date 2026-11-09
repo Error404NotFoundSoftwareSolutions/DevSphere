@@ -144,7 +144,7 @@ LabInfo loadLabInfo(String labFolder) {
     }
     final check = s['practice_check'];
     if (check != null && !(check is String && _id.hasMatch(check))) throw const FormatException('Lab manifest has an invalid check id.');
-    out.add(LabStepInfo(id: sid, title: s['title'] as String, contentRef: ref, hasCheck: check != null));
+    out.add(LabStepInfo(id: sid, title: s['title'] as String, contentRef: ref, hasCheck: check != null, checkId: check as String?));
   }
   return LabInfo(id: id, title: doc['title'] as String, steps: out);
 }

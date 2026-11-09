@@ -38,6 +38,22 @@ class SampleData {
       steps: ['Setup', 'Write the greet function', 'Run the checks'],
     ),
     SampleActivity(
+      id: 'oss-first-contribution-001',
+      kinds: ['Featured', 'Lab'],
+      title: 'Your first open-source contribution',
+      description:
+          'Learn how open source works, then do it: fix two bugs and a docs issue with real Git branches, commits, a pull request description and a review.',
+      duration: '2.5 hours',
+      level: 'Beginner',
+      steps: [
+        'Theory and videos',
+        'Start a repository',
+        'Fix issues on branches',
+        'Write the pull request',
+        'Answer the review'
+      ],
+    ),
+    SampleActivity(
       id: 'git-first-commit-001',
       kinds: ['Featured', 'Course'],
       title: 'Your first Git commit',

@@ -10,11 +10,14 @@ import 'channel_server.dart';
 import 'protocol.dart';
 
 class LabStepInfo {
-  const LabStepInfo({required this.id, required this.title, required this.contentRef, required this.hasCheck});
+  const LabStepInfo({required this.id, required this.title, required this.contentRef, required this.hasCheck, this.checkId});
   final String id;
   final String title;
   final String contentRef;
   final bool hasCheck;
+
+  /// The manifest's `practice_check` id. It picks which test file the check runs (see [checkTarget]).
+  final String? checkId;
 }
 
 class LabInfo {

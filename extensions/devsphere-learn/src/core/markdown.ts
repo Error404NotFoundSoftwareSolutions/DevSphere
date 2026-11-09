@@ -19,10 +19,21 @@ export function renderMarkdownSafe(markdown: string): string {
   const src = markdown.replace(/<!--[\s\S]*?-->/g, '').replace(/\r\n?/g, '\n');
   const out: string[] = [];
   const para: string[] = [];
-  const flush = (): void => {
+  const quote: string[] = [];
+  let list: { tag: 'ul' | 'ol'; items: string[] } | undefined;
+  const flushPara = (): void => {
     if (para.length) out.push(`<p>${inline(escapeText(para.join(' ')))}</p>`);
     para.length = 0;
   };
+  const flushQuote = (): void => {
+    if (quote.length) out.push(`<blockquote><p>${inline(escapeText(quote.join(' ')))}</p></blockquote>`);
+    quote.length = 0;
+  };
+  const flushList = (): void => {
+    if (list) out.push(`<${list.tag}>${list.items.map((i) => `<li>${inline(escapeText(i))}</li>`).join('')}</${list.tag}>`);
+    list = undefined;
+  };
+  const flush = (): void => { flushPara(); flushQuote(); flushList(); };
   let code: string[] | undefined;
   for (const line of src.split('\n')) {
     if (line.startsWith('```')) {
@@ -40,13 +51,29 @@ export function renderMarkdownSafe(markdown: string): string {
       continue;
     }
     const h = /^(#{1,3})\s+(.+)$/.exec(line);
+    const ul = /^\s{0,3}[-*]\s+(.+)$/.exec(line);
+    const ol = /^\s{0,3}\d{1,2}[.)]\s+(.+)$/.exec(line);
+    const bq = /^>\s?(.*)$/.exec(line);
     if (h) {
       flush();
       const level = (h[1] ?? '#').length;
       out.push(`<h${level}>${inline(escapeText(h[2] ?? ''))}</h${level}>`);
+    } else if (ul || ol) {
+      flushPara(); flushQuote();
+      const tag = ul ? 'ul' : 'ol';
+      if (list && list.tag !== tag) flushList();
+      list ??= { tag, items: [] };
+      list.items.push(((ul ?? ol)?.[1] ?? '').trim());
+    } else if (bq) {
+      flushPara(); flushList();
+      if ((bq[1] ?? '').trim() === '') flushQuote(); else quote.push((bq[1] ?? '').trim());
     } else if (line.trim() === '') {
       flush();
+    } else if (list && /^\s{2,}\S/.test(line)) {
+      const last = list.items.length - 1;
+      list.items[last] = `${list.items[last] ?? ''} ${line.trim()}`;
     } else {
+      flushQuote(); flushList();
       para.push(line.trim());
     }
   }

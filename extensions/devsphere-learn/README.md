@@ -16,6 +16,6 @@ Run your code, store progress, hold tokens, use the network, or accept scores fr
 ```bash
 cd extensions/devsphere-learn
 npm ci --ignore-scripts
-npm test        # compile + 35 tests (protocol fixtures, session discovery, channel client, webview safety)
+npm test        # compile + 41 tests (protocol fixtures, session discovery, channel client, webview safety)
 ```
 To try it with the real app flow, run the worker's launcher with `extraEditorArgs: ['--extensionDevelopmentPath=<this folder>']`. Packaging as a `.vsix` is not done yet.

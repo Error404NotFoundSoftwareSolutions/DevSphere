@@ -2,7 +2,7 @@
   "name": "devsphere-learn",
   "displayName": "DevPilot Guide",
   "description": "Guides each step of a DevPilot lab in a side panel. Talks only to the DevPilot app on this computer.",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "private": true,
   "publisher": "devpilot",
   "license": "UNLICENSED",

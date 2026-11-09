@@ -103,3 +103,11 @@ Rules for `contribution`:
 5. `check` points add up to `max_points` (rule 1 above). `grader_test` replaces GitHub Actions check conclusions (no Checks permission is requested).
 6. `max_assistance_level` applies to repository files shared with the tutor (`docs/AI_TUTOR_POLICY.md`).
 7. The platform never merges. Approval and merge are not scored (FR-OSS-010, FR-OSS-012).
+
+## Which tests a step's check runs
+
+A guide step with `practice_check: <id>` runs one test file in the learner's folder: `tests/visible/test_<id>.py`, where dashes in the id become underscores (`issue-1-slugify` runs `test_issue_1_slugify.py`). If that file does not exist, the whole `tests/visible` folder runs, which is what simple labs such as `python-hello-001` rely on. Steps without a `practice_check` are reading steps.
+
+Checks may inspect the learner's Git repository (branch names, commit messages, changed files). Mark such tests so they are skipped when the environment variable `DEVPILOT_LABCHECK=1` is set: `labcheck` sets it, because the authors' CI runs against a folder that has no learner history. See `content/labs/oss-first-contribution-001/` for the pattern, and `services/content-ci/tests/test_oss_lab.py`, which replays a learner through it with real Git.
+
+Guide text is rendered as safe markdown: headings, paragraphs, bullet and numbered lists, quotes, code blocks, bold and inline code. Links and images are never active, so a video is written as its title, channel and address in a code span. HTML comments are removed before rendering, so never put `<!--` in guide text.

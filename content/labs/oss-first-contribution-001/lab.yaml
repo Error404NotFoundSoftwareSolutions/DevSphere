@@ -1,0 +1,94 @@
+# Capability: CAP-CONTENT, CAP-OSS-LAB. Rules: TRU-01, SEC-04, SEC-26
+# Implemented here: the first open-source contribution lab, run offline on a practice project with a simulated pull request flow
+
+schema_version: 1
+id: oss-first-contribution-001
+version: 1.0.0
+title: Your first open-source contribution
+description: Learn how open source works, then do it. Fix two bugs and a docs issue in a small project with real Git branches, commits, a pull request description and a review.
+difficulty: beginner
+estimated_minutes: 150
+os: [windows, linux, macos]
+runtimes:
+  - name: python
+    version: ">=3.10,<3.15"
+  - name: git
+    version: ">=2.28"
+workspace:
+  type: code-editor
+  language: python
+environment:
+  manager: venv
+guide:
+  steps:
+    - id: welcome
+      title: What open source is and why it matters
+      content_ref: guide/01-welcome.md
+    - id: how-it-works
+      title: How a contribution really works
+      content_ref: guide/02-how-it-works.md
+    - id: git-basics
+      title: Git in ten minutes
+      content_ref: guide/03-git-basics.md
+    - id: meet-project
+      title: Meet the project
+      content_ref: guide/04-meet-project.md
+    - id: git-setup
+      title: Start your repository
+      content_ref: guide/05-git-setup.md
+      practice_check: git-setup
+    - id: issue-1
+      title: "Issue 1: fix slugify on a branch"
+      content_ref: guide/06-issue-1.md
+      practice_check: issue-1-slugify
+    - id: issue-docs
+      title: "Issue 3: fix the README"
+      content_ref: guide/07-issue-docs.md
+      practice_check: issue-docs
+    - id: issue-truncate
+      title: "Issue 2: fix truncate_words with a test"
+      content_ref: guide/08-issue-truncate.md
+      practice_check: issue-truncate
+    - id: pull-request
+      title: Write the pull request
+      content_ref: guide/09-pull-request.md
+      practice_check: pull-request
+    - id: review
+      title: Answer the review
+      content_ref: guide/10-review.md
+      practice_check: review
+    - id: wrap-up
+      title: Your next real contribution
+      content_ref: guide/11-wrap-up.md
+tutor:
+  enabled: true
+  max_assistance_level: 3
+  allowed_context: [guide, selected_files, task_output]
+evaluation:
+  rubric_version: 1
+  evaluator: pytest
+  max_points: 100
+  checks:
+    - { id: git-setup, type: test, points: 10, visible: true }
+    - { id: issue-1-slugify, type: test, points: 15, visible: true }
+    - { id: issue-docs, type: test, points: 10, visible: true }
+    - { id: issue-truncate, type: test, points: 15, visible: true }
+    - { id: pull-request, type: test, points: 10, visible: true }
+    - { id: review, type: test, points: 10, visible: true }
+    - { id: hidden-slugify-edge, type: test, points: 15, visible: false }
+    - { id: hidden-truncate-edge, type: test, points: 15, visible: false }
+references:
+  - { url: "https://opensource.guide/how-to-contribute/", last_verified: "2026-11-09" }
+  - { url: "https://git-scm.com/book/en/v2", last_verified: "2026-11-09" }
+  - { url: "https://www.conventionalcommits.org/en/v1.0.0/", last_verified: "2026-11-09" }
+  - { url: "https://docs.github.com/en/get-started/exploring-projects-on-github/finding-ways-to-contribute-to-open-source-on-github", last_verified: "2026-11-09" }
+  - { url: "https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests", last_verified: "2026-11-09" }
+  - { url: "https://www.firsttimersonly.com/", last_verified: "2026-11-09" }
+  - { url: "https://goodfirstissue.dev/", last_verified: "2026-11-09" }
+  - { url: "https://www.youtube.com/watch?v=SWYqp7iY_Tc", last_verified: "2026-11-09" }
+  - { url: "https://www.youtube.com/watch?v=RGOj5yH7evk", last_verified: "2026-11-09" }
+  - { url: "https://www.youtube.com/watch?v=e2IbNHi4uCI", last_verified: "2026-11-09" }
+  - { url: "https://www.youtube.com/watch?v=e9lnsKot_SQ", last_verified: "2026-11-09" }
+  - { url: "https://www.youtube.com/watch?v=mklEhT_RLos", last_verified: "2026-11-09" }
+  - { url: "https://www.youtube.com/watch?v=dLRA1lffWBw", last_verified: "2026-11-09" }
+  - { url: "https://www.youtube.com/watch?v=OJqUWvmf4gg", last_verified: "2026-11-09" }

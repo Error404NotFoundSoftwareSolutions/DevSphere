@@ -68,6 +68,19 @@ Future<bool> realSpawnDetached(String exe, List<String> args, Map<String, String
 }
 
 /// Runs the lab's visible tests with a timeout, an output cap and a minimal environment (SEC-23).
+/// Which tests a step's check runs. A step whose check id is `issue-1-slugify` runs
+/// `tests/visible/test_issue_1_slugify.py` when that file exists, so the learner gets feedback about the
+/// step they are on. Without such a file the whole `tests/visible` folder runs (the original behaviour).
+/// The id was validated as `[a-z0-9_-]` by the manifest loader, and the path is rebuilt from it here.
+String checkTarget(String labRoot, LabStepInfo step) {
+  final id = step.checkId;
+  if (id != null && RegExp(r'^[a-z0-9][a-z0-9_-]{0,63}$').hasMatch(id)) {
+    final rel = 'tests/visible/test_${id.replaceAll('-', '_')}.py';
+    if (File('$labRoot/$rel').existsSync()) return rel;
+  }
+  return 'tests/visible';
+}
+
 CheckRunner pytestCheckRunner(String labRoot, {String python = 'python3'}) {
   const allowed = {'python3', 'python', 'py'};
   return (step) async {
@@ -75,7 +88,7 @@ CheckRunner pytestCheckRunner(String labRoot, {String python = 'python3'}) {
     final env = launcherEnvironment(Platform.environment)..addAll({'PYTHONDONTWRITEBYTECODE': '1', 'PYTHONNOUSERSITE': '1'});
     final r = await runProcess(
       python,
-      ['-m', 'pytest', '-q', '--no-header', '-p', 'no:cacheprovider', 'tests/visible'],
+      ['-m', 'pytest', '-q', '--no-header', '-p', 'no:cacheprovider', checkTarget(labRoot, step)],
       cwd: labRoot,
       timeout: const Duration(seconds: 30),
       maxOutput: 64 * 1024,

@@ -2,6 +2,7 @@
 # Requirements: FR-CONT-001..005, NFR-MAINT-002, NFR-LEGAL-002
 # Implemented here: the starter must fail the tests and the reference must pass them, twice in a row (FR-CONT-003)
 
+import os
 import shutil
 import subprocess
 import sys
@@ -20,8 +21,15 @@ def _pytest(folder: Path, tests: list[Path]) -> bool:
         "no:cacheprovider",
         *map(str, tests),
     ]
+    env = {
+        **os.environ,
+        "DEVPILOT_LABCHECK": "1",
+    }  # lets labs skip checks that need a learner's Git history
     return (
-        subprocess.run(cmd, cwd=folder, capture_output=True, text=True, timeout=120).returncode == 0
+        subprocess.run(
+            cmd, cwd=folder, capture_output=True, text=True, timeout=120, env=env
+        ).returncode
+        == 0
     )
 
 

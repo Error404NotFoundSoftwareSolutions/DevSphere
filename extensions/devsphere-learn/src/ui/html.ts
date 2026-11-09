@@ -33,6 +33,8 @@ button.link{background:none;color:var(--vscode-textLink-foreground);padding:2px 
 progress{width:100%;height:8px}
 .layout{display:grid;grid-template-columns:220px 1fr;gap:20px}@media(max-width:700px){.layout{grid-template-columns:1fr}}
 ol.steps{list-style:none;padding:0;margin:0}ol.steps li{margin:4px 0}
+ul,ol{padding-left:1.4em;margin:.4em 0}li{margin:.2em 0}blockquote{margin:.8em 0;padding:2px 12px;border-left:4px solid var(--vscode-textLink-foreground);background:var(--vscode-textBlockQuote-background)}
+code{font-family:var(--vscode-editor-font-family);background:var(--vscode-textCodeBlock-background);padding:0 4px;border-radius:3px}pre code{padding:0;background:none}
 pre{background:var(--vscode-textCodeBlock-background);padding:10px;border-radius:4px;overflow:auto;white-space:pre-wrap}
 .result{border-left:4px solid var(--vscode-panel-border);padding:6px 12px;margin-top:12px}
 .pass{border-color:var(--vscode-testing-iconPassed)}.fail{border-color:var(--vscode-testing-iconFailed)}
