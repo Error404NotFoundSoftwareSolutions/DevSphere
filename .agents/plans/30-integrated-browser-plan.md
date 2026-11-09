@@ -1,6 +1,6 @@
 # Plan: integrated browser (Track C)
 
-Status: **Accepted** (2026-11-04), not yet Active. Architecture: `../architecture/integrated-browser.md`. ADR-014 (Accepted).
+Status: **Accepted** (2026-11-04), not yet Active. Architecture: `../architecture/integrated-browser.md`. ADR-019 (Accepted).
 
 ## Goal
 A browser pane inside the IDE for previewing the student's app and reading content, optionally operable by the AI under strict, visible, revocable permissions.
@@ -11,7 +11,7 @@ General-purpose browsing replacement; extension support inside the pane; sync; p
 ## Milestones
 | ID | Milestone | Exit criteria |
 |---|---|---|
-| PL-BRW-00 | Decide purpose | Q-003 answered; ADR-014 Accepted |
+| PL-BRW-00 | Decide purpose | Q-003 answered; ADR-019 Accepted |
 | PL-BRW-01 | Spike: check upstream | Does the pinned Code-OSS already include a suitable integrated browser? Write RESULT.md with a reuse/build recommendation |
 | PL-BRW-02 | Isolation proof | Pane loads a hostile page fixture; no node access, no permission grants, separate session, cleared on demand |
 | PL-BRW-03 | Preview pane | Opens `localhost` URL from a running task; reload on save; back/forward; devtools toggle by profile |

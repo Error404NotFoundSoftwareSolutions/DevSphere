@@ -61,7 +61,8 @@ class SignInService {
   /// Returns true when [clientId] is still the placeholder (not yet configured)
   /// AND no custom [urlLauncher] was injected (i.e. production mode, not tests).
   bool get isPlaceholderClientId =>
-      clientId == defaultClientId && urlLauncher == null;
+      (clientId.isEmpty || clientId.contains('devsphere-desktop-client')) &&
+      urlLauncher == null;
 
   // Strictly identity scopes only (FR-AUTH-003)
   static const List<String> identityScopes = ['openid', 'profile', 'email'];

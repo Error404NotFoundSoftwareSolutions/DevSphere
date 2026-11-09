@@ -1,6 +1,6 @@
 // User story: US-37 Usability and accessibility (Sprint 9, MVP)
 // Requirements: NFR-USE-001
-// Implemented here: BuildLoop light theme built only from tokens (docs/DESIGN_SYSTEM.md)
+// Implemented here: DevPilot light theme built only from tokens (docs/DESIGN_SYSTEM.md)
 
 import 'package:flutter/material.dart';
 import 'tokens.dart';
@@ -14,7 +14,7 @@ TextStyle _t(double size, FontWeight weight, Color color) => TextStyle(
       height: 1.4,
     );
 
-ThemeData buildLoopTheme() {
+ThemeData devPilotTheme() {
   const scheme = ColorScheme.light(
     primary: BL.primary,
     onPrimary: Colors.white,
@@ -48,7 +48,7 @@ ThemeData buildLoopTheme() {
       labelMedium: _t(12, FontWeight.w500, BL.textSecondary),
       labelSmall: _t(12, FontWeight.w500, BL.textSecondary), // labels
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: BL.surface,
       elevation: 0,
       margin: EdgeInsets.zero,
@@ -112,13 +112,13 @@ ThemeData buildLoopTheme() {
       decoration: BoxDecoration(color: BL.navy, borderRadius: BorderRadius.circular(BL.radiusSm)),
       textStyle: _t(12, FontWeight.w500, Colors.white),
     ),
-    dialogTheme: DialogTheme(
+    dialogTheme: DialogThemeData(
       backgroundColor: BL.surface,
       elevation: 8,
       shadowColor: const Color(0x1A183153),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(BL.radiusLg)),
     ),
-    tabBarTheme: const TabBarTheme(
+    tabBarTheme: const TabBarThemeData(
       labelColor: BL.primary,
       unselectedLabelColor: BL.textSecondary,
       indicatorColor: BL.primary,

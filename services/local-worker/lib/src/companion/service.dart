@@ -1,6 +1,6 @@
 // User story: US-15 Open the lab workspace (Sprint 4, MVP)
 // Requirements: FR-ENV-001..005, FR-WS-001..005, NFR-SEC-002
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Tests: TC-LNK-01..12
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Tests: TC-LNK-01..12
 // Implemented here: the service behind the companion:* IPC channels. status() finds VS Code and writes
 // the install plan in plain words; install() needs an explicit approval; launch() never installs by
 // itself and refuses until the guide is current; sessionState() reports Practice progress for the app.
@@ -41,7 +41,7 @@ class CompanionService {
         : {'found': true, 'name': editor.displayName, 'version': editor.version, 'path': editor.path};
     Map<String, Object?> guide;
     if (pkg == null) {
-      guide = {'available': false, 'action': 'none', 'lines': ['The BuildLoop Guide extension is missing from this BuildLoop install. Reinstall BuildLoop.']};
+      guide = {'available': false, 'action': 'none', 'lines': ['The DevPilot Guide extension is missing from this DevPilot install. Reinstall DevPilot.']};
     } else if (editor == null) {
       guide = {'available': true, 'action': 'unknown', 'lines': <String>[]};
     } else {
@@ -56,7 +56,7 @@ class CompanionService {
     final editor = (await findEditor()).install;
     final pkg = loadGuide();
     if (editor == null) return {'status': 'failed', 'message': _help};
-    if (pkg == null) return {'status': 'failed', 'message': 'The BuildLoop Guide extension is missing from this BuildLoop install. Reinstall BuildLoop.'};
+    if (pkg == null) return {'status': 'failed', 'message': 'The DevPilot Guide extension is missing from this DevPilot install. Reinstall DevPilot.'};
     final plan = await planInstall(editor: editor, package: pkg, runner: runner, extraArgs: extraEditorArgs);
     final outcome = await installExtension(plan, userApproved: true, runner: runner, sha256Of: sha256Of);
     return {'status': outcome.status.name, 'message': outcome.message};
@@ -66,10 +66,10 @@ class CompanionService {
     final editor = (await findEditor()).install;
     final pkg = loadGuide();
     if (editor == null) return {'ok': false, 'message': _help};
-    if (pkg == null) return {'ok': false, 'message': 'The BuildLoop Guide extension is missing from this BuildLoop install. Reinstall BuildLoop.'};
+    if (pkg == null) return {'ok': false, 'message': 'The DevPilot Guide extension is missing from this DevPilot install. Reinstall DevPilot.'};
     final plan = await planInstall(editor: editor, package: pkg, runner: runner, extraArgs: extraEditorArgs);
     if (plan.action != InstallAction.none) {
-      return {'ok': false, 'message': 'Install the BuildLoop Guide in ${editor.displayName} first, then start the lab.'};
+      return {'ok': false, 'message': 'Install the DevPilot Guide in ${editor.displayName} first, then start the lab.'};
     }
     final existing = _sessions[labId];
     if (existing != null) {

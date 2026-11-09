@@ -30,7 +30,7 @@ class CatalogueScreen extends StatelessWidget {
           IconButton(
             key: const Key('catalogue_dashboard_button'),
             icon: const Icon(Icons.dashboard_outlined),
-            tooltip: 'BuildLoop Dashboard',
+            tooltip: 'DevPilot Dashboard',
             onPressed: () {
               context.go('/dashboard');
             },

@@ -14,6 +14,7 @@ import '../../ui/neon_background.dart';
 import '../../services/google_token_exchange.dart';
 import '../../services/oauth_loopback_server.dart';
 import 'firebase_auth_service.dart';
+import 'auth_session.dart';
 import 'launching_rocket_card.dart';
 import 'session_store.dart';
 import 'sign_in_service.dart';
@@ -229,6 +230,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
       // --- Step 7: Save Firebase session token ---
       await _sessionStore.saveToken(result.idToken);
+      AuthSession.instance.signIn(AuthUser.fromFirebase(result));
 
       if (widget.onSignInSuccess != null) {
         widget.onSignInSuccess!();
@@ -321,6 +323,7 @@ class _SignInScreenState extends State<SignInScreen> {
       }
 
       await _sessionStore.saveToken(userResult.idToken);
+      AuthSession.instance.signIn(AuthUser.fromFirebase(userResult));
 
       if (widget.onSignInSuccess != null) {
         widget.onSignInSuccess!();
@@ -389,6 +392,7 @@ class _SignInScreenState extends State<SignInScreen> {
       }
 
       await _sessionStore.saveToken(userResult.idToken);
+      AuthSession.instance.signIn(AuthUser.fromFirebase(userResult));
 
       if (widget.onSignInSuccess != null) {
         widget.onSignInSuccess!();
@@ -507,7 +511,7 @@ class _SignInScreenState extends State<SignInScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Devpilot',
+                  'DevPilot',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 26,
@@ -614,7 +618,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'Devpilot',
+                                'DevPilot',
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: Colors.white,
@@ -1526,7 +1530,7 @@ class _AiCompanionIllustration extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '    # Devpilot: SIMD auto-vectorized',
+                  '    # DevPilot: SIMD auto-vectorized',
                   style: TextStyle(
                     color: Colors.white38,
                     fontSize: 10,
@@ -1852,7 +1856,7 @@ class _RoadmapIllustration extends StatelessWidget {
           _stepRow(
               Icons.check_circle, '2. Backend APIs', 'Verified pass', true),
           const SizedBox(height: 6),
-          _stepRow(Icons.radio_button_checked, '3. Devpilot Studio Labs',
+          _stepRow(Icons.radio_button_checked, '3. DevPilot Studio Labs',
               'In Progress', false,
               isCurrent: true),
           const SizedBox(height: 6),

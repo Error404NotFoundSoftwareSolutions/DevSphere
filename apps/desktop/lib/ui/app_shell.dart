@@ -1,12 +1,14 @@
 // User story: US-15 Open the lab workspace (Sprint 4, MVP)
 // Requirements: FR-WS-001..005, NFR-USE-001
-// Implemented here: BuildLoop shell in the Google-Skills pattern: 64px header (menu, wordmark, pill
+// Implemented here: DevPilot shell in the Google-Skills pattern: 64px header (menu, wordmark, pill
 // search, streak, help, avatar) and a 104px icon rail with a pale-blue pill on the selected item.
 // No dart:io: privileged work stays behind the worker channel (SEC-03).
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ui/ui.dart';
+import '../features/auth/auth_session.dart';
+import '../features/auth/session_store.dart';
 import '../features/dashboard/dashboard_data.dart';
 import '../router.dart' show sections;
 
@@ -87,7 +89,7 @@ class _Header extends StatelessWidget {
           const IconButton(
               onPressed: null, tooltip: 'Menu', icon: Icon(Icons.menu)),
           const SizedBox(width: BL.space2),
-          Text('BuildLoop',
+          Text('DevPilot',
               style: text.titleLarge
                   ?.copyWith(color: BL.navy, fontWeight: FontWeight.w600)),
           const SizedBox(width: BL.space8),
@@ -133,18 +135,7 @@ class _Header extends StatelessWidget {
           const SizedBox(width: BL.space4),
           const Icon(Icons.help_outline),
           const SizedBox(width: BL.space4),
-          InkWell(
-            onTap: () => context.go('/profile'),
-            borderRadius: BorderRadius.circular(17),
-            child: const CircleAvatar(
-              key: Key('profile'),
-              radius: 17,
-              backgroundColor: BL.selected,
-              child: Text('L',
-                  style:
-                      TextStyle(color: BL.primary, fontWeight: FontWeight.w600)),
-            ),
-          ),
+          const _AccountMenu(),
           const SizedBox(width: BL.space3),
         ],
       ),
@@ -219,6 +210,66 @@ class _RailItem extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Shows who is signed in (initial in the avatar; name and email in the menu) with Profile and Sign out.
+/// Signed out: a Sign in button instead of a made-up user.
+class _AccountMenu extends StatelessWidget {
+  const _AccountMenu();
+
+  @override
+  Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: AuthSession.instance,
+      builder: (context, _) {
+        final user = AuthSession.instance.user;
+        final text = Theme.of(context).textTheme;
+        if (user == null) {
+          return TextButton(
+            key: const Key('header-sign-in'),
+            onPressed: () => context.go('/'),
+            child: const Text('Sign in'),
+          );
+        }
+        return PopupMenuButton<String>(
+          tooltip: 'Account',
+          offset: const Offset(0, 44),
+          onSelected: (v) async {
+            // Take the router first: signing out rebuilds this menu away, so `context` would be gone.
+            final router = GoRouter.of(context);
+            if (v == 'profile') {
+              router.go('/profile');
+            } else if (v == 'sign-out') {
+              AuthSession.instance.signOut();
+              router.go('/landing');
+              await SessionStore().clear();
+            }
+          },
+          itemBuilder: (c) => [
+            PopupMenuItem<String>(
+              enabled: false,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(user.label, style: text.labelLarge),
+                  Text(user.email, style: text.bodySmall),
+                ],
+              ),
+            ),
+            const PopupMenuDivider(),
+            const PopupMenuItem<String>(value: 'profile', child: Text('Profile')),
+            const PopupMenuItem<String>(value: 'sign-out', child: Text('Sign out')),
+          ],
+          child: CircleAvatar(
+            key: const Key('profile'),
+            radius: 17,
+            backgroundColor: BL.selected,
+            child: Text(user.initial, style: const TextStyle(color: BL.primary, fontWeight: FontWeight.w600)),
+          ),
+        );
+      },
     );
   }
 }

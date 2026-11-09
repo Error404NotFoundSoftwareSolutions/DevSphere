@@ -23,6 +23,7 @@ active_scope:
   - tools/check_security.py
   - tools/tests/
   - docs/security/
+  - docs/buildathon/
   - docs/SECURITY.md
   - SECURITY.md
   - docs/TECH_STACK.md
@@ -44,14 +45,14 @@ autonomy:
 # Status: Proposed -> Accepted (ADR merged) -> Active (in current sprint) -> Frozen | Dropped
 tracks:
   A-learning-platform:   { status: Active, adr: ADR-003, note: "Flutter desktop + Python services. Exists today." }
-  B-companion-extension: { status: Active, adr: ADR-019, note: "BuildLoop app + guide extension in the learner's VS Code. Supersedes the fork (ADR-013)." }
-  C-integrated-browser:  { status: Deferred, adr: ADR-014, note: "Re-plan on the companion model; VS Code has a Simple Browser." }
-  D-agent-runtime:       { status: Deferred, adr: ADR-015, note: "Tutor first via the extension panel; Pair/Agent later." }
+  B-companion-extension: { status: Active, adr: ADR-022, note: "DevPilot app + guide extension in the learner's VS Code. Supersedes the fork (ADR-018)." }
+  C-integrated-browser:  { status: Deferred, adr: ADR-019, note: "Re-plan on the companion model; VS Code has a Simple Browser." }
+  D-agent-runtime:       { status: Deferred, adr: ADR-020, note: "Tutor first via the extension panel; Pair/Agent later." }
   E-curriculum-roadmap:  { status: Proposed, adr: ADR-017, note: "Skill graph, prebuilt+generated roadmaps, OSS contribution sandbox, beginner->professional. Questions answered; awaiting owner's yes on ADR-017 and the MVP change request." }
   X-extension-fabric:    { status: Accepted, adr: ADR-016, note: "Ports/adapters/registries so any later idea plugs in." }
 
 # Answered 2026-11-04: Q-001 (IDE hosts learning platform), Q-002 (patch-set on pinned tag), Q-003, Q-005 (Tutor+Pair+Agent by profile), Q-004, Q-006, Q-007, Q-015.
-# ADR-013/014/015 accepted 2026-11-04. Accepted is not Active: no track is built while code_freeze is true.
+# ADR-018/014/015 accepted 2026-11-04. Accepted is not Active: no track is built while code_freeze is true.
 blocking_questions: []   # remaining open (non-blocking): Q-009..Q-014, Q-016..Q-018   # see QUESTIONS.md
 active_plan: .agents/plans/00-master-plan.md
 active_slice: "Companion extension: docs done; next M1 launcher + installer + channel (plans/70-companion-extension-plan.md)"

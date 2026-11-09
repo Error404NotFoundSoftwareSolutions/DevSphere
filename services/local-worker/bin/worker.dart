@@ -48,12 +48,12 @@ CompanionService? _buildCompanion(List<String> args) {
 
 Map<String, Object?> _error(Object e) {
   if (e is IpcValidationException) {
-    return {'code': 'invalid-request', 'message': e.message, 'recovery': 'This is a bug in BuildLoop. Please report it.'};
+    return {'code': 'invalid-request', 'message': e.message, 'recovery': 'This is a bug in DevPilot. Please report it.'};
   }
   if (e is StateError) {
-    return {'code': 'unavailable', 'message': e.message, 'recovery': 'Reinstall BuildLoop or contact support.'};
+    return {'code': 'unavailable', 'message': e.message, 'recovery': 'Reinstall DevPilot or contact support.'};
   }
-  return {'code': 'failed', 'message': 'Something went wrong in BuildLoop.', 'recovery': 'Try again. If it keeps happening, restart BuildLoop.'};
+  return {'code': 'failed', 'message': 'Something went wrong in DevPilot.', 'recovery': 'Try again. If it keeps happening, restart DevPilot.'};
 }
 
 Future<void> main(List<String> args) async {

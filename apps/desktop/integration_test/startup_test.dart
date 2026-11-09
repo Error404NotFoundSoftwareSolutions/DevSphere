@@ -13,12 +13,12 @@ void main() {
 
   testWidgets('App starts cleanly within performance threshold (TC-NFR-PERF-001-01)', (WidgetTester tester) async {
     final stopwatch = Stopwatch()..start();
-    await tester.pumpWidget(BuildLoopApp());
+    await tester.pumpWidget(DevPilotApp());
     await tester.pumpAndSettle();
     stopwatch.stop();
 
     expect(stopwatch.elapsedMilliseconds, lessThan(3000));
-    expect(find.byType(BuildLoopApp), findsOneWidget);
+    expect(find.byType(DevPilotApp), findsOneWidget);
   });
 }
 

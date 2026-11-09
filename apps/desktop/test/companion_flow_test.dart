@@ -1,6 +1,6 @@
 // User story: US-15 Open the lab workspace (Sprint 4, MVP)
 // Requirements: FR-ENV-001..005, FR-WS-001..005, NFR-USE-001
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Test IDs: TC-LNK-40..49
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Test IDs: TC-LNK-40..49
 // Implemented here: what the learner sees when they press Start: detect VS Code, plan, approve, install, open
 
 import 'package:desktop/api.dart';
@@ -37,16 +37,16 @@ class FakeWorker implements WorkerClient {
             'available': guideAvailable,
             'action': guideAction,
             'lines': guideAvailable
-                ? ['BuildLoop Guide 0.1.0 will be installed into Visual Studio Code 1.144.0 (/usr/bin/code).', 'It talks only to BuildLoop on this computer and does not use the internet.']
-                : ['The BuildLoop Guide extension is missing from this BuildLoop install. Reinstall BuildLoop.'],
+                ? ['DevPilot Guide 0.1.0 will be installed into Visual Studio Code 1.144.0 (/usr/bin/code).', 'It talks only to DevPilot on this computer and does not use the internet.']
+                : ['The DevPilot Guide extension is missing from this DevPilot install. Reinstall DevPilot.'],
           },
         };
       case 'companion:install':
-        return {'status': installStatus, 'message': installStatus == 'installed' ? 'The BuildLoop Guide is installed.' : 'Visual Studio Code could not install the guide. It may be blocked on this computer.'};
+        return {'status': installStatus, 'message': installStatus == 'installed' ? 'The DevPilot Guide is installed.' : 'Visual Studio Code could not install the guide. It may be blocked on this computer.'};
       case 'companion:launch':
-        return launchOk ? {'ok': true, 'message': 'VS Code is opening your lab.', 'labRoot': '/home/u/BuildLoopLabs/python-hello-001'} : {'ok': false, 'message': 'Visual Studio Code could not open the lab. Close any stuck VS Code windows and try again.'};
+        return launchOk ? {'ok': true, 'message': 'VS Code is opening your lab.', 'labRoot': '/home/u/DevPilotLabs/python-hello-001'} : {'ok': false, 'message': 'Visual Studio Code could not open the lab. Close any stuck VS Code windows and try again.'};
       case 'companion:sessionState':
-        return {'active': sessionSteps.isNotEmpty, 'labRoot': '/home/u/BuildLoopLabs/python-hello-001', 'steps': sessionSteps, 'passed': sessionSteps.where((s) => s['state'] == 'pass').length, 'total': sessionSteps.length, 'finishRequested': false};
+        return {'active': sessionSteps.isNotEmpty, 'labRoot': '/home/u/DevPilotLabs/python-hello-001', 'steps': sessionSteps, 'passed': sessionSteps.where((s) => s['state'] == 'pass').length, 'total': sessionSteps.length, 'finishRequested': false};
     }
     throw WorkerException(code: 'failed', message: 'unexpected $channel', recovery: '');
   }
@@ -58,7 +58,7 @@ Future<void> openCourse(WidgetTester tester, FakeWorker w) async {
   addTearDown(tester.view.reset);
   await tester.pumpWidget(ProviderScope(
     overrides: [workerClientProvider.overrideWithValue(w)],
-    child: BuildLoopApp(router: createRouter(initialLocation: '/course/python-hello-001')),
+    child: DevPilotApp(router: createRouter(initialLocation: '/course/python-hello-001')),
   ));
   await tester.pumpAndSettle();
 }
@@ -111,11 +111,11 @@ void main() {
     expect(w.calls, ['companion:status']);
   });
 
-  testWidgets('TC-LNK-44 guide missing from this BuildLoop install: says so, starts nothing', (tester) async {
+  testWidgets('TC-LNK-44 guide missing from this DevPilot install: says so, starts nothing', (tester) async {
     final w = FakeWorker(guideAvailable: false);
     await openCourse(tester, w);
     await pressStart(tester);
-    expect(find.textContaining('missing from this BuildLoop install'), findsWidgets);
+    expect(find.textContaining('missing from this DevPilot install'), findsWidgets);
     expect(w.calls, ['companion:status']);
   });
 
@@ -143,8 +143,8 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
     await tester.pumpWidget(ProviderScope(
-      overrides: [workerClientProvider.overrideWithValue(UnavailableWorkerClient('BuildLoop helper was not found.'))],
-      child: BuildLoopApp(router: createRouter(initialLocation: '/course/python-hello-001')),
+      overrides: [workerClientProvider.overrideWithValue(UnavailableWorkerClient('DevPilot helper was not found.'))],
+      child: DevPilotApp(router: createRouter(initialLocation: '/course/python-hello-001')),
     ));
     await tester.pumpAndSettle();
     await pressStart(tester);
@@ -161,7 +161,7 @@ void main() {
     addTearDown(tester.view.reset);
     await tester.pumpWidget(ProviderScope(
       overrides: [workerClientProvider.overrideWithValue(w)],
-      child: BuildLoopApp(router: createRouter(initialLocation: '/lab/python-hello-001')),
+      child: DevPilotApp(router: createRouter(initialLocation: '/lab/python-hello-001')),
     ));
     await tester.pumpAndSettle();
     expect(find.text('Open the starter file'), findsOneWidget);
@@ -186,7 +186,7 @@ void main() {
     addTearDown(tester.view.reset);
     await tester.pumpWidget(ProviderScope(
       overrides: [workerClientProvider.overrideWithValue(w)],
-      child: BuildLoopApp(router: createRouter(initialLocation: '/lab/python-hello-001')),
+      child: DevPilotApp(router: createRouter(initialLocation: '/lab/python-hello-001')),
     ));
     await tester.pumpAndSettle();
     expect(find.textContaining('not open'), findsOneWidget);

@@ -1,6 +1,6 @@
 // User story: US-15 Open the lab workspace (Sprint 4, MVP)
 // Requirements: FR-WS-001..005, FR-CONT-001, NFR-SEC-004, NFR-SEC-006
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Tests: TC-CMP-06-xx. Rules SEC-04, SEC-07, SEC-26
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Tests: TC-CMP-06-xx. Rules SEC-04, SEC-07, SEC-26
 // Implemented here: build the learner's lab folder from a published lab bundle. Only allow-listed
 // learner files are copied (never protected tests or reference solutions), symlinks are skipped,
 // existing files are never overwritten, and the manifest is validated as untrusted input.
@@ -19,7 +19,7 @@ const int _maxManifestBytes = 64 * 1024;
 const int _maxSteps = 50;
 
 String resolveLabsRoot(String configured, String home) {
-  final root = configured.trim().isEmpty ? '$home/BuildLoopLabs' : configured.trim();
+  final root = configured.trim().isEmpty ? '$home/DevPilotLabs' : configured.trim();
   if (!root.startsWith('/') && !RegExp(r'^[A-Za-z]:[\\/]').hasMatch(root)) {
     throw ArgumentError('The labs folder must be a full path.');
   }
@@ -110,7 +110,7 @@ bool _plain(Object? v, int max) =>
 LabInfo loadLabInfo(String labFolder) {
   final markerFile = File('$labFolder/.devsphere/lab.json');
   final manifestFile = File('$labFolder/.devsphere/lab.yaml');
-  if (!markerFile.existsSync() || !manifestFile.existsSync()) throw const FormatException('This is not a BuildLoop lab folder.');
+  if (!markerFile.existsSync() || !manifestFile.existsSync()) throw const FormatException('This is not a DevPilot lab folder.');
   if (manifestFile.lengthSync() > _maxManifestBytes) throw const FormatException('Lab manifest is too large.');
   final text = manifestFile.readAsStringSync();
   if (RegExp(r'(^|[\s\[{,])[&*][A-Za-z0-9_-]+', multiLine: true).hasMatch(text)) {

@@ -1,4 +1,4 @@
-# Extension protocol v1 (BuildLoop app worker <-> BuildLoop Guide extension)
+# Extension protocol v1 (DevPilot app worker <-> DevPilot Guide extension)
 
 Status: Draft v1 (2026-11-04), milestone PL-CMP-01. Architecture: `.agents/architecture/companion-extension.md`. Threats: `docs/security/THREAT_MODEL.md` T19-T24. Shared test fixtures: `fixtures/protocol/valid` and `fixtures/protocol/invalid` (used by both the Dart worker and the TypeScript extension, ARC-03).
 
@@ -13,7 +13,7 @@ Unix domain socket (Linux, macOS) or named pipe (Windows) in a per-user private 
 Frame = 4-byte big-endian unsigned length N, then N bytes of UTF-8 JSON. **N must be 1 to 65536**; anything else closes the connection.
 
 ## 2b. Finding the session
-The worker writes `session-<sessionId>.json` (mode 0600) in the per-user runtime directory (`$XDG_RUNTIME_DIR/buildloop`, else `~/.buildloop/run`; directory mode 0700) containing `{sessionId, socketPath, labId, labRoot, protocol}`. The extension finds the file whose `labRoot` equals its workspace folder, checks that the file is owned by the current user and not readable by others, then connects. No environment variables are used: an already running VS Code would not pass them to a new window.
+The worker writes `session-<sessionId>.json` (mode 0600) in the per-user runtime directory (`$XDG_RUNTIME_DIR/devpilot`, else `~/.devpilot/run`; directory mode 0700) containing `{sessionId, socketPath, labId, labRoot, protocol}`. The extension finds the file whose `labRoot` equals its workspace folder, checks that the file is owned by the current user and not readable by others, then connects. No environment variables are used: an already running VS Code would not pass them to a new window.
 
 ## 3. Identifiers
 `id` = `^[a-z0-9][a-z0-9_-]{0,63}$` (lab ids, step ids). `sessionId` = 32 lowercase hex characters. `extVersion` = `MAJOR.MINOR.PATCH` digits only.
@@ -47,4 +47,4 @@ No other keys are allowed in a request. `hello` must come first; a second `hello
 - Rate limit and idle timeout close abusive sessions.
 
 ## 7. Versioning
-`protocol` is an integer. A change that breaks old clients bumps it; the worker supports N and N-1 for one release. A mismatch shows "update BuildLoop" or "reinstall the guide extension" and refuses privileged requests.
+`protocol` is an integer. A change that breaks old clients bumps it; the worker supports N and N-1 for one release. A mismatch shows "update DevPilot" or "reinstall the guide extension" and refuses privileged requests.

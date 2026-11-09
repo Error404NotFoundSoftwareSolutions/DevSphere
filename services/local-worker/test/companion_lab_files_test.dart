@@ -1,6 +1,6 @@
 // User story: US-15 Open the lab workspace (Sprint 4, MVP)
 // Requirements: FR-WS-001..005, FR-CONT-001, NFR-SEC-004, NFR-SEC-006
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Test IDs: TC-CMP-06-01..07. Rules SEC-04, SEC-07, SEC-26
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Test IDs: TC-CMP-06-01..07. Rules SEC-04, SEC-07, SEC-26
 // Implemented here: prepare the learner's lab folder (learner files only) and read the lab manifest
 
 import 'dart:io';
@@ -80,7 +80,7 @@ void main() {
   test('TC-CMP-06-04 the labs root must be absolute and not the disk root', () {
     expect(() => resolveLabsRoot('relative/dir', '/home/u'), throwsArgumentError);
     expect(() => resolveLabsRoot('/', '/home/u'), throwsArgumentError);
-    expect(resolveLabsRoot('', '/home/u'), '/home/u/BuildLoopLabs');
+    expect(resolveLabsRoot('', '/home/u'), '/home/u/DevPilotLabs');
     expect(resolveLabsRoot('/data/labs', '/home/u'), '/data/labs');
   });
 

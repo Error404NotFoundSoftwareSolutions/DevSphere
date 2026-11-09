@@ -1,6 +1,6 @@
-# BuildLoop design system ("Quiet Engineering")
+# DevPilot design system ("Quiet Engineering")
 
-Status: Accepted 2026-11-04 (supplied by the owner). Code: `packages/ui/lib/src/tokens.dart` and `build_loop_theme.dart`. Product name: **BuildLoop**. Tagline: **Learn by building. Grow by contributing.**
+Status: Accepted 2026-11-04 (supplied by the owner). Code: `packages/ui/lib/src/tokens.dart` and `dev_pilot_theme.dart`. Product name: **DevPilot**. Tagline: **Learn by building. Grow by contributing.**
 
 Direction: simplicity of Google Skills, usability of a professional developer tool, structure of a technical learning platform. Trustworthy, focused, mature. Not gamified, not a generic SaaS dashboard. Content over decoration; practical work over gamification; consistency over novelty.
 
@@ -25,8 +25,8 @@ Rule: Build, Debug and Contribute share the same blue. Differentiate by icon and
 Inter for UI, JetBrains Mono for code, commands, terminal, file names. Page heading 26-30 / 650, section 19-22 / 600, card heading 16-18 / 600, body 14 / 400, secondary 13, labels 12 / 500, code 13. (Flutter has no 650 weight without a variable font; 600 is used.) Fonts must be bundled with the app (no runtime download, SEC-20); until added, a system sans-serif fallback is used.
 
 ## Layout pattern: Google Skills style (owner screenshots, 2026-11-04) - SUPERSEDES the layout section below
-The owner's reference is the structure of Google Skills. We copy the **structure and interaction pattern only**, never Google's logo, wording, illustrations or badges. Colours, type and name stay BuildLoop.
-- **Header (64px, white):** hamburger, BuildLoop wordmark, wide pill search ("What do you want to learn today?"), streak chip, help, language, avatar. No points.
+The owner's reference is the structure of Google Skills. We copy the **structure and interaction pattern only**, never Google's logo, wording, illustrations or badges. Colours, type and name stay DevPilot.
+- **Header (64px, white):** hamburger, DevPilot wordmark, wide pill search ("What do you want to learn today?"), streak chip, help, language, avatar. No points.
 - **Left icon rail (104px, white):** icon above a small label; selected item has a pale-blue pill behind the icon. Items: Dashboard, Catalog, Paths, Credentials, Workspaces. Build / Debug / Contribute become filters in Catalog.
 - **Dashboard:** a hero card (illustration left, breadcrumb links, unit title, primary Start/Resume); tabs **Activities | Paths** with text and blue underline; a 3-column grid of activity cards (chips Featured / Path / Course / Lab, 20px title, 3-line description, duration with clock, round arrow button). Right column: Badges and Skills summary cards, weekly goal card with seven day circles, Achievements with progress bars.
 - **Course page:** dark navy header band with title, chips (credits-free: level, duration, type), Start button and progress bar; a dropdown for the version; a dismissible info banner; content below.

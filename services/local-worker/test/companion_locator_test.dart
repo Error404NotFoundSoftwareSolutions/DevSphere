@@ -1,6 +1,6 @@
 // User story: US-12 Prepare the environment with consent (Sprint 3, MVP)
 // Requirements: FR-ENV-001..005, NFR-SEC-002
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Test IDs: TC-CMP-02-01..09, threat T22
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Test IDs: TC-CMP-02-01..09, threat T22
 // Implemented here: finding and verifying the learner's VS Code; a fake `code` must be rejected
 
 import 'package:local_worker/src/companion/vscode_locator.dart';

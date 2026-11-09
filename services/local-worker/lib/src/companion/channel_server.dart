@@ -1,6 +1,6 @@
 // User story: US-15 Open the lab workspace (Sprint 4, MVP)
 // Requirements: FR-WS-001..005, NFR-SEC-002, NFR-SEC-003
-// Capability: CAP-APP-EXT-CHANNEL (ADR-019). Spec: docs/EXTENSION_PROTOCOL.md. Tests: TC-CMP-04-xx. Threats T19, T20
+// Capability: CAP-APP-EXT-CHANNEL (ADR-022). Spec: docs/EXTENSION_PROTOCOL.md. Tests: TC-CMP-04-xx. Threats T19, T20
 // Implemented here: the local channel server. Unix socket in a private directory (0700, socket 0600),
 // one client at a time, handshake first, strict parsing, three invalid messages and out you go,
 // rate limit, idle timeout. The client is untrusted: the handler decides everything.
@@ -84,7 +84,7 @@ class ChannelServer {
 
   void _onConnection(Socket s) {
     if (_active != null) {
-      _send(s, errorEvent('busy', 'BuildLoop is already connected to another VS Code window for this lab.'));
+      _send(s, errorEvent('busy', 'DevPilot is already connected to another VS Code window for this lab.'));
       unawaited(_closeClient(s));
       return;
     }
@@ -117,9 +117,9 @@ class ChannelServer {
       if (request == null) {
         invalid++;
         if (invalid >= maxInvalid) {
-          await endWith(errorEvent('invalid-message', 'BuildLoop did not understand that message and closed the connection.'));
+          await endWith(errorEvent('invalid-message', 'DevPilot did not understand that message and closed the connection.'));
         } else {
-          _send(s, errorEvent('invalid-message', 'BuildLoop did not understand that message.'));
+          _send(s, errorEvent('invalid-message', 'DevPilot did not understand that message.'));
         }
         return;
       }
@@ -127,9 +127,9 @@ class ChannelServer {
         case GateDecision.needHello:
           _send(s, errorEvent('need-hello', 'Say hello first.'));
         case GateDecision.wrongSession:
-          await endWith(errorEvent('wrong-session', 'This is not the session BuildLoop started for this lab.'));
+          await endWith(errorEvent('wrong-session', 'This is not the session DevPilot started for this lab.'));
         case GateDecision.protocolMismatch:
-          await endWith(errorEvent('protocol-mismatch', 'The BuildLoop Guide and BuildLoop need to be the same version. Update BuildLoop.'));
+          await endWith(errorEvent('protocol-mismatch', 'The DevPilot Guide and DevPilot need to be the same version. Update DevPilot.'));
         case GateDecision.duplicateHello:
           _send(s, errorEvent('duplicate-hello', 'Already connected.'));
         case GateDecision.allow:
@@ -141,7 +141,7 @@ class ChannelServer {
                 _send(s, e);
               }
             } catch (_) {
-              _send(s, errorEvent('invalid-message', 'BuildLoop could not handle that request.'));
+              _send(s, errorEvent('invalid-message', 'DevPilot could not handle that request.'));
             }
           }
       }

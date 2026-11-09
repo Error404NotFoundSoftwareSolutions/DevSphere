@@ -1,6 +1,6 @@
 // User story: US-19 Follow a step-by-step guide (Sprint 5, MVP)
 // Requirements: FR-GUIDE-001..008, FR-GRADE-002, NFR-SEC-005
-// Capability: CAP-APP-EXT-CHANNEL (ADR-019). Test IDs: TC-CMP-05-01..08
+// Capability: CAP-APP-EXT-CHANNEL (ADR-022). Test IDs: TC-CMP-05-01..08
 // Implemented here: the worker-side lab controller: state, navigation, checks, finish. The worker decides.
 
 import 'dart:async';

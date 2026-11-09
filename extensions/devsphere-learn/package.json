@@ -1,10 +1,10 @@
 {
   "name": "devsphere-learn",
-  "displayName": "BuildLoop Guide",
-  "description": "Guides each step of a BuildLoop lab in a side panel. Talks only to the BuildLoop app on this computer.",
-  "version": "0.2.0",
+  "displayName": "DevPilot Guide",
+  "description": "Guides each step of a DevPilot lab in a side panel. Talks only to the DevPilot app on this computer.",
+  "version": "0.3.1",
   "private": true,
-  "publisher": "buildloop",
+  "publisher": "devpilot",
   "license": "UNLICENSED",
   "engines": {
     "vscode": "^1.144.0",
@@ -25,17 +25,17 @@
     "viewsContainers": {
       "secondarySidebar": [
         {
-          "id": "buildloop",
-          "title": "BuildLoop Guide",
+          "id": "devpilot",
+          "title": "DevPilot Guide",
           "icon": "media/guide.svg"
         }
       ]
     },
     "views": {
-      "buildloop": [
+      "devpilot": [
         {
           "type": "webview",
-          "id": "buildloop.guide",
+          "id": "devpilot.guide",
           "name": "Lab guide"
         }
       ]
@@ -43,7 +43,7 @@
     "commands": [
       {
         "command": "devsphere.openGuide",
-        "title": "BuildLoop: Open Lab Guide"
+        "title": "DevPilot: Open Lab Guide"
       }
     ]
   },

@@ -1,4 +1,4 @@
-# Architecture: in-product agent runtime (Track D, Proposed - ADR-015)
+# Architecture: in-product agent runtime (Track D, Proposed - ADR-020)
 
 Status: **Proposed.** Needs Q-004, Q-005, Q-013. Must honour `rules/20-trust-and-scoring.md` and `rules/80-ai-and-prompts.md`.
 

@@ -1,4 +1,4 @@
-// Capability: CAP-APP-EXT-CHANNEL (ADR-019). Rules: SEC-21, SEC-26. Threat T19. Tests: TC-CMP-11-xx
+// Capability: CAP-APP-EXT-CHANNEL (ADR-022). Rules: SEC-21, SEC-26. Threat T19. Tests: TC-CMP-11-xx
 // Implemented here: the channel client. Connects to the worker's private socket, says hello, waits for
 // welcome, then relays only valid events and sends only valid requests. It holds no credentials.
 import net from 'node:net';
@@ -33,9 +33,9 @@ export class ChannelClient {
         socket.destroy();
         reject(new Error(message));
       };
-      const timer = setTimeout(() => fail('BuildLoop did not answer. Open this lab again from the BuildLoop app.'), this.opts.handshakeTimeoutMs ?? 5000);
+      const timer = setTimeout(() => fail('DevPilot did not answer. Open this lab again from the DevPilot app.'), this.opts.handshakeTimeoutMs ?? 5000);
       socket.on('connect', () => socket.write(encodeFrame(requests.hello(this.session.sessionId, this.extVersion))));
-      socket.on('error', () => fail('Could not connect to the BuildLoop app. Open this lab again from BuildLoop.'));
+      socket.on('error', () => fail('Could not connect to the DevPilot app. Open this lab again from DevPilot.'));
       socket.on('data', (chunk) => {
         let raws: unknown[];
         try {
@@ -43,7 +43,7 @@ export class ChannelClient {
         } catch (e) {
           if (e instanceof ProtocolError) {
             if (settled) socket.destroy();
-            else fail('BuildLoop sent a message this guide does not understand.');
+            else fail('DevPilot sent a message this guide does not understand.');
           }
           return;
         }
@@ -52,7 +52,7 @@ export class ChannelClient {
           if (!event) continue; // drop anything that is not a valid event
           if (!this.ready) {
             if (event.type === 'welcome') {
-              if (event.labId !== this.session.labId) { fail('BuildLoop answered for a different lab.'); return; }
+              if (event.labId !== this.session.labId) { fail('DevPilot answered for a different lab.'); return; }
               this.ready = true;
               settled = true;
               clearTimeout(timer);
@@ -70,13 +70,13 @@ export class ChannelClient {
         const wasReady = this.ready;
         this.ready = false;
         if (wasReady) for (const cb of this.closeCbs) cb();
-        fail('The BuildLoop app closed the connection.');
+        fail('The DevPilot app closed the connection.');
       });
     });
   }
 
   send(request: ExtRequest): void {
-    if (!this.socket || !this.ready) throw new Error('Not connected to the BuildLoop app.');
+    if (!this.socket || !this.ready) throw new Error('Not connected to the DevPilot app.');
     this.socket.write(encodeFrame(checkRequest(request)));
   }
 

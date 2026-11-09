@@ -21,7 +21,7 @@ Facts below are from general knowledge of that product; re-check before quoting 
 | Timed, temporary credentials | Not needed for local labs; used for cloud sandbox labs later | |
 | Quests / skill badges / learning paths | Roadmaps made of lab "quests" with badges | Roadmap can be **generated for the learner** from a goal and a short assessment |
 | Content is vendor product training | Content is general engineering practice (setup, Git, debugging, OSS) | Vendor-neutral |
-| No AI coach (classic) | Tutor that explains, never judges (existing policy) | Adds Pair/Agent modes for professionals (ADR-015) |
+| No AI coach (classic) | Tutor that explains, never judges (existing policy) | Adds Pair/Agent modes for professionals (ADR-020) |
 
 ## 4. The skills beginners lack (initial skill map, owner to prioritise)
 
@@ -59,7 +59,7 @@ Bridge to the real world: after the practice repo, a curated list of real projec
 
 ## 7. From beginner to professional
 
-Levels share one platform and differ by **profile** (ARC-05): Foundations -> Practitioner -> Professional. Professional content: code review, working in a team repository, CI/CD and releases, debugging in production-like systems, design and testing practice, on-call basics, using AI agents safely at work. Professional users get the Pair/Agent modes and the full IDE; beginners get Tutor mode and guided steps (ADR-015).
+Levels share one platform and differ by **profile** (ARC-05): Foundations -> Practitioner -> Professional. Professional content: code review, working in a team repository, CI/CD and releases, debugging in production-like systems, design and testing practice, on-call basics, using AI agents safely at work. Professional users get the Pair/Agent modes and the full IDE; beginners get Tutor mode and guided steps (ADR-020).
 
 ## 7b. One desktop app (owner, 2026-11-04)
 No web portal. Login, dashboard, courses, roadmaps, badges and streaks, the workspace and the completion screen all live in one desktop app. See `APP_FLOW.md`.

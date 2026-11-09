@@ -1,6 +1,6 @@
 // User story: US-12 Prepare the environment with consent (Sprint 3, MVP)
 // Requirements: FR-ENV-001..005, FR-WS-001..005, NFR-SEC-002
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Test IDs: TC-LNK-01..12
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Test IDs: TC-LNK-01..12
 // Implemented here: the service behind the companion:* IPC channels (status, install, launch, sessionState)
 
 import 'dart:convert';
@@ -17,7 +17,7 @@ import 'companion_test_support.dart';
 
 const editor = EditorInstall(path: '/usr/bin/code', version: '1.144.0', kind: EditorKind.vscode);
 const hash = 'a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f90';
-const guide = ExtensionPackage(id: 'buildloop.devsphere-learn', version: '0.1.0', vsixPath: '/opt/buildloop/guide-0.1.0.vsix', sha256: hash);
+const guide = ExtensionPackage(id: 'devpilot.devsphere-learn', version: '0.1.0', vsixPath: '/opt/devpilot/guide-0.1.0.vsix', sha256: hash);
 
 class Fake {
   Fake({this.installed = ''});
@@ -28,7 +28,7 @@ class Fake {
     commands.add([exe, ...args]);
     if (args.contains('--list-extensions')) return CommandResult(exitCode: 0, stdout: installed);
     if (args.contains('--install-extension')) {
-      installed = 'buildloop.devsphere-learn@0.1.0\n';
+      installed = 'devpilot.devsphere-learn@0.1.0\n';
       return const CommandResult(exitCode: 0);
     }
     return const CommandResult(exitCode: 1);
@@ -117,7 +117,7 @@ void main() {
   });
 
   test('TC-LNK-07 launch with the guide current opens VS Code on the lab folder', () async {
-    final f = Fake(installed: 'buildloop.devsphere-learn@0.1.0\n');
+    final f = Fake(installed: 'devpilot.devsphere-learn@0.1.0\n');
     final s = await make(f);
     final r = await s.launch('python-hello-001');
     expect(r['ok'], true, reason: '${r['message']}');
@@ -126,7 +126,7 @@ void main() {
   });
 
   test('TC-LNK-08 launching the same lab again reuses the session and just brings VS Code forward', () async {
-    final f = Fake(installed: 'buildloop.devsphere-learn@0.1.0\n');
+    final f = Fake(installed: 'devpilot.devsphere-learn@0.1.0\n');
     final s = await make(f);
     final a = await s.launch('python-hello-001');
     final b = await s.launch('python-hello-001');
@@ -136,7 +136,7 @@ void main() {
   });
 
   test('TC-LNK-09 sessionState: inactive before launch; after a check it shows Practice progress', () async {
-    final f = Fake(installed: 'buildloop.devsphere-learn@0.1.0\n');
+    final f = Fake(installed: 'devpilot.devsphere-learn@0.1.0\n');
     final s = await make(f);
     expect((await s.sessionState('python-hello-001'))['active'], false);
     await s.launch('python-hello-001');
@@ -160,7 +160,7 @@ void main() {
   });
 
   test('TC-LNK-10 IPC handler routes companion channels and validates input', () async {
-    final f = Fake(installed: 'buildloop.devsphere-learn@0.1.0\n');
+    final f = Fake(installed: 'devpilot.devsphere-learn@0.1.0\n');
     final s = await make(f);
     companionService = s;
     addTearDown(() => companionService = null);
@@ -180,11 +180,11 @@ void main() {
     Directory make({String? json, bool vsix = true, String name = 'guide-0.1.0.vsix'}) {
       final d = dir();
       addTearDown(() => d.deleteSync(recursive: true));
-      if (json != null) File('${d.path}/buildloop-guide.json').writeAsStringSync(json);
+      if (json != null) File('${d.path}/devpilot-guide.json').writeAsStringSync(json);
       if (vsix) File('${d.path}/$name').writeAsBytesSync([1, 2, 3]);
       return d;
     }
-    String meta({String id = 'buildloop.devsphere-learn', String version = '0.1.0', String? sha, String file = 'guide-0.1.0.vsix'}) =>
+    String meta({String id = 'devpilot.devsphere-learn', String version = '0.1.0', String? sha, String file = 'guide-0.1.0.vsix'}) =>
         jsonEncode({'id': id, 'version': version, 'sha256': sha ?? hex, 'vsix': file});
     final ok = loadGuidePackage(make(json: meta()).path)!;
     expect(ok.version, '0.1.0');

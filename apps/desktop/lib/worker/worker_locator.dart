@@ -1,6 +1,6 @@
 // User story: US-16 Run lab tasks with limits (Sprint 4, MVP)
 // Requirements: FR-EXEC-001..003, NFR-SEC-002
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Tests: TC-LNK-30..34
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Tests: TC-LNK-30..34
 // Implemented here: where the app looks for its worker program, the lab content and the bundled guide
 // extension. Only absolute paths that exist are accepted. The UI never supplies these paths.
 
@@ -26,7 +26,7 @@ AppPaths locateAppPaths(
     required Map<String, String> env,
     required bool Function(String path) exists}) {
   String? worker;
-  final w = _env(env, 'BUILDLOOP_WORKER');
+  final w = _env(env, 'DEVPILOT_WORKER');
   if (w != null && exists(w)) {
     worker = w;
   } else {
@@ -56,24 +56,27 @@ AppPaths locateAppPaths(
       }
     }
   }
-
   String? guideDir;
-  final g = _env(env, 'BUILDLOOP_GUIDE_DIR');
-  if (g != null && exists('$g/buildloop-guide.json')) {
+  final g = _env(env, 'DEVPILOT_GUIDE_DIR') ?? _env(env, 'BUILDLOOP_GUIDE_DIR');
+  if (g != null &&
+      (exists('$g/devpilot-guide.json') || exists('$g/buildloop-guide.json'))) {
     guideDir = g;
   } else {
     final guideCandidate = '$exeDir/guide';
-    if (exists('$guideCandidate/buildloop-guide.json')) {
+    if (exists('$guideCandidate/devpilot-guide.json') ||
+        exists('$guideCandidate/buildloop-guide.json')) {
       guideDir = guideCandidate;
     } else {
       // In development builds, walk up to find the guide package directory
       var dir = exeDir;
       for (var i = 0; i < 12 && guideDir == null; i++) {
-        if (exists('$dir/release/guide-build/buildloop-guide.json')) {
+        if (exists('$dir/release/guide-build/devpilot-guide.json') ||
+            exists('$dir/release/guide-build/buildloop-guide.json')) {
           guideDir = '$dir/release/guide-build';
           break;
         }
-        if (exists('$dir/release/bundle/guide/buildloop-guide.json')) {
+        if (exists('$dir/release/bundle/guide/devpilot-guide.json') ||
+            exists('$dir/release/bundle/guide/buildloop-guide.json')) {
           guideDir = '$dir/release/bundle/guide';
           break;
         }
@@ -84,9 +87,8 @@ AppPaths locateAppPaths(
       }
     }
   }
-
   String? content;
-  final c = _env(env, 'BUILDLOOP_CONTENT_ROOT');
+  final c = _env(env, 'DEVPILOT_CONTENT_ROOT');
   if (c != null && exists(c)) {
     content = c;
   } else {

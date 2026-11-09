@@ -1,4 +1,4 @@
-// Capability: CAP-APP-EXT-CHANNEL (ADR-019). Rules: SEC-24, SEC-26. Threats T19, T20
+// Capability: CAP-APP-EXT-CHANNEL (ADR-022). Rules: SEC-24, SEC-26. Threats T19, T20
 // Implemented here: TC-CMP-10-01..07 finding the session file safely, TC-CMP-11-01..07 the channel client
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -75,7 +75,7 @@ test('TC-CMP-10-06 refuses malformed or hostile session content', () => {
 });
 
 test('TC-CMP-10-07 a missing runtime directory is simply "no session"', () => {
-  assert.equal(discoverSession('/tmp', '/nonexistent/buildloop/run'), undefined);
+  assert.equal(discoverSession('/tmp', '/nonexistent/devpilot/run'), undefined);
 });
 
 // ---------------------------------------------------------------- client against a fake worker
@@ -121,9 +121,9 @@ test('TC-CMP-11-02 delivers valid events and drops invalid ones', async () => {
 });
 
 test('TC-CMP-11-03 an error reply to hello rejects with the plain message', async () => {
-  const f = await fakeWorker((m, s) => { if (m.type === 'hello') send(s, { type: 'error', code: 'protocol-mismatch', message: 'Update BuildLoop.' }); });
+  const f = await fakeWorker((m, s) => { if (m.type === 'hello') send(s, { type: 'error', code: 'protocol-mismatch', message: 'Update DevPilot.' }); });
   const c = new ChannelClient(session(f.path), '0.1.0');
-  await assert.rejects(c.connect(), /Update BuildLoop/);
+  await assert.rejects(c.connect(), /Update DevPilot/);
   f.server.close();
 });
 

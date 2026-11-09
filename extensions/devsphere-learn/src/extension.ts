@@ -1,5 +1,5 @@
-// Capability: CAP-COMPANION-EXT, CAP-COMPLETION. Rules: SEC-21..SEC-27, TRU-01, TRU-02, ADR-019. Tests: TC-CMP-13-xx
-// Implemented here: VS Code glue for the BuildLoop Guide. The guide is a webview VIEW in the Secondary Side
+// Capability: CAP-COMPANION-EXT, CAP-COMPLETION. Rules: SEC-21..SEC-27, TRU-01, TRU-02, ADR-022. Tests: TC-CMP-13-xx
+// Implemented here: VS Code glue for the DevPilot Guide. The guide is a webview VIEW in the Secondary Side
 // Bar (the chat area, like Copilot Chat), never a tab in the editor area. In a lab folder it finds the app's
 // private session, connects to the channel and renders the guide from the worker's events. It never runs the
 // learner's code, stores progress or holds credentials: it only asks the app (Check my work, next step,
@@ -14,7 +14,7 @@ import { ChannelClient } from './host/channel';
 import { defaultRuntimeDir, discoverSession } from './host/session';
 import { clientScript, escapeHtml, newNonce, pageShell, renderCompletion, renderGuide, type GuideModel } from './ui/html';
 
-const VIEW_ID = 'buildloop.guide';
+const VIEW_ID = 'devpilot.guide';
 
 interface Model {
   labTitle: string;
@@ -31,7 +31,7 @@ class GuideView implements vscode.WebviewViewProvider {
   private view: vscode.WebviewView | undefined;
   private client: ChannelClient | undefined;
   private started = false;
-  private readonly model: Model = { labTitle: 'BuildLoop lab', steps: [], current: '', lastCheck: undefined, finished: false, notice: undefined };
+  private readonly model: Model = { labTitle: 'DevPilot lab', steps: [], current: '', lastCheck: undefined, finished: false, notice: undefined };
 
   constructor(private readonly version: string) {}
 
@@ -77,13 +77,13 @@ class GuideView implements vscode.WebviewViewProvider {
   render(): void {
     const folder = this.folder();
     const m = this.model;
-    if (!folder) { this.show('Lab guide', '<p>Open a BuildLoop lab folder to see its guide.</p>'); return; }
+    if (!folder) { this.show('Lab guide', '<p>Open a DevPilot lab folder to see its guide.</p>'); return; }
     if (m.finished && m.steps.length > 0 && m.steps.every((s) => s.state === 'pass')) {
       this.show('Lab complete', renderCompletion({
         labTitle: m.labTitle,
         skills: m.steps.map((s) => s.title),
         verification: 'unavailable',
-        message: 'Go back to the BuildLoop app to submit for a Verified result. Practice results alone do not earn a badge.',
+        message: 'Go back to the DevPilot app to submit for a Verified result. Practice results alone do not earn a badge.',
         practicePassed: m.steps.length,
         total: m.steps.length,
       }));
@@ -99,17 +99,17 @@ class GuideView implements vscode.WebviewViewProvider {
     if (!folder) return;
     const session = discoverSession(folder, defaultRuntimeDir());
     if (!session) {
-      this.model.notice = 'BuildLoop is not running for this lab. Open the lab again from the BuildLoop app.';
+      this.model.notice = 'DevPilot is not running for this lab. Open the lab again from the DevPilot app.';
       this.render();
       return;
     }
     const c = new ChannelClient(session, this.version);
     this.client = c;
     c.onEvent((e) => this.onEvent(e));
-    c.onClose(() => { this.model.notice = 'The connection to BuildLoop ended. Open the lab again from BuildLoop.'; this.render(); });
+    c.onClose(() => { this.model.notice = 'The connection to DevPilot ended. Open the lab again from DevPilot.'; this.render(); });
     try {
       await c.connect();
-      log.appendLine('connected to the BuildLoop app');
+      log.appendLine('connected to the DevPilot app');
       c.send(requests.getLabState());
     } catch (e) {
       this.model.notice = (e as Error).message;
@@ -126,7 +126,7 @@ class GuideView implements vscode.WebviewViewProvider {
     } else if (e.type === 'error') {
       m.lastCheck = { passed: false, output: e.message, kind: 'Practice' };
     } else if (e.type === 'sessionClosed') {
-      m.notice = 'The BuildLoop app closed this lab session. Open the lab again from BuildLoop.';
+      m.notice = 'The DevPilot app closed this lab session. Open the lab again from DevPilot.';
     }
     this.render();
   }
@@ -149,7 +149,7 @@ class GuideView implements vscode.WebviewViewProvider {
 }
 
 export function activate(ctx: vscode.ExtensionContext): void {
-  log = vscode.window.createOutputChannel('BuildLoop Guide');
+  log = vscode.window.createOutputChannel('DevPilot Guide');
   const provider = new GuideView((ctx.extension.packageJSON as { version: string }).version);
   ctx.subscriptions.push(
     log,

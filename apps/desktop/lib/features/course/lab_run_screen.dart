@@ -1,7 +1,7 @@
 // User story: US-19 Follow a step-by-step guide (Sprint 5, MVP)
 // Requirements: FR-GUIDE-001..005, FR-GUIDE-006, FR-GRADE-002, NFR-USE-001
-// Capability: CAP-COURSE-PLAYER (ADR-019). Tests: TC-DES-003-10, TC-LNK-48, TC-LNK-49
-// Implemented here: the lab page in the app. The guided steps run in VS Code (BuildLoop Guide panel);
+// Capability: CAP-COURSE-PLAYER (ADR-022). Tests: TC-DES-003-10, TC-LNK-48, TC-LNK-49
+// Implemented here: the lab page in the app. The guided steps run in VS Code (DevPilot Guide panel);
 // this page follows the open lab: Practice score and step states from the worker, the lab folder, and a
 // way to bring VS Code forward. Scores here are Practice. Only a Verified result can earn a badge.
 
@@ -260,7 +260,7 @@ class _Body extends StatelessWidget {
                   Text('This lab is not open', style: text.headlineMedium),
                   const SizedBox(height: BL.space3),
                   Text(
-                      'Start it to open VS Code with your lab folder and the BuildLoop Guide. Your progress will show here.',
+                      'Start it to open VS Code with your lab folder and the DevPilot Guide. Your progress will show here.',
                       style: text.bodyLarge),
                   const SizedBox(height: BL.space6),
                   ElevatedButton(
@@ -271,7 +271,7 @@ class _Body extends StatelessWidget {
                       style: text.headlineMedium),
                   const SizedBox(height: BL.space3),
                   Text(
-                    'Follow the BuildLoop Guide panel on the right side of VS Code. Press Check my work on each step. Results appear here too.',
+                    'Follow the DevPilot Guide panel on the right side of VS Code. Press Check my work on each step. Results appear here too.',
                     style: text.bodyLarge,
                   ),
                   const SizedBox(height: BL.space6),

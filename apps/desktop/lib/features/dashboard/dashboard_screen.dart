@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ui/ui.dart';
+import '../auth/auth_session.dart';
 import 'dashboard_data.dart';
 
 /// Content width below which the right column is hidden.
@@ -52,6 +53,15 @@ class _MainState extends State<_Main> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          ListenableBuilder(
+            listenable: AuthSession.instance,
+            builder: (context, _) {
+              final u = AuthSession.instance.user;
+              return Text(u == null ? 'Welcome to DevPilot' : 'Welcome, ${u.label}',
+                  style: text.headlineMedium);
+            },
+          ),
+          const SizedBox(height: BL.space1),
           Text(
               'Sample data. Courses and progress are not connected to your account yet.',
               style: text.bodySmall),

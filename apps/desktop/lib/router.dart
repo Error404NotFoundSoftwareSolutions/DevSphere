@@ -1,7 +1,7 @@
 // User story: US-03 Create and manage my profile (Sprint 1, MVP)
 // User story: US-15 Open the lab workspace (Sprint 4, MVP)
 // Requirements: FR-PROF-002..008, FR-WS-001..005, NFR-MAINT-005
-// Implemented here: top-level router configuration using go_router; BuildLoop shell routes with onboarding navigation
+// Implemented here: top-level router configuration using go_router; DevPilot shell routes with onboarding navigation
 
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';

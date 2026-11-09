@@ -10,6 +10,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 
 from app.routers import (
+    ai,
     attempts,
     auth,
     config,
@@ -67,6 +68,7 @@ def create_app() -> FastAPI:
 
     for r in (
         health,
+        ai,
         auth,
         me,
         data_requests,

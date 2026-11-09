@@ -1,6 +1,6 @@
 // User story: US-12 Prepare the environment with consent (Sprint 3, MVP)
 // Requirements: FR-ENV-001..005, NFR-SEC-002
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019)
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022)
 // Implemented here: real (dart:io) adapters for the locator and installer. Every process goes through
 // runProcess (executable + argument array, no shell). Kept separate so the logic stays testable.
 

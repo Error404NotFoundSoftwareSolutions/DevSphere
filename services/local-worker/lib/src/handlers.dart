@@ -14,7 +14,7 @@ CompanionService? companionService;
 
 CompanionService _companion() {
   final s = companionService;
-  if (s == null) throw StateError('The VS Code connection is not set up in this build of BuildLoop.');
+  if (s == null) throw StateError('The VS Code connection is not set up in this build of DevPilot.');
   return s;
 }
 

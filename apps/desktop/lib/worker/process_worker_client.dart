@@ -1,6 +1,6 @@
 // User story: US-16 Run lab tasks with limits (Sprint 4, MVP)
 // Requirements: FR-EXEC-001..003, FR-EXEC-005..006, FR-EXEC-009, NFR-SEC-002..003
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Tests: TC-LNK-20..27
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Tests: TC-LNK-20..27
 // Implemented here: the real client for the local worker process. It starts the worker program, talks
 // JSON lines (one request per line, answers matched by id), validates every request against the IPC
 // contract first, fails pending calls if the worker stops, and restarts it on the next call.
@@ -48,8 +48,8 @@ class ProcessWorkerClient implements WorkerClient {
     } on ProcessException {
       throw WorkerException(
           code: 'unavailable',
-          message: 'BuildLoop could not start its helper program.',
-          recovery: 'Reinstall BuildLoop.');
+          message: 'DevPilot could not start its helper program.',
+          recovery: 'Reinstall DevPilot.');
     }
     final ready = Completer<void>();
     _process = p;
@@ -74,7 +74,7 @@ class ProcessWorkerClient implements WorkerClient {
           c.completeError(WorkerException(
             code: '${err['code'] ?? 'failed'}',
             message:
-                '${err['message'] ?? 'Something went wrong in BuildLoop.'}',
+                '${err['message'] ?? 'Something went wrong in DevPilot.'}',
             recovery: '${err['recovery'] ?? ''}',
           ));
         } else {
@@ -91,8 +91,8 @@ class ProcessWorkerClient implements WorkerClient {
       p.kill();
       throw WorkerException(
           code: 'unavailable',
-          message: 'BuildLoop helper did not start.',
-          recovery: 'Restart BuildLoop.');
+          message: 'DevPilot helper did not start.',
+          recovery: 'Restart DevPilot.');
     });
   }
 
@@ -101,7 +101,7 @@ class ProcessWorkerClient implements WorkerClient {
     _process = null;
     final err = WorkerException(
         code: 'stopped',
-        message: 'BuildLoop helper stopped unexpectedly.',
+        message: 'DevPilot helper stopped unexpectedly.',
         recovery: 'Try again.');
     if (!ready.isCompleted) ready.completeError(err);
     for (final c in _pending.values.toList()) {
@@ -119,7 +119,7 @@ class ProcessWorkerClient implements WorkerClient {
     if (p == null)
       throw WorkerException(
           code: 'stopped',
-          message: 'BuildLoop helper stopped unexpectedly.',
+          message: 'DevPilot helper stopped unexpectedly.',
           recovery: 'Try again.');
     final id = ++_nextId;
     final c = Completer<Map<String, dynamic>>();
@@ -129,7 +129,7 @@ class ProcessWorkerClient implements WorkerClient {
       _pending.remove(id);
       throw WorkerException(
           code: 'timeout',
-          message: 'BuildLoop took too long to answer.',
+          message: 'DevPilot took too long to answer.',
           recovery: 'Try again.');
     });
   }

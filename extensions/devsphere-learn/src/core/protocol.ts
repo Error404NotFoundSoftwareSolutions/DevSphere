@@ -1,4 +1,4 @@
-// Capability: CAP-APP-EXT-CHANNEL (ADR-019). Spec: docs/EXTENSION_PROTOCOL.md. Rules: SEC-21, SEC-26, ARC-03
+// Capability: CAP-APP-EXT-CHANNEL (ADR-022). Spec: docs/EXTENSION_PROTOCOL.md. Rules: SEC-21, SEC-26, ARC-03
 // Tests: TC-CMP-09-xx (shared fixtures in fixtures/protocol)
 // Implemented here: the extension side of the protocol. Events from the worker are parsed strictly (the
 // worker is trusted, but bugs and a spoofed socket must not break the panel); requests can only be built

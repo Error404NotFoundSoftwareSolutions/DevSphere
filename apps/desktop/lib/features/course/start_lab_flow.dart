@@ -1,7 +1,7 @@
 // User story: US-12 Prepare the environment with consent (Sprint 3, MVP)
 // User story: US-15 Open the lab workspace (Sprint 4, MVP)
 // Requirements: FR-ENV-001..005, FR-WS-001..005, NFR-USE-001
-// Capability: CAP-VSCODE-LAUNCHER (ADR-019). Tests: TC-LNK-40..47
+// Capability: CAP-VSCODE-LAUNCHER (ADR-022). Tests: TC-LNK-40..47
 // Implemented here: what happens when the learner presses Start. Find VS Code; if the guide extension
 // needs installing, show a plain-language plan and wait for a click; then install, then open the lab.
 // Nothing is installed or opened without that click. No dart:io: everything goes through the worker client.
@@ -53,7 +53,7 @@ Future<bool> startLab(BuildContext context, WidgetRef ref, String labId,
     }
     if (guide['available'] != true) {
       onBusy?.call(null);
-      await _notice(context, 'BuildLoop Guide is missing',
+      await _notice(context, 'DevPilot Guide is missing',
           _lines(guide['lines']).join('\n'));
       return false;
     }
@@ -64,7 +64,7 @@ Future<bool> startLab(BuildContext context, WidgetRef ref, String labId,
         context: context,
         builder: (c) => AlertDialog(
           title:
-              const Text('Install the BuildLoop Guide in Visual Studio Code?'),
+              const Text('Install the DevPilot Guide in Visual Studio Code?'),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,

@@ -1,6 +1,6 @@
 // User story: US-19 Follow a step-by-step guide (Sprint 5, MVP)
 // Requirements: FR-GUIDE-001..008, FR-GRADE-002, NFR-SEC-005
-// Capability: CAP-APP-EXT-CHANNEL (ADR-019). Tests: TC-CMP-05-xx
+// Capability: CAP-APP-EXT-CHANNEL (ADR-022). Tests: TC-CMP-05-xx
 // Implemented here: worker-side lab controller. The extension only asks; this decides: step state,
 // navigation, running a check (one at a time, output redacted and bounded), and whether the lab can
 // finish. Results are Practice only. Verified grading is the server's job (TRU-01, TRU-02).
