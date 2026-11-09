@@ -5,11 +5,12 @@
 // No dart:io: privileged work stays behind the worker channel (SEC-03).
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ui/ui.dart';
 import '../features/auth/auth_session.dart';
 import '../features/auth/session_store.dart';
-import '../features/dashboard/dashboard_data.dart';
+import '../api.dart';
 import '../router.dart' show sections;
 
 const Map<String, IconData> _icons = {
@@ -120,18 +121,7 @@ class _Header extends StatelessWidget {
               ),
             ),
           ),
-          Tooltip(
-            message: 'Weeks in a row you met your weekly goal (sample)',
-            child: Row(
-              key: const Key('streak'),
-              children: [
-                const Icon(Icons.local_fire_department,
-                    color: BL.warning, size: 22),
-                const SizedBox(width: BL.space1),
-                Text('${SampleData.streakWeeks}', style: text.labelLarge),
-              ],
-            ),
-          ),
+          const _Streak(),
           const SizedBox(width: BL.space4),
           const Icon(Icons.help_outline),
           const SizedBox(width: BL.space4),
@@ -194,8 +184,13 @@ class _RailItem extends StatelessWidget {
                 color: selected ? BL.selected : Colors.transparent,
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: Icon(_icons[slug] ?? Icons.circle_outlined,
-                  size: 22, color: selected ? BL.primary : BL.textSecondary),
+              child: AnimatedScale(
+                scale: selected ? 1.12 : 1.0,
+                duration: const Duration(milliseconds: 180),
+                curve: Curves.easeOutBack,
+                child: Icon(_icons[slug] ?? Icons.circle_outlined,
+                    size: 22, color: selected ? BL.primary : BL.textSecondary),
+              ),
             ),
             const SizedBox(height: BL.space1),
             Text(
@@ -270,6 +265,28 @@ class _AccountMenu extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+/// Weeks in a row with at least one check passed, for the signed-in person only.
+class _Streak extends ConsumerWidget {
+  const _Streak();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final c = ref.watch(userDataProvider);
+    final weeks = c.data?.streakWeeks(c.today) ?? 0;
+    return Tooltip(
+      message: 'Weeks in a row with at least one check passed',
+      child: Row(
+        key: const Key('streak'),
+        children: [
+          Icon(Icons.local_fire_department, color: weeks > 0 ? BL.warning : BL.textDisabled, size: 22),
+          const SizedBox(width: BL.space1),
+          Text('$weeks', style: Theme.of(context).textTheme.labelLarge),
+        ],
+      ),
     );
   }
 }

@@ -1,12 +1,19 @@
 // User story: US-06 Browse the lab catalogue (Sprint 2, MVP)
 // Requirements: FR-CAT-001..003, FR-PROG-001, NFR-USE-001
 // Implemented here: dashboard in the Google-Skills pattern: hero card, Activities/Paths tabs with a
-// card grid, and a right column (badges, skills, weekly goal, achievements). SAMPLE data, labelled.
+// card grid, and a right column (badges, skills, weekly goal, achievements). Progress, streak and goal come from
+// the signed-in person's own saved results (lib/data); the course list is the catalogue.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ui/ui.dart';
+import '../../api.dart';
+import '../../data/user_data.dart';
 import '../auth/auth_session.dart';
+import '../../ui/motion.dart';
+import '../pages/credentials_screen.dart';
+import '../pages/shared.dart';
 import 'dashboard_data.dart';
 
 /// Content width below which the right column is hidden.
@@ -62,11 +69,10 @@ class _MainState extends State<_Main> {
             },
           ),
           const SizedBox(height: BL.space1),
-          Text(
-              'Sample data. Courses and progress are not connected to your account yet.',
-              style: text.bodySmall),
+          Text('Your progress is saved for your account only, on this computer.',
+              key: const Key('dashboard-caption'), style: text.bodySmall),
           const SizedBox(height: BL.space3),
-          const SizedBox(width: double.infinity, child: _Hero()),
+          const Reveal(child: SizedBox(width: double.infinity, child: _Hero())),
           const SizedBox(height: BL.space6),
           Container(
             key: const Key('tabs'),
@@ -96,9 +102,14 @@ class _MainState extends State<_Main> {
                 runSpacing: BL.space4,
                 children: [
                   for (var i = 0; i < items.length; i++)
-                    SizedBox(
-                        width: w,
-                        child: _ActivityCard(index: i, item: items[i])),
+                    Reveal(
+                      key: ValueKey('${_tab}-${items[i].id}'),
+                      index: i + 1,
+                      child: SizedBox(
+                          width: w,
+                          child: HoverLift(
+                              child: _ActivityCard(index: i, item: items[i]))),
+                    ),
                 ],
               );
             },
@@ -141,13 +152,17 @@ class _Tab extends StatelessWidget {
   }
 }
 
-class _Hero extends StatelessWidget {
+class _Hero extends ConsumerWidget {
   const _Hero();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final text = Theme.of(context).textTheme;
-    final unit = SampleData.byId('git-first-commit-001');
+    final data = ref.watch(userDataProvider).data;
+    final resumeId = data?.resumable?.labId;
+    final unit = SampleData.find(resumeId ?? '') ?? _recommended(data);
+    final started = data?.lab(unit.id) != null;
+    final path = SampleData.paths.where((p) => p.activityIds.contains(unit.id)).firstOrNull;
     return Card(
       key: const Key('hero'),
       child: Padding(
@@ -163,17 +178,19 @@ class _Hero extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Roadmap: First project  ›',
-                      style: text.bodyMedium?.copyWith(color: BL.primary)),
-                  Text('Terminal and Git/GitHub  ›',
-                      style: text.bodyMedium?.copyWith(color: BL.primary)),
+                  if (path != null)
+                    InkWell(
+                      onTap: () => context.go('/paths'),
+                      child: Text('Path: ${path.title}  ›',
+                          style: text.bodyMedium?.copyWith(color: BL.primary)),
+                    ),
                   const SizedBox(height: BL.space3),
                   Text(unit.title, style: text.titleLarge),
                   const SizedBox(height: BL.space4),
                   ElevatedButton.icon(
                     onPressed: () => context.go('/course/${unit.id}'),
                     icon: const Icon(Icons.play_arrow, size: 18),
-                    label: const Text('Resume'),
+                    label: Text(started ? 'Resume' : 'Start'),
                     style:
                         ElevatedButton.styleFrom(shape: const StadiumBorder()),
                   ),
@@ -185,6 +202,14 @@ class _Hero extends StatelessWidget {
       ),
     );
   }
+}
+
+/// The first available lab the person has not finished, or the first lab when everything is done.
+SampleActivity _recommended(UserData? data) {
+  for (final a in SampleData.activities) {
+    if (a.available && data?.statusOf(a.id) != LabStatus.practiceComplete) return a;
+  }
+  return SampleData.activities.first;
 }
 
 /// Simple original illustration (our own shapes, not Google's artwork).
@@ -248,15 +273,16 @@ class _Chip extends StatelessWidget {
   }
 }
 
-class _ActivityCard extends StatelessWidget {
+class _ActivityCard extends ConsumerWidget {
   const _ActivityCard({required this.index, required this.item});
 
   final int index;
   final SampleActivity item;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final text = Theme.of(context).textTheme;
+    final status = statusFor(item, ref.watch(userDataProvider).data);
     return Card(
       key: Key('activity-$index'),
       clipBehavior: Clip.antiAlias,
@@ -281,7 +307,12 @@ class _ActivityCard extends StatelessWidget {
                   style: text.bodySmall,
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis),
-              const SizedBox(height: BL.space6),
+              const SizedBox(height: BL.space4),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: StatusChip(label: status.label, color: status.color),
+              ),
+              const SizedBox(height: BL.space4),
               Row(
                 children: [
                   const Icon(Icons.schedule, size: 18),
@@ -305,40 +336,43 @@ class _ActivityCard extends StatelessWidget {
   }
 }
 
-class _SideColumn extends StatelessWidget {
+class _SideColumn extends ConsumerWidget {
   const _SideColumn();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final data = ref.watch(userDataProvider).data;
     return SizedBox(
       width: BL.sideColumnWidth,
       child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(0, BL.space8, BL.space8, BL.space8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: const [
-            Row(
+          children: [
+            Reveal(
+              index: 2,
+              child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
+                const Expanded(
                     child: _CountCard(
                         cardKey: 'badges-card',
                         icon: Icons.workspace_premium_outlined,
                         label: 'Badges',
-                        value: SampleData.badgeCount)),
-                SizedBox(width: BL.space4),
+                        value: 0)),
+                const SizedBox(width: BL.space4),
                 Expanded(
                     child: _CountCard(
                         cardKey: 'skills-card',
                         icon: Icons.insights_outlined,
                         label: 'Skills',
-                        value: SampleData.skillCount)),
+                        value: practisedSkills(data).length)),
               ],
-            ),
-            SizedBox(height: BL.space4),
-            _WeeklyCard(),
-            SizedBox(height: BL.space4),
-            _Achievements(),
+            )),
+            const SizedBox(height: BL.space4),
+            const Reveal(index: 3, child: _WeeklyCard()),
+            const SizedBox(height: BL.space4),
+            const Reveal(index: 4, child: _Achievements()),
           ],
         ),
       ),
@@ -378,7 +412,8 @@ class _CountCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text('$value',
+                CountUp(
+                    value: value,
                     style: text.headlineMedium?.copyWith(fontSize: 40)),
                 Container(
                   width: 40,
@@ -397,12 +432,19 @@ class _CountCard extends StatelessWidget {
   }
 }
 
-class _WeeklyCard extends StatelessWidget {
+class _WeeklyCard extends ConsumerWidget {
   const _WeeklyCard();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final text = Theme.of(context).textTheme;
+    final c = ref.watch(userDataProvider);
+    final data = c.data;
+    final today = c.today;
+    final week = data?.weekFlags(today) ?? List<bool>.filled(7, false);
+    final labels = (data ?? const UserData(uid: '')).weekLabels(today);
+    final done = data?.weeklyDone(today) ?? 0;
+    final target = data?.weeklyTarget ?? 5;
     return Card(
       key: const Key('weekly-card'),
       child: Padding(
@@ -412,14 +454,15 @@ class _WeeklyCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text('${SampleData.weeklyDone}',
+                CountUp(
+                    value: done,
                     style: text.headlineMedium?.copyWith(fontSize: 56)),
                 const SizedBox(width: BL.space3),
                 const Icon(Icons.local_fire_department,
                     color: BL.warning, size: 36),
                 const SizedBox(width: BL.space2),
                 Expanded(
-                    child: Text('of ${SampleData.weeklyTarget} units this week',
+                    child: Text('of $target checks passed this week',
                         style: text.bodySmall)),
               ],
             ),
@@ -438,22 +481,22 @@ class _WeeklyCard extends StatelessWidget {
                         height: 26,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: SampleData.week[i]
+                          color: week[i]
                               ? BL.success
                               : Colors.transparent,
                           border: Border.all(
-                              color: SampleData.week[i]
+                              color: week[i]
                                   ? BL.success
                                   : BL.textDisabled,
                               width: 1.5),
                         ),
-                        child: SampleData.week[i]
+                        child: week[i]
                             ? const Icon(Icons.check,
                                 size: 16, color: Colors.white)
                             : null,
                       ),
                       const SizedBox(height: BL.space1),
-                      Text(SampleData.weekLabels[i], style: text.labelSmall),
+                      Text(labels[i], style: text.labelSmall),
                     ],
                   ),
               ],
@@ -465,12 +508,15 @@ class _WeeklyCard extends StatelessWidget {
   }
 }
 
-class _Achievements extends StatelessWidget {
+class _Achievements extends ConsumerWidget {
   const _Achievements();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final text = Theme.of(context).textTheme;
+    final data = ref.watch(userDataProvider).data;
+    final labs = (data?.labs.values.toList() ?? [])..sort((a, b) => b.lastActivity.compareTo(a.lastActivity));
+    final shown = labs.take(2).toList();
     return Card(
       key: const Key('achievements'),
       child: Padding(
@@ -484,21 +530,27 @@ class _Achievements extends StatelessWidget {
                 'A badge is earned only after a Verified result from the server.',
                 style: text.bodySmall),
             const SizedBox(height: BL.space4),
-            Row(
-              children: const [
-                Expanded(
-                    child: _Medal(
-                        title: 'First function',
-                        note: 'Pending verification',
-                        value: 1.0)),
-                SizedBox(width: BL.space4),
-                Expanded(
-                    child: _Medal(
-                        title: 'Terminal ready',
-                        note: '1 of 3 labs',
-                        value: 0.33)),
-              ],
-            ),
+            if (shown.isEmpty)
+              Text('Open a lab from the list. Your progress will show here.',
+                  key: const Key('achievements-empty'), style: text.bodyMedium)
+            else
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  for (var i = 0; i < shown.length; i++) ...[
+                    if (i > 0) const SizedBox(width: BL.space4),
+                    Expanded(
+                      child: _Medal(
+                        title: SampleData.find(shown[i].labId)?.title ?? shown[i].title,
+                        note: shown[i].status == LabStatus.practiceComplete
+                            ? 'Practice complete, pending verification'
+                            : '${shown[i].passed} of ${shown[i].total} checks',
+                        value: shown[i].total == 0 ? 0 : shown[i].passed / shown[i].total,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
           ],
         ),
       ),
@@ -532,7 +584,7 @@ class _Medal extends StatelessWidget {
         const SizedBox(height: BL.space2),
         ClipRRect(
             borderRadius: BorderRadius.circular(3),
-            child: LinearProgressIndicator(value: value)),
+            child: AnimatedBar(value: value)),
       ],
     );
   }

@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ui/ui.dart';
+import '../../api.dart';
+import '../../ui/motion.dart';
 import '../dashboard/dashboard_data.dart';
 import 'start_lab_flow.dart';
 
@@ -27,6 +29,7 @@ class _CourseScreenState extends ConsumerState<CourseScreen> {
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
     final a = SampleData.byId(widget.id);
+    final lab = ref.watch(userDataProvider).data?.lab(a.id);
     final chips = [
       a.level,
       a.duration,
@@ -97,13 +100,16 @@ class _CourseScreenState extends ConsumerState<CourseScreen> {
                     Row(
                       children: [
                         ElevatedButton.icon(
-                          onPressed: _busy != null
+                          onPressed: _busy != null || !a.available
                               ? null
                               : () => startLab(context, ref, a.id, onBusy: (l) {
                                     if (mounted) setState(() => _busy = l);
                                   }),
                           icon: const Icon(Icons.play_arrow, size: 18),
-                          label: Text(_busy ?? 'Start'),
+                          label: Text(_busy ??
+                              (!a.available
+                                  ? 'Coming soon'
+                                  : (lab == null ? 'Start' : 'Resume'))),
                           style: ElevatedButton.styleFrom(
                             shape: const StadiumBorder(),
                             backgroundColor: BL.selected,
@@ -111,13 +117,15 @@ class _CourseScreenState extends ConsumerState<CourseScreen> {
                           ),
                         ),
                         const SizedBox(width: BL.space6),
-                        const Expanded(
+                        Expanded(
                           child: ClipRRect(
-                            borderRadius: BorderRadius.all(Radius.circular(3)),
-                            child: LinearProgressIndicator(
-                                value: 0,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(3)),
+                            child: AnimatedBar(
+                                barKey: const Key('course-progress'),
+                                value: (lab?.score ?? 0) / 100,
                                 color: BL.selected,
-                                backgroundColor: Color(0xFF24456E)),
+                                backgroundColor: const Color(0xFF24456E)),
                           ),
                         ),
                       ],

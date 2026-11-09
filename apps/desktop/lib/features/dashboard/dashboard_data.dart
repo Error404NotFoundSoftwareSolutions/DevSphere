@@ -1,7 +1,8 @@
 // User story: US-06 Browse the lab catalogue (Sprint 2, MVP)
 // Requirements: FR-CAT-001..003, FR-PROG-001
-// Implemented here: SAMPLE data for the dashboard, course and lab pages. Nothing here comes from a
-// server; every screen that shows it says so. Replace with api_client results when stories land.
+// Implemented here: the catalogue (what exists and what is planned) and the learning paths. This part is
+// static and the same for everyone. Progress, streaks and credentials are NOT here: they come from the signed-in
+// person's own data (lib/data). Replace with api_client results when the catalogue API lands.
 
 class SampleActivity {
   const SampleActivity({
@@ -12,6 +13,8 @@ class SampleActivity {
     required this.duration,
     required this.level,
     required this.steps,
+    this.available = false,
+    this.skills = const [],
   });
 
   final String id;
@@ -21,6 +24,12 @@ class SampleActivity {
   final String duration;
   final String level;
   final List<String> steps;
+
+  /// True when the lab's content is in this install, so Start works. Others are planned.
+  final bool available;
+
+  /// Skills a learner practises here. Shown on the Credentials page once the lab's checks all pass.
+  final List<String> skills;
 }
 
 class SampleData {
@@ -36,6 +45,8 @@ class SampleData {
       duration: '45 minutes',
       level: 'Beginner',
       steps: ['Setup', 'Write the greet function', 'Run the checks'],
+      available: true,
+      skills: ['Python basics', 'Writing a function', 'Running tests'],
     ),
     SampleActivity(
       id: 'oss-first-contribution-001',
@@ -51,6 +62,14 @@ class SampleData {
         'Fix issues on branches',
         'Write the pull request',
         'Answer the review'
+      ],
+      available: true,
+      skills: [
+        'Git branches and merges',
+        'Commit messages',
+        'Regression tests',
+        'Pull request writing',
+        'Responding to review',
       ],
     ),
     SampleActivity(
@@ -113,30 +132,51 @@ class SampleData {
   static SampleActivity byId(String id) =>
       activities.firstWhere((a) => a.id == id, orElse: () => activities.first);
 
-  static const String learner = 'Learner';
-  static const int streakWeeks = 1;
-  static const int weeklyDone = 1;
-  static const int weeklyTarget = 3;
-  static const int badgeCount = 2;
-  static const int skillCount = 3;
+  /// Looks an activity up by id, or null when it is not in the catalogue.
+  static SampleActivity? find(String id) {
+    for (final a in activities) {
+      if (a.id == id) return a;
+    }
+    return null;
+  }
 
-  /// Day circles Thu..Wed; true = at least one unit completed that day.
-  static const List<bool> week = [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    true
+  static const List<LearningPath> paths = [
+    LearningPath(
+      id: 'first-project-to-first-pr',
+      title: 'From your first project to your first pull request',
+      description:
+          'Write and test code, learn Git properly, then contribute to a project the way maintainers expect.',
+      activityIds: [
+        'python-hello-001',
+        'git-first-commit-001',
+        'oss-first-contribution-001',
+      ],
+    ),
+    LearningPath(
+      id: 'debug-like-a-professional',
+      title: 'Debug like a professional',
+      description:
+          'Use the terminal, read stack traces and fix bugs with tests as your guide.',
+      activityIds: [
+        'terminal-basics-001',
+        'debug-a-traceback-001',
+        'rest-api-001',
+      ],
+    ),
   ];
-  static const List<String> weekLabels = [
-    'Thu',
-    'Fri',
-    'Sat',
-    'Sun',
-    'Mon',
-    'Tue',
-    'Wed'
-  ];
+}
+
+/// An ordered list of activities. Progress through it is computed from the person's own results.
+class LearningPath {
+  const LearningPath({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.activityIds,
+  });
+
+  final String id;
+  final String title;
+  final String description;
+  final List<String> activityIds;
 }

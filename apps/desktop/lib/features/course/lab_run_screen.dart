@@ -12,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ui/ui.dart';
 import '../../api.dart';
+import '../../data/user_data.dart';
 import '../../worker/worker_client.dart';
 import '../dashboard/dashboard_data.dart';
 import 'start_lab_flow.dart';
@@ -60,6 +61,18 @@ class _LabRunScreenState extends ConsumerState<LabRunScreen> {
           .send('companion:sessionState', {'labId': widget.id});
       if (!mounted) return;
       final steps = r['steps'];
+      if (r['active'] == true && steps is List) {
+        // Save this person's progress so the dashboard, credentials and workspaces pages show it.
+        ref.read(userDataProvider).recordLab(
+          labId: widget.id,
+          title: SampleData.byId(widget.id).title,
+          labRoot: '${r['labRoot'] ?? ''}',
+          steps: [
+            for (final s in steps)
+              if (s is Map) StepProgress(id: '${s['id']}', title: '${s['title']}', state: '${s['state']}')
+          ],
+        );
+      }
       setState(() {
         _active = r['active'] == true;
         _labRoot = '${r['labRoot'] ?? ''}';

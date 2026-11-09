@@ -12,10 +12,14 @@ import 'features/course/course_screen.dart';
 import 'features/course/lab_run_screen.dart';
 import 'features/dashboard/dashboard_screen.dart';
 import 'features/landing/landing_screen.dart';
-import 'features/placeholder/section_placeholder.dart';
-import 'features/profile/profile_screen.dart';
+import 'features/pages/catalog_screen.dart';
+import 'features/pages/credentials_screen.dart';
+import 'features/pages/paths_screen.dart';
+import 'features/pages/workspaces_screen.dart';
+import 'features/profile/my_profile_route.dart';
 import 'features/workspace/workspace_view.dart';
 import 'ui/app_shell.dart';
+import 'ui/motion.dart';
 
 String _determineInitialRoute() {
   final defaultRoute = WidgetsBinding.instance.platformDispatcher.defaultRouteName;
@@ -56,8 +60,8 @@ CustomTransitionPage<T> buildSmoothTransitionPage<T>({
   required GoRouterState state,
   required Widget child,
   LocalKey? key,
-  Duration duration = const Duration(milliseconds: 260),
-  Duration reverseDuration = const Duration(milliseconds: 220),
+  Duration duration = const Duration(milliseconds: 340),
+  Duration reverseDuration = const Duration(milliseconds: 240),
 }) {
   return CustomTransitionPage<T>(
     key: key ?? state.pageKey,
@@ -65,6 +69,7 @@ CustomTransitionPage<T> buildSmoothTransitionPage<T>({
     transitionDuration: duration,
     reverseTransitionDuration: reverseDuration,
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      if (reducedMotion(context)) return child;
       final curvedAnimation = CurvedAnimation(
         parent: animation,
         curve: Curves.easeOutCubic,
@@ -76,16 +81,24 @@ CustomTransitionPage<T> buildSmoothTransitionPage<T>({
         reverseCurve: Curves.easeInCubic,
       );
 
+      // Enter: fade in, rise a little and settle from a slightly smaller size.
+      // The page underneath fades and shrinks a touch while a new one covers it.
       return FadeTransition(
         opacity: curvedAnimation,
         child: SlideTransition(
           position: Tween<Offset>(
-            begin: const Offset(0.0, 0.015),
+            begin: const Offset(0.0, 0.03),
             end: Offset.zero,
           ).animate(curvedAnimation),
-          child: FadeTransition(
-            opacity: Tween<double>(begin: 1.0, end: 0.9).animate(curvedSecondary),
-            child: child,
+          child: ScaleTransition(
+            scale: Tween<double>(begin: 0.985, end: 1.0).animate(curvedAnimation),
+            child: FadeTransition(
+              opacity: Tween<double>(begin: 1.0, end: 0.0).animate(curvedSecondary),
+              child: ScaleTransition(
+                scale: Tween<double>(begin: 1.0, end: 0.99).animate(curvedSecondary),
+                child: child,
+              ),
+            ),
           ),
         ),
       );
@@ -143,18 +156,22 @@ GoRouter createRouter({String? initialLocation}) {
               child: const DashboardScreen(),
             ),
           ),
-          for (final s in sections.skip(1))
-            GoRoute(
-              path: '/${s.slug}',
-              pageBuilder: (context, state) => buildSmoothTransitionPage(
-                state: state,
-                child: SectionPlaceholder(
-                  slug: s.slug,
-                  title: s.label,
-                  blurb: s.blurb,
-                ),
-              ),
-            ),
+          GoRoute(
+            path: '/catalog',
+            pageBuilder: (context, state) => buildSmoothTransitionPage(state: state, child: const CatalogScreen()),
+          ),
+          GoRoute(
+            path: '/paths',
+            pageBuilder: (context, state) => buildSmoothTransitionPage(state: state, child: const PathsScreen()),
+          ),
+          GoRoute(
+            path: '/credentials',
+            pageBuilder: (context, state) => buildSmoothTransitionPage(state: state, child: const CredentialsScreen()),
+          ),
+          GoRoute(
+            path: '/workspaces',
+            pageBuilder: (context, state) => buildSmoothTransitionPage(state: state, child: const WorkspacesScreen()),
+          ),
           GoRoute(
             path: '/course/:id',
             pageBuilder: (context, state) => buildSmoothTransitionPage(
@@ -191,13 +208,7 @@ GoRouter createRouter({String? initialLocation}) {
         path: '/profile',
         pageBuilder: (context, state) => buildSmoothTransitionPage(
           state: state,
-          child: ProfileScreen(
-            isOnboarding: true,
-            initialDisplayName: 'Student User',
-            email: 'student@example.com',
-            uid: 'current-student',
-            onSave: (profile) => context.go('/dashboard'),
-          ),
+          child: const MyProfileRoute(),
         ),
       ),
     ],

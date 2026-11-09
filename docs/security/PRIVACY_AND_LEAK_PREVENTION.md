@@ -36,6 +36,10 @@ Complements `../compliance/PRIVACY_AND_RETENTION.md` (Track A policy).
 ## 4. Retention and deletion
 Follow `compliance/PRIVACY_AND_RETENTION.md`. Add: a user-visible "delete my data" path that removes local progress and requests server deletion; log retention measured in days, not indefinite.
 
+
+### Per-person data kept on this computer (desktop app)
+Each signed-in person has one file, `~/.devpilot/users/<hash>.json` (folder mode 0700, file mode 0600, written atomically). The name is the first 32 characters of the SHA-256 of the user id, so it reveals nothing and two people on one computer never share a file. It holds only: the profile fields the person typed (display name, college, course, year, interests), lab progress (lab id, step states, folder path, timestamps) and the days a check passed. It never holds tokens, passwords, email or a date of birth (a test checks this). A file for another user id, a wrong version or damaged content is ignored, and sizes are capped when it is read. Deleting the file (or the `~/.devpilot/users` folder) removes everything the app remembers about that person. Implementation: `apps/desktop/lib/data/`; tests TC-USR-01..14.
+
 ## 5. Leak detection
 - `tools/check_security.py` blocks secret patterns and non-allow-listed URLs in extension source.
 - First-launch and idle network capture test in release gate.

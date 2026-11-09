@@ -3,9 +3,20 @@
 // Implemented here: app-wide IPC and API client provider
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'data/user_controller.dart';
+import 'data/user_store.dart';
 import 'worker/worker_client.dart';
 
 final workerClientProvider = Provider<WorkerClient>((ref) {
   return MockWorkerClient();
 });
 
+
+/// Where each person's profile and progress are kept. `main.dart` replaces this with a private folder on disk;
+/// the default keeps data in memory only, which is what widget tests want.
+final userStoreProvider = Provider<UserStore>((ref) => MemoryUserStore());
+
+/// The signed-in person's own data. It is empty when nobody is signed in and switches when someone else signs in.
+final userDataProvider = ChangeNotifierProvider<UserDataController>((ref) {
+  return UserDataController(ref.watch(userStoreProvider));
+});

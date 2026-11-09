@@ -61,7 +61,7 @@ void main() {
 
   testWidgets('TC-DES-003-04 dashboard has hero, tabs and a grid of activity cards', (tester) async {
     await pumpAt(tester, const Size(1440, 900));
-    expect(find.descendant(of: find.byKey(const Key('hero')), matching: find.text('Resume')), findsOneWidget);
+    expect(find.descendant(of: find.byKey(const Key('hero')), matching: find.text('Start')), findsOneWidget, reason: 'nothing started yet, so the hero offers Start');
     expect(find.descendant(of: find.byKey(const Key('tabs')), matching: find.text('Activities')), findsOneWidget);
     expect(find.descendant(of: find.byKey(const Key('tabs')), matching: find.text('Paths')), findsOneWidget);
     for (var i = 0; i < 3; i++) {
@@ -126,9 +126,10 @@ void main() {
     expect(find.textContaining('Badge earned'), findsNothing);
   });
 
-  testWidgets('TC-DES-003-11 sample data is labelled on the dashboard and the lab setup values are marked as samples', (tester) async {
+  testWidgets('TC-DES-003-11 the dashboard says progress belongs to the account, and the lab setup values are marked as samples', (tester) async {
     await pumpAt(tester, const Size(1440, 900));
-    expect(find.textContaining('Sample data'), findsWidgets);
+    expect(find.byKey(const Key('dashboard-caption')), findsOneWidget);
+    expect(find.textContaining('Sample data'), findsNothing, reason: 'the dashboard no longer shows invented progress');
     await pumpAt(tester, const Size(1440, 900), location: '/course/python-hello-001');
     expect(find.textContaining('Sample data'), findsWidgets);
   });
@@ -144,6 +145,8 @@ void main() {
     expect(find.byKey(const Key('lab_back_button')), findsOneWidget);
 
     await pumpAt(tester, const Size(1440, 900), location: '/catalog');
-    expect(find.byKey(const Key('placeholder_back_catalog')), findsOneWidget);
+    expect(find.byKey(const Key('shell_back_button')), findsOneWidget);
+    expect(find.byKey(const Key('page-catalog')), findsOneWidget);
+    expect(find.byKey(const Key('signed-out-notice')), findsOneWidget, reason: 'the catalog is a real page that asks you to sign in, not a placeholder');
   });
 }
