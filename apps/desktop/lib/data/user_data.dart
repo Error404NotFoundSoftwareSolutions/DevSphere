@@ -202,6 +202,126 @@ class SavedRoadmap {
   }
 }
 
+class InterviewQuestionData {
+  const InterviewQuestionData(
+      {required this.kind,
+      required this.question,
+      required this.hint,
+      this.covers = const [],
+      this.skills = const []});
+
+  final String kind;
+  final String question;
+  final String hint;
+
+  /// What a good answer covers. Shown only when the person asks for it.
+  final List<String> covers;
+  final List<String> skills;
+
+  Map<String, Object?> toJson() => {
+        'kind': kind,
+        'question': question,
+        'hint': hint,
+        'covers': covers,
+        'skills': skills
+      };
+}
+
+/// Practice interview questions the person asked for, with the ones they marked as practised.
+class SavedInterview {
+  const SavedInterview(
+      {required this.title,
+      required this.source,
+      required this.createdAt,
+      required this.questions,
+      this.practised = const {}});
+
+  final String title;
+  final String source;
+  final String createdAt;
+  final List<InterviewQuestionData> questions;
+  final Set<int> practised;
+
+  SavedInterview withPractised(int index, bool done) {
+    final next = {...practised};
+    done ? next.add(index) : next.remove(index);
+    return SavedInterview(
+        title: title,
+        source: source,
+        createdAt: createdAt,
+        questions: questions,
+        practised: next);
+  }
+
+  Map<String, Object?> toJson() => {
+        'title': title,
+        'source': source,
+        'createdAt': createdAt,
+        'questions': [for (final q in questions) q.toJson()],
+        'practised': practised.toList()..sort(),
+      };
+
+  /// Reads the API's answer (or a saved copy). Anything that is not the expected shape is rejected.
+  static SavedInterview? parse(Object? raw,
+      {required String source, required String createdAt}) {
+    if (raw is! Map || raw['title'] is! String || raw['questions'] is! List)
+      return null;
+    String s(Object? v, int max) =>
+        v is String ? (v.length <= max ? v : v.substring(0, max)) : '';
+    List<String> list(Object? v, int n, int max) => v is List
+        ? [
+            for (final e in v.take(n))
+              if (e is String) s(e, max)
+          ]
+        : const [];
+    final qs = <InterviewQuestionData>[];
+    for (final e in (raw['questions'] as List).take(10)) {
+      if (e is! Map) continue;
+      final kind = e['kind'];
+      final question = s(e['question'], 300);
+      if (!const {'concept', 'practical', 'behavioural'}.contains(kind) ||
+          question.isEmpty) continue;
+      qs.add(InterviewQuestionData(
+        kind: kind as String,
+        question: question,
+        hint: s(e['hint'], 300),
+        covers: list(e['good_answer_covers'] ?? e['covers'], 3, 300),
+        skills: list(e['skills'], 4, 40),
+      ));
+    }
+    final title = s(raw['title'], 120);
+    if (title.isEmpty || qs.isEmpty) return null;
+    final practised = <int>{
+      if (raw['practised'] is List)
+        for (final i in (raw['practised'] as List))
+          if (i is int && i >= 0 && i < qs.length) i
+    };
+    return SavedInterview(
+        title: title,
+        source: source == 'topic' ? 'topic' : 'job_description',
+        createdAt: createdAt,
+        questions: qs,
+        practised: practised);
+  }
+}
+
+/// A lab the AI wrote for this person and that they added to their own labs.
+class GeneratedLabRef {
+  const GeneratedLabRef(
+      {required this.labId,
+      required this.title,
+      required this.topic,
+      required this.createdAt});
+
+  final String labId;
+  final String title;
+  final String topic;
+  final String createdAt;
+
+  Map<String, Object?> toJson() =>
+      {'labId': labId, 'title': title, 'topic': topic, 'createdAt': createdAt};
+}
+
 class UserData {
   const UserData({
     required this.uid,
@@ -210,6 +330,8 @@ class UserData {
     this.passes = const [],
     this.weeklyTarget = 5,
     this.roadmap,
+    this.interview,
+    this.generatedLabs = const [],
   });
 
   static const int version = 1;
@@ -224,6 +346,12 @@ class UserData {
 
   /// The roadmap this person last asked for, if any.
   final SavedRoadmap? roadmap;
+
+  /// The practice interview questions this person last asked for, if any.
+  final SavedInterview? interview;
+
+  /// Labs the AI wrote for this person. Their files are on this computer; this list says whose they are.
+  final List<GeneratedLabRef> generatedLabs;
 
   LabProgress? lab(String id) => labs[id];
 
@@ -301,7 +429,10 @@ class UserData {
           Map<String, LabProgress>? labs,
           List<PassEvent>? passes,
           SavedRoadmap? roadmap,
-          bool clearRoadmap = false}) =>
+          bool clearRoadmap = false,
+          SavedInterview? interview,
+          bool clearInterview = false,
+          List<GeneratedLabRef>? generatedLabs}) =>
       UserData(
         uid: uid,
         profile: profile ?? this.profile,
@@ -309,6 +440,8 @@ class UserData {
         passes: passes ?? this.passes,
         weeklyTarget: weeklyTarget,
         roadmap: clearRoadmap ? null : (roadmap ?? this.roadmap),
+        interview: clearInterview ? null : (interview ?? this.interview),
+        generatedLabs: generatedLabs ?? this.generatedLabs,
       );
 
   Map<String, Object?> toJson() => {
@@ -317,6 +450,8 @@ class UserData {
         'profile': profile.toJson(),
         'weeklyTarget': weeklyTarget,
         if (roadmap != null) 'roadmap': roadmap!.toJson(),
+        if (interview != null) 'interview': interview!.toJson(),
+        'generatedLabs': [for (final g in generatedLabs) g.toJson()],
         'labs': [for (final l in labs.values) l.toJson()],
         'passes': [
           for (final p in passes)
@@ -395,7 +530,30 @@ class UserData {
         profile: profile,
         labs: labs,
         passes: passes,
-        roadmap: SavedRoadmap.fromSaved(raw['roadmap']));
+        roadmap: SavedRoadmap.fromSaved(raw['roadmap']),
+        interview: raw['interview'] is Map
+            ? SavedInterview.parse(raw['interview'],
+                source: '${(raw['interview'] as Map)['source']}',
+                createdAt: '${(raw['interview'] as Map)['createdAt'] ?? ''}')
+            : null,
+        generatedLabs: _generatedLabs(raw['generatedLabs']));
+  }
+
+  static List<GeneratedLabRef> _generatedLabs(Object? raw) {
+    if (raw is! List) return const [];
+    String s(Object? v, int max) => v is String && v.length <= max ? v : '';
+    final out = <GeneratedLabRef>[];
+    for (final e in raw.take(50)) {
+      if (e is! Map) continue;
+      final id = s(e['labId'], 64);
+      if (!RegExp(r'^ai-[a-z0-9][a-z0-9-]{2,63}$').hasMatch(id)) continue;
+      out.add(GeneratedLabRef(
+          labId: id,
+          title: s(e['title'], 120),
+          topic: s(e['topic'], 300),
+          createdAt: s(e['createdAt'], 40)));
+    }
+    return out;
   }
 
   /// Applies the latest state of a lab session. Returns the same object when nothing changed.

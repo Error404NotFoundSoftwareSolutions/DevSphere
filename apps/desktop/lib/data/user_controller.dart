@@ -91,6 +91,32 @@ class UserDataController extends ChangeNotifier {
     _persist(d.copyWith(roadmap: roadmap));
   }
 
+  void saveInterview(SavedInterview interview) {
+    final d = _data;
+    if (d == null) return;
+    _persist(d.copyWith(interview: interview));
+  }
+
+  void setPractised(int index, bool done) {
+    final d = _data;
+    final i = d?.interview;
+    if (d == null || i == null) return;
+    _persist(d.copyWith(interview: i.withPractised(index, done)));
+  }
+
+  void addGeneratedLab(GeneratedLabRef ref) {
+    final d = _data;
+    if (d == null) return;
+    final others = d.generatedLabs.where((g) => g.labId != ref.labId).toList();
+    _persist(d.copyWith(generatedLabs: [ref, ...others].take(50).toList()));
+  }
+
+  void clearInterview() {
+    final d = _data;
+    if (d == null) return;
+    _persist(d.copyWith(clearInterview: true));
+  }
+
   void clearRoadmap() {
     final d = _data;
     if (d == null) return;

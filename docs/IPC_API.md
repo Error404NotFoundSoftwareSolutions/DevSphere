@@ -26,6 +26,7 @@ The only calls the UI may make. Defined in `packages/ipc_contract` (`channels.da
 | `companion:install` | Install the shipped guide extension; needs `approved: true` from a real click | US-12 |
 | `companion:launch` | Prepare the lab folder, start the private channel and open VS Code on it | US-15 |
 | `companion:sessionState` | Step results for an open lab (Practice only) | US-19 |
+| `labforge:install` | Install an AI-generated lab (from the API's learner view) as a lab folder with an `ai-` id. The worker re-validates every id, path, size and type and writes nothing if anything is wrong. The app asks the person first. | F-B4 |
 
 ## Rules for each call
 

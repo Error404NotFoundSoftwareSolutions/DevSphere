@@ -12,6 +12,7 @@ import '../../data/user_data.dart';
 import '../../services/devpilot_api.dart';
 import '../../ui/motion.dart';
 import '../dashboard/dashboard_data.dart';
+import 'interview_card.dart';
 import 'shared.dart';
 
 class RoadmapPlanner extends ConsumerStatefulWidget {
@@ -26,6 +27,7 @@ class _RoadmapPlannerState extends ConsumerState<RoadmapPlanner> {
   String _kind = 'job_description';
   String _level = 'beginner';
   bool _busy = false;
+  String _what = 'roadmap';
   String? _error;
 
   @override
@@ -34,7 +36,7 @@ class _RoadmapPlannerState extends ConsumerState<RoadmapPlanner> {
     super.dispose();
   }
 
-  Future<void> _plan() async {
+  Future<void> _run(String what) async {
     final text = _text.text.trim();
     if (text.isEmpty) {
       setState(() => _error = _kind == 'job_description'
@@ -44,19 +46,31 @@ class _RoadmapPlannerState extends ConsumerState<RoadmapPlanner> {
     }
     setState(() {
       _busy = true;
+      _what = what;
       _error = null;
     });
     try {
-      final raw = await ref
-          .read(devPilotApiProvider)
-          .roadmap(kind: _kind, text: text, level: _level);
+      final api = ref.read(devPilotApiProvider);
       final controller = ref.read(userDataProvider);
-      final saved =
-          SavedRoadmap.fromApi(raw, source: _kind, now: controller.today);
-      if (saved == null)
-        throw const ApiProblem('The planner gave an answer we could not use.',
-            recovery: 'Try again with a shorter or clearer request.');
-      controller.saveRoadmap(saved);
+      if (what == 'roadmap') {
+        final raw = await api.roadmap(kind: _kind, text: text, level: _level);
+        final saved =
+            SavedRoadmap.fromApi(raw, source: _kind, now: controller.today);
+        if (saved == null) {
+          throw const ApiProblem('The planner gave an answer we could not use.',
+              recovery: 'Try again with a shorter or clearer request.');
+        }
+        controller.saveRoadmap(saved);
+      } else {
+        final raw = await api.interview(kind: _kind, text: text, level: _level);
+        final saved = SavedInterview.parse(raw,
+            source: _kind, createdAt: controller.today.toIso8601String());
+        if (saved == null) {
+          throw const ApiProblem('The coach gave an answer we could not use.',
+              recovery: 'Try again with a shorter or clearer request.');
+        }
+        controller.saveInterview(saved);
+      }
       if (mounted) setState(() => _text.clear());
     } on ApiProblem catch (e) {
       if (mounted) setState(() => _error = e.toString());
@@ -71,6 +85,7 @@ class _RoadmapPlannerState extends ConsumerState<RoadmapPlanner> {
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
     final saved = ref.watch(userDataProvider).data?.roadmap;
+    final interview = ref.watch(userDataProvider).data?.interview;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -143,17 +158,31 @@ class _RoadmapPlannerState extends ConsumerState<RoadmapPlanner> {
                 Row(children: [
                   FilledButton.icon(
                     key: const Key('planner-submit'),
-                    onPressed: _busy ? null : _plan,
-                    icon: _busy
+                    onPressed: _busy ? null : () => _run('roadmap'),
+                    icon: _busy && _what == 'roadmap'
                         ? const SizedBox(
                             width: 16,
                             height: 16,
                             child: CircularProgressIndicator(
                                 strokeWidth: 2, color: Colors.white))
                         : const Icon(Icons.route, size: 18),
-                    label: Text(_busy
+                    label: Text(_busy && _what == 'roadmap'
                         ? 'Planning (about 15 seconds)...'
                         : 'Plan my roadmap'),
+                  ),
+                  const SizedBox(width: BL.space2),
+                  OutlinedButton.icon(
+                    key: const Key('planner-interview'),
+                    onPressed: _busy ? null : () => _run('interview'),
+                    icon: _busy && _what == 'interview'
+                        ? const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(strokeWidth: 2))
+                        : const Icon(Icons.record_voice_over, size: 18),
+                    label: Text(_busy && _what == 'interview'
+                        ? 'Writing questions...'
+                        : 'Interview questions'),
                   ),
                   const SizedBox(width: BL.space3),
                   Expanded(
@@ -186,6 +215,12 @@ class _RoadmapPlannerState extends ConsumerState<RoadmapPlanner> {
           Reveal(
               key: ValueKey(saved.createdAt),
               child: _SavedRoadmapCard(roadmap: saved)),
+        ],
+        if (interview != null) ...[
+          const SizedBox(height: BL.space6),
+          Reveal(
+              key: ValueKey('i-${interview.createdAt}'),
+              child: InterviewCard(interview: interview)),
         ],
       ],
     );

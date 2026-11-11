@@ -32,6 +32,15 @@ abstract class DevPilotApi {
   Future<Map<String, dynamic>> roadmap(
       {required String kind, required String text, String level = 'beginner'});
 
+  /// Asks the interview coach for practice questions. [kind] is `job_description` or `topic`.
+  Future<Map<String, dynamic>> interview(
+      {required String kind, required String text, String level = 'beginner'});
+
+  /// Asks Lab Forge to write a lab. The service checks it (the reference solution must pass, the starter must
+  /// fail) before answering. Takes about 30 seconds.
+  Future<Map<String, dynamic>> generateLab(
+      {required String topic, String level = 'beginner'});
+
   /// Opens (or reuses) a server-side attempt for a lab, which the tutor needs.
   Future<String> attemptFor(String labId);
 
@@ -56,6 +65,18 @@ class OfflineDevPilotApi implements DevPilotApi {
           {required String kind,
           required String text,
           String level = 'beginner'}) =>
+      Future.error(_problem);
+
+  @override
+  Future<Map<String, dynamic>> interview(
+          {required String kind,
+          required String text,
+          String level = 'beginner'}) =>
+      Future.error(_problem);
+
+  @override
+  Future<Map<String, dynamic>> generateLab(
+          {required String topic, String level = 'beginner'}) =>
       Future.error(_problem);
 
   @override
@@ -136,6 +157,19 @@ class HttpDevPilotApi implements DevPilotApi {
           required String text,
           String level = 'beginner'}) =>
       _post('/v1/ai/roadmap', {'kind': kind, 'text': text, 'level': level});
+
+  @override
+  Future<Map<String, dynamic>> interview(
+          {required String kind,
+          required String text,
+          String level = 'beginner'}) =>
+      _post('/v1/ai/interview', {'kind': kind, 'text': text, 'level': level});
+
+  @override
+  Future<Map<String, dynamic>> generateLab(
+          {required String topic, String level = 'beginner'}) =>
+      _post('/v1/ai/labs/generate', {'topic': topic, 'level': level},
+          timeout: const Duration(seconds: 150));
 
   @override
   Future<String> attemptFor(String labId) async {

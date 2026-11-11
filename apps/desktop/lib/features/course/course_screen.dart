@@ -28,8 +28,9 @@ class _CourseScreenState extends ConsumerState<CourseScreen> {
   @override
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
-    final a = SampleData.byId(widget.id);
-    final lab = ref.watch(userDataProvider).data?.lab(a.id);
+    final userData = ref.watch(userDataProvider).data;
+    final a = activityFor(widget.id, userData);
+    final lab = userData?.lab(a.id);
     final chips = [
       a.level,
       a.duration,

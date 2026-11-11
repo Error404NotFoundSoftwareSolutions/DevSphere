@@ -81,6 +81,7 @@ class LabLauncher {
     required this.runtimeDir,
     required this.contentRoot,
     required this.labsRoot,
+    this.generatedRoot,
     required this.checkRunnerFor,
     required this.parentEnvironment,
     this.onPractice,
@@ -93,6 +94,9 @@ class LabLauncher {
   final String runtimeDir;
   final String contentRoot;
   final String labsRoot;
+
+  /// Where AI-generated labs are installed. Labs whose id starts with `ai-` are only ever read from here.
+  final String? generatedRoot;
   final CheckRunner Function(String labRoot) checkRunnerFor;
   final Map<String, String> parentEnvironment;
   final void Function(String labId, String stepId, bool passed)? onPractice;
@@ -110,7 +114,10 @@ class LabLauncher {
     final String labRoot;
     final LabInfo info;
     try {
-      labRoot = prepareLabFolder(contentRoot, labId, labsRoot);
+      final gen = generatedRoot;
+      final from = labId.startsWith('ai-') ? gen : contentRoot;
+      if (from == null) return const LaunchResult.failed('That lab is not available.');
+      labRoot = prepareLabFolder(from, labId, labsRoot);
       info = loadLabInfo(labRoot);
     } on ArgumentError {
       return const LaunchResult.failed('That lab is not available.');

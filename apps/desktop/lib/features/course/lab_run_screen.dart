@@ -66,7 +66,7 @@ class _LabRunScreenState extends ConsumerState<LabRunScreen> {
         // Save this person's progress so the dashboard, credentials and workspaces pages show it.
         ref.read(userDataProvider).recordLab(
           labId: widget.id,
-          title: SampleData.byId(widget.id).title,
+          title: activityFor(widget.id, ref.read(userDataProvider).data).title,
           labRoot: '${r['labRoot'] ?? ''}',
           steps: [
             for (final s in steps)
@@ -101,7 +101,7 @@ class _LabRunScreenState extends ConsumerState<LabRunScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final a = SampleData.byId(widget.id);
+    final a = activityFor(widget.id, ref.watch(userDataProvider).data);
     return LayoutBuilder(
       builder: (context, box) {
         final showPanel = _panelOpen && box.maxWidth >= 1000;

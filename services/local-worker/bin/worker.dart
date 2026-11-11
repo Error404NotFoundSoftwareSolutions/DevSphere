@@ -32,6 +32,7 @@ CompanionService? _buildCompanion(List<String> args) {
     runtimeDir: defaultRuntimeDir(env),
     contentRoot: contentRoot,
     labsRoot: labsRoot,
+    generatedRoot: _opt(args, 'generated-root') ?? '${env['HOME'] ?? env['USERPROFILE'] ?? Directory.systemTemp.path}/.devpilot/generated-labs',
     checkRunnerFor: (root) => pytestCheckRunner(root),
     parentEnvironment: env,
     extraEditorArgs: extra,

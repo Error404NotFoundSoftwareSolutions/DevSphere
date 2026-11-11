@@ -32,6 +32,9 @@ active_scope:
   - .github/workflows/ci.yml   # only to add the security, extension and lab jobs
   - content/labs/oss-first-contribution-001/   # owner asked for the open-source lab (2026-11-09)
   - services/content-ci/
+  - services/api/   # AI gateway and API features (owner asked to build features, 2026-11-11)
+  - docs/FEATURE_ROADMAP.md
+  - docs/PROGRESS.md
 code_freeze_reason_old: >
   Owner asked for the planning, rules and documentation layer first. Implementation starts
   only after the blocking questions in QUESTIONS.md are answered and this flag is set to false.

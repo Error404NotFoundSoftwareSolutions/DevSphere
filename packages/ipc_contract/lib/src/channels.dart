@@ -25,6 +25,7 @@ const List<String> channels = [
   "companion:install",
   "companion:launch",
   "companion:sessionState",
+  "labforge:install",
 ];
 
 const List<String> events = [

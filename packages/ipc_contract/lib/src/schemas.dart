@@ -205,6 +205,15 @@ final Map<String, ChannelSchema> channelSchemas = {
     requiredRequestKeys: {"labId"},
     validateRequestData: (d) => _checkLabId(d["labId"]),
   ),
+  "labforge:install": ChannelSchema(
+    allowedRequestKeys: {"lab"},
+    requiredRequestKeys: {"lab"},
+    validateRequestData: (d) {
+      if (d["lab"] is! Map) {
+        throw IpcValidationException('Field "lab" must be an object.');
+      }
+    },
+  ),
   "companion:sessionState": ChannelSchema(
     allowedRequestKeys: {"labId"},
     requiredRequestKeys: {"labId"},

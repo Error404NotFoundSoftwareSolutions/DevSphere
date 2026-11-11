@@ -3,7 +3,7 @@
 Status: Draft 2026-11-06. These are the steps and the gaps. Do not deploy until the "must change first" list is done. Never paste keys or tokens into chat, commits or docs.
 
 ## What the code does today
-`services/api` now has `/v1/ai/roadmap`, `/v1/ai/labs/generate` and a tutor with a language setting. They call Gemini only through `app/ai/provider.py`. `DEVSPHERE_AI_PROVIDER=fake` (the default) never calls out; `gemini` uses the Google GenAI SDK. The Gemini adapter is tested against a stand-in SDK only: **it has not been run against the live service.**
+`services/api` now has `/v1/ai/roadmap`, `/v1/ai/interview`, `/v1/ai/labs/generate` and a tutor with a language setting. They call Gemini only through `app/ai/provider.py`. `DEVSPHERE_AI_PROVIDER=fake` (the default) never calls out; `gemini` uses the Google GenAI SDK. The Gemini adapter was run against the live service on 2026-11-11 (see `GCP_SETUP.md`); the automated tests still use a stand-in SDK so they never call out.
 
 ## Must change first (the API is still a development stand-in)
 | Gap | Why it blocks production | Fix |

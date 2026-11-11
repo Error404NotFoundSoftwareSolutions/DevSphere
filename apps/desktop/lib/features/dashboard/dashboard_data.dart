@@ -4,6 +4,8 @@
 // static and the same for everyone. Progress, streaks and credentials are NOT here: they come from the signed-in
 // person's own data (lib/data). Replace with api_client results when the catalogue API lands.
 
+import '../../data/user_data.dart';
+
 class SampleActivity {
   const SampleActivity({
     required this.id,
@@ -31,6 +33,29 @@ class SampleActivity {
   /// Skills a learner practises here. Shown on the Credentials page once the lab's checks all pass.
   final List<String> skills;
 }
+
+/// Finds an activity for the lab page: a catalogue item, or a lab the AI wrote for this person.
+SampleActivity activityFor(String id, UserData? data) {
+  final known = SampleData.find(id);
+  if (known != null) return known;
+  for (final g in data?.generatedLabs ?? const <GeneratedLabRef>[]) {
+    if (g.labId == id) return generatedActivity(g);
+  }
+  return SampleData.activities.first;
+}
+
+SampleActivity generatedActivity(GeneratedLabRef g) => SampleActivity(
+      id: g.labId,
+      kinds: const ['Lab', 'AI-generated'],
+      title: g.title,
+      description:
+          'Written by AI for: ${g.topic}. It has not been reviewed by a person.',
+      duration: '30 minutes',
+      level: 'Beginner',
+      steps: const [],
+      available: true,
+      skills: const [],
+    );
 
 class SampleData {
   const SampleData._();

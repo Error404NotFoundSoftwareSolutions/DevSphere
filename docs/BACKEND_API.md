@@ -48,3 +48,13 @@ Conventions that apply here: `Idempotency-Key` on `POST` calls that change state
 One row per attempt and milestone in the milestone store, with `source` and `trust`. A hint may be upgraded once to High by verified evidence; a High row is never changed or downgraded; a repeated event never awards points twice.
 
 Operator actions (role change, score correction, data export and deletion) use a separate router that requires the `operator` role and writes an audit event.
+
+## AI gateway endpoints (built, in `services/api/app/routers/ai.py`)
+All need a signed-in person (Firebase ID token), count against a per-person daily limit and answer with `{ code, message, recovery }` on failure. AI output is only ever a proposal: it is parsed with a strict schema and checked before it is returned, and none of these endpoints scores or awards anything.
+
+| Endpoint | Body | Returns |
+|---|---|---|
+| `POST /v1/ai/roadmap` | `{kind: job_description or topic, text (1 to 6000 chars), level}` | `{title, steps[]}`. A step is a real lab (`lab_id` from the catalogue) or a lab to generate (at most 4). |
+| `POST /v1/ai/interview` | same | `{title, questions[4..10]}`. Each question has `kind` (concept, practical, behavioural), `question`, `hint`, up to 3 `good_answer_covers` and up to 4 `skills`. Practice material only. |
+| `POST /v1/ai/labs/generate` | `{topic, level}` | A lab that passed generate-and-verify, as a learner view (no protected tests, no reference). Development only until the isolated verifier exists. |
+| `POST /v1/tutor/messages` | `{attempt_id, question, level, code?, language}` | `{answer, level}`; the level is lowered to the lab's cap by the server. |

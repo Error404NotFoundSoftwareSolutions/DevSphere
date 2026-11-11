@@ -5,7 +5,10 @@
 // the install plan in plain words; install() needs an explicit approval; launch() never installs by
 // itself and refuses until the guide is current; sessionState() reports Practice progress for the app.
 
+import 'dart:io';
+
 import 'extension_installer.dart';
+import 'generated_lab.dart' as gen;
 import 'launcher.dart';
 import 'vscode_locator.dart';
 
@@ -60,6 +63,20 @@ class CompanionService {
     final plan = await planInstall(editor: editor, package: pkg, runner: runner, extraArgs: extraEditorArgs);
     final outcome = await installExtension(plan, userApproved: true, runner: runner, sha256Of: sha256Of);
     return {'status': outcome.status.name, 'message': outcome.message};
+  }
+
+  /// Installs an AI-generated lab so it can be started like any other. The lab is re-validated here.
+  Map<String, Object?> installGeneratedLab(Map<String, dynamic> lab) {
+    final root = launcher.generatedRoot;
+    if (root == null) throw StateError('Generated labs are not set up in this build of DevPilot.');
+    try {
+      final r = gen.installGeneratedLab(lab, root);
+      return {'ok': true, 'labId': r.labId, 'title': r.title};
+    } on gen.GeneratedLabInvalid catch (e) {
+      return {'ok': false, 'message': 'This lab was not installed: ${e.message}'};
+    } on FileSystemException {
+      return {'ok': false, 'message': 'DevPilot could not save the lab. Check that you have space and permission, then try again.'};
+    }
   }
 
   Future<Map<String, Object?>> launch(String labId) async {

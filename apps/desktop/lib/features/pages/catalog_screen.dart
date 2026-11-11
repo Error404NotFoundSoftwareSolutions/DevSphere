@@ -9,6 +9,7 @@ import 'package:ui/ui.dart';
 import '../../api.dart';
 import '../dashboard/dashboard_data.dart';
 import '../../ui/motion.dart';
+import 'lab_forge.dart';
 import 'shared.dart';
 
 class CatalogScreen extends ConsumerStatefulWidget {
@@ -47,6 +48,9 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const LabForgeCard(),
+          const MyGeneratedLabs(),
+          const SizedBox(height: BL.space6),
           SizedBox(
             width: 420,
             child: TextField(
