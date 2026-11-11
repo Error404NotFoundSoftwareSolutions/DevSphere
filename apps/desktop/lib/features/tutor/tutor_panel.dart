@@ -1,47 +1,54 @@
 // User story: US-23 Ask the AI tutor for an explanation or hint without giving the solution (Sprint 6, MVP)
 // Requirements: FR-AI-001..005, NFR-SEC-004
-// Implemented here: AI tutor chat panel with guided hints, rate limiting, and secret redaction
+// Capability: CAP-AI-CLIENT. Tests: TC-AIUI-04..
+// Implemented here: the AI tutor for a lab. A question goes to the DevPilot API, which opens a server-side attempt,
+// lowers the hint level to the lab's own cap, removes secrets, limits use and asks Gemini. The app never calls the
+// model and never decides the hint level. Answers can come in nine languages; code and commands stay in English.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ui/ui.dart';
+import '../../api.dart';
+import '../../services/devpilot_api.dart';
 
-class TutorPanel extends StatefulWidget {
-  const TutorPanel({super.key});
+const tutorLanguages = <String, String>{
+  'en': 'English',
+  'hi': 'हिन्दी',
+  'kn': 'ಕನ್ನಡ',
+  'ta': 'தமிழ்',
+  'te': 'తెలుగు',
+  'ml': 'മലയാളം',
+  'mr': 'मराठी',
+  'bn': 'বাংলা',
+  'gu': 'ગુજરાતી',
+};
 
-  @override
-  State<TutorPanel> createState() => _TutorPanelState();
+/// The language of the tutor's answers. Kept for the whole session.
+final tutorLanguageProvider = StateProvider<String>((ref) => 'en');
+
+class _Message {
+  const _Message(this.fromTutor, this.text, {this.isError = false});
+  final bool fromTutor;
+  final String text;
+  final bool isError;
 }
 
-class _TutorPanelState extends State<TutorPanel> {
-  final List<Map<String, String>> _messages = [
-    {
-      'role': 'assistant',
-      'text': 'Hello! I am your AI learning tutor. Ask me for conceptual explanations or debugging hints. '
-          'I will guide you step-by-step without giving away direct solutions.',
-    }
+class TutorPanel extends ConsumerStatefulWidget {
+  const TutorPanel({super.key, this.labId = 'python-hello-001'});
+
+  final String labId;
+
+  @override
+  ConsumerState<TutorPanel> createState() => _TutorPanelState();
+}
+
+class _TutorPanelState extends ConsumerState<TutorPanel> {
+  final _controller = TextEditingController();
+  final _messages = <_Message>[
+    const _Message(true,
+        'Hello! Ask me about an error or a concept. I give hints that help you think, not the finished answer.'),
   ];
-  final TextEditingController _controller = TextEditingController();
-  bool _isLoading = false;
-
-  void _sendMessage() async {
-    final text = _controller.text.trim();
-    if (text.isEmpty) return;
-    _controller.clear();
-
-    setState(() {
-      _messages.add({'role': 'user', 'text': text});
-      _isLoading = true;
-    });
-
-    await Future.delayed(const Duration(milliseconds: 600));
-
-    setState(() {
-      _isLoading = false;
-      _messages.add({
-        'role': 'assistant',
-        'text': 'Think about how Python handles string methods. Have you considered using `.strip()` to remove extraneous spaces before formatting the greeting?',
-      });
-    });
-  }
+  bool _busy = false;
 
   @override
   void dispose() {
@@ -49,102 +56,120 @@ class _TutorPanelState extends State<TutorPanel> {
     super.dispose();
   }
 
+  Future<void> _send() async {
+    final q = _controller.text.trim();
+    if (q.isEmpty || _busy) return;
+    _controller.clear();
+    setState(() {
+      _messages.add(_Message(false, q));
+      _busy = true;
+    });
+    try {
+      final api = ref.read(devPilotApiProvider);
+      final attempt = await api.attemptFor(widget.labId);
+      final a = await api.ask(
+          attemptId: attempt,
+          question: q,
+          language: ref.read(tutorLanguageProvider));
+      if (mounted) setState(() => _messages.add(_Message(true, a.answer)));
+    } on ApiProblem catch (e) {
+      if (mounted)
+        setState(
+            () => _messages.add(_Message(true, e.toString(), isError: true)));
+    } catch (_) {
+      if (mounted)
+        setState(() => _messages.add(const _Message(true,
+            'The tutor is not available right now. You can keep working and try again later.',
+            isError: true)));
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).colorScheme.surface,
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Icon(Icons.psychology, color: Colors.blue),
-              const SizedBox(width: 8),
-              Text(
-                'AI Tutor',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            'Guidance only. Solutions are never provided directly. Secrets are redacted automatically.',
-            style: TextStyle(fontSize: 11, color: Colors.grey),
-          ),
-          const Divider(height: 20),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _messages.length,
-              itemBuilder: (context, index) {
-                final msg = _messages[index];
-                final isUser = msg['role'] == 'user';
-                return Align(
-                  alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: 4),
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: isUser
-                          ? Theme.of(context).colorScheme.primaryContainer
-                          : Theme.of(context).colorScheme.surfaceContainerHighest,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      msg['text'] ?? '',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: isUser
-                            ? Theme.of(context).colorScheme.onPrimaryContainer
-                            : Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          if (_isLoading)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 14,
-                    height: 14,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  ),
-                  SizedBox(width: 8),
-                  Text('Tutor is thinking...', style: TextStyle(fontSize: 12)),
+    final text = Theme.of(context).textTheme;
+    final language = ref.watch(tutorLanguageProvider);
+    return Card(
+      key: const Key('tutor-panel'),
+      child: Padding(
+        padding: const EdgeInsets.all(BL.space6),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(children: [
+              const Icon(Icons.psychology, color: BL.primary),
+              const SizedBox(width: BL.space2),
+              Expanded(child: Text('Ask the tutor', style: text.titleLarge)),
+              DropdownButton<String>(
+                key: const Key('tutor-language'),
+                value: language,
+                underline: const SizedBox.shrink(),
+                items: [
+                  for (final e in tutorLanguages.entries)
+                    DropdownMenuItem(value: e.key, child: Text(e.value))
                 ],
+                onChanged: (v) =>
+                    ref.read(tutorLanguageProvider.notifier).state = v ?? 'en',
               ),
-            ),
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _controller,
-                  decoration: const InputDecoration(
-                    hintText: 'Ask a hint or question...',
-                    border: OutlineInputBorder(),
-                    isDense: true,
+            ]),
+            Text(
+                'Hints only: the tutor never hands you the solution. Passwords and keys are removed before your question leaves this computer.',
+                style: text.bodySmall),
+            const Divider(height: BL.space6),
+            for (final m in _messages)
+              Align(
+                alignment:
+                    m.fromTutor ? Alignment.centerLeft : Alignment.centerRight,
+                child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: BL.space1),
+                  padding: const EdgeInsets.all(BL.space3),
+                  constraints: const BoxConstraints(maxWidth: 640),
+                  decoration: BoxDecoration(
+                    color: m.isError
+                        ? BL.danger.withValues(alpha: 0.08)
+                        : (m.fromTutor ? BL.surfaceMuted : BL.selected),
+                    borderRadius: BorderRadius.circular(BL.radiusMd),
                   ),
-                  onSubmitted: (_) => _sendMessage(),
+                  child: SelectableText(m.text, style: text.bodyMedium),
                 ),
               ),
-              const SizedBox(width: 8),
-              IconButton.filled(
-                icon: const Icon(Icons.send, size: 18),
-                onPressed: _sendMessage,
+            if (_busy)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: BL.space2),
+                child: Row(children: [
+                  SizedBox(
+                      width: 14,
+                      height: 14,
+                      child: CircularProgressIndicator(strokeWidth: 2)),
+                  SizedBox(width: BL.space2),
+                  Text('The tutor is thinking...'),
+                ]),
               ),
-            ],
-          ),
-        ],
+            const SizedBox(height: BL.space3),
+            Row(children: [
+              Expanded(
+                child: TextField(
+                  key: const Key('tutor-input'),
+                  controller: _controller,
+                  maxLength: 2000,
+                  maxLines: 1,
+                  decoration: const InputDecoration(
+                      hintText: 'Ask a hint or a question...', counterText: ''),
+                  onSubmitted: (_) => _send(),
+                ),
+              ),
+              const SizedBox(width: BL.space2),
+              IconButton.filled(
+                key: const Key('tutor-send'),
+                icon: const Icon(Icons.send, size: 18),
+                tooltip: 'Send',
+                onPressed: _busy ? null : _send,
+              ),
+            ]),
+          ],
+        ),
       ),
     );
   }
 }
-

@@ -15,6 +15,7 @@ import '../../api.dart';
 import '../../data/user_data.dart';
 import '../../worker/worker_client.dart';
 import '../dashboard/dashboard_data.dart';
+import '../tutor/tutor_panel.dart';
 import 'start_lab_flow.dart';
 
 class LabRunScreen extends ConsumerStatefulWidget {
@@ -69,7 +70,11 @@ class _LabRunScreenState extends ConsumerState<LabRunScreen> {
           labRoot: '${r['labRoot'] ?? ''}',
           steps: [
             for (final s in steps)
-              if (s is Map) StepProgress(id: '${s['id']}', title: '${s['title']}', state: '${s['state']}')
+              if (s is Map)
+                StepProgress(
+                    id: '${s['id']}',
+                    title: '${s['title']}',
+                    state: '${s['state']}')
           ],
         );
       }
@@ -119,6 +124,7 @@ class _LabRunScreenState extends ConsumerState<LabRunScreen> {
                 children: [
                   Expanded(
                     child: _Body(
+                      labId: widget.id,
                       active: _active,
                       steps: _steps,
                       onStart: () =>
@@ -242,11 +248,13 @@ class _Toolbar extends StatelessWidget {
 
 class _Body extends StatelessWidget {
   const _Body(
-      {required this.active,
+      {required this.labId,
+      required this.active,
       required this.steps,
       required this.onStart,
       required this.busy});
 
+  final String labId;
   final bool active;
   final List<Map<String, dynamic>> steps;
   final VoidCallback onStart;
@@ -260,47 +268,55 @@ class _Body extends StatelessWidget {
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 820),
-          child: Container(
-            padding: const EdgeInsets.all(BL.space8),
-            decoration: BoxDecoration(
-                color: BL.surface,
-                borderRadius: BorderRadius.circular(BL.radiusXl),
-                border: Border.all(color: BL.border)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (!active) ...[
-                  Text('This lab is not open', style: text.headlineMedium),
-                  const SizedBox(height: BL.space3),
-                  Text(
-                      'Start it to open VS Code with your lab folder and the DevPilot Guide. Your progress will show here.',
-                      style: text.bodyLarge),
-                  const SizedBox(height: BL.space6),
-                  ElevatedButton(
-                      onPressed: busy == null ? onStart : null,
-                      child: Text(busy ?? 'Start this lab')),
-                ] else ...[
-                  Text('Your lab is open in VS Code',
-                      style: text.headlineMedium),
-                  const SizedBox(height: BL.space3),
-                  Text(
-                    'Follow the DevPilot Guide panel on the right side of VS Code. Press Check my work on each step. Results appear here too.',
-                    style: text.bodyLarge,
-                  ),
-                  const SizedBox(height: BL.space6),
-                  Text('Steps', style: text.titleLarge),
-                  const SizedBox(height: BL.space2),
-                  Column(
-                    key: const Key('lab-steps'),
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      for (final s in steps)
-                        _StepRow(title: '${s['title']}', state: '${s['state']}')
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(BL.space8),
+                decoration: BoxDecoration(
+                    color: BL.surface,
+                    borderRadius: BorderRadius.circular(BL.radiusXl),
+                    border: Border.all(color: BL.border)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (!active) ...[
+                      Text('This lab is not open', style: text.headlineMedium),
+                      const SizedBox(height: BL.space3),
+                      Text(
+                          'Start it to open VS Code with your lab folder and the DevPilot Guide. Your progress will show here.',
+                          style: text.bodyLarge),
+                      const SizedBox(height: BL.space6),
+                      ElevatedButton(
+                          onPressed: busy == null ? onStart : null,
+                          child: Text(busy ?? 'Start this lab')),
+                    ] else ...[
+                      Text('Your lab is open in VS Code',
+                          style: text.headlineMedium),
+                      const SizedBox(height: BL.space3),
+                      Text(
+                        'Follow the DevPilot Guide panel on the right side of VS Code. Press Check my work on each step. Results appear here too.',
+                        style: text.bodyLarge,
+                      ),
+                      const SizedBox(height: BL.space6),
+                      Text('Steps', style: text.titleLarge),
+                      const SizedBox(height: BL.space2),
+                      Column(
+                        key: const Key('lab-steps'),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          for (final s in steps)
+                            _StepRow(
+                                title: '${s['title']}', state: '${s['state']}')
+                        ],
+                      ),
                     ],
-                  ),
-                ],
-              ],
-            ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: BL.space6),
+              TutorPanel(labId: labId),
+            ],
           ),
         ),
       ),

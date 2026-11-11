@@ -3,7 +3,12 @@
 # Requirements: FR-AUTH-001..009, NFR-SEC-004, NFR-SEC-006, NFR-MAINT-001, NFR-MAINT-004, NFR-MAINT-006, NFR-TEST-003
 # Implemented here: shared test client and valid signed test credentials
 
-import pytest
+import os
+
+# Tests never call a real AI service, whatever a developer put in services/api/.env
+os.environ["DEVSPHERE_AI_PROVIDER"] = "fake"
+
+import pytest  # noqa: E402
 from app.core.auth import create_token, get_or_create_user
 from app.db import memory
 from app.main import app

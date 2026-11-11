@@ -5,6 +5,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'data/user_controller.dart';
 import 'data/user_store.dart';
+import 'services/devpilot_api.dart';
 import 'worker/worker_client.dart';
 
 final workerClientProvider = Provider<WorkerClient>((ref) {
@@ -20,3 +21,6 @@ final userStoreProvider = Provider<UserStore>((ref) => MemoryUserStore());
 final userDataProvider = ChangeNotifierProvider<UserDataController>((ref) {
   return UserDataController(ref.watch(userStoreProvider));
 });
+
+/// The DevPilot API (roadmap planner, tutor). `main.dart` wires the real one; the default says it is offline.
+final devPilotApiProvider = Provider<DevPilotApi>((ref) => const OfflineDevPilotApi());

@@ -17,14 +17,16 @@ class Settings(BaseSettings):
     auth_secret_key: str = "devsphere-local-jwt-secret-key-change-in-production"
     auth_issuer: str = "https://accounts.google.com"
     auth_audience: str = "devsphere-desktop-client"
+    # The Firebase project whose sign-in tokens the API accepts (the same project the desktop app signs in with).
+    firebase_project_id: str = "devpilot-1a384"
     # AI gateway (ADR-007). "fake" never calls out. "gemini" uses Google Gemini on Vertex AI with the service
     # identity (no key), or the Gemini API when an API key is set in the environment. Never put keys in code.
     ai_provider: str = "fake"
     gemini_project: str = ""
-    gemini_location: str = "us-central1"
+    gemini_location: str = "global"  # the 3.x models answer from "global"; us-central1 returned 404 in tests on 2026-11-11
     gemini_api_key: SecretStr = SecretStr("")
-    gemini_model_fast: str = "gemini-flash-latest"  # verify the model names available to your project
-    gemini_model_pro: str = "gemini-pro-latest"
+    gemini_model_fast: str = "gemini-3.5-flash"  # checked live on Vertex AI, 2026-11-11
+    gemini_model_pro: str = "gemini-3.1-pro-preview"  # a preview model: re-check before release
     ai_daily_limit: int = 30  # roadmap plans per user per day
     ai_labgen_daily_limit: int = 5  # lab generations per user per day (each one is costly)
 

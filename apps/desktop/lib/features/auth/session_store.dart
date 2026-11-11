@@ -9,6 +9,10 @@ class SessionStore {
   bool _disabled = false;
   String? _inMemoryToken;
 
+  /// The one store the running app uses, so the API client reads the token the sign-in screen saved even when
+  /// the system keyring is unavailable (then it lives in memory only and is cleared on sign-out).
+  static final SessionStore app = SessionStore();
+
   SessionStore({FlutterSecureStorage? storage, bool forceWeakStorage = false})
       : _storage = storage ?? const FlutterSecureStorage(),
         _disabled = forceWeakStorage;

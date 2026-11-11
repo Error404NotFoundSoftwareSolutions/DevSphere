@@ -110,13 +110,20 @@ def validate_lab(raw: object) -> GeneratedLab:
     if len(set(ids)) != len(ids) or not all(_STEP_ID.match(i) for i in ids):
         raise LabInvalid("The lab steps are not valid.")
     total = 0
-    for group, rule in ((lab.starter, None), (lab.reference, None), (lab.visible_tests, _VISIBLE), (lab.protected_tests, _PROTECTED)):
+    for group, rule in (
+        (lab.starter, None),
+        (lab.reference, None),
+        (lab.visible_tests, _VISIBLE),
+        (lab.protected_tests, _PROTECTED),
+    ):
         for f in group:
             _check_path(f.path)
             if rule is not None and not rule.match(f.path):
                 raise LabInvalid("A test file is in the wrong place.")
             if rule is None and f.path.startswith("tests/"):
-                raise LabInvalid("Starter and reference files must not be placed in the tests folder.")
+                raise LabInvalid(
+                    "Starter and reference files must not be placed in the tests folder."
+                )
             total += len(f.content.encode())
     if total > MAX_TOTAL_BYTES:
         raise LabInvalid("The lab is too large.")
@@ -155,16 +162,28 @@ class LocalDevSandbox:
                 os.makedirs(os.path.dirname(target), exist_ok=True)
                 with open(target, "w", encoding="utf-8") as fh:
                     fh.write(content)
-            env = {"PATH": os.environ.get("PATH", ""), "PYTHONPATH": root, "PYTHONDONTWRITEBYTECODE": "1", "PYTHONNOUSERSITE": "1"}
+            env = {
+                "PATH": os.environ.get("PATH", ""),
+                "PYTHONPATH": root,
+                "PYTHONDONTWRITEBYTECODE": "1",
+                "PYTHONNOUSERSITE": "1",
+            }
             try:
                 r = subprocess.run(
                     [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests"],
-                    cwd=root, env=env, capture_output=True, text=True, timeout=self.timeout_s, check=False,
+                    cwd=root,
+                    env=env,
+                    capture_output=True,
+                    text=True,
+                    timeout=self.timeout_s,
+                    check=False,
                 )
                 return SandboxResult(r.returncode, (r.stdout + r.stderr)[-4000:], False)
             except subprocess.TimeoutExpired as e:
-                out = (e.stdout or b"")
-                return SandboxResult(None, (out.decode() if isinstance(out, bytes) else str(out))[-2000:], True)
+                out = e.stdout or b""
+                return SandboxResult(
+                    None, (out.decode() if isinstance(out, bytes) else str(out))[-2000:], True
+                )
 
 
 @dataclass
@@ -187,9 +206,17 @@ def verify_lab(lab: GeneratedLab, sandbox: SandboxRunner) -> VerificationReport:
     ref = sandbox.run(reference_build)
     start = sandbox.run(starter_build)
     reference_passes = ref.exit_code == 0 and not ref.timed_out
-    starter_fails = start.exit_code == 1 and not start.timed_out  # 1 = tests ran and failed (not a crash)
+    starter_fails = (
+        start.exit_code == 1 and not start.timed_out
+    )  # 1 = tests ran and failed (not a crash)
     details = f"reference exit {ref.exit_code}; starter exit {start.exit_code}\n{ref.output[-800:]}\n{start.output[-800:]}"
-    return VerificationReport(reference_passes and starter_fails, reference_passes, starter_fails, ref.timed_out or start.timed_out, details)
+    return VerificationReport(
+        reference_passes and starter_fails,
+        reference_passes,
+        starter_fails,
+        ref.timed_out or start.timed_out,
+        details,
+    )
 
 
 def generate_lab(spec: LabSpec, provider: ModelProvider, feedback: str = "") -> GeneratedLab:
@@ -198,14 +225,21 @@ def generate_lab(spec: LabSpec, provider: ModelProvider, feedback: str = "") -> 
         f"<untrusted_topic>\n{redact(spec.topic)}\n</untrusted_topic>"
         + (f"\n\nThe previous attempt failed verification: {feedback}\nFix it." if feedback else "")
     )
-    raw = provider.generate_json(system=SYSTEM, prompt=prompt, schema=GeneratedLab.model_json_schema(), max_output_tokens=8000)
+    raw = provider.generate_json(
+        system=SYSTEM,
+        prompt=prompt,
+        schema=GeneratedLab.model_json_schema(),
+        max_output_tokens=8000,
+    )
     try:
         return validate_lab(json.loads(raw))
     except (json.JSONDecodeError, LabInvalid) as e:
         raise AiOutputInvalid("The AI lab could not be validated.") from e
 
 
-def generate_verified_lab(spec: LabSpec, provider: ModelProvider, sandbox: SandboxRunner, attempts: int = 2) -> tuple[GeneratedLab, VerificationReport]:
+def generate_verified_lab(
+    spec: LabSpec, provider: ModelProvider, sandbox: SandboxRunner, attempts: int = 2
+) -> tuple[GeneratedLab, VerificationReport]:
     feedback = ""
     last: VerificationReport | None = None
     for _ in range(attempts):
@@ -218,8 +252,12 @@ def generate_verified_lab(spec: LabSpec, provider: ModelProvider, sandbox: Sandb
         if report.verified:
             return lab, report
         last = report
-        feedback = f"reference passes={report.reference_passes}, starter fails={report.starter_fails}"
-    raise LabNotVerified(last or VerificationReport(False, False, False, False, "No valid lab was produced."))
+        feedback = (
+            f"reference passes={report.reference_passes}, starter fails={report.starter_fails}"
+        )
+    raise LabNotVerified(
+        last or VerificationReport(False, False, False, False, "No valid lab was produced.")
+    )
 
 
 def learner_view(lab: GeneratedLab) -> dict:

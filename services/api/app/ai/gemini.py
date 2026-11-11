@@ -4,13 +4,18 @@
 # are turned into a plain ProviderDown: their text can contain request details, so it is never passed on.
 # NOT yet exercised against the live service from this repository's tests (they use a stand-in SDK).
 
+import time
+
 from app.ai.provider import ProviderDown
 
 TIMEOUT_MS = 45_000
+RETRY_DELAY_S = 0.5
 
 
 class GeminiProvider:
-    def __init__(self, *, model_fast: str, model_pro: str, project: str, location: str, api_key: str):
+    def __init__(
+        self, *, model_fast: str, model_pro: str, project: str, location: str, api_key: str
+    ):
         self.model_fast = model_fast
         self.model_pro = model_pro
         self._project = project
@@ -37,25 +42,65 @@ class GeminiProvider:
             self._client = genai.Client(**kwargs)
         return self._client
 
-    def _call(self, *, model: str, system: str, prompt: str, max_output_tokens: int, json_schema: dict | None) -> str:
-        try:
-            _, types = self._sdk()
-            cfg: dict = {"system_instruction": system, "max_output_tokens": max_output_tokens, "temperature": 0.2}
-            if json_schema is not None:
-                cfg["response_mime_type"] = "application/json"
-                cfg["response_json_schema"] = json_schema
-            result = self._get_client().models.generate_content(
-                model=model, contents=prompt, config=types.GenerateContentConfig(**cfg)
-            )
-            text = getattr(result, "text", None)
-        except Exception:  # noqa: BLE001 - details may contain secrets or request data
-            raise ProviderDown("The AI service did not answer.") from None
+    def _call(
+        self,
+        *,
+        model: str,
+        system: str,
+        prompt: str,
+        max_output_tokens: int,
+        json_schema: dict | None,
+    ) -> str:
+        text = None
+        for attempt in range(2):  # one quick retry: the first call after a cold start can fail once
+            try:
+                _, types = self._sdk()
+                cfg: dict = {
+                    "system_instruction": system,
+                    "max_output_tokens": max_output_tokens,
+                    "temperature": 0.2,
+                }
+                if json_schema is not None:
+                    cfg["response_mime_type"] = "application/json"
+                    cfg["response_json_schema"] = json_schema
+                result = self._get_client().models.generate_content(
+                    model=model, contents=prompt, config=types.GenerateContentConfig(**cfg)
+                )
+                text = getattr(result, "text", None)
+                break
+            except Exception:  # noqa: BLE001 - details may contain secrets or request data
+                if attempt == 1:
+                    raise ProviderDown("The AI service did not answer.") from None
+                time.sleep(RETRY_DELAY_S)
         if not text:
             raise ProviderDown("The AI service returned nothing.")
         return text
 
-    def generate_json(self, *, system: str, prompt: str, schema: dict, max_output_tokens: int = 4000) -> str:
-        return self._call(model=self.model_pro, system=system, prompt=prompt, max_output_tokens=max_output_tokens, json_schema=schema)
+    def generate_json(
+        self,
+        *,
+        system: str,
+        prompt: str,
+        schema: dict,
+        max_output_tokens: int = 4000,
+        fast: bool = False,
+    ) -> str:
+        model = (
+            self.model_fast if fast else self.model_pro
+        )  # fast: same quality for short plans, about 40% quicker
+        return self._call(
+            model=model,
+            system=system,
+            prompt=prompt,
+            max_output_tokens=max_output_tokens,
+            json_schema=schema,
+        )
 
     def generate_text(self, *, system: str, prompt: str, max_output_tokens: int = 800) -> str:
-        return self._call(model=self.model_fast, system=system, prompt=prompt, max_output_tokens=max_output_tokens, json_schema=None)
+        return self._call(
+            model=self.model_fast,
+            system=system,
+            prompt=prompt,
+            max_output_tokens=max_output_tokens,
+            json_schema=None,
+        )

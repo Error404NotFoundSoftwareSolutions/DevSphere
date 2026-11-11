@@ -239,7 +239,7 @@ class _AccountMenu extends StatelessWidget {
             } else if (v == 'sign-out') {
               AuthSession.instance.signOut();
               router.go('/landing');
-              await SessionStore().clear();
+              await SessionStore.app.clear();
             }
           },
           itemBuilder: (c) => [

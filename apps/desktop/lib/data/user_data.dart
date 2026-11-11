@@ -6,7 +6,8 @@
 enum LabStatus { notStarted, inProgress, practiceComplete }
 
 class StepProgress {
-  const StepProgress({required this.id, required this.title, required this.state});
+  const StepProgress(
+      {required this.id, required this.title, required this.state});
   final String id;
   final String title;
 
@@ -43,7 +44,11 @@ class LabProgress {
       ? LabStatus.practiceComplete
       : LabStatus.inProgress;
 
-  LabProgress copyWith({String? lastActivity, String? labRoot, List<StepProgress>? steps, String? completedAt}) =>
+  LabProgress copyWith(
+          {String? lastActivity,
+          String? labRoot,
+          List<StepProgress>? steps,
+          String? completedAt}) =>
       LabProgress(
         labId: labId,
         title: title,
@@ -66,7 +71,12 @@ class LabProgress {
 }
 
 class UserProfile {
-  const UserProfile({this.displayName = '', this.college = '', this.course = '', this.academicYear = '', this.interests = const []});
+  const UserProfile(
+      {this.displayName = '',
+      this.college = '',
+      this.course = '',
+      this.academicYear = '',
+      this.interests = const []});
   final String displayName;
   final String college;
   final String course;
@@ -84,12 +94,112 @@ class UserProfile {
 
 /// A check that passed for the first time, kept to build the streak and the weekly goal.
 class PassEvent {
-  const PassEvent({required this.labId, required this.stepId, required this.day});
+  const PassEvent(
+      {required this.labId, required this.stepId, required this.day});
   final String labId;
   final String stepId;
 
   /// `YYYY-MM-DD` in the learner's local time.
   final String day;
+}
+
+class RoadmapStepData {
+  const RoadmapStepData(
+      {required this.kind,
+      this.labId,
+      required this.title,
+      required this.why,
+      this.skills = const []});
+
+  /// `lab` (a lab that exists) or `generate` (a lab that does not exist yet).
+  final String kind;
+  final String? labId;
+  final String title;
+  final String why;
+  final List<String> skills;
+
+  Map<String, Object?> toJson() => {
+        'kind': kind,
+        if (labId != null) 'labId': labId,
+        'title': title,
+        'why': why,
+        'skills': skills
+      };
+}
+
+/// A roadmap the person asked for, kept with their own data.
+class SavedRoadmap {
+  const SavedRoadmap(
+      {required this.title,
+      required this.source,
+      required this.createdAt,
+      required this.steps});
+
+  final String title;
+
+  /// `job_description` or `topic`.
+  final String source;
+  final String createdAt;
+  final List<RoadmapStepData> steps;
+
+  Map<String, Object?> toJson() => {
+        'title': title,
+        'source': source,
+        'createdAt': createdAt,
+        'steps': [for (final s in steps) s.toJson()],
+      };
+
+  /// Reads the API's answer. Anything that is not the expected shape is rejected, never half-used.
+  static SavedRoadmap? fromApi(Object? raw,
+          {required String source, required DateTime now}) =>
+      _parse(raw, source: source, createdAt: now.toIso8601String());
+
+  static SavedRoadmap? fromSaved(Object? raw) =>
+      raw is Map && raw['source'] is String
+          ? _parse(raw,
+              source: raw['source'] as String,
+              createdAt:
+                  raw['createdAt'] is String ? raw['createdAt'] as String : '')
+          : null;
+
+  static SavedRoadmap? _parse(Object? raw,
+      {required String source, required String createdAt}) {
+    if (raw is! Map || raw['title'] is! String || raw['steps'] is! List)
+      return null;
+    String s(Object? v, int max) =>
+        v is String ? (v.length <= max ? v : v.substring(0, max)) : '';
+    final steps = <RoadmapStepData>[];
+    for (final e in (raw['steps'] as List).take(12)) {
+      if (e is! Map) continue;
+      final kind = e['kind'];
+      if (kind != 'lab' && kind != 'generate') continue;
+      final labRaw = e['labId'] ?? e['lab_id'];
+      final labId = labRaw is String &&
+              RegExp(r'^[a-z0-9][a-z0-9_-]{2,63}$').hasMatch(labRaw)
+          ? labRaw
+          : null;
+      if (kind == 'lab' && labId == null) continue;
+      steps.add(RoadmapStepData(
+        kind: kind as String,
+        labId: kind == 'lab' ? labId : null,
+        title: s(e['title'], 120),
+        why: s(e['why'], 300),
+        skills: e['skills'] is List
+            ? [
+                for (final k in (e['skills'] as List).take(6))
+                  if (k is String) s(k, 40)
+              ]
+            : const [],
+      ));
+    }
+    final title = s(raw['title'], 120);
+    if (title.isEmpty || steps.isEmpty) return null;
+    return SavedRoadmap(
+        title: title,
+        source: source == 'topic' ? 'topic' : 'job_description',
+        createdAt: createdAt,
+        steps: steps);
+  }
 }
 
 class UserData {
@@ -99,6 +209,7 @@ class UserData {
     this.labs = const {},
     this.passes = const [],
     this.weeklyTarget = 5,
+    this.roadmap,
   });
 
   static const int version = 1;
@@ -111,13 +222,19 @@ class UserData {
   final List<PassEvent> passes;
   final int weeklyTarget;
 
+  /// The roadmap this person last asked for, if any.
+  final SavedRoadmap? roadmap;
+
   LabProgress? lab(String id) => labs[id];
 
-  LabStatus statusOf(String labId) => labs[labId]?.status ?? LabStatus.notStarted;
+  LabStatus statusOf(String labId) =>
+      labs[labId]?.status ?? LabStatus.notStarted;
 
   /// The most recently used lab that is not finished, for the Resume button.
   LabProgress? get resumable {
-    final open = labs.values.where((l) => l.status == LabStatus.inProgress).toList()
+    final open = labs.values
+        .where((l) => l.status == LabStatus.inProgress)
+        .toList()
       ..sort((a, b) => b.lastActivity.compareTo(a.lastActivity));
     return open.isEmpty ? null : open.first;
   }
@@ -132,26 +249,37 @@ class UserData {
   int weeklyDone(DateTime today) {
     final from = dayKey(today.subtract(const Duration(days: 6)));
     final to = dayKey(today);
-    return passes.where((p) => p.day.compareTo(from) >= 0 && p.day.compareTo(to) <= 0).length;
+    return passes
+        .where((p) => p.day.compareTo(from) >= 0 && p.day.compareTo(to) <= 0)
+        .length;
   }
 
   /// Seven flags, oldest first, ending on [today]: was there at least one pass that day?
   List<bool> weekFlags(DateTime today) {
     final days = activeDays;
-    return [for (var i = 6; i >= 0; i--) days.contains(dayKey(today.subtract(Duration(days: i))))];
+    return [
+      for (var i = 6; i >= 0; i--)
+        days.contains(dayKey(today.subtract(Duration(days: i))))
+    ];
   }
 
   List<String> weekLabels(DateTime today) {
     const names = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    return [for (var i = 6; i >= 0; i--) names[today.subtract(Duration(days: i)).weekday - 1]];
+    return [
+      for (var i = 6; i >= 0; i--)
+        names[today.subtract(Duration(days: i)).weekday - 1]
+    ];
   }
 
   /// Consecutive weeks (Monday to Sunday) with at least one pass, counting back from this week.
   /// An empty current week does not break the streak until the week is over.
   int streakWeeks(DateTime today) {
-    final weeks = {for (final d in activeDays) _weekStart(DateTime.tryParse(d) ?? today)};
+    final weeks = {
+      for (final d in activeDays) _weekStart(DateTime.tryParse(d) ?? today)
+    };
     var cursor = _weekStart(today);
-    if (!weeks.contains(cursor)) cursor = cursor.subtract(const Duration(days: 7));
+    if (!weeks.contains(cursor))
+      cursor = cursor.subtract(const Duration(days: 7));
     var n = 0;
     while (weeks.contains(cursor)) {
       n++;
@@ -168,24 +296,40 @@ class UserData {
     return day.subtract(Duration(days: day.weekday - 1));
   }
 
-  UserData copyWith({UserProfile? profile, Map<String, LabProgress>? labs, List<PassEvent>? passes}) =>
-      UserData(uid: uid, profile: profile ?? this.profile, labs: labs ?? this.labs, passes: passes ?? this.passes, weeklyTarget: weeklyTarget);
+  UserData copyWith(
+          {UserProfile? profile,
+          Map<String, LabProgress>? labs,
+          List<PassEvent>? passes,
+          SavedRoadmap? roadmap,
+          bool clearRoadmap = false}) =>
+      UserData(
+        uid: uid,
+        profile: profile ?? this.profile,
+        labs: labs ?? this.labs,
+        passes: passes ?? this.passes,
+        weeklyTarget: weeklyTarget,
+        roadmap: clearRoadmap ? null : (roadmap ?? this.roadmap),
+      );
 
   Map<String, Object?> toJson() => {
         'version': version,
         'uid': uid,
         'profile': profile.toJson(),
         'weeklyTarget': weeklyTarget,
+        if (roadmap != null) 'roadmap': roadmap!.toJson(),
         'labs': [for (final l in labs.values) l.toJson()],
         'passes': [
-          for (final p in passes) {'labId': p.labId, 'stepId': p.stepId, 'day': p.day}
+          for (final p in passes)
+            {'labId': p.labId, 'stepId': p.stepId, 'day': p.day}
         ],
       };
 
   /// Reads a saved file. The file is untrusted input: wrong types and oversize lists are dropped, never thrown.
   static UserData fromJson(Object? raw, {required String uid}) {
-    if (raw is! Map || raw['version'] != version || raw['uid'] != uid) return UserData(uid: uid);
-    String s(Object? v, [int max = 200]) => v is String && v.length <= max ? v : '';
+    if (raw is! Map || raw['version'] != version || raw['uid'] != uid)
+      return UserData(uid: uid);
+    String s(Object? v, [int max = 200]) =>
+        v is String && v.length <= max ? v : '';
     final p = raw['profile'];
     final profile = p is Map
         ? UserProfile(
@@ -194,7 +338,10 @@ class UserData {
             course: s(p['course'], 160),
             academicYear: s(p['academicYear'], 40),
             interests: p['interests'] is List
-                ? [for (final i in (p['interests'] as List).take(20)) if (i is String && i.length <= 60) i]
+                ? [
+                    for (final i in (p['interests'] as List).take(20))
+                      if (i is String && i.length <= 60) i
+                  ]
                 : const [],
           )
         : const UserProfile();
@@ -210,7 +357,12 @@ class UserData {
           for (final st in (l['steps'] as List).take(50)) {
             if (st is! Map) continue;
             final state = s(st['state'], 10);
-            steps.add(StepProgress(id: s(st['id'], 64), title: s(st['title'], 120), state: const {'pass', 'fail', 'todo'}.contains(state) ? state : 'todo'));
+            steps.add(StepProgress(
+                id: s(st['id'], 64),
+                title: s(st['title'], 120),
+                state: const {'pass', 'fail', 'todo'}.contains(state)
+                    ? state
+                    : 'todo'));
           }
         }
         labs[id] = LabProgress(
@@ -220,7 +372,8 @@ class UserData {
           lastActivity: s(l['lastActivity'], 40),
           labRoot: s(l['labRoot'], 500),
           steps: steps,
-          completedAt: l['completedAt'] is String ? s(l['completedAt'], 40) : null,
+          completedAt:
+              l['completedAt'] is String ? s(l['completedAt'], 40) : null,
         );
       }
     }
@@ -228,12 +381,21 @@ class UserData {
     final rawPasses = raw['passes'];
     if (rawPasses is List) {
       for (final e in rawPasses.take(maxPasses)) {
-        if (e is Map && RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(s(e['day'], 10))) {
-          passes.add(PassEvent(labId: s(e['labId'], 64), stepId: s(e['stepId'], 64), day: s(e['day'], 10)));
+        if (e is Map &&
+            RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(s(e['day'], 10))) {
+          passes.add(PassEvent(
+              labId: s(e['labId'], 64),
+              stepId: s(e['stepId'], 64),
+              day: s(e['day'], 10)));
         }
       }
     }
-    return UserData(uid: uid, profile: profile, labs: labs, passes: passes);
+    return UserData(
+        uid: uid,
+        profile: profile,
+        labs: labs,
+        passes: passes,
+        roadmap: SavedRoadmap.fromSaved(raw['roadmap']));
   }
 
   /// Applies the latest state of a lab session. Returns the same object when nothing changed.
@@ -248,23 +410,41 @@ class UserData {
     final nowIso = now.toIso8601String();
     final stepsSame = old != null &&
         old.steps.length == steps.length &&
-        [for (var i = 0; i < steps.length; i++) old.steps[i].state == steps[i].state && old.steps[i].id == steps[i].id].every((x) => x);
-    if (old != null && stepsSame && (labRoot.isEmpty || old.labRoot == labRoot)) return this;
+        [
+          for (var i = 0; i < steps.length; i++)
+            old.steps[i].state == steps[i].state &&
+                old.steps[i].id == steps[i].id
+        ].every((x) => x);
+    if (old != null && stepsSame && (labRoot.isEmpty || old.labRoot == labRoot))
+      return this;
     if (old == null && labs.length >= maxLabs) return this;
 
     final already = {for (final p in passes) '${p.labId}/${p.stepId}'};
     final fresh = [
       for (final s in steps)
-        if (s.passed && !already.contains('$labId/${s.id}')) PassEvent(labId: labId, stepId: s.id, day: dayKey(now))
+        if (s.passed && !already.contains('$labId/${s.id}'))
+          PassEvent(labId: labId, stepId: s.id, day: dayKey(now))
     ];
-    final updated = (old ?? LabProgress(labId: labId, title: title, startedAt: nowIso, lastActivity: nowIso))
-        .copyWith(lastActivity: nowIso, labRoot: labRoot.isEmpty ? null : labRoot, steps: steps);
+    final updated = (old ??
+            LabProgress(
+                labId: labId,
+                title: title,
+                startedAt: nowIso,
+                lastActivity: nowIso))
+        .copyWith(
+            lastActivity: nowIso,
+            labRoot: labRoot.isEmpty ? null : labRoot,
+            steps: steps);
     final done = updated.total > 0 && updated.passed == updated.total;
-    final withDone = done && updated.completedAt == null ? updated.copyWith(completedAt: nowIso) : updated;
+    final withDone = done && updated.completedAt == null
+        ? updated.copyWith(completedAt: nowIso)
+        : updated;
     final nextPasses = [...passes, ...fresh];
     return copyWith(
       labs: {...labs, labId: withDone},
-      passes: nextPasses.length > maxPasses ? nextPasses.sublist(nextPasses.length - maxPasses) : nextPasses,
+      passes: nextPasses.length > maxPasses
+          ? nextPasses.sublist(nextPasses.length - maxPasses)
+          : nextPasses,
     );
   }
 }

@@ -10,7 +10,8 @@ import 'user_data.dart';
 import 'user_store.dart';
 
 class UserDataController extends ChangeNotifier {
-  UserDataController(this._store, {AuthSession? session, DateTime Function()? clock})
+  UserDataController(this._store,
+      {AuthSession? session, DateTime Function()? clock})
       : _session = session ?? AuthSession.instance,
         _clock = clock ?? DateTime.now {
     _session.addListener(_onAuth);
@@ -40,10 +41,17 @@ class UserDataController extends ChangeNotifier {
     if (_data?.uid == user.uid) return;
     _data = null;
     final loaded = await _store.load(user.uid);
-    if (_session.user?.uid != user.uid) return; // someone else signed in while we were loading
+    if (_session.user?.uid != user.uid)
+      return; // someone else signed in while we were loading
     final name = loaded.profile.displayName;
     _data = name.isEmpty && (user.displayName ?? '').isNotEmpty
-        ? loaded.copyWith(profile: UserProfile(displayName: user.displayName!, college: loaded.profile.college, course: loaded.profile.course, academicYear: loaded.profile.academicYear, interests: loaded.profile.interests))
+        ? loaded.copyWith(
+            profile: UserProfile(
+                displayName: user.displayName!,
+                college: loaded.profile.college,
+                course: loaded.profile.course,
+                academicYear: loaded.profile.academicYear,
+                interests: loaded.profile.interests))
         : loaded;
     _notify();
   }
@@ -61,11 +69,32 @@ class UserDataController extends ChangeNotifier {
   /// Waits until every queued save has finished. For tests and for shutdown.
   Future<void> flush() => _saving;
 
-  void recordLab({required String labId, required String title, required String labRoot, required List<StepProgress> steps}) {
+  void recordLab(
+      {required String labId,
+      required String title,
+      required String labRoot,
+      required List<StepProgress> steps}) {
     final d = _data;
     if (d == null) return;
-    final next = d.withLabState(labId: labId, title: title, labRoot: labRoot, steps: steps, now: _clock());
+    final next = d.withLabState(
+        labId: labId,
+        title: title,
+        labRoot: labRoot,
+        steps: steps,
+        now: _clock());
     if (!identical(next, d)) _persist(next);
+  }
+
+  void saveRoadmap(SavedRoadmap roadmap) {
+    final d = _data;
+    if (d == null) return;
+    _persist(d.copyWith(roadmap: roadmap));
+  }
+
+  void clearRoadmap() {
+    final d = _data;
+    if (d == null) return;
+    _persist(d.copyWith(clearRoadmap: true));
   }
 
   void saveProfile(UserProfile profile) {
@@ -90,7 +119,11 @@ class UserDataController extends ChangeNotifier {
           labRoot: '${r['labRoot'] ?? ''}',
           steps: [
             for (final s in steps)
-              if (s is Map) StepProgress(id: '${s['id']}', title: '${s['title']}', state: '${s['state']}')
+              if (s is Map)
+                StepProgress(
+                    id: '${s['id']}',
+                    title: '${s['title']}',
+                    state: '${s['state']}')
           ],
         );
       } on WorkerException {

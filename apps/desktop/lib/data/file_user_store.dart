@@ -23,14 +23,16 @@ class FileUserStore implements UserStore {
 
   File _file(String uid) {
     final name = sha256.convert(utf8.encode(uid)).toString().substring(0, 32);
-    return File('$baseDir${Platform.pathSeparator}users${Platform.pathSeparator}$name.json');
+    return File(
+        '$baseDir${Platform.pathSeparator}users${Platform.pathSeparator}$name.json');
   }
 
   @override
   Future<UserData> load(String uid) async {
     final f = _file(uid);
     try {
-      if (!await f.exists() || await f.length() > 1024 * 1024) return UserData(uid: uid);
+      if (!await f.exists() || await f.length() > 1024 * 1024)
+        return UserData(uid: uid);
       return UserData.fromJson(jsonDecode(await f.readAsString()), uid: uid);
     } catch (_) {
       return UserData(uid: uid);
@@ -41,7 +43,8 @@ class FileUserStore implements UserStore {
   Future<void> save(UserData data) async {
     final f = _file(data.uid);
     await f.parent.create(recursive: true);
-    if (!Platform.isWindows) await Process.run('chmod', ['700', f.parent.path, baseDir]);
+    if (!Platform.isWindows)
+      await Process.run('chmod', ['700', f.parent.path, baseDir]);
     final tmp = File('${f.path}.tmp');
     await tmp.writeAsString(jsonEncode(data.toJson()), flush: true);
     if (!Platform.isWindows) await Process.run('chmod', ['600', tmp.path]);

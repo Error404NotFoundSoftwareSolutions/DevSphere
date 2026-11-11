@@ -21,7 +21,15 @@ class AiOutputInvalid(Exception):
 
 
 class ModelProvider(Protocol):
-    def generate_json(self, *, system: str, prompt: str, schema: dict, max_output_tokens: int = 4000) -> str: ...
+    def generate_json(
+        self,
+        *,
+        system: str,
+        prompt: str,
+        schema: dict,
+        max_output_tokens: int = 4000,
+        fast: bool = False,
+    ) -> str: ...
 
     def generate_text(self, *, system: str, prompt: str, max_output_tokens: int = 800) -> str: ...
 
@@ -31,12 +39,22 @@ class FakeProvider:
 
     DEFAULT_TEXT = "Starter answer: think about what the test expects, then try a smaller step."
 
-    def __init__(self, json_responses: list[str] | None = None, text_responses: list[str] | None = None):
+    def __init__(
+        self, json_responses: list[str] | None = None, text_responses: list[str] | None = None
+    ):
         self._json = list(json_responses or [])
         self._text = list(text_responses or [])
         self.calls: list[dict] = []
 
-    def generate_json(self, *, system: str, prompt: str, schema: dict, max_output_tokens: int = 4000) -> str:
+    def generate_json(
+        self,
+        *,
+        system: str,
+        prompt: str,
+        schema: dict,
+        max_output_tokens: int = 4000,
+        fast: bool = False,
+    ) -> str:
         self.calls.append({"kind": "json", "system": system, "prompt": prompt})
         return self._json.pop(0) if self._json else "{}"
 
@@ -61,7 +79,9 @@ def build_provider() -> ModelProvider:
         raw = settings.gemini_api_key
         key = raw.get_secret_value() if hasattr(raw, "get_secret_value") else str(raw or "")
         if not settings.gemini_project and not key:
-            raise AiConfigError("Gemini needs a Google Cloud project or an API key in the environment.")
+            raise AiConfigError(
+                "Gemini needs a Google Cloud project or an API key in the environment."
+            )
         from app.ai.gemini import GeminiProvider
 
         return GeminiProvider(

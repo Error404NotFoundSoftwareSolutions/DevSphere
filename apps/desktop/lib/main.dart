@@ -12,6 +12,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'api.dart';
 import 'app.dart';
 import 'data/file_user_store.dart';
+import 'features/auth/session_store.dart';
+import 'services/devpilot_api.dart';
 import 'firebase_options.dart';
 import 'perf/startup_timer.dart';
 import 'worker/process_worker_client.dart';
@@ -36,6 +38,10 @@ Future<void> main() async {
     overrides: [
       workerClientProvider.overrideWithValue(client),
       userStoreProvider.overrideWithValue(FileUserStore.defaultLocation(Platform.environment)),
+      devPilotApiProvider.overrideWithValue(HttpDevPilotApi(
+        baseUrl: Platform.environment['DEVPILOT_API_URL'] ?? 'http://127.0.0.1:8000',
+        token: () => SessionStore.app.readToken(),
+      )),
     ],
     child: DevPilotApp(),
   ));

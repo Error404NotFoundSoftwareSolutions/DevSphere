@@ -68,7 +68,9 @@ def validate_roadmap(raw: object, catalogue_ids: set[str]) -> Roadmap:
     if not _plain(road.title):
         raise RoadmapInvalid("The plan has unsafe characters.")
     for s in road.steps:
-        if not (_plain(s.title) and _plain(s.why) and all(_plain(k) and len(k) <= 40 for k in s.skills)):
+        if not (
+            _plain(s.title) and _plain(s.why) and all(_plain(k) and len(k) <= 40 for k in s.skills)
+        ):
             raise RoadmapInvalid("The plan has unsafe characters.")
         if s.kind == "lab":
             if s.lab_id is None or s.lab_id not in catalogue_ids or not _LAB_ID.match(s.lab_id):
@@ -85,9 +87,19 @@ def validate_roadmap(raw: object, catalogue_ids: set[str]) -> Roadmap:
     return road
 
 
-def plan_roadmap(req: RoadmapRequest, catalogue: dict[str, dict], provider: ModelProvider) -> Roadmap:
+def plan_roadmap(
+    req: RoadmapRequest, catalogue: dict[str, dict], provider: ModelProvider
+) -> Roadmap:
     cat_lines = "\n".join(
-        json.dumps({"lab_id": c["id"], "title": c["title"], "difficulty": c.get("difficulty", "")}) for c in catalogue.values()
+        json.dumps(
+            {
+                "lab_id": c["id"],
+                "title": c["title"],
+                "difficulty": c.get("difficulty", ""),
+                "teaches": str(c.get("description", ""))[:240],
+            }
+        )
+        for c in catalogue.values()
     )
     base = (
         f"Learner level: {req.level}\nInput kind: {req.kind}\n"
@@ -97,9 +109,11 @@ def plan_roadmap(req: RoadmapRequest, catalogue: dict[str, dict], provider: Mode
     schema = Roadmap.model_json_schema()
     prompt = base
     for _ in range(2):  # one retry
-        raw = provider.generate_json(system=SYSTEM, prompt=prompt, schema=schema)
+        raw = provider.generate_json(system=SYSTEM, prompt=prompt, schema=schema, fast=True)
         try:
             return validate_roadmap(json.loads(raw), set(catalogue))
         except (json.JSONDecodeError, RoadmapInvalid):
-            prompt = base + "\n\nYour previous answer was invalid. Reply again with valid JSON only."
+            prompt = (
+                base + "\n\nYour previous answer was invalid. Reply again with valid JSON only."
+            )
     raise AiOutputInvalid("The AI plan could not be validated.")

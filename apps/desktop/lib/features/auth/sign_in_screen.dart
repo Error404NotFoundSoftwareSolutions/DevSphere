@@ -111,7 +111,7 @@ class _SignInScreenState extends State<SignInScreen> {
     _isCreateAccount = widget.initialCreateAccount;
     _signInService = widget.signInService ?? SignInService();
     _firebaseAuthService = widget.firebaseAuthService ?? FirebaseAuthService();
-    _sessionStore = widget.sessionStore ?? SessionStore();
+    _sessionStore = widget.sessionStore ?? SessionStore.app;
     _firstNameController = TextEditingController();
     _lastNameController = TextEditingController();
     _emailController = TextEditingController();

@@ -12,6 +12,7 @@ import uuid
 from fastapi import Depends, Header, HTTPException
 
 from app.core import audit
+from app.core.firebase_auth import FirebaseTokenInvalid, verify_firebase_id_token
 from app.core.settings import settings
 from app.db import memory
 
@@ -99,6 +100,46 @@ def verify_token(token_str: str) -> dict:
         )
 
     header_b64, payload_b64, sig_b64 = parts
+    try:
+        alg = json.loads(_b64url_decode(header_b64).decode("utf-8")).get("alg")
+    except Exception:
+        alg = None
+    if alg == "RS256":
+        # A real Firebase sign-in token from the desktop app: verified against Google's certificates.
+        try:
+            claims = verify_firebase_id_token(token_str, settings.firebase_project_id)
+        except FirebaseTokenInvalid as e:
+            audit.record("anonymous", "auth_failed", "token", "firebase_invalid")
+            raise HTTPException(
+                401,
+                detail={
+                    "code": "invalid_token",
+                    "message": "Your sign-in could not be verified.",
+                    "recovery": "Please sign in again.",
+                },
+            ) from e
+        if claims["sub"] in memory.REVOKED_USERS:
+            audit.record(claims["sub"], "auth_failed", "token", "revoked_token")
+            raise HTTPException(
+                401,
+                detail={
+                    "code": "revoked_token",
+                    "message": "Your session has been revoked.",
+                    "recovery": "Please sign in again.",
+                },
+            )
+        return {**claims, "provider": "firebase"}
+    if alg != "HS256" or settings.environment != "dev":
+        # The shared-secret test tokens exist only for local development and tests.
+        audit.record("anonymous", "auth_failed", "token", "unsupported_algorithm")
+        raise HTTPException(
+            401,
+            detail={
+                "code": "invalid_token",
+                "message": "Unsupported token type.",
+                "recovery": "Please sign in again.",
+            },
+        )
     expected_sig = _sign(f"{header_b64}.{payload_b64}", settings.auth_secret_key)
     if not hmac.compare_digest(sig_b64, expected_sig):
         audit.record("anonymous", "auth_failed", "token", "bad_signature")
