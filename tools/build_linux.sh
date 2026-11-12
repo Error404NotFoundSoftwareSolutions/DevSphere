@@ -3,7 +3,7 @@
 #   - the guide extension packaged as a .vsix, with a metadata file holding its SHA-256
 #   - the local worker compiled to a single executable
 #   - the Flutter app bundle, with `worker` and `guide/` placed next to the app binary
-# Output: release/devpilot-linux-x64.tar.gz and release/bundle/ (git-ignored).
+# Output: release/devpilot-linux-x64.tar.gz (unpacks into devpilot/), its .sha256, and release/bundle/ (git-ignored).
 # Lab content is bundled WITHOUT its private parts: the copy in bundle/content/labs has no `reference/` folder, no
 # `tests/protected/` and no authoring notes (SEC-04). The app finds bundle/content/labs next to its executable.
 # The release also gets: the hosted service as the default address (DEVPILOT_API_URL still overrides it at run time) and,
@@ -123,5 +123,7 @@ Optional: set DEVPILOT_API_URL to use another DevPilot service. Sign in with ema
 Notes: learning paths, videos, the tutor and the coach use the online DevPilot service. Writing new AI labs needs the
 developer setup (./start.sh in the project) and is not available from this package.
 TXT
-tar -czf "$OUT/devpilot-linux-x64.tar.gz" -C "$OUT" bundle
+# the archive unpacks into a folder called devpilot/, with a checksum file next to it for the release page
+tar -czf "$OUT/devpilot-linux-x64.tar.gz" -C "$OUT" --transform 's,^bundle,devpilot,' bundle
+(cd "$OUT" && sha256sum devpilot-linux-x64.tar.gz > devpilot-linux-x64.tar.gz.sha256)
 echo "Built: $OUT/bundle/devpilot  ($(du -sh "$OUT/bundle" | cut -f1)), tarball $(du -sh "$OUT/devpilot-linux-x64.tar.gz" | cut -f1)"

@@ -2,6 +2,12 @@
 
 Newest first. One entry per finished step: what changed, how it was checked, what is still missing. Plans and status live in `FEATURE_ROADMAP.md`.
 
+## 2026-11-12: first public Linux release (v0.1.0-preview.1)
+- The source repository is private, so visitors could not download release files from it. Releases now go to the public repository [devpilot-releases](https://github.com/Error404NotFoundSoftwareSolutions/devpilot-releases) (README with install steps, issues for feedback, no source code). The website's five "Download" buttons link straight to the file; "Get DevPilot", GitHub, Docs and Contact go to that public repository instead of the private one (they were 404 for visitors).
+- Built from DevSphere commit `e0e9d5a` with `tools/build_linux.sh` (Google sign-in secret compiled in, owner's choice; hosted service as the default). 365 MB `.tar.gz` that unpacks into `devpilot/`, with a SHA-256 file. Published as a pre-release: Linux only, not code-signed, no update feed (see `docs/RELEASE_CHECKLIST.md`). Version 0.1.0+1, `CHANGELOG.md` started, steps in `docs/RELEASING.md`.
+- Checked before release: check_docs, check_security, ruff, pytest, flutter analyze (infos only), flutter test (195). Smoke test: checksum OK, unpacked in an empty folder, no missing libraries, no private lab parts or `.env` files, app starts and keeps running.
+- Not done: Windows and macOS builds, AppImage or `.deb`, signing, a clean-machine test on another computer, deploying the website.
+
 ## 2026-11-12: hosted website (`apps/web`)
 - New Next.js 16 landing page for DevPilot, separate from the desktop app: fixed scene with a looping pond video drawn through a WebGL hover-ripple lens, fading to violet and a night plate; a 3D koi that swims to a new pose per section; dashboard preview (labelled sample data), typing terminal, role cards, footer with a live service-status chip. Copy is DevPilot's own and avoids claims we cannot back (planned features are marked).
 - The 3D stand-in is a smiling robot (eyes follow the mouse, drifts toward the cursor, waves when close, click for a spin-hop) that flies between sections in the empty spaces, in front of the page; `?mascot=rocket` / `NEXT_PUBLIC_MASCOT=rocket` gives a rocket that points the way it flies. Code: `lib/mascot.ts`, `lib/koi.ts`.
