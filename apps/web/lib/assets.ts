@@ -1,4 +1,5 @@
-// The scene's media. The defaults are the files in public/media (the night desk clip, cleaned and looped). Set a
+// The scene's media. The defaults are the files in public/media: the night desk clip (cleaned and looped) and its still,
+// used for both the hero and the night scene, so visitors download the video once. Set a
 // NEXT_PUBLIC_* variable to use another file, or set it to an empty value and the site draws a built-in stand-in instead
 // (a generated dusk or night plate), so the page always works. See README.md for the exact specs.
 export const assets = {
@@ -7,9 +8,9 @@ export const assets = {
   /** Looping hero video, muted, no audio, first frame = last frame. The host must send Access-Control-Allow-Origin: *. */
   video: process.env.NEXT_PUBLIC_HERO_VIDEO ?? "/media/hero.mp4",
   /** The same scene at night, behind the call to action and footer. */
-  nightPlate: process.env.NEXT_PUBLIC_NIGHT_PLATE ?? "/media/night.jpg",
+  nightPlate: process.env.NEXT_PUBLIC_NIGHT_PLATE ?? "/media/day.jpg",
   /** Optional looping video for the night scene (call to action and footer). Muted, no audio. Falls back to the night plate. */
-  nightVideo: process.env.NEXT_PUBLIC_NIGHT_VIDEO ?? "/media/night.mp4",
+  nightVideo: process.env.NEXT_PUBLIC_NIGHT_VIDEO ?? "/media/hero.mp4",
   /** A GLB 3D model that swims through the page. Must allow CORS. Its longest axis is its length, nose to tail. */
   model: process.env.NEXT_PUBLIC_MODEL_GLB ?? "",
   /** The built-in character used while there is no model file: "robot" (default), "rocket" or "plane". Try it with ?mascot=rocket. */

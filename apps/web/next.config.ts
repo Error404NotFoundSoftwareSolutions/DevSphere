@@ -1,9 +1,11 @@
 import type { NextConfig } from "next";
 
 const config: NextConfig = {
-  // A self-contained server build, small enough for a container (Cloud Run) or any Node host.
-  output: "standalone",
+  // A static export (plain files in out/): the page needs no server, so it is hosted for free on Firebase Hosting
+  // (https://devpilot.web.app). Run `npm run deploy` to publish.
+  output: "export",
   reactStrictMode: true,
+  images: { unoptimized: true },
 };
 
 export default config;

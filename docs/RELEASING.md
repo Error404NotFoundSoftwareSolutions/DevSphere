@@ -28,8 +28,8 @@ marked **pre-release** and only ship for Linux.
      --title "DevPilot 0.1.0 preview 2 (Linux)" --notes-file notes.md
    ```
 
-6. Point the website at it: set `release.tag` in `apps/web/lib/assets.ts` (or `NEXT_PUBLIC_RELEASE_TAG`), rebuild and
-   redeploy the site.
+6. Point the website at it: set `release.tag` in `apps/web/lib/assets.ts` (or `NEXT_PUBLIC_RELEASE_TAG`), then run
+   `npm run deploy` in `apps/web` to publish https://devpilot.web.app.
 7. Check that the download works without signing in:
    `curl -sIL https://github.com/Error404NotFoundSoftwareSolutions/devpilot-releases/releases/download/<tag>/devpilot-linux-x64.tar.gz`
    should end in `200`.

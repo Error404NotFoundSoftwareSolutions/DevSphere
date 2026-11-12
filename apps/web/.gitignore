@@ -7,3 +7,6 @@ next-env.d.ts
 
 # raw source media (large, may carry watermarks)
 /media-src/
+
+# Firebase deploy cache
+.firebase/

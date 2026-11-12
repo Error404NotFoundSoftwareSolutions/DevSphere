@@ -2,6 +2,12 @@
 
 Newest first. One entry per finished step: what changed, how it was checked, what is still missing. Plans and status live in `FEATURE_ROADMAP.md`.
 
+## 2026-11-12: website live at https://devpilot.web.app (free)
+- The landing page is a static export (`output: "export"`) on Firebase Hosting in `devpilot-app`, new site `devpilot`, instead of Cloud Run (owner asked for free or lowest cost, and the name devpilot; the devpilot names on Vercel, Netlify and Cloudflare Pages were taken). Config in `apps/web/firebase.json` and `.firebaserc`, hosting only; `npm run deploy` publishes. The Dockerfile is gone.
+- The hero and the night scene now share one video and one still (they were identical copies), so a first visit downloads about 2.5 MB. Media cached a week, scripts a year, the page revalidates every time; security headers (nosniff, no framing, referrer policy).
+- Checked live: page, video and still return 200, the backup day clip is not uploaded, no console errors in Chrome at 1440x900 and 390x844, the video plays, the robot shows, and the Download button requests the release file.
+- Cost: inside Firebase Hosting's free 10 GB storage and 10 GB a month of transfer (about 4,000 new visitors a month).
+
 ## 2026-11-12: first public Linux release (v0.1.0-preview.1)
 - The source repository is private, so visitors could not download release files from it. Releases now go to the public repository [devpilot-releases](https://github.com/Error404NotFoundSoftwareSolutions/devpilot-releases) (README with install steps, issues for feedback, no source code). The website's five "Download" buttons link straight to the file; "Get DevPilot", GitHub, Docs and Contact go to that public repository instead of the private one (they were 404 for visitors).
 - Built from DevSphere commit `e0e9d5a` with `tools/build_linux.sh` (Google sign-in secret compiled in, owner's choice; hosted service as the default). 365 MB `.tar.gz` that unpacks into `devpilot/`, with a SHA-256 file. Published as a pre-release: Linux only, not code-signed, no update feed (see `docs/RELEASE_CHECKLIST.md`). Version 0.1.0+1, `CHANGELOG.md` started, steps in `docs/RELEASING.md`.
