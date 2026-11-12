@@ -168,6 +168,25 @@ if [ -f "$ROOT_DIR/.env" ]; then
   set +a
 fi
 
+# On Linux, give the app its icon in the dock and the applications menu (a desktop entry, for this user only).
+# Wayland and GNOME take the icon from this entry, not from the program. Skipped when one is already installed.
+if [ "$TARGET_DEVICE" = "linux" ] && [ ! -f "$HOME/.local/share/applications/com.devpilot.app.desktop" ]; then
+  mkdir -p "$HOME/.local/share/applications"
+  cat > "$HOME/.local/share/applications/com.devpilot.app.desktop" <<DESKTOP
+[Desktop Entry]
+Type=Application
+Name=DevPilot
+Comment=Learn practical engineering skills with guided labs
+Exec=$ROOT_DIR/start.sh
+Path=$ROOT_DIR
+Icon=$ROOT_DIR/apps/desktop/linux/icons/devpilot-256.png
+Terminal=true
+Categories=Education;
+StartupWMClass=devpilot
+DESKTOP
+  update-desktop-database "$HOME/.local/share/applications" 2>/dev/null || true
+fi
+
 # 5. Launch the Complete Client Application
 echo ""
 echo "--> Launching DevSphere Client on target: $TARGET_DEVICE..."

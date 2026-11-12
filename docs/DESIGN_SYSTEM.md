@@ -54,6 +54,16 @@ SHOTS_DARK=1 SHOTS_DIR=/tmp/shots-dark flutter test test/shots/shots_test.dart
 ```
 Without `SHOTS_DIR` it does nothing. `SHOTS_ONLY=dashboard,catalog` limits the pages.
 
+## Depth and motion (effects kit, `lib/ui/fx.dart`)
+Drawn in code, no downloaded art. Each effect uses one controller and one painter, runs only in the real app, and stops in tests and with reduced motion (`fxOn`).
+- **AuroraBackdrop**: a slow moving mesh of coloured light behind hero areas (dashboard hero, the prompt card banner).
+- **IsoStack**: a floating isometric stack of glass layers, the hero illustration; the progress ring floats above it.
+- **TiltCard** (every `Panel(lift: true)`, for example lab cards): tilts in 3D towards the pointer with a moving glare and a deeper shadow.
+- **GlowFrame**: a light that travels around the prompt card's border.
+- **Journey map** (learning path): the steps as a winding road; finished stretches are green, the current step pulses (`PulseRing`), locked steps are greyed.
+- **Confetti** when a step is finished; **ShimmerBox** placeholders while a step is being prepared.
+Rules: effects decorate, they never carry meaning (every state also has text or an icon); keep them subtle in dark mode; never run them in a list of many items.
+
 ## Sign-in screen
 Split layout from 900 px wide: a deep-blue brand panel (slides, each with a small product preview) and the form. Below 900 px only the form with a small brand header. Fields use a floating label, a leading icon and a focus ring; errors are an animated banner; dialogs for terms and password reset. Everything uses the tokens, so it works in light and dark. Keys the tests use start with `auth_`.
 

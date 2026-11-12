@@ -13,7 +13,6 @@ import '../../ui/kit.dart';
 import '../../ui/motion.dart';
 import '../dashboard/dashboard_data.dart';
 import 'activity_table.dart';
-import '../learn/path_builder.dart';
 import 'roadmap_planner.dart';
 import 'shared.dart';
 
@@ -30,9 +29,7 @@ class PathsScreen extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Reveal(child: PathBuilderCard()),
-          const SizedBox(height: BL.space8),
-          const Reveal(index: 1, child: RoadmapPlanner()),
+          const Reveal(child: RoadmapPlanner()),
           const SizedBox(height: BL.space12),
           for (var i = 0; i < SampleData.paths.length; i++) ...[
             Reveal(

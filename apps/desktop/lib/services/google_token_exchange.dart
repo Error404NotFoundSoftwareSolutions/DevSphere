@@ -43,12 +43,12 @@ class GoogleTokenExchange {
   final http.Client _client;
 
   /// Google's token endpoint wants a client secret for this client even with PKCE. It is read from the
-  /// DEVPILOT_GOOGLE_CLIENT_SECRET environment variable (kept in the git-ignored .env), never from the source.
+  /// DEVPILOT_GOOGLE_CLIENT_SECRET environment variable (kept in the git-ignored .env), or compiled in by the release build script, never from the source.
   GoogleTokenExchange({http.Client? client, String? clientSecret})
       : _client = client ?? http.Client(),
         _clientSecret = clientSecret ??
             Platform.environment['DEVPILOT_GOOGLE_CLIENT_SECRET'] ??
-            '';
+            const String.fromEnvironment('DEVPILOT_GOOGLE_CLIENT_SECRET');
 
   final String _clientSecret;
 

@@ -5,6 +5,8 @@
 // checks all passed in VS Code. The video lives in its own tab and never in a scrolling area, because the native
 // player window reports what was really watched.
 
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -13,6 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../api.dart';
 import '../../data/user_data.dart';
 import '../../services/devpilot_api.dart';
+import '../../ui/fx.dart';
 import '../../ui/kit.dart';
 import '../../ui/simple_markdown.dart';
 import '../../worker/worker_client.dart';
@@ -311,61 +314,20 @@ class _LearnScreenState extends ConsumerState<LearnScreen> {
               width: 300,
               decoration: BoxDecoration(
                   border: Border(right: BorderSide(color: BL.border))),
-              child:
-                  ListView(padding: const EdgeInsets.all(BL.space3), children: [
-                for (var i = 0; i < p.steps.length; i++)
-                  _stepTile(context, p, i, selected, done),
-              ]),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(
+                    BL.space2, BL.space3, BL.space2, BL.space6),
+                child: _Journey(
+                    path: p,
+                    selected: selected,
+                    labDone: done,
+                    onSelect: _select),
+              ),
             ),
             Expanded(child: _stepPanel(context, p, selected, done)),
           ]),
         ),
       ],
-    );
-  }
-
-  Widget _stepTile(BuildContext context, StudyPath p, int i, int selected,
-      bool Function(String) done) {
-    final text = Theme.of(context).textTheme;
-    final complete = p.stepComplete(i, done);
-    final open = p.unlocked(i, done);
-    final isSel = i == selected;
-    final icon = complete
-        ? Icon(Icons.check_circle, color: BL.success, size: 22)
-        : open
-            ? Icon(Icons.play_circle_fill, color: BL.primary, size: 22)
-            : Icon(Icons.lock_outline, color: BL.textDisabled, size: 20);
-    return Padding(
-      padding: const EdgeInsets.only(bottom: BL.space2),
-      child: InkWell(
-        key: Key('learn-step-${p.steps[i].id}'),
-        borderRadius: BorderRadius.circular(BL.radiusMd),
-        onTap: () => _select(i),
-        child: Container(
-          padding: const EdgeInsets.all(BL.space3),
-          decoration: BoxDecoration(
-            color: isSel ? BL.selected : null,
-            borderRadius: BorderRadius.circular(BL.radiusMd),
-          ),
-          child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            icon,
-            const SizedBox(width: BL.space3),
-            Expanded(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Step ${i + 1}',
-                        style: BL.mono(size: 11, color: BL.textSecondary)),
-                    Text(p.steps[i].title,
-                        style: text.titleSmall?.copyWith(
-                            color: open ? BL.textPrimary : BL.textDisabled)),
-                    Text('${p.steps[i].minutes} min',
-                        style: text.bodySmall?.copyWith(fontSize: 12)),
-                  ]),
-            ),
-          ]),
-        ),
-      ),
     );
   }
 
@@ -398,7 +360,25 @@ class _LearnScreenState extends ConsumerState<LearnScreen> {
           padding: const EdgeInsets.all(BL.space8),
           child: Column(mainAxisSize: MainAxisSize.min, children: [
             if (err == null) ...[
-              const CircularProgressIndicator(),
+              const SizedBox(
+                  width: 420,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ShimmerBox(height: 22, width: 260),
+                        SizedBox(height: 12),
+                        ShimmerBox(height: 14),
+                        SizedBox(height: 8),
+                        ShimmerBox(height: 14),
+                        SizedBox(height: 8),
+                        ShimmerBox(height: 14, width: 320),
+                        SizedBox(height: 20),
+                        Row(children: [
+                          ShimmerBox(height: 90, width: 200, radius: 12),
+                          SizedBox(width: 12),
+                          ShimmerBox(height: 90, width: 200, radius: 12)
+                        ]),
+                      ])),
               const SizedBox(height: BL.space4),
               Text('Preparing "${s.title}"',
                   key: const Key('learn-building'), style: text.titleMedium),
@@ -453,31 +433,34 @@ class _LearnScreenState extends ConsumerState<LearnScreen> {
       padding: const EdgeInsets.fromLTRB(BL.space6, BL.space4, BL.space6, 0),
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
         if (complete)
-          Container(
-            key: const Key('learn-step-complete'),
-            margin: const EdgeInsets.only(bottom: BL.space3),
-            padding: const EdgeInsets.all(BL.space3),
-            decoration: BoxDecoration(
-                color: BL.success.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(BL.radiusMd),
-                border: Border.all(color: BL.success.withValues(alpha: 0.4))),
-            child: Row(children: [
-              Icon(Icons.celebration_outlined, color: BL.success),
-              const SizedBox(width: BL.space3),
-              Expanded(
-                child: Text(
-                    i == p.steps.length - 1
-                        ? 'You finished the whole path. Well done!'
-                        : 'Step complete. The next step is open.',
-                    style: text.titleSmall),
-              ),
-              if (i < p.steps.length - 1)
-                FilledButton(
-                    key: const Key('learn-next'),
-                    onPressed: () => _select(i + 1),
-                    child: const Text('Next step')),
-            ]),
-          ),
+          Stack(clipBehavior: Clip.none, children: [
+            Container(
+              key: const Key('learn-step-complete'),
+              margin: const EdgeInsets.only(bottom: BL.space3),
+              padding: const EdgeInsets.all(BL.space3),
+              decoration: BoxDecoration(
+                  color: BL.success.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(BL.radiusMd),
+                  border: Border.all(color: BL.success.withValues(alpha: 0.4))),
+              child: Row(children: [
+                Icon(Icons.celebration_outlined, color: BL.success),
+                const SizedBox(width: BL.space3),
+                Expanded(
+                  child: Text(
+                      i == p.steps.length - 1
+                          ? 'You finished the whole path. Well done!'
+                          : 'Step complete. The next step is open.',
+                      style: text.titleSmall),
+                ),
+                if (i < p.steps.length - 1)
+                  FilledButton(
+                      key: const Key('learn-next'),
+                      onPressed: () => _select(i + 1),
+                      child: const Text('Next step')),
+              ]),
+            ),
+            const Positioned.fill(child: Confetti()),
+          ]),
         Text(s.title, style: text.headlineSmall),
         const SizedBox(height: 2),
         Text(s.objective, style: text.bodySmall),
@@ -859,4 +842,195 @@ class _LearnScreenState extends ConsumerState<LearnScreen> {
       ),
     );
   }
+}
+
+/// The steps as a winding road: nodes on a curve, a pulsing marker on the current step, locked steps greyed out.
+class _Journey extends StatelessWidget {
+  const _Journey(
+      {required this.path,
+      required this.selected,
+      required this.labDone,
+      required this.onSelect});
+
+  final StudyPath path;
+  final int selected;
+  final bool Function(String) labDone;
+  final void Function(int) onSelect;
+
+  static const rowH = 108.0;
+  static const nodeD = 46.0;
+
+  double _x(int i) => 58 + 20 * math.sin(i * 1.25);
+
+  @override
+  Widget build(BuildContext context) {
+    final text = Theme.of(context).textTheme;
+    final n = path.steps.length;
+    final current = path.currentIndex(labDone);
+    final complete = [
+      for (var i = 0; i < n; i++) path.stepComplete(i, labDone)
+    ];
+    return LayoutBuilder(builder: (context, box) {
+      final w = box.maxWidth;
+      return SizedBox(
+        width: w,
+        height: n * rowH,
+        child: Stack(children: [
+          Positioned.fill(
+            child: CustomPaint(
+                painter:
+                    _RoadPainter(n: n, x: _x, rowH: rowH, complete: complete)),
+          ),
+          for (var i = 0; i < n; i++)
+            Positioned(
+              left: _x(i) - nodeD / 2 - 10,
+              top: i * rowH + 8,
+              width: w - (_x(i) - nodeD / 2 - 10) - 4,
+              height: rowH - 16,
+              child: InkWell(
+                key: Key('learn-step-${path.steps[i].id}'),
+                borderRadius: BorderRadius.circular(BL.radiusMd),
+                onTap: () => onSelect(i),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: i == selected
+                        ? BL.selected.withValues(alpha: 0.7)
+                        : null,
+                    borderRadius: BorderRadius.circular(BL.radiusMd),
+                  ),
+                  padding: const EdgeInsets.only(left: 10, right: 8),
+                  child: Row(children: [
+                    _node(i, complete[i], i == current,
+                        path.unlocked(i, labDone)),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                                'STEP ${i + 1}  ·  ${path.steps[i].minutes} MIN',
+                                style: BL.mono(
+                                    size: 10.5,
+                                    color: BL.textSecondary,
+                                    spacing: 0.6)),
+                            const SizedBox(height: 2),
+                            Text(path.steps[i].title,
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
+                                style: text.titleSmall?.copyWith(
+                                    color: path.unlocked(i, labDone)
+                                        ? BL.textPrimary
+                                        : BL.textDisabled,
+                                    height: 1.25)),
+                          ]),
+                    ),
+                  ]),
+                ),
+              ),
+            ),
+        ]),
+      );
+    });
+  }
+
+  Widget _node(int i, bool done, bool isCurrent, bool open) {
+    final Widget core = Container(
+      width: nodeD,
+      height: nodeD,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: done
+            ? LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [BL.success, BL.teal])
+            : open
+                ? LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [BL.blue, BL.violet])
+                : null,
+        color: open || done ? null : BL.surfaceMuted,
+        border: Border.all(
+            color: open || done
+                ? Colors.white.withValues(alpha: 0.9)
+                : BL.borderStrong,
+            width: 2.5),
+        boxShadow: open || done
+            ? [
+                BoxShadow(
+                    color: (done ? BL.success : BL.blue).withValues(alpha: 0.4),
+                    blurRadius: 14,
+                    offset: const Offset(0, 5))
+              ]
+            : null,
+      ),
+      child: Icon(
+        done
+            ? Icons.check_rounded
+            : (open ? Icons.play_arrow_rounded : Icons.lock_outline),
+        color: open || done ? Colors.white : BL.textDisabled,
+        size: done || open ? 26 : 20,
+      ),
+    );
+    if (!isCurrent) return SizedBox(width: nodeD, child: core);
+    return SizedBox(
+      width: nodeD,
+      height: nodeD,
+      child: OverflowBox(
+        maxWidth: nodeD * 1.9,
+        maxHeight: nodeD * 1.9,
+        child: PulseRing(color: BL.blue, size: nodeD, child: core),
+      ),
+    );
+  }
+}
+
+class _RoadPainter extends CustomPainter {
+  _RoadPainter(
+      {required this.n,
+      required this.x,
+      required this.rowH,
+      required this.complete});
+  final int n;
+  final double Function(int) x;
+  final double rowH;
+  final List<bool> complete;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Offset c(int i) => Offset(x(i), i * rowH + rowH / 2);
+    for (var i = 0; i < n - 1; i++) {
+      final a = c(i), b = c(i + 1);
+      final path = Path()
+        ..moveTo(a.dx, a.dy)
+        ..cubicTo(
+            a.dx, a.dy + rowH * 0.55, b.dx, b.dy - rowH * 0.55, b.dx, b.dy);
+      final done = complete[i];
+      canvas.drawPath(
+        path,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeCap = StrokeCap.round
+          ..strokeWidth = 7
+          ..color = done ? BL.success.withValues(alpha: 0.9) : BL.border,
+      );
+      if (!done) {
+        final metric = path.computeMetrics().first;
+        final dash = Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeCap = StrokeCap.round
+          ..strokeWidth = 2
+          ..color = BL.surface;
+        for (var d = 6.0; d < metric.length; d += 14) {
+          canvas.drawPath(metric.extractPath(d, d + 6), dash);
+        }
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_RoadPainter old) =>
+      old.complete != complete || old.n != n;
 }

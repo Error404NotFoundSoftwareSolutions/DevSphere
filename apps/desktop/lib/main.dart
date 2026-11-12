@@ -23,6 +23,11 @@ import 'perf/startup_timer.dart';
 import 'worker/process_worker_client.dart';
 import 'worker/worker_locator.dart';
 
+/// The service address when DEVPILOT_API_URL is not set. Release builds are made with
+/// --dart-define=DEVPILOT_DEFAULT_API_URL=<the hosted service>; development uses the local one.
+const defaultApiUrl = String.fromEnvironment('DEVPILOT_DEFAULT_API_URL',
+    defaultValue: 'http://127.0.0.1:8787');
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   StartupTimer.markAppStart();
@@ -48,11 +53,10 @@ Future<void> main() async {
       userStoreProvider.overrideWithValue(
           FileUserStore.defaultLocation(Platform.environment)),
       serviceHealthCheckProvider.overrideWithValue(() => checkService(
-          Platform.environment['DEVPILOT_API_URL'] ?? 'http://127.0.0.1:8787')),
+          Platform.environment['DEVPILOT_API_URL'] ?? defaultApiUrl)),
       playerLauncherProvider.overrideWithValue(openPlayerWindow),
       devPilotApiProvider.overrideWithValue(HttpDevPilotApi(
-        baseUrl:
-            Platform.environment['DEVPILOT_API_URL'] ?? 'http://127.0.0.1:8787',
+        baseUrl: Platform.environment['DEVPILOT_API_URL'] ?? defaultApiUrl,
         token: () => SessionStore.app.readToken(),
       )),
     ],

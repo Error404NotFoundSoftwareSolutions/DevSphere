@@ -6,6 +6,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:ui/ui.dart';
+import 'fx.dart';
 import 'motion.dart';
 
 enum Tone { accent, muted, warn, bad, info, plain }
@@ -164,7 +165,7 @@ class Panel extends StatelessWidget {
         ),
       ),
     );
-    if (lift) card = HoverLift(radius: BL.radiusCard, lift: 2, child: card);
+    if (lift) card = TiltCard(radius: BL.radiusCard, child: card);
     return card;
   }
 }
