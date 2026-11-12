@@ -35,7 +35,7 @@ const PHONE: Record<Key, Partial<Pose>> = {
 const CHAR: Record<Key, Pose> = {
   hero: { x: 0.74, y: 0.4, s: 0.3, yaw: 0, pitch: 0, roll: 0 },
   statement: { x: 0.84, y: -0.4, s: 0.26, yaw: 0, pitch: 0, roll: 0 },
-  dash: { x: 0.8, y: -0.78, s: 0.17, yaw: 0, pitch: 0, roll: 0 },
+  dash: { x: 0.935, y: -0.05, s: 0.13, yaw: 0, pitch: 0, roll: 0 },
   packs: { x: 0.02, y: 0.2, s: 0.26, yaw: 0, pitch: 0, roll: 0 },
   uses: { x: 0.78, y: -0.14, s: 0.24, yaw: 0, pitch: 0, roll: 0 },
   end: { x: -0.8, y: -0.05, s: 0.3, yaw: 0, pitch: 0, roll: 0 },

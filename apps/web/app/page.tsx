@@ -4,7 +4,7 @@ import Reveal from "@/components/Reveal";
 import Typing from "@/components/Typing";
 import LiveStatus from "@/components/LiveStatus";
 import { links } from "@/lib/assets";
-import { areaChart, series, sparkline } from "@/lib/charts";
+import AppShowcase from "@/components/AppShowcase";
 
 // ---------------------------------------------------------------------------------------------------------------
 // small pieces
@@ -48,124 +48,6 @@ const BID = `$ devpilot check
 
 Fix the file, then run the check again.`;
 
-// ---------------------------------------------------------------------------------------------------------------
-// the dashboard preview (sample data, drawn as SVG)
-// ---------------------------------------------------------------------------------------------------------------
-
-function Dashboard() {
-  const kpis = [
-    { label: "Checks passed", value: "5/5", chip: "+3", color: "#9b8cff", s: series(14, 3, 20, 7, 10), up: true },
-    { label: "Labs completed", value: "1", chip: "+1", color: "#ff8fd8", s: series(14, 7, 18, 6, 9), up: true },
-    { label: "Streak", value: "1 wk", chip: "new", color: "#7fd6ff", s: series(14, 11, 22, 6, -6), up: false },
-    { label: "Skills practised", value: "3", chip: "+2", color: "#7cf0bd", s: series(14, 5, 12, 4, 14), up: true },
-  ];
-  const a = series(30, 2, 90, 26, 60), b = series(30, 9, 70, 22, 30);
-  const ch = areaChart(a, b);
-  const bars = [
-    ["Python", 38, "#9b8cff"], ["Git", 27, "#7fd6ff"], ["Testing", 19, "#ff8fd8"], ["Debugging", 10, "#ffc27a"], ["Code review", 6, "#7cf0bd"],
-  ] as const;
-  const rows = [
-    ["Hello, Python", "Beginner", "45 min", "100%", "Practice complete", true],
-    ["Your first open-source contribution", "Beginner", "2.5 h", "50%", "In progress", true],
-    ["Git: your first commit", "Beginner", "30 min", "n/a", "Planned", false],
-  ] as const;
-  return (
-    <div className="dash reveal" id="dash" aria-label="A preview of the DevPilot app with sample data">
-      <div className="dash-top">
-        <span className="mini-logo"><i className="orb orb-s" />DevPilot</span>
-        <span className="crumb">Paths  /  <b>Git and pull requests</b></span>
-        <span className="grow" />
-        <span className="search">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true"><circle cx="7" cy="7" r="4.5" /><path d="M10.5 10.5L14 14" /></svg>
-          Search labs and pages <kbd>⌘K</kbd>
-        </span>
-        <span className="chip">Sample data</span>
-        <span className="avatar">AR</span>
-      </div>
-      <div className="dash-body">
-        <aside className="side">
-          <div className="grp">WORKSPACE</div>
-          <div className="item active"><Mini d="M2 2h5v5H2zM9 2h5v3H9zM9 7h5v7H9zM2 9h5v5H2z" />Dashboard</div>
-          <div className="item"><Mini d="M8 2a6 6 0 100 12A6 6 0 008 2zM10.5 5.5L9 9 5.5 10.5 7 7z" />Catalog</div>
-          <div className="item"><Mini d="M3 3v4a3 3 0 003 3h4M13 13V9" />Paths <span className="n">1</span></div>
-          <div className="item"><Mini d="M8 2l1.8 3.7 4 .6-2.9 2.8.7 4L8 11.2 4.4 13l.7-4L2.2 6.3l4-.6z" />Credentials</div>
-          <div className="item"><Mini d="M2 4h5l1 1.5h6V13H2z" />Workspaces</div>
-          <div className="grp g2">LIBRARY</div>
-          <div className="item"><Mini d="M3 3h10v10H3z" />Labs <span className="n">2</span></div>
-          <div className="item"><Mini d="M2 8l4 4 8-8" />Roadmaps</div>
-          <div className="item"><Mini d="M3 3h10v7H8l-3 3v-3H3z" />Interview practice</div>
-          <div className="item"><Mini d="M8 2v12M2 8h12" />Coach</div>
-        </aside>
-        <div className="main">
-          <div className="main-head">
-            <h4>Your week</h4>
-            <span className="chip up">▲ 5 checks this week</span>
-            <span className="grow" />
-            <span className="seg"><i>7D</i><i className="on">30D</i><i>90D</i></span>
-            <span className="smallbtn">+ New path</span>
-          </div>
-          <div className="kpis">
-            {kpis.map((k) => {
-              const sp = sparkline(k.s);
-              return (
-                <div className="kpi" key={k.label}>
-                  <div className="kl">{k.label}</div>
-                  <div className="kv"><span>{k.value}</span><span className={`chip ${k.up ? "up" : ""}`}>{k.chip}</span></div>
-                  <svg viewBox="0 0 200 30" preserveAspectRatio="none" className="spark" aria-hidden="true">
-                    <defs><linearGradient id={`sg-${k.label.replace(/\W+/g, "-")}`} x1="0" x2="0" y1="0" y2="1"><stop offset="0" stopColor={k.color} stopOpacity=".35" /><stop offset="1" stopColor={k.color} stopOpacity="0" /></linearGradient></defs>
-                    <path d={sp.area} fill={`url(#sg-${k.label.replace(/\W+/g, "-")})`} className="fillin" />
-                    <path d={sp.line} fill="none" stroke={k.color} strokeWidth="1.6" vectorEffect="non-scaling-stroke" pathLength={1} className="draw" />
-                  </svg>
-                </div>
-              );
-            })}
-          </div>
-          <div className="charts">
-            <div className="pane">
-              <div className="ph">Checks passed per day <span className="legend"><i style={{ background: "#9b8cff" }} />Checks <i style={{ background: "#ff8fd8" }} />Labs opened</span></div>
-              <svg viewBox="0 0 600 190" preserveAspectRatio="none" className="area" aria-hidden="true">
-                {[0, 1, 2, 3, 4].map((i) => <line key={i} x1="0" x2="600" y1={12 + i * 41.5} y2={12 + i * 41.5} stroke="rgba(190,170,255,.08)" />)}
-                <defs>
-                  <linearGradient id="ga" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stopColor="#9b8cff" stopOpacity=".42" /><stop offset="1" stopColor="#9b8cff" stopOpacity="0" /></linearGradient>
-                  <linearGradient id="gb" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stopColor="#ff8fd8" stopOpacity=".22" /><stop offset="1" stopColor="#ff8fd8" stopOpacity="0" /></linearGradient>
-                </defs>
-                <path d={ch.aa} fill="url(#ga)" className="fillin" />
-                <path d={ch.ab} fill="url(#gb)" className="fillin" />
-                <path d={ch.la} fill="none" stroke="#9b8cff" strokeWidth="2" vectorEffect="non-scaling-stroke" pathLength={1} className="draw" />
-                <path d={ch.lb} fill="none" stroke="#ff8fd8" strokeWidth="1.6" vectorEffect="non-scaling-stroke" pathLength={1} className="draw d2" />
-                <g className="fillin">
-                  <line x1={ch.marker[0]} x2={ch.marker[0]} y1="10" y2="178" stroke="rgba(220,210,255,.25)" strokeDasharray="3 4" />
-                  <circle cx={ch.marker[0]} cy={ch.marker[1]} r="4.5" fill="#1a1150" stroke="#b9adff" strokeWidth="2" />
-                </g>
-              </svg>
-            </div>
-            <div className="pane">
-              <div className="ph">Skills practised</div>
-              <div className="bars">
-                {bars.map(([name, v, c]) => (
-                  <div key={name}>
-                    <div className="bl"><span>{name}</span><span className="mono">{v}%</span></div>
-                    <div className="track"><div className="barfill" style={{ ["--w" as string]: `${(v / 38) * 100}%`, background: `linear-gradient(90deg, ${c}, ${c}aa)` }} /></div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className="table">
-            <div className="tr th"><span>Lab</span><span>Level</span><span>Time</span><span>Progress</span><span>Status</span></div>
-            {rows.map(([name, level, time, prog, status, live]) => (
-              <div className="tr" key={name}>
-                <b>{name}</b><span>{level}</span><span className="mono">{time}</span><span className="mono">{prog}</span>
-                <span><span className={`chip ${live ? "live" : ""}`}>{status}</span></span>
-              </div>
-            ))}
-          </div>
-          <p className="sample-note">Sample data, shown for illustration.</p>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 // ---------------------------------------------------------------------------------------------------------------
 // page
@@ -231,7 +113,7 @@ export default function Page() {
             <div><strong>100%</strong><span>of your lab code runs<br />on your own computer</span></div>
             <div><strong>0</strong><span>finished answers from the<br />tutor: hints only</span></div>
           </div>
-          <Dashboard />
+          <AppShowcase />
         </section>
 
         {/* ------------------------------------------------------------------------------------------ how it works */}
