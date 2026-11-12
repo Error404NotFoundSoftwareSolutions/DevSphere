@@ -319,7 +319,3 @@ main { position: relative; z-index: 1; }
   .appshow .shot-cap { flex-direction: column; gap: 4px; font-size: 13px; padding: 12px 14px; }
 }
 @media (prefers-reduced-motion: reduce) { .appshow .shot img { transition: none; } }
-/* the whole app window (tabs, screenshot, caption) fits on screen below the fixed nav */
-@media (min-width: 821px) {
-  .appshow { max-width: min(calc(var(--u) * 1220), calc((100vh - 300px - var(--u) * 110) * 1.651)); }
-}
