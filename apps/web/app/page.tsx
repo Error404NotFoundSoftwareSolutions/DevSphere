@@ -189,7 +189,7 @@ export default function Page() {
         <div className="right">
           <a href={links.docs} className="login">Docs</a>
           <a href={links.github} className="pill glass">GitHub</a>
-          <a href={links.releases} className="pill dark">Get DevPilot — it&apos;s Free</a>
+          <a href={links.releases} className="pill dark">Get DevPilot</a>
         </div>
       </nav>
 
@@ -316,13 +316,13 @@ export default function Page() {
           <div className="cta glass reveal">
             <h2 className="h-cta">Start Learning<br /><em className="serif">Real Tools</em> Now!</h2>
             <p className="lede" style={{ maxWidth: "calc(var(--u) * 540)", margin: "calc(var(--u) * 20) auto 0" }}>
-              Free to start. Your first guided lab can be open in VS Code within minutes.
+              Download DevPilot and your first guided lab can be open in VS Code within minutes.
             </p>
             <div className="btnrow">
               <a className="btn fill" href={links.download}>Download for Linux</a>
               <a className="btn ghost" href={links.github}>View on GitHub</a>
             </div>
-            <p className="note">No card needed  ·  Labs run on your computer  ·  Hints, not answers</p>
+            <p className="note">Labs run on your computer  ·  Hints, not answers</p>
           </div>
 
           <footer className="foot">
