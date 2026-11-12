@@ -112,6 +112,67 @@ Future<MemoryUserStore> seeded() async {
           createdAt: '2026-11-11T10:00:00')
     ],
   );
+  final outline = {
+    'title': 'Git and pull requests',
+    'summary':
+        'For beginners. You will branch, commit, merge and open a pull request.',
+    'steps': [
+      for (final t in [
+        'Commits and history',
+        'Branches',
+        'Merging and conflicts',
+        'Pull requests',
+        'Review and ship'
+      ])
+        {
+          'id': t.toLowerCase().replaceAll(' ', '-'),
+          'title': t,
+          'objective': 'You can use ${t.toLowerCase()}.',
+          'skills': ['Git'],
+          'minutes': 45
+        }
+    ],
+  };
+  var path = StudyPath.fromApi(outline,
+      id: 'p1700000000000',
+      goal: 'git',
+      level: 'beginner',
+      language: 'en',
+      now: now)!;
+  final detail = StepDetail.parse({
+    'intro_md':
+        'A **branch** is a separate line of work.\n\n- Create one with `git switch -c`\n- Commit on it, then merge it back',
+    'key_points': ['Branches are cheap', 'Switch often', 'Merge when done'],
+    'videos': [
+      {
+        'video_id': 'e9lnsKot_SQ',
+        'why': 'See a branch made',
+        'title': 'How Git Works: Explained in 4 Minutes',
+        'channel': 'ByteByteGo',
+        'duration_s': 258
+      }
+    ],
+    'videos_available': true,
+    'quiz': [
+      for (var i = 0; i < 3; i++)
+        {
+          'question': 'Question $i?',
+          'options': ['a', 'b', 'c'],
+          'answer_index': 0,
+          'explain': 'Because.'
+        }
+    ],
+    'lab': {
+      'kind': 'catalog',
+      'lab_id': 'python-hello-001',
+      'title': 'Hello, Python'
+    },
+  })!;
+  path = path.withStep(
+      0,
+      path.steps[0].copyWith(
+          detail: detail, watched: {'e9lnsKot_SQ': 0.9}, quizBest: 3));
+  d = d.copyWith(learningPaths: [path]);
   await store.save(d);
   return store;
 }
@@ -132,6 +193,7 @@ void main() {
     'course': '/course/oss-first-contribution-001',
     'lab': '/lab/oss-first-contribution-001',
     'landing': '/landing',
+    'learn': '/learn/p1700000000000',
     'signin': '/',
     'signin_login': '/?mode=signin',
   };

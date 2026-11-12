@@ -7,6 +7,7 @@ import 'package:desktop/data/user_data.dart';
 import 'package:desktop/data/user_store.dart';
 import 'package:desktop/features/auth/auth_session.dart';
 import 'package:desktop/features/learn/video_player.dart';
+import 'package:desktop/features/pages/roadmap_planner.dart' show inferKind;
 import 'package:desktop/router.dart';
 import 'package:desktop/services/devpilot_api.dart';
 import 'package:desktop/worker/worker_client.dart';
@@ -261,7 +262,7 @@ void main() {
     final api = PathApi();
     final store = await pumpApp(tester, api);
     await tester.enterText(
-        find.byKey(const Key('path-goal')), 'understand git branches');
+        find.byKey(const Key('planner-text')), 'understand git branches');
     await tester.tap(find.byKey(const Key('path-create')));
     await tester.pumpAndSettle();
     expect(api.created.single['goal'], 'understand git branches');
@@ -387,5 +388,37 @@ void main() {
         uid: 'bob-uid', email: 'bob@example.com', displayName: 'Bob'));
     await tester.pumpAndSettle();
     expect(find.byKey(const Key('my-path-p1700000000000')), findsNothing);
+  });
+
+  testWidgets(
+      'TC-LP-15 one card, one text box: paths, roadmaps and interview questions share it',
+      (tester) async {
+    final api = PathApi();
+    await pumpApp(tester, api);
+    expect(find.byKey(const Key('roadmap-planner')), findsOneWidget);
+    expect(find.byKey(const Key('planner-text')), findsOneWidget,
+        reason: 'a single text box');
+    expect(find.byKey(const Key('path-create')), findsOneWidget);
+    expect(find.byKey(const Key('planner-submit')), findsOneWidget);
+    expect(find.byKey(const Key('planner-interview')), findsOneWidget);
+    expect(find.text('Learn anything, step by step'), findsNothing,
+        reason: 'the second card is gone');
+    await tester.enterText(
+        find.byKey(const Key('planner-text')), 'understand git branches');
+    await tester.pump();
+    expect(find.text('Treated as a topic or goal.'), findsOneWidget);
+    await tester.enterText(
+        find.byKey(const Key('planner-text')), 'Junior developer\nPython, Git');
+    await tester.pump();
+    expect(find.text('Treated as a job description.'), findsOneWidget);
+  });
+
+  test(
+      'TC-LP-16 short single-line text is a topic; long or multi-line text is a job description',
+      () {
+    expect(inferKind('learn git'), 'topic');
+    expect(inferKind('Backend developer\nPython'), 'job_description');
+    expect(inferKind('x' * 241), 'job_description');
+    expect(inferKind('  learn git  '), 'topic');
   });
 }

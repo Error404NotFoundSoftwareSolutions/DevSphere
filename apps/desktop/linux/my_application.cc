@@ -49,6 +49,19 @@ static void my_application_activate(GApplication* application) {
   }
 
   gtk_window_set_default_size(window, 1280, 720);
+
+  // The window icon: the DevPilot logo, shipped with the app's assets (works in development and in the package).
+  {
+    g_autofree gchar* exe = g_file_read_link("/proc/self/exe", nullptr);
+    if (exe != nullptr) {
+      g_autofree gchar* dir = g_path_get_dirname(exe);
+      g_autofree gchar* icon = g_build_filename(dir, "data", "flutter_assets", "assets", "images", "app_icon.png", nullptr);
+      g_autoptr(GError) icon_error = nullptr;
+      if (!gtk_window_set_icon_from_file(window, icon, &icon_error)) {
+        g_warning("DevPilot: could not load the window icon %s: %s", icon, icon_error ? icon_error->message : "unknown");
+      }
+    }
+  }
   gtk_widget_show(GTK_WIDGET(window));
 
   g_autoptr(FlDartProject) project = fl_dart_project_new();

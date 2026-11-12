@@ -188,8 +188,8 @@ def generate(body: LabRequest, user: User = Depends(current_user)) -> dict:
         raise _err(
             503,
             "verifier_unavailable",
-            "Labs cannot be checked right now, so none was created.",
-            "Try again later.",
+            "The online service cannot write new labs yet, because it has no safe place to check them.",
+            "Use the labs in the catalogue for now. Writing labs works when DevPilot runs its own service (./start.sh).",
         ) from e
     except LabNotVerified as e:
         raise _err(

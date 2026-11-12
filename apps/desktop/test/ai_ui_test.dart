@@ -192,12 +192,12 @@ void main() {
     await pump(tester, '/paths', MemoryUserStore(), api);
     expect(find.byKey(const Key('saved-roadmap')), findsNothing);
     await tester.enterText(find.byKey(const Key('planner-text')),
-        'Junior backend developer. Python, Git, FastAPI.');
+        'Junior backend developer.\nPython, Git, FastAPI.');
     await tester.tap(find.byKey(const Key('planner-submit')));
     await tester.pumpAndSettle();
     expect(api.lastRoadmapRequest, {
       'kind': 'job_description',
-      'text': 'Junior backend developer. Python, Git, FastAPI.',
+      'text': 'Junior backend developer.\nPython, Git, FastAPI.',
       'level': 'beginner'
     });
     expect(find.byKey(const Key('saved-roadmap')), findsOneWidget);
@@ -243,8 +243,7 @@ void main() {
     await pump(tester, '/paths', MemoryUserStore(), api);
     await tester.tap(find.byKey(const Key('planner-submit')));
     await tester.pumpAndSettle();
-    expect(
-        find.textContaining('Paste a job description first'), findsOneWidget);
+    expect(find.textContaining('Type what you want to learn'), findsOneWidget);
     expect(api.calls, isEmpty, reason: 'nothing is sent for empty input');
     await tester.enterText(find.byKey(const Key('planner-text')), 'x');
     await tester.tap(find.byKey(const Key('planner-submit')));
@@ -356,12 +355,12 @@ void main() {
     final api = FakeApi();
     await pump(tester, '/paths', MemoryUserStore(), api);
     await tester.enterText(
-        find.byKey(const Key('planner-text')), 'Python backend job');
+        find.byKey(const Key('planner-text')), 'Python backend job\nGit, APIs');
     await tester.tap(find.byKey(const Key('planner-interview')));
     await tester.pumpAndSettle();
     expect(api.lastInterviewRequest, {
       'kind': 'job_description',
-      'text': 'Python backend job',
+      'text': 'Python backend job\nGit, APIs',
       'level': 'beginner'
     });
     expect(api.calls, ['interview'], reason: 'the roadmap is not requested');
@@ -409,8 +408,7 @@ void main() {
     await pump(tester, '/paths', MemoryUserStore(), api);
     await tester.tap(find.byKey(const Key('planner-interview')));
     await tester.pumpAndSettle();
-    expect(
-        find.textContaining('Paste a job description first'), findsOneWidget);
+    expect(find.textContaining('Type what you want to learn'), findsOneWidget);
     expect(api.calls, isEmpty);
     await tester.enterText(find.byKey(const Key('planner-text')), 'x');
     await tester.tap(find.byKey(const Key('planner-interview')));

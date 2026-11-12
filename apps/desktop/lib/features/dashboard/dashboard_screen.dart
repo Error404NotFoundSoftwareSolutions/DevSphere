@@ -10,6 +10,7 @@ import 'package:go_router/go_router.dart';
 import 'package:ui/ui.dart';
 import '../../api.dart';
 import '../../data/user_data.dart';
+import '../../ui/fx.dart';
 import '../../ui/kit.dart';
 import '../../ui/motion.dart';
 import '../auth/auth_session.dart';
@@ -165,17 +166,11 @@ class _Resume extends StatelessWidget {
       key: const Key('hero'),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(BL.radiusXl),
-        gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [BL.heroStart, BL.heroEnd]),
         boxShadow: BL.shadowLift,
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(BL.radiusXl),
-        child: CustomPaint(
-          painter: _RingsPainter(),
-          child: Padding(
+      child: AuroraBackdrop(
+        child: Stack(children: [
+          Padding(
             padding: const EdgeInsets.all(BL.space8),
             child: LayoutBuilder(builder: (context, box) {
               final wide = box.maxWidth >= 620;
@@ -230,14 +225,14 @@ class _Resume extends StatelessWidget {
                   ]);
               final ring = ProgressRing(
                 value: progress,
-                size: 132,
-                stroke: 11,
+                size: 112,
+                stroke: 10,
                 color: Colors.white,
                 track: Colors.white.withValues(alpha: 0.2),
                 child: Column(mainAxisSize: MainAxisSize.min, children: [
                   Text('${(progress * 100).round()}%',
                       style: text.headlineSmall
-                          ?.copyWith(color: Colors.white, fontSize: 28)),
+                          ?.copyWith(color: Colors.white, fontSize: 24)),
                   Text(started ? 'done' : 'ready',
                       style: BL.mono(size: 12, color: Colors.white70)),
                 ]),
@@ -247,33 +242,26 @@ class _Resume extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(child: left),
-                    const SizedBox(width: BL.space8),
-                    ring
+                    const SizedBox(width: BL.space4),
+                    SizedBox(
+                      key: const Key('hero-art'),
+                      width: 250,
+                      height: 250,
+                      child: Stack(
+                          clipBehavior: Clip.none,
+                          alignment: Alignment.center,
+                          children: [
+                            const IsoStack(size: 250),
+                            Positioned(top: -6, child: ring),
+                          ]),
+                    ),
                   ]);
             }),
           ),
-        ),
+        ]),
       ),
     );
   }
-}
-
-/// Soft concentric rings in the corner of the continue card, for depth.
-class _RingsPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final p = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5
-      ..color = Colors.white.withValues(alpha: 0.07);
-    final c = Offset(size.width * 0.92, size.height * 0.08);
-    for (var r = 90.0; r < 420; r += 56) {
-      canvas.drawCircle(c, r, p);
-    }
-  }
-
-  @override
-  bool shouldRepaint(_RingsPainter old) => false;
 }
 
 // ------------------------------------------------------------------------------------------------ learn
