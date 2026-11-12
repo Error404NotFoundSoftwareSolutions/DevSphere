@@ -8,7 +8,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Architecture security constraints (TC-NFR-SEC-002-01)', () {
-    test('UI and feature code must never import dart:io or access privileged File/Process APIs', () {
+    test(
+        'UI and feature code must never import dart:io or access privileged File/Process APIs',
+        () {
       final baseDir = Directory.current.path.endsWith('desktop')
           ? Directory.current
           : Directory('apps/desktop');
@@ -28,11 +30,14 @@ void main() {
             for (var i = 0; i < lines.length; i++) {
               final line = lines[i];
               // Check for dart:io import
-              if (line.contains("import 'dart:io'") || line.contains('import "dart:io"')) {
-                violations.add('${entity.path}:${i + 1} imports dart:io directly');
+              if (line.contains("import 'dart:io'") ||
+                  line.contains('import "dart:io"')) {
+                violations
+                    .add('${entity.path}:${i + 1} imports dart:io directly');
               }
               // Check for Process.run or Process.start references
-              if (line.contains('Process.run') || line.contains('Process.start')) {
+              if (line.contains('Process.run') ||
+                  line.contains('Process.start')) {
                 violations.add('${entity.path}:${i + 1} accesses Process API');
               }
             }
@@ -43,7 +48,8 @@ void main() {
       expect(
         violations,
         isEmpty,
-        reason: 'UI layer must use typed IPC to local-worker instead of direct dart:io:\n${violations.join('\n')}',
+        reason:
+            'UI layer must use typed IPC to local-worker instead of direct dart:io:\n${violations.join('\n')}',
       );
     });
   });

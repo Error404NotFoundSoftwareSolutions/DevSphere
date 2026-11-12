@@ -38,7 +38,8 @@ class BranchChecks extends StatelessWidget {
                   ? 'Branch "$branchName" is protected. Please create a feature branch before pushing.'
                   : 'Branch "$branchName" is safe for contribution.',
               style: TextStyle(
-                color: isProtected ? Colors.red.shade900 : Colors.green.shade900,
+                color:
+                    isProtected ? Colors.red.shade900 : Colors.green.shade900,
               ),
             ),
           ),
@@ -47,4 +48,3 @@ class BranchChecks extends StatelessWidget {
     );
   }
 }
-

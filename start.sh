@@ -110,13 +110,13 @@ fi
 
 # 4. Start Backend API Server
 echo ""
-echo "--> Starting DevSphere Backend API (FastAPI) on port 8000..."
+echo "--> Starting DevSphere Backend API (FastAPI) on port 8787..."
 
-# Stop any existing process on port 8000
+# Stop any existing process on port 8787
 if command -v lsof &> /dev/null; then
-  EXISTING_PID=$(lsof -ti:8000 || true)
+  EXISTING_PID=$(lsof -ti:8787 || true)
   if [ -n "$EXISTING_PID" ]; then
-    echo "Stopping existing process on port 8000 (PID: $EXISTING_PID)..."
+    echo "Stopping existing process on port 8787 (PID: $EXISTING_PID)..."
     kill -9 $EXISTING_PID 2>/dev/null || true
     sleep 1
   fi
@@ -125,7 +125,7 @@ fi
 # Launch backend in background
 (
   cd "$ROOT_DIR/services/api"
-  exec uv run uvicorn app.main:app --host 127.0.0.1 --port 8000
+  exec uv run uvicorn app.main:app --host 127.0.0.1 --port 8787
 ) &
 API_PID=$!
 
@@ -142,8 +142,8 @@ trap cleanup EXIT INT TERM
 # Wait for API to respond
 echo "Waiting for API server to become ready..."
 for i in {1..30}; do
-  if curl -s http://127.0.0.1:8000/health | grep -q '"status":"ok"'; then
-    echo "Backend API is ready at http://127.0.0.1:8000"
+  if curl -s http://127.0.0.1:8787/health | grep -q '"status":"ok"'; then
+    echo "Backend API is ready at http://127.0.0.1:8787"
     break
   fi
   sleep 0.5
@@ -160,6 +160,13 @@ fi
 export BUILDLOOP_WORKER="${BUILDLOOP_WORKER:-$ROOT_DIR/release/guide-build/worker}"
 export BUILDLOOP_GUIDE_DIR="${BUILDLOOP_GUIDE_DIR:-$ROOT_DIR/release/guide-build}"
 export BUILDLOOP_CONTENT_ROOT="${BUILDLOOP_CONTENT_ROOT:-$ROOT_DIR/content/labs}"
+
+# Local secrets (git-ignored), for example DEVPILOT_GOOGLE_CLIENT_SECRET for Google sign-in
+if [ -f "$ROOT_DIR/.env" ]; then
+  set -a
+  . "$ROOT_DIR/.env"
+  set +a
+fi
 
 # 5. Launch the Complete Client Application
 echo ""

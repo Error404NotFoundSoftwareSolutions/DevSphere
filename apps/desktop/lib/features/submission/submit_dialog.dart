@@ -45,7 +45,8 @@ class SubmitDialog extends StatelessWidget {
                 itemBuilder: (context, index) => ListTile(
                   dense: true,
                   leading: const Icon(Icons.insert_drive_file, size: 16),
-                  title: Text(includedFiles[index], style: const TextStyle(fontSize: 13)),
+                  title: Text(includedFiles[index],
+                      style: const TextStyle(fontSize: 13)),
                 ),
               ),
             ),
@@ -81,4 +82,3 @@ class SubmitDialog extends StatelessWidget {
     );
   }
 }
-

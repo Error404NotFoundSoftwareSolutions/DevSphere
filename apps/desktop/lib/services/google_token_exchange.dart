@@ -5,6 +5,7 @@
 // separated from the UI/feature layers, though dart:convert is allowed everywhere.
 
 import 'dart:convert';
+import 'dart:io' show Platform;
 import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
@@ -35,13 +36,21 @@ class PkceHelper {
 }
 
 /// Exchanges a Google OAuth 2.0 authorization code for a Google ID token using
-/// the token endpoint. For PKCE Desktop apps, no client_secret is required.
+/// the token endpoint. The client secret is optional here and comes from the environment.
 class GoogleTokenExchange {
   static const String _tokenEndpoint = 'https://oauth2.googleapis.com/token';
 
   final http.Client _client;
 
-  GoogleTokenExchange({http.Client? client}) : _client = client ?? http.Client();
+  /// Google's token endpoint wants a client secret for this client even with PKCE. It is read from the
+  /// DEVPILOT_GOOGLE_CLIENT_SECRET environment variable (kept in the git-ignored .env), never from the source.
+  GoogleTokenExchange({http.Client? client, String? clientSecret})
+      : _client = client ?? http.Client(),
+        _clientSecret = clientSecret ??
+            Platform.environment['DEVPILOT_GOOGLE_CLIENT_SECRET'] ??
+            '';
+
+  final String _clientSecret;
 
   /// Exchanges [code] + [codeVerifier] for a Google ID token.
   ///
@@ -62,6 +71,7 @@ class GoogleTokenExchange {
         'redirect_uri': redirectUri,
         'grant_type': 'authorization_code',
         'code_verifier': codeVerifier,
+        if (_clientSecret.isNotEmpty) 'client_secret': _clientSecret,
       },
     );
 
@@ -92,4 +102,3 @@ class TokenExchangeException implements Exception {
   @override
   String toString() => 'TokenExchangeException: $message';
 }
-

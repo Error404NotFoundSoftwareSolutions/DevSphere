@@ -51,7 +51,8 @@ class CatalogueScreen extends StatelessWidget {
           Card(
             child: ListTile(
               title: const Text('Hello, Python'),
-              subtitle: const Text('Write and test your first function • Beginner • 45 min'),
+              subtitle: const Text(
+                  'Write and test your first function • Beginner • 45 min'),
               trailing: const Icon(Icons.arrow_forward),
               onTap: () {
                 context.go('/workspace/attempt-hello-001');

@@ -20,7 +20,8 @@ class SqliteOutboxStore implements OutboxStore {
 
   @override
   List<Map<String, dynamic>> pending() {
-    final results = db.select('SELECT event_id, body FROM outbox ORDER BY created_at ASC');
+    final results =
+        db.select('SELECT event_id, body FROM outbox ORDER BY created_at ASC');
     return results.map((row) {
       return {
         'event_id': row['event_id'] as String,
@@ -42,4 +43,3 @@ class SqliteOutboxStore implements OutboxStore {
     return row['cnt'] as int;
   }
 }
-

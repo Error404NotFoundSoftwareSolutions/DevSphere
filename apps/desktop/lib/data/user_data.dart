@@ -3,6 +3,9 @@
 // and activity. Pure Dart (no files, no network) so it can be tested and shown anywhere. It holds no
 // tokens, no password, no email and no date of birth. Results are Practice; a badge needs a Verified result.
 
+import 'learning_path.dart';
+export 'learning_path.dart';
+
 enum LabStatus { notStarted, inProgress, practiceComplete }
 
 class StepProgress {
@@ -332,6 +335,7 @@ class UserData {
     this.roadmap,
     this.interview,
     this.generatedLabs = const [],
+    this.learningPaths = const [],
   });
 
   static const int version = 1;
@@ -352,6 +356,19 @@ class UserData {
 
   /// Labs the AI wrote for this person. Their files are on this computer; this list says whose they are.
   final List<GeneratedLabRef> generatedLabs;
+
+  /// Learning paths the AI built for this person, newest first.
+  final List<StudyPath> learningPaths;
+
+  StudyPath? path(String id) {
+    for (final p in learningPaths) {
+      if (p.id == id) return p;
+    }
+    return null;
+  }
+
+  /// True when every check of this lab has passed for this person.
+  bool labDone(String labId) => statusOf(labId) == LabStatus.practiceComplete;
 
   LabProgress? lab(String id) => labs[id];
 
@@ -380,6 +397,18 @@ class UserData {
     return passes
         .where((p) => p.day.compareTo(from) >= 0 && p.day.compareTo(to) <= 0)
         .length;
+  }
+
+  /// Checks passed per day for the last [days] days, oldest first, ending on [today].
+  List<int> dayCounts(DateTime today, int days) {
+    final per = <String, int>{};
+    for (final p in passes) {
+      per[p.day] = (per[p.day] ?? 0) + 1;
+    }
+    return [
+      for (var i = days - 1; i >= 0; i--)
+        per[dayKey(today.subtract(Duration(days: i)))] ?? 0
+    ];
   }
 
   /// Seven flags, oldest first, ending on [today]: was there at least one pass that day?
@@ -432,7 +461,8 @@ class UserData {
           bool clearRoadmap = false,
           SavedInterview? interview,
           bool clearInterview = false,
-          List<GeneratedLabRef>? generatedLabs}) =>
+          List<GeneratedLabRef>? generatedLabs,
+          List<StudyPath>? learningPaths}) =>
       UserData(
         uid: uid,
         profile: profile ?? this.profile,
@@ -442,6 +472,7 @@ class UserData {
         roadmap: clearRoadmap ? null : (roadmap ?? this.roadmap),
         interview: clearInterview ? null : (interview ?? this.interview),
         generatedLabs: generatedLabs ?? this.generatedLabs,
+        learningPaths: learningPaths ?? this.learningPaths,
       );
 
   Map<String, Object?> toJson() => {
@@ -452,6 +483,7 @@ class UserData {
         if (roadmap != null) 'roadmap': roadmap!.toJson(),
         if (interview != null) 'interview': interview!.toJson(),
         'generatedLabs': [for (final g in generatedLabs) g.toJson()],
+        'learningPaths': [for (final p in learningPaths) p.toJson()],
         'labs': [for (final l in labs.values) l.toJson()],
         'passes': [
           for (final p in passes)
@@ -536,7 +568,18 @@ class UserData {
                 source: '${(raw['interview'] as Map)['source']}',
                 createdAt: '${(raw['interview'] as Map)['createdAt'] ?? ''}')
             : null,
-        generatedLabs: _generatedLabs(raw['generatedLabs']));
+        generatedLabs: _generatedLabs(raw['generatedLabs']),
+        learningPaths: _learningPaths(raw['learningPaths']));
+  }
+
+  static List<StudyPath> _learningPaths(Object? raw) {
+    if (raw is! List) return const [];
+    final out = <StudyPath>[];
+    for (final e in raw.take(StudyPath.maxSaved)) {
+      final p = StudyPath.fromSaved(e);
+      if (p != null && out.every((o) => o.id != p.id)) out.add(p);
+    }
+    return out;
   }
 
   static List<GeneratedLabRef> _generatedLabs(Object? raw) {

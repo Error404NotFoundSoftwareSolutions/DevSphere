@@ -1,7 +1,7 @@
 // Capability: CAP-ROADMAP, CAP-AI-CLIENT. Rules: TRU-01, AIR-01, AIR-08. Tests: TC-AIUI-01..
-// Implemented here: "Build a roadmap for a job or topic". The person pastes a job description (or names a topic);
-// the DevPilot API asks Gemini and answers with a path made only of labs that exist, plus a few labs that do not
-// exist yet. The result is saved with this person's own data. The app never calls Gemini itself.
+// Implemented here: "Build a roadmap for a job or topic". The person pastes a job description (or names a topic); the
+// DevPilot API asks Gemini and answers with a path made only of labs that exist, plus a few labs that do not exist yet.
+// The roadmap is drawn as a git graph and saved with this person's own data. The app never calls Gemini itself.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,6 +10,7 @@ import 'package:ui/ui.dart';
 import '../../api.dart';
 import '../../data/user_data.dart';
 import '../../services/devpilot_api.dart';
+import '../../ui/kit.dart';
 import '../../ui/motion.dart';
 import '../dashboard/dashboard_data.dart';
 import 'interview_card.dart';
@@ -84,140 +85,105 @@ class _RoadmapPlannerState extends ConsumerState<RoadmapPlanner> {
   @override
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
-    final saved = ref.watch(userDataProvider).data?.roadmap;
-    final interview = ref.watch(userDataProvider).data?.interview;
+    final data = ref.watch(userDataProvider).data;
+    final saved = data?.roadmap;
+    final interview = data?.interview;
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Card(
+        Panel(
           key: const Key('roadmap-planner'),
-          child: Padding(
-            padding: const EdgeInsets.all(BL.space6),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(children: [
-                  const Icon(Icons.auto_awesome, color: BL.primary),
-                  const SizedBox(width: BL.space2),
-                  Text('Build a roadmap for a job or topic',
-                      style: text.titleLarge),
-                ]),
-                const SizedBox(height: BL.space1),
-                Text(
-                    'Paste a job description and get a path of real labs to prepare for it. Written by Gemini, checked by DevPilot.',
-                    style: text.bodySmall),
-                const SizedBox(height: BL.space4),
-                Wrap(
-                    spacing: BL.space4,
-                    runSpacing: BL.space3,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      SegmentedButton<String>(
-                        key: const Key('planner-kind'),
-                        segments: const [
-                          ButtonSegment(
-                              value: 'job_description',
-                              label: Text('Job description')),
-                          ButtonSegment(value: 'topic', label: Text('Topic')),
-                        ],
-                        selected: {_kind},
-                        onSelectionChanged: _busy
-                            ? null
-                            : (s) => setState(() => _kind = s.first),
-                      ),
-                      SegmentedButton<String>(
-                        key: const Key('planner-level'),
-                        segments: const [
-                          ButtonSegment(
-                              value: 'beginner', label: Text('Beginner')),
-                          ButtonSegment(
-                              value: 'intermediate',
-                              label: Text('Intermediate')),
-                        ],
-                        selected: {_level},
-                        onSelectionChanged: _busy
-                            ? null
-                            : (s) => setState(() => _level = s.first),
-                      ),
-                    ]),
-                const SizedBox(height: BL.space3),
-                TextField(
-                  key: const Key('planner-text'),
-                  controller: _text,
-                  enabled: !_busy,
-                  minLines: 4,
-                  maxLines: 8,
-                  maxLength: 6000,
-                  decoration: InputDecoration(
-                    hintText: _kind == 'job_description'
-                        ? 'Paste the job description here...'
-                        : 'For example: backend development with Python and FastAPI',
-                  ),
+          title: 'Plan a roadmap or practise interviews',
+          trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+            PillTabs(
+                key: const Key('planner-kind'),
+                labels: const ['Job description', 'Topic'],
+                selected: _kind == 'job_description' ? 0 : 1,
+                enabled: !_busy,
+                onChanged: (i) => setState(
+                    () => _kind = i == 0 ? 'job_description' : 'topic')),
+            const SizedBox(width: BL.space3),
+            PillTabs(
+                key: const Key('planner-level'),
+                labels: const ['Beginner', 'Intermediate'],
+                selected: _level == 'beginner' ? 0 : 1,
+                enabled: !_busy,
+                onChanged: (i) => setState(
+                    () => _level = i == 0 ? 'beginner' : 'intermediate')),
+          ]),
+          padding: const EdgeInsets.all(BL.space6),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                  'Paste a job description and get a path of real labs to prepare for it, or a set of interview questions. Written by Gemini, checked by DevPilot.',
+                  style: text.bodySmall),
+              const SizedBox(height: BL.space4),
+              TextField(
+                key: const Key('planner-text'),
+                controller: _text,
+                enabled: !_busy,
+                minLines: 4,
+                maxLines: 8,
+                maxLength: 6000,
+                style: text.bodyMedium,
+                decoration: InputDecoration(
+                  counterStyle: BL.mono(size: 11, color: BL.textDisabled),
+                  hintText: _kind == 'job_description'
+                      ? 'Paste the job description here...'
+                      : 'For example: backend development with Python and FastAPI',
+                  hintStyle: text.bodyMedium?.copyWith(color: BL.textDisabled),
                 ),
-                const SizedBox(height: BL.space2),
-                Row(children: [
-                  FilledButton.icon(
-                    key: const Key('planner-submit'),
-                    onPressed: _busy ? null : () => _run('roadmap'),
-                    icon: _busy && _what == 'roadmap'
-                        ? const SizedBox(
-                            width: 16,
-                            height: 16,
-                            child: CircularProgressIndicator(
-                                strokeWidth: 2, color: Colors.white))
-                        : const Icon(Icons.route, size: 18),
-                    label: Text(_busy && _what == 'roadmap'
-                        ? 'Planning (about 15 seconds)...'
-                        : 'Plan my roadmap'),
-                  ),
-                  const SizedBox(width: BL.space2),
-                  OutlinedButton.icon(
-                    key: const Key('planner-interview'),
-                    onPressed: _busy ? null : () => _run('interview'),
-                    icon: _busy && _what == 'interview'
-                        ? const SizedBox(
-                            width: 16,
-                            height: 16,
-                            child: CircularProgressIndicator(strokeWidth: 2))
-                        : const Icon(Icons.record_voice_over, size: 18),
-                    label: Text(_busy && _what == 'interview'
-                        ? 'Writing questions...'
-                        : 'Interview questions'),
-                  ),
-                  const SizedBox(width: BL.space3),
-                  Expanded(
-                      child: Text(
-                          'Your text is sent to the DevPilot service with passwords and keys removed.',
-                          style: text.bodySmall)),
-                ]),
-                if (_error != null) ...[
-                  const SizedBox(height: BL.space3),
-                  Container(
-                    key: const Key('planner-error'),
-                    padding: const EdgeInsets.all(BL.space3),
-                    decoration: BoxDecoration(
-                        color: BL.danger.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(BL.radiusMd)),
-                    child: Row(children: [
-                      const Icon(Icons.error_outline,
-                          color: BL.danger, size: 20),
-                      const SizedBox(width: BL.space3),
-                      Expanded(child: Text(_error!)),
-                    ]),
-                  ),
-                ],
+              ),
+              const SizedBox(height: BL.space2),
+              Row(children: [
+                FilledButton(
+                  key: const Key('planner-submit'),
+                  onPressed: _busy ? null : () => _run('roadmap'),
+                  child: Text(_busy && _what == 'roadmap'
+                      ? 'Planning (about 15 seconds)...'
+                      : 'Plan my roadmap'),
+                ),
+                const SizedBox(width: BL.space2),
+                OutlinedButton(
+                  key: const Key('planner-interview'),
+                  onPressed: _busy ? null : () => _run('interview'),
+                  child: Text(_busy && _what == 'interview'
+                      ? 'Writing questions...'
+                      : 'Interview questions'),
+                ),
+                const SizedBox(width: BL.space4),
+                Expanded(
+                    child: Text(
+                        'Sent to the DevPilot service with passwords and keys removed.',
+                        style: BL.mono(size: 12, color: BL.textSecondary))),
+              ]),
+              if (_error != null) ...[
+                const SizedBox(height: BL.space4),
+                Container(
+                  key: const Key('planner-error'),
+                  padding: const EdgeInsets.all(BL.space3),
+                  decoration: BoxDecoration(
+                      color: BL.danger.withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(BL.radiusMd)),
+                  child: Row(children: [
+                    Icon(Icons.error_outline, color: BL.danger, size: 20),
+                    const SizedBox(width: BL.space3),
+                    Expanded(child: Text(_error!, style: text.bodyMedium))
+                  ]),
+                ),
               ],
-            ),
+            ],
           ),
         ),
         if (saved != null) ...[
-          const SizedBox(height: BL.space6),
+          const SizedBox(height: BL.space12),
           Reveal(
               key: ValueKey(saved.createdAt),
-              child: _SavedRoadmapCard(roadmap: saved)),
+              child: _SavedRoadmap(roadmap: saved)),
         ],
         if (interview != null) ...[
-          const SizedBox(height: BL.space6),
+          const SizedBox(height: BL.space12),
           Reveal(
               key: ValueKey('i-${interview.createdAt}'),
               child: InterviewCard(interview: interview)),
@@ -227,8 +193,8 @@ class _RoadmapPlannerState extends ConsumerState<RoadmapPlanner> {
   }
 }
 
-class _SavedRoadmapCard extends ConsumerWidget {
-  const _SavedRoadmapCard({required this.roadmap});
+class _SavedRoadmap extends ConsumerWidget {
+  const _SavedRoadmap({required this.roadmap});
 
   final SavedRoadmap roadmap;
 
@@ -240,50 +206,70 @@ class _SavedRoadmapCard extends ConsumerWidget {
     final done = labSteps
         .where((s) => data?.statusOf(s.labId!) == LabStatus.practiceComplete)
         .length;
-    return Card(
+    var head = -1;
+    for (var i = 0; i < roadmap.steps.length; i++) {
+      final s = roadmap.steps[i];
+      if (s.kind == 'lab' &&
+          data?.statusOf(s.labId!) != LabStatus.practiceComplete) {
+        head = i;
+        break;
+      }
+    }
+    return Container(
       key: const Key('saved-roadmap'),
-      child: Padding(
-        padding: const EdgeInsets.all(BL.space6),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(children: [
-              Expanded(child: Text(roadmap.title, style: text.titleLarge)),
-              StatusChip(
-                  label: roadmap.source == 'topic'
-                      ? 'From a topic'
-                      : 'From a job description',
-                  color: BL.navy),
-              const SizedBox(width: BL.space2),
-              IconButton(
-                key: const Key('roadmap-clear'),
-                tooltip: 'Remove this roadmap',
-                icon: const Icon(Icons.close),
-                onPressed: () => ref.read(userDataProvider).clearRoadmap(),
-              ),
-            ]),
-            const SizedBox(height: BL.space2),
-            Text(
-                labSteps.isEmpty
-                    ? 'No ready-made lab matches yet.'
-                    : '$done of ${labSteps.length} ready-made labs done',
-                style: text.bodySmall),
-            const SizedBox(height: BL.space4),
-            for (var i = 0; i < roadmap.steps.length; i++)
-              _StepRow(index: i, step: roadmap.steps[i], data: data),
-          ],
-        ),
+      child: Section(
+        label: 'Your roadmap',
+        trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+          Text(
+              roadmap.source == 'topic'
+                  ? 'From a topic'
+                  : 'From a job description',
+              style: BL.mono(size: 12)),
+          const SizedBox(width: BL.space3),
+          InkWell(
+              key: const Key('roadmap-clear'),
+              onTap: () => ref.read(userDataProvider).clearRoadmap(),
+              child: Text('Remove',
+                  style: BL.mono(size: 12, color: BL.textSecondary))),
+        ]),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(roadmap.title, style: text.headlineSmall),
+          const SizedBox(height: BL.space1),
+          Text(
+              labSteps.isEmpty
+                  ? 'No ready-made lab matches yet.'
+                  : '$done of ${labSteps.length} ready-made labs done',
+              style: BL.mono(size: 12)),
+          const SizedBox(height: BL.space6),
+          for (var i = 0; i < roadmap.steps.length; i++)
+            _Step(
+                index: i,
+                step: roadmap.steps[i],
+                data: data,
+                first: i == 0,
+                last: i == roadmap.steps.length - 1,
+                head: i == head),
+        ]),
       ),
     );
   }
 }
 
-class _StepRow extends StatelessWidget {
-  const _StepRow({required this.index, required this.step, required this.data});
+class _Step extends StatelessWidget {
+  const _Step(
+      {required this.index,
+      required this.step,
+      required this.data,
+      required this.first,
+      required this.last,
+      required this.head});
 
   final int index;
   final RoadmapStepData step;
   final UserData? data;
+  final bool first;
+  final bool last;
+  final bool head;
 
   @override
   Widget build(BuildContext context) {
@@ -292,45 +278,44 @@ class _StepRow extends StatelessWidget {
     final activity = isLab ? SampleData.find(step.labId!) : null;
     final complete =
         isLab && data?.statusOf(step.labId!) == LabStatus.practiceComplete;
-    return Container(
-      key: Key('roadmap-step-$index'),
-      margin: const EdgeInsets.only(bottom: BL.space2),
-      padding: const EdgeInsets.all(BL.space3),
-      decoration: BoxDecoration(
-        color: isLab ? BL.selected : BL.surfaceMuted,
-        borderRadius: BorderRadius.circular(BL.radiusMd),
-        border: Border.all(color: BL.border),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(
-              complete
-                  ? Icons.check_circle
-                  : (isLab ? Icons.radio_button_unchecked : Icons.schedule),
-              color: complete ? BL.success : BL.textSecondary),
-          const SizedBox(width: BL.space3),
+    return GitNode(
+      first: first,
+      last: last,
+      state: !isLab
+          ? NodeState.later
+          : (complete
+              ? NodeState.done
+              : (head ? NodeState.head : NodeState.todo)),
+      child: Container(
+        key: Key('roadmap-step-$index'),
+        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Expanded(
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('${index + 1}. ${activity?.title ?? step.title}',
-                  style: text.titleSmall),
-              if (step.why.isNotEmpty) Text(step.why, style: text.bodySmall),
+              Text(activity?.title ?? step.title,
+                  style: text.titleSmall?.copyWith(
+                      color: isLab ? BL.textPrimary : BL.textSecondary)),
+              if (step.why.isNotEmpty)
+                Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Text(step.why, style: text.bodySmall)),
               if (step.skills.isNotEmpty)
                 Padding(
-                    padding: const EdgeInsets.only(top: BL.space1),
-                    child: Text(step.skills.join(' · '),
-                        style: text.bodySmall?.copyWith(color: BL.primary))),
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                        step.skills.map((s) => s.toLowerCase()).join('  ·  '),
+                        style: BL.mono(size: 11, color: BL.textDisabled))),
             ]),
           ),
-          const SizedBox(width: BL.space3),
+          const SizedBox(width: BL.space4),
           if (isLab && activity != null)
-            OutlinedButton(
+            TextButton(
                 onPressed: () => context.go('/course/${step.labId}'),
                 child: Text(actionFor(activity, data)))
           else
-            const StatusChip(label: 'No lab yet', color: BL.textSecondary),
-        ],
+            Text('No lab yet',
+                style: BL.mono(size: 11.5, color: BL.textDisabled)),
+        ]),
       ),
     );
   }

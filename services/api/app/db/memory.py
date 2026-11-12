@@ -6,17 +6,23 @@
 
 from pathlib import Path
 
-USERS: dict[str, dict] = {}
-SUBJECT_MAP: dict[tuple[str, str], str] = {}  # (provider, sub) -> user_id
-REVOKED_TOKENS: set[str] = set()
-REVOKED_USERS: set[str] = set()
-ATTEMPTS: dict[str, dict] = {}
-EVENTS: dict[str, dict] = {}  # event_id -> event (idempotency: the id is the key)
-SUBMISSIONS: dict[str, dict] = {}
-GENERATED_LABS: dict[
-    str, dict
-] = {}  # AI-generated drafts that passed verification; never auto-published
-AI_USAGE: dict[tuple[str, str], int] = {}  # (user_id, feature) -> count today
+from app.core.settings import settings
+from app.db.store import Collection, SetCollection
+
+# Each collection keeps its data in process by default, or in Cloud Firestore when DEVSPHERE_DATABASE=firestore (see store.py).
+USERS = Collection("users")
+SUBJECT_MAP = Collection("subject_map")  # (provider, sub) -> user_id
+REVOKED_TOKENS = SetCollection("revoked_tokens")
+REVOKED_USERS = SetCollection("revoked_users")
+ATTEMPTS = Collection("attempts")
+EVENTS = Collection("events")  # event_id -> event (idempotency: the id is the key)
+SUBMISSIONS = Collection("submissions")
+GENERATED_LABS = Collection("generated_labs")  # AI-generated drafts that passed verification; never auto-published
+CREDENTIALS = Collection("credentials")  # earned credentials; private until the owner shares one
+PLAYER_SESSIONS = Collection("player_sessions")  # session id -> how much of one video was watched
+VIDEO_CACHE = Collection("video_search_cache")  # (query, language) -> YouTube results, kept a week
+AI_USAGE = Collection("ai_usage")  # (user_id, feature, day) -> count
+# The catalogue is read from content/labs at start-up, so it stays in process.
 LABS: dict[str, dict] = {
     "python-hello-001": {
         "id": "python-hello-001",
@@ -34,37 +40,34 @@ def load_content_labs(root: Path | None = None) -> int:
 
     Only the public fields of lab.yaml are read (never tests or reference solutions). Missing folder: nothing added.
     """
-    import yaml
+    from app.db.catalog import read_catalog
 
     base = root or Path(__file__).resolve().parents[4] / "content" / "labs"
-    added = 0
-    if not base.is_dir():
+    entries = read_catalog(base)
+    for entry in entries:
+        LABS[entry["id"]] = entry
+    return len(entries)
+
+
+def load_catalog_file(path: str) -> int:
+    """Production images carry only a small JSON catalogue (made at build time), never the lab sources."""
+    import json
+
+    try:
+        entries = json.loads(Path(path).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
         return 0
-    for manifest in sorted(base.glob("*/lab.yaml")):
-        try:
-            m = yaml.safe_load(manifest.read_text(encoding="utf-8"))
-            lab_id = m["id"]
-            LABS[lab_id] = {
-                "id": lab_id,
-                "title": m["title"],
-                "version": m["version"],
-                "difficulty": m["difficulty"],
-                "os": m["os"],
-                "max_assistance_level": m["tutor"]["max_assistance_level"],
-                "description": str(m.get("description", ""))[:400],
-                "estimated_minutes": m.get("estimated_minutes"),
-            }
-            added += 1
-        except (OSError, KeyError, TypeError, yaml.YAMLError):
-            continue  # a broken manifest must never stop the API from starting
-    return added
+    for entry in entries:
+        LABS[entry["id"]] = entry
+    return len(entries)
 
 
-load_content_labs()
+if settings.catalog_file:
+    load_catalog_file(settings.catalog_file)
+else:
+    load_content_labs()
 
 
 def reset() -> None:
-    for d in (USERS, SUBJECT_MAP, ATTEMPTS, EVENTS, SUBMISSIONS, GENERATED_LABS, AI_USAGE):
+    for d in (USERS, SUBJECT_MAP, ATTEMPTS, EVENTS, SUBMISSIONS, GENERATED_LABS, AI_USAGE, CREDENTIALS, VIDEO_CACHE, PLAYER_SESSIONS, REVOKED_TOKENS, REVOKED_USERS):
         d.clear()
-    REVOKED_TOKENS.clear()
-    REVOKED_USERS.clear()

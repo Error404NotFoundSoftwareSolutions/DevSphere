@@ -73,8 +73,7 @@ class ProcessWorkerClient implements WorkerClient {
         if (err is Map) {
           c.completeError(WorkerException(
             code: '${err['code'] ?? 'failed'}',
-            message:
-                '${err['message'] ?? 'Something went wrong in DevPilot.'}',
+            message: '${err['message'] ?? 'Something went wrong in DevPilot.'}',
             recovery: '${err['recovery'] ?? ''}',
           ));
         } else {

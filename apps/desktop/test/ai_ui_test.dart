@@ -13,12 +13,43 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'support/api_stub.dart';
+
 const asha =
     AuthUser(uid: 'asha-uid', email: 'asha@example.com', displayName: 'Asha');
 const bob =
     AuthUser(uid: 'bob-uid', email: 'bob@example.com', displayName: 'Bob');
 
-class FakeApi implements DevPilotApi {
+class FakeApi extends DevPilotApiStub {
+  @override
+  Future<Map<String, dynamic>> explainError(
+          {required String errorText, String? code, String language = 'en'}) =>
+      throw UnimplementedError();
+  @override
+  Future<Map<String, dynamic>> reviewCode(
+          {required String code,
+          String filename = '',
+          String goal = '',
+          String language = 'en'}) =>
+      throw UnimplementedError();
+
+  @override
+  Future<List<Credential>> credentials() => throw UnimplementedError();
+  @override
+  Future<Credential> claimCredential(
+          {required String labId,
+          required Map<String, bool> checks,
+          required String startedAt,
+          required String completedAt}) =>
+      throw UnimplementedError();
+  @override
+  Future<Credential> setSharing(String id,
+          {required bool isPublic, String displayName = ''}) =>
+      throw UnimplementedError();
+  @override
+  String publicLink(String id) => '';
+  @override
+  bool get isLocalService => true;
   FakeApi({this.roadmapError, this.askError, this.interviewError});
   final ApiProblem? interviewError;
   final ApiProblem? roadmapError;
@@ -109,7 +140,9 @@ class FakeApi implements DevPilotApi {
   }
 
   @override
-  Future<Map<String, dynamic>> generateLab({required String topic, String level = 'beginner'}) async => throw UnimplementedError();
+  Future<Map<String, dynamic>> generateLab(
+          {required String topic, String level = 'beginner'}) async =>
+      throw UnimplementedError();
 
   @override
   Future<String> attemptFor(String labId) async {

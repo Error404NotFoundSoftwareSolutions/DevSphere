@@ -19,7 +19,8 @@ void ensurePrivateDir(String path) {
   Directory(path).createSync(recursive: true);
   final r = Process.runSync('chmod', ['700', path], runInShell: false);
   if (r.exitCode != 0 || (FileStat.statSync(path).mode & 0x3F) != 0) {
-    throw FileSystemException('Could not make the runtime folder private', path);
+    throw FileSystemException(
+        'Could not make the runtime folder private', path);
   }
 }
 
@@ -55,11 +56,14 @@ class ChannelServer {
   Timer? _idle;
 
   Future<String> start() async {
-    if (Platform.isWindows) throw UnsupportedError('Windows named pipes are planned for milestone PL-CMP-09.');
+    if (Platform.isWindows)
+      throw UnsupportedError(
+          'Windows named pipes are planned for milestone PL-CMP-09.');
     ensurePrivateDir(runtimeDir);
     final stale = File(socketPath);
     if (stale.existsSync()) stale.deleteSync();
-    _server = await ServerSocket.bind(InternetAddress(socketPath, type: InternetAddressType.unix), 0);
+    _server = await ServerSocket.bind(
+        InternetAddress(socketPath, type: InternetAddressType.unix), 0);
     _chmod600(socketPath);
     _server!.listen(_onConnection, onError: (_) {});
     return socketPath;
@@ -84,7 +88,10 @@ class ChannelServer {
 
   void _onConnection(Socket s) {
     if (_active != null) {
-      _send(s, errorEvent('busy', 'DevPilot is already connected to another VS Code window for this lab.'));
+      _send(
+          s,
+          errorEvent('busy',
+              'DevPilot is already connected to another VS Code window for this lab.'));
       unawaited(_closeClient(s));
       return;
     }
@@ -117,9 +124,13 @@ class ChannelServer {
       if (request == null) {
         invalid++;
         if (invalid >= maxInvalid) {
-          await endWith(errorEvent('invalid-message', 'DevPilot did not understand that message and closed the connection.'));
+          await endWith(errorEvent('invalid-message',
+              'DevPilot did not understand that message and closed the connection.'));
         } else {
-          _send(s, errorEvent('invalid-message', 'DevPilot did not understand that message.'));
+          _send(
+              s,
+              errorEvent('invalid-message',
+                  'DevPilot did not understand that message.'));
         }
         return;
       }
@@ -127,9 +138,11 @@ class ChannelServer {
         case GateDecision.needHello:
           _send(s, errorEvent('need-hello', 'Say hello first.'));
         case GateDecision.wrongSession:
-          await endWith(errorEvent('wrong-session', 'This is not the session DevPilot started for this lab.'));
+          await endWith(errorEvent('wrong-session',
+              'This is not the session DevPilot started for this lab.'));
         case GateDecision.protocolMismatch:
-          await endWith(errorEvent('protocol-mismatch', 'The DevPilot Guide and DevPilot need to be the same version. Update DevPilot.'));
+          await endWith(errorEvent('protocol-mismatch',
+              'The DevPilot Guide and DevPilot need to be the same version. Update DevPilot.'));
         case GateDecision.duplicateHello:
           _send(s, errorEvent('duplicate-hello', 'Already connected.'));
         case GateDecision.allow:
@@ -141,7 +154,10 @@ class ChannelServer {
                 _send(s, e);
               }
             } catch (_) {
-              _send(s, errorEvent('invalid-message', 'DevPilot could not handle that request.'));
+              _send(
+                  s,
+                  errorEvent('invalid-message',
+                      'DevPilot could not handle that request.'));
             }
           }
       }
@@ -162,10 +178,12 @@ class ChannelServer {
         }
         for (final m in messages) {
           final now = DateTime.now();
-          stamps.removeWhere((t) => now.difference(t) > const Duration(seconds: 1));
+          stamps.removeWhere(
+              (t) => now.difference(t) > const Duration(seconds: 1));
           stamps.add(now);
           if (stamps.length > maxRequestsPerSecond) {
-            chain = chain.then((_) => endWith(errorEvent('busy', 'Too many requests. The connection was closed.')));
+            chain = chain.then((_) => endWith(errorEvent(
+                'busy', 'Too many requests. The connection was closed.')));
             return;
           }
           chain = chain.then((_) => process(m));

@@ -8,7 +8,11 @@
 import 'vscode_locator.dart';
 
 class ExtensionPackage {
-  const ExtensionPackage({required this.id, required this.version, required this.vsixPath, required this.sha256});
+  const ExtensionPackage(
+      {required this.id,
+      required this.version,
+      required this.vsixPath,
+      required this.sha256});
   final String id; // publisher.name
   final String version;
   final String vsixPath; // absolute path of the file shipped inside the app
@@ -16,14 +20,19 @@ class ExtensionPackage {
 }
 
 class CommandResult {
-  const CommandResult({this.exitCode, this.stdout = '', this.stderr = '', this.timedOut = false});
+  const CommandResult(
+      {this.exitCode,
+      this.stdout = '',
+      this.stderr = '',
+      this.timedOut = false});
   final int? exitCode;
   final String stdout;
   final String stderr;
   final bool timedOut;
 }
 
-typedef CommandRunner = Future<CommandResult> Function(String exe, List<String> args, {Duration timeout});
+typedef CommandRunner = Future<CommandResult>
+    Function(String exe, List<String> args, {Duration timeout});
 
 enum InstallAction { install, update, none }
 
@@ -45,10 +54,13 @@ class InstallPlan {
   final ExtensionPackage package;
   final InstallAction action;
   final String? installedVersion;
+
   /// Plain-language lines to show the learner before they approve.
   final List<String> lines;
+
   /// Old-name guides found in the editor; removed after the new guide is installed.
   final List<String> legacyInstalled;
+
   /// Development only: extra editor arguments such as an isolated profile. Never from user input.
   final List<String> extraArgs;
 }
@@ -67,17 +79,26 @@ final RegExp _sha = RegExp(r'^[a-f0-9]{64}$');
 
 void _validate(ExtensionPackage p) {
   final path = p.vsixPath;
-  final absolute = path.startsWith('/') || RegExp(r'^[A-Za-z]:[\\/]').hasMatch(path);
+  final absolute =
+      path.startsWith('/') || RegExp(r'^[A-Za-z]:[\\/]').hasMatch(path);
   if (!_extId.hasMatch(p.id)) throw ArgumentError('Invalid extension id');
-  if (!_semver.hasMatch(p.version)) throw ArgumentError('Invalid extension version');
+  if (!_semver.hasMatch(p.version))
+    throw ArgumentError('Invalid extension version');
   if (!_sha.hasMatch(p.sha256)) throw ArgumentError('Invalid fingerprint');
-  if (!absolute || path.contains('\u0000') || path.startsWith('-') || !path.endsWith('.vsix') || path.split(RegExp(r'[\\/]')).contains('..')) {
+  if (!absolute ||
+      path.contains('\u0000') ||
+      path.startsWith('-') ||
+      !path.endsWith('.vsix') ||
+      path.split(RegExp(r'[\\/]')).contains('..')) {
     throw ArgumentError('Invalid extension file path');
   }
 }
 
-Future<Map<String, String>?> _listInstalled(EditorInstall editor, CommandRunner runner, List<String> extraArgs) async {
-  final r = await runner(editor.path, [...extraArgs, '--list-extensions', '--show-versions'], timeout: const Duration(seconds: 30));
+Future<Map<String, String>?> _listInstalled(
+    EditorInstall editor, CommandRunner runner, List<String> extraArgs) async {
+  final r = await runner(
+      editor.path, [...extraArgs, '--list-extensions', '--show-versions'],
+      timeout: const Duration(seconds: 30));
   if (r.exitCode != 0 || r.timedOut) return null;
   final out = <String, String>{};
   for (final line in r.stdout.split('\n')) {
@@ -90,32 +111,53 @@ Future<Map<String, String>?> _listInstalled(EditorInstall editor, CommandRunner 
   return out;
 }
 
-Future<String?> _installedVersion(EditorInstall editor, ExtensionPackage p, CommandRunner runner, List<String> extraArgs) async =>
+Future<String?> _installedVersion(EditorInstall editor, ExtensionPackage p,
+        CommandRunner runner, List<String> extraArgs) async =>
     (await _listInstalled(editor, runner, extraArgs))?[p.id];
 
-Future<InstallPlan> planInstall({required EditorInstall editor, required ExtensionPackage package, required CommandRunner runner, List<String> extraArgs = const []}) async {
+Future<InstallPlan> planInstall(
+    {required EditorInstall editor,
+    required ExtensionPackage package,
+    required CommandRunner runner,
+    List<String> extraArgs = const []}) async {
   _validate(package);
   final all = await _listInstalled(editor, runner, extraArgs);
   final installed = all?[package.id];
-  final legacy = [for (final id in legacyExtensionIds) if (all?.containsKey(id) ?? false) id];
+  final legacy = [
+    for (final id in legacyExtensionIds)
+      if (all?.containsKey(id) ?? false) id
+  ];
   var action = installed == null
       ? InstallAction.install
-      : (compareVersions(installed, package.version) < 0 ? InstallAction.update : InstallAction.none);
+      : (compareVersions(installed, package.version) < 0
+          ? InstallAction.update
+          : InstallAction.none);
   // The new guide is current but an old-name guide is still there: run the approved step so it is removed.
-  if (action == InstallAction.none && legacy.isNotEmpty) action = InstallAction.update;
+  if (action == InstallAction.none && legacy.isNotEmpty)
+    action = InstallAction.update;
   final lines = <String>[
     if (action == InstallAction.none)
       'DevPilot Guide $installed is already installed in ${editor.displayName}. Nothing to do.'
     else
       'DevPilot Guide ${package.version} will be installed into ${editor.displayName} ${editor.version} (${editor.path}).',
-    if (action == InstallAction.update && installed != null) 'An older version ($installed) is installed and will be replaced.',
-    if (legacy.isNotEmpty) 'The old BuildLoop Guide will be removed, because the product is now called DevPilot.',
-    if (action == InstallAction.update || legacy.isNotEmpty) 'If this lab is already open in VS Code, close that window first so the new guide loads.',
+    if (action == InstallAction.update && installed != null)
+      'An older version ($installed) is installed and will be replaced.',
+    if (legacy.isNotEmpty)
+      'The old BuildLoop Guide will be removed, because the product is now called DevPilot.',
+    if (action == InstallAction.update || legacy.isNotEmpty)
+      'If this lab is already open in VS Code, close that window first so the new guide loads.',
     'It adds a side panel that shows your lab steps. It is active only in lab folders.',
     'It talks only to DevPilot on this computer and does not use the internet.',
     'The extension file is part of DevPilot and its fingerprint is checked before it is installed.',
   ];
-  return InstallPlan(editor: editor, package: package, action: action, installedVersion: installed, lines: lines, legacyInstalled: legacy, extraArgs: extraArgs);
+  return InstallPlan(
+      editor: editor,
+      package: package,
+      action: action,
+      installedVersion: installed,
+      lines: lines,
+      legacyInstalled: legacy,
+      extraArgs: extraArgs);
 }
 
 /// `userApproved` must come from a real click on the plan screen. Without it nothing runs.
@@ -125,9 +167,11 @@ Future<InstallOutcome> installExtension(
   required CommandRunner runner,
   required Future<String> Function(String path) sha256Of,
 }) async {
-  if (!userApproved) throw StateError('The learner has not approved the install plan.');
+  if (!userApproved)
+    throw StateError('The learner has not approved the install plan.');
   if (plan.action == InstallAction.none) {
-    return const InstallOutcome(InstallStatus.alreadyCurrent, 'The DevPilot Guide is already installed.');
+    return const InstallOutcome(InstallStatus.alreadyCurrent,
+        'The DevPilot Guide is already installed.');
   }
   final actual = await sha256Of(plan.package.vsixPath);
   if (actual != plan.package.sha256) {
@@ -138,7 +182,12 @@ Future<InstallOutcome> installExtension(
   }
   final run = await runner(
     plan.editor.path,
-    [...plan.extraArgs, '--install-extension', plan.package.vsixPath, '--force'],
+    [
+      ...plan.extraArgs,
+      '--install-extension',
+      plan.package.vsixPath,
+      '--force'
+    ],
     timeout: const Duration(seconds: 120),
   );
   if (run.exitCode != 0 || run.timedOut) {
@@ -149,13 +198,17 @@ Future<InstallOutcome> installExtension(
           : '${plan.editor.displayName} could not install the guide. It may be blocked on this computer.',
     );
   }
-  final now = await _installedVersion(plan.editor, plan.package, runner, plan.extraArgs);
+  final now = await _installedVersion(
+      plan.editor, plan.package, runner, plan.extraArgs);
   if (now != plan.package.version) {
-    return const InstallOutcome(InstallStatus.failed, 'The guide install finished but VS Code does not list it. Restart VS Code and try again.');
+    return const InstallOutcome(InstallStatus.failed,
+        'The guide install finished but VS Code does not list it. Restart VS Code and try again.');
   }
   var removalFailed = false;
   for (final id in plan.legacyInstalled) {
-    final r = await runner(plan.editor.path, [...plan.extraArgs, '--uninstall-extension', id], timeout: const Duration(seconds: 60));
+    final r = await runner(
+        plan.editor.path, [...plan.extraArgs, '--uninstall-extension', id],
+        timeout: const Duration(seconds: 60));
     if (r.exitCode != 0 || r.timedOut) removalFailed = true;
   }
   if (removalFailed) {
@@ -164,5 +217,6 @@ Future<InstallOutcome> installExtension(
       'The DevPilot Guide is installed, but DevPilot could not remove the old BuildLoop Guide. Remove it in VS Code under Extensions so only one guide shows.',
     );
   }
-  return const InstallOutcome(InstallStatus.installed, 'The DevPilot Guide is installed.');
+  return const InstallOutcome(
+      InstallStatus.installed, 'The DevPilot Guide is installed.');
 }

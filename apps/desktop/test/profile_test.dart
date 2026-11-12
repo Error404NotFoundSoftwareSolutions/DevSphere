@@ -8,8 +8,11 @@ import 'package:desktop/features/firestore/firestore_service.dart';
 import 'package:desktop/features/profile/profile_screen.dart';
 
 void main() {
-  group('TC-FR-PROF-002-01 Display Name collection, prefilled and editable', () {
-    testWidgets('prefills display name from provider, is editable, and other fields are optional', (WidgetTester tester) async {
+  group('TC-FR-PROF-002-01 Display Name collection, prefilled and editable',
+      () {
+    testWidgets(
+        'prefills display name from provider, is editable, and other fields are optional',
+        (WidgetTester tester) async {
       StudentProfile? savedProfile;
 
       await tester.pumpWidget(
@@ -27,7 +30,8 @@ void main() {
       await tester.pumpAndSettle();
 
       // 1. Verify display name is prefilled
-      final displayNameFinder = find.byKey(const Key('profile_display_name_field'));
+      final displayNameFinder =
+          find.byKey(const Key('profile_display_name_field'));
       expect(displayNameFinder, findsOneWidget);
       expect(find.text('Google Student Name'), findsOneWidget);
 
@@ -50,7 +54,9 @@ void main() {
       expect(savedProfile!.interests, isEmpty);
     });
 
-    testWidgets('rejects empty display name with field-level validation message', (WidgetTester tester) async {
+    testWidgets(
+        'rejects empty display name with field-level validation message',
+        (WidgetTester tester) async {
       StudentProfile? savedProfile;
 
       await tester.pumpWidget(
@@ -79,8 +85,12 @@ void main() {
     });
   });
 
-  group('TC-FR-PROF-003-01 Inspection: Profile fields supported and prohibited fields excluded', () {
-    testWidgets('supports optional college, course, academic year, interests; strictly NO DOB, phone, address', (WidgetTester tester) async {
+  group(
+      'TC-FR-PROF-003-01 Inspection: Profile fields supported and prohibited fields excluded',
+      () {
+    testWidgets(
+        'supports optional college, course, academic year, interests; strictly NO DOB, phone, address',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: ProfileScreen(
@@ -92,16 +102,20 @@ void main() {
       await tester.pumpAndSettle();
 
       // Supported fields are present
-      expect(find.byKey(const Key('profile_display_name_field')), findsOneWidget);
+      expect(
+          find.byKey(const Key('profile_display_name_field')), findsOneWidget);
       expect(find.byKey(const Key('profile_college_field')), findsOneWidget);
       expect(find.byKey(const Key('profile_course_field')), findsOneWidget);
-      expect(find.byKey(const Key('profile_academic_year_field')), findsOneWidget);
+      expect(
+          find.byKey(const Key('profile_academic_year_field')), findsOneWidget);
       expect(find.byKey(const Key('profile_interests_field')), findsOneWidget);
 
       // Prohibited fields are strictly ABSENT (FR-PROF-003: no date of birth, phone number or address)
-      expect(find.textContaining('Date of Birth', findRichText: true), findsNothing);
+      expect(find.textContaining('Date of Birth', findRichText: true),
+          findsNothing);
       expect(find.textContaining('dob', findRichText: true), findsNothing);
-      expect(find.textContaining('birth date', findRichText: true), findsNothing);
+      expect(
+          find.textContaining('birth date', findRichText: true), findsNothing);
       expect(find.textContaining('Phone', findRichText: true), findsNothing);
       expect(find.textContaining('Mobile', findRichText: true), findsNothing);
       expect(find.textContaining('Address', findRichText: true), findsNothing);
@@ -111,7 +125,9 @@ void main() {
   });
 
   group('TC-FR-PROF-007-01 Privacy notice presentation', () {
-    testWidgets('shows privacy disclosure stating profile data is private by default', (WidgetTester tester) async {
+    testWidgets(
+        'shows privacy disclosure stating profile data is private by default',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: ProfileScreen(
@@ -122,12 +138,16 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text('Profile data is private by default and visible only to you.'), findsOneWidget);
+      expect(
+          find.text(
+              'Profile data is private by default and visible only to you.'),
+          findsOneWidget);
     });
   });
 
   group('TC-FR-PROF-008-01 View and edit profile after onboarding', () {
-    testWidgets('renders existing profile values and saves modified updates', (WidgetTester tester) async {
+    testWidgets('renders existing profile values and saves modified updates',
+        (WidgetTester tester) async {
       StudentProfile? updatedProfile;
 
       await tester.pumpWidget(
@@ -173,14 +193,17 @@ void main() {
 
       expect(updatedProfile, isNotNull);
       expect(updatedProfile!.displayName, equals('Initial Student'));
-      expect(updatedProfile!.college, equals('PES University Ring Road Campus'));
+      expect(
+          updatedProfile!.college, equals('PES University Ring Road Campus'));
       expect(updatedProfile!.course, equals('B.Tech CS'));
       expect(updatedProfile!.academicYear, equals('3rd Year / 6th Sem'));
-      expect(updatedProfile!.interests, equals(['Python', 'Machine Learning', 'Go']));
+      expect(updatedProfile!.interests,
+          equals(['Python', 'Machine Learning', 'Go']));
       expect(find.text('Profile saved successfully.'), findsOneWidget);
     });
 
-    testWidgets('backward navigation buttons exist on profile screen', (WidgetTester tester) async {
+    testWidgets('backward navigation buttons exist on profile screen',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: ProfileScreen(
@@ -192,8 +215,8 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byKey(const Key('profile_back_button')), findsOneWidget);
-      expect(find.byKey(const Key('profile_cancel_back_button')), findsOneWidget);
+      expect(
+          find.byKey(const Key('profile_cancel_back_button')), findsOneWidget);
     });
   });
 }
-

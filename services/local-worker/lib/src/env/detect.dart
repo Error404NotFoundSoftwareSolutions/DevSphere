@@ -45,4 +45,3 @@ Future<List<ToolStatus>> detectTools() async {
 
   return items;
 }
-

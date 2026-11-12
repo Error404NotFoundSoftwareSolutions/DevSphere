@@ -12,4 +12,3 @@ Future<RunResult> runPracticeCheck(String workspaceDir, String testFile) async {
     timeout: const Duration(seconds: 30),
   );
 }
-

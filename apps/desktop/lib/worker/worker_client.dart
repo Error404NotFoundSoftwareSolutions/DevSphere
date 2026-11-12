@@ -29,9 +29,7 @@ class UnavailableWorkerClient implements WorkerClient {
   Future<Map<String, dynamic>> send(
       String channel, Map<String, dynamic> data) async {
     throw WorkerException(
-        code: 'unavailable',
-        message: message,
-        recovery: 'Reinstall DevPilot.');
+        code: 'unavailable', message: message, recovery: 'Reinstall DevPilot.');
   }
 }
 

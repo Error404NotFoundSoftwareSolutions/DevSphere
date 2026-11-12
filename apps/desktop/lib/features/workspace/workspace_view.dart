@@ -61,4 +61,3 @@ class WorkspaceView extends StatelessWidget {
     );
   }
 }
-

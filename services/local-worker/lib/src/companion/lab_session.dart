@@ -10,7 +10,12 @@ import 'channel_server.dart';
 import 'protocol.dart';
 
 class LabStepInfo {
-  const LabStepInfo({required this.id, required this.title, required this.contentRef, required this.hasCheck, this.checkId});
+  const LabStepInfo(
+      {required this.id,
+      required this.title,
+      required this.contentRef,
+      required this.hasCheck,
+      this.checkId});
   final String id;
   final String title;
   final String contentRef;
@@ -28,7 +33,8 @@ class LabInfo {
 }
 
 class CheckOutcome {
-  const CheckOutcome({required this.passed, required this.summary, required this.output});
+  const CheckOutcome(
+      {required this.passed, required this.summary, required this.output});
   final bool passed;
   final String summary;
   final String output;
@@ -56,12 +62,14 @@ class LabSessionController implements RequestHandler {
 
   /// Progress for the app (Practice only).
   Map<String, Object?> snapshot() => {
-        'steps': [for (final s in lab.steps) {'id': s.id, 'title': s.title, 'state': _state[s.id] ?? 'todo'}],
+        'steps': [
+          for (final s in lab.steps)
+            {'id': s.id, 'title': s.title, 'state': _state[s.id] ?? 'todo'}
+        ],
         'passed': lab.steps.where((s) => _state[s.id] == 'pass').length,
         'total': lab.steps.length,
         'finishRequested': _finishRequested,
       };
-
 
   @override
   Map<String, Object?> welcome() => welcomeEvent(lab.id);
@@ -70,7 +78,15 @@ class LabSessionController implements RequestHandler {
         labId: lab.id,
         title: lab.title,
         currentStepId: _current,
-        steps: [for (final s in lab.steps) (id: s.id, title: s.title, state: _state[s.id] ?? 'todo', contentRef: s.contentRef)],
+        steps: [
+          for (final s in lab.steps)
+            (
+              id: s.id,
+              title: s.title,
+              state: _state[s.id] ?? 'todo',
+              contentRef: s.contentRef
+            )
+        ],
       );
 
   LabStepInfo? _step(String id) {
@@ -88,37 +104,58 @@ class LabSessionController implements RequestHandler {
       case GetLabStateRequest():
         return [_labState()];
       case GoStepRequest(:final stepId):
-        if (_step(stepId) == null) return [errorEvent('unknown-step', 'That step is not part of this lab.')];
+        if (_step(stepId) == null)
+          return [
+            errorEvent('unknown-step', 'That step is not part of this lab.')
+          ];
         _current = stepId;
         return [_labState()];
       case RunCheckRequest(:final stepId):
         final step = _step(stepId);
-        if (step == null) return [errorEvent('unknown-step', 'That step is not part of this lab.')];
-        if (_running) return [errorEvent('busy', 'Wait for the current check to finish.')];
+        if (step == null)
+          return [
+            errorEvent('unknown-step', 'That step is not part of this lab.')
+          ];
+        if (_running)
+          return [errorEvent('busy', 'Wait for the current check to finish.')];
         _running = true;
         try {
           CheckOutcome outcome;
           if (!step.hasCheck) {
-            outcome = const CheckOutcome(passed: true, summary: 'Marked as done.', output: '');
+            outcome = const CheckOutcome(
+                passed: true, summary: 'Marked as done.', output: '');
           } else {
             try {
               outcome = await runCheck(step);
             } catch (_) {
-              outcome = const CheckOutcome(passed: false, summary: 'The check could not run. Make sure Python is installed, then try again.', output: '');
+              outcome = const CheckOutcome(
+                  passed: false,
+                  summary:
+                      'The check could not run. Make sure Python is installed, then try again.',
+                  output: '');
             }
           }
           _state[step.id] = outcome.passed ? 'pass' : 'fail';
           onPractice(step.id, outcome.passed);
           return [
-            checkResultEvent(stepId: step.id, passed: outcome.passed, summary: outcome.summary, output: redact(outcome.output).text),
+            checkResultEvent(
+                stepId: step.id,
+                passed: outcome.passed,
+                summary: outcome.summary,
+                output: redact(outcome.output).text),
             _labState(),
           ];
         } finally {
           _running = false;
         }
       case FinishLabRequest():
-        final done = lab.steps.isNotEmpty && lab.steps.every((s) => _state[s.id] == 'pass');
-        if (!done) return [errorEvent('steps-incomplete', 'Finish every step first. Use Check my work on each step.')];
+        final done = lab.steps.isNotEmpty &&
+            lab.steps.every((s) => _state[s.id] == 'pass');
+        if (!done)
+          return [
+            errorEvent('steps-incomplete',
+                'Finish every step first. Use Check my work on each step.')
+          ];
         _finishRequested = true;
         onFinishRequested(true);
         return [_labState()];

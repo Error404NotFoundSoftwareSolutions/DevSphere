@@ -14,11 +14,14 @@ CompanionService? companionService;
 
 CompanionService _companion() {
   final s = companionService;
-  if (s == null) throw StateError('The VS Code connection is not set up in this build of DevPilot.');
+  if (s == null)
+    throw StateError(
+        'The VS Code connection is not set up in this build of DevPilot.');
   return s;
 }
 
-Future<Map<String, dynamic>> handleIpcRequest(String channel, Map<String, dynamic> data) async {
+Future<Map<String, dynamic>> handleIpcRequest(
+    String channel, Map<String, dynamic> data) async {
   validateRequest(channel, data);
 
   switch (channel) {
@@ -31,7 +34,11 @@ Future<Map<String, dynamic>> handleIpcRequest(String channel, Map<String, dynami
     case 'catalogue:list':
       return {
         'labs': [
-          {'id': 'python-hello-001', 'title': 'Hello Python', 'version': '1.0.0'}
+          {
+            'id': 'python-hello-001',
+            'title': 'Hello Python',
+            'version': '1.0.0'
+          }
         ]
       };
     case 'bundle:download':
@@ -43,7 +50,8 @@ Future<Map<String, dynamic>> handleIpcRequest(String channel, Map<String, dynami
       final plan = await buildSetupPlan(data['labId'] as String);
       return {'planId': plan.planId, 'steps': plan.steps};
     case 'env:apply':
-      final ok = await applySetupPlan(data['planId'] as String, data['approvalId'] as String);
+      final ok = await applySetupPlan(
+          data['planId'] as String, data['approvalId'] as String);
       return {'ok': ok};
     case 'workspace:open':
       final ok = await openWorkspace(data['attemptId'] as String);
@@ -70,15 +78,18 @@ Future<Map<String, dynamic>> handleIpcRequest(String channel, Map<String, dynami
     case 'companion:status':
       return Map<String, dynamic>.from(await _companion().status());
     case 'companion:install':
-      return Map<String, dynamic>.from(await _companion().install(approved: data['approved'] as bool));
+      return Map<String, dynamic>.from(
+          await _companion().install(approved: data['approved'] as bool));
     case 'companion:launch':
-      return Map<String, dynamic>.from(await _companion().launch(data['labId'] as String));
+      return Map<String, dynamic>.from(
+          await _companion().launch(data['labId'] as String));
     case 'labforge:install':
-      return Map<String, dynamic>.from(_companion().installGeneratedLab((data['lab'] as Map).cast<String, dynamic>()));
+      return Map<String, dynamic>.from(_companion()
+          .installGeneratedLab((data['lab'] as Map).cast<String, dynamic>()));
     case 'companion:sessionState':
-      return Map<String, dynamic>.from(await _companion().sessionState(data['labId'] as String));
+      return Map<String, dynamic>.from(
+          await _companion().sessionState(data['labId'] as String));
     default:
       throw IpcValidationException('Unhandled channel: $channel');
   }
 }
-

@@ -5,10 +5,13 @@
 final RegExp _safeBranch = RegExp(r'^[a-zA-Z0-9._/-]+$');
 
 bool isSafeBranchName(String name) {
-  if (name.isEmpty || name.startsWith('-') || name.startsWith('.')) return false;
-  if (name.contains('..') || name.contains(' ') || name.contains(';') || name.contains('~')) {
+  if (name.isEmpty || name.startsWith('-') || name.startsWith('.'))
+    return false;
+  if (name.contains('..') ||
+      name.contains(' ') ||
+      name.contains(';') ||
+      name.contains('~')) {
     return false;
   }
   return _safeBranch.hasMatch(name);
 }
-

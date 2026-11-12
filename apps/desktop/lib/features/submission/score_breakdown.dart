@@ -53,4 +53,3 @@ class ScoreBreakdown extends StatelessWidget {
     );
   }
 }
-

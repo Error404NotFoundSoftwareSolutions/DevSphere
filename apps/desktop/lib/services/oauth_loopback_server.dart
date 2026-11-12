@@ -130,4 +130,3 @@ class OAuthLoopbackServer {
       ..close();
   }
 }
-

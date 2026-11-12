@@ -35,38 +35,41 @@ class DefaultFirebaseOptions {
   }
 
   static FirebaseOptions get macos => FirebaseOptions(
-    apiKey: const String.fromEnvironment('FIREBASE_MACOS_API_KEY').isNotEmpty
-        ? const String.fromEnvironment('FIREBASE_MACOS_API_KEY')
-        : _decodeKey('QUl6YVN5Qy1aMlo5VnhtaGpVYmpoT0V6N2FxcjJOZEdtSzlEYTVV'),
-    appId: '1:608221930150:ios:78f1179537485f49674a67',
-    messagingSenderId: '608221930150',
-    projectId: 'devpilot-1a384',
-    storageBucket: 'devpilot-1a384.firebasestorage.app',
-    iosClientId: '608221930150-uvtktmqvsbcs0t7hgjtd6v762fnvrbu6.apps.googleusercontent.com',
-    iosBundleId: 'com.devsphere.devsphereScaffold',
-  );
+        apiKey:
+            const String.fromEnvironment('FIREBASE_MACOS_API_KEY').isNotEmpty
+                ? const String.fromEnvironment('FIREBASE_MACOS_API_KEY')
+                : _decodeKey(
+                    'QUl6YVN5QUdNRFVNVDZSb0k0MEQ2LURSLTY3bU9SVzRfVEFOUXZB'),
+        appId: '1:664564860639:web:0e147c7c23f4eecf608b6a',
+        messagingSenderId: '664564860639',
+        projectId: 'devpilot-app',
+        storageBucket: 'devpilot-app.firebasestorage.app',
+      );
 
   static FirebaseOptions get windows => FirebaseOptions(
-    apiKey: const String.fromEnvironment('FIREBASE_WINDOWS_API_KEY').isNotEmpty
-        ? const String.fromEnvironment('FIREBASE_WINDOWS_API_KEY')
-        : _decodeKey('QUl6YVN5QW1JbmlNS0NDZFVFQTRhbklhUnpEaGhVV2VzM2VjdXY0'),
-    appId: '1:608221930150:web:c8ccc076e4ee51ef674a67',
-    messagingSenderId: '608221930150',
-    projectId: 'devpilot-1a384',
-    authDomain: 'devpilot-1a384.firebaseapp.com',
-    storageBucket: 'devpilot-1a384.firebasestorage.app',
-    measurementId: 'G-4ZKF5WHF5S',
-  );
+        apiKey:
+            const String.fromEnvironment('FIREBASE_WINDOWS_API_KEY').isNotEmpty
+                ? const String.fromEnvironment('FIREBASE_WINDOWS_API_KEY')
+                : _decodeKey(
+                    'QUl6YVN5QUdNRFVNVDZSb0k0MEQ2LURSLTY3bU9SVzRfVEFOUXZB'),
+        appId: '1:664564860639:web:0e147c7c23f4eecf608b6a',
+        messagingSenderId: '664564860639',
+        projectId: 'devpilot-app',
+        authDomain: 'devpilot-app.firebaseapp.com',
+        storageBucket: 'devpilot-app.firebasestorage.app',
+        measurementId: 'G-JPQRTJ8S4L',
+      );
 
   static FirebaseOptions get web => FirebaseOptions(
-    apiKey: const String.fromEnvironment('FIREBASE_WEB_API_KEY').isNotEmpty
-        ? const String.fromEnvironment('FIREBASE_WEB_API_KEY')
-        : _decodeKey('QUl6YVN5QW1JbmlNS0NDZFVFQTRhbklhUnpEaGhVV2VzM2VjdXY0'),
-    appId: '1:608221930150:web:53db51afa7466b33674a67',
-    messagingSenderId: '608221930150',
-    projectId: 'devpilot-1a384',
-    authDomain: 'devpilot-1a384.firebaseapp.com',
-    storageBucket: 'devpilot-1a384.firebasestorage.app',
-    measurementId: 'G-W3CG4EYZ0X',
-  );
+        apiKey: const String.fromEnvironment('FIREBASE_WEB_API_KEY').isNotEmpty
+            ? const String.fromEnvironment('FIREBASE_WEB_API_KEY')
+            : _decodeKey(
+                'QUl6YVN5QUdNRFVNVDZSb0k0MEQ2LURSLTY3bU9SVzRfVEFOUXZB'),
+        appId: '1:664564860639:web:0e147c7c23f4eecf608b6a',
+        messagingSenderId: '664564860639',
+        projectId: 'devpilot-app',
+        authDomain: 'devpilot-app.firebaseapp.com',
+        storageBucket: 'devpilot-app.firebasestorage.app',
+        measurementId: 'G-JPQRTJ8S4L',
+      );
 }

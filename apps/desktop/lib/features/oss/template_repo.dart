@@ -11,7 +11,8 @@ class TemplateRepo extends StatelessWidget {
   const TemplateRepo({
     super.key,
     this.repoName = 'community/fastapi-pagination',
-    this.description = 'Simulated upstream open-source repository with open good-first-issues.',
+    this.description =
+        'Simulated upstream open-source repository with open good-first-issues.',
   });
 
   @override
@@ -47,4 +48,3 @@ class TemplateRepo extends StatelessWidget {
     );
   }
 }
-

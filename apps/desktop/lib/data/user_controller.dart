@@ -111,6 +111,33 @@ class UserDataController extends ChangeNotifier {
     _persist(d.copyWith(generatedLabs: [ref, ...others].take(50).toList()));
   }
 
+  /// Adds a new learning path (newest first, at most [StudyPath.maxSaved]).
+  void addPath(StudyPath path) {
+    final d = _data;
+    if (d == null) return;
+    final others = d.learningPaths.where((p) => p.id != path.id);
+    _persist(d.copyWith(
+        learningPaths: [path, ...others].take(StudyPath.maxSaved).toList()));
+  }
+
+  /// Replaces one step of a saved path (its detail, video progress, quick-check score or installed lab).
+  void updatePathStep(String pathId, int index, PathStep step) {
+    final d = _data;
+    final p = d?.path(pathId);
+    if (d == null || p == null || index < 0 || index >= p.steps.length) return;
+    final next = p.withStep(index, step);
+    _persist(d.copyWith(learningPaths: [
+      for (final x in d.learningPaths) x.id == pathId ? next : x
+    ]));
+  }
+
+  void removePath(String pathId) {
+    final d = _data;
+    if (d == null) return;
+    _persist(d.copyWith(
+        learningPaths: d.learningPaths.where((p) => p.id != pathId).toList()));
+  }
+
   void clearInterview() {
     final d = _data;
     if (d == null) return;

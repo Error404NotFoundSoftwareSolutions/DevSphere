@@ -14,7 +14,12 @@ void recordProgress(
 }) {
   db.execute(
     'INSERT OR REPLACE INTO progress_events (event_id, attempt_id, type, payload, client_time) VALUES (?, ?, ?, ?, ?)',
-    [eventId, attemptId, type, jsonEncode(payload), DateTime.now().toIso8601String()],
+    [
+      eventId,
+      attemptId,
+      type,
+      jsonEncode(payload),
+      DateTime.now().toIso8601String()
+    ],
   );
 }
-

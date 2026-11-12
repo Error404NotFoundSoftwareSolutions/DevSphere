@@ -7,6 +7,6 @@ class AttemptPin {
   final String labId;
   final String version;
 
-  const AttemptPin({required this.attemptId, required this.labId, required this.version});
+  const AttemptPin(
+      {required this.attemptId, required this.labId, required this.version});
 }
-

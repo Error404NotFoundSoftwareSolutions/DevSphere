@@ -14,7 +14,8 @@ class TestClient {
   Future<void> get closed => _closed.future;
 
   static Future<TestClient> connect(String path) async {
-    final s = await Socket.connect(InternetAddress(path, type: InternetAddressType.unix), 0);
+    final s = await Socket.connect(
+        InternetAddress(path, type: InternetAddressType.unix), 0);
     final c = TestClient._(s);
     s.listen(
       (data) {
@@ -44,10 +45,12 @@ class TestClient {
   void send(Map<String, Object?> m) => socket.add(encodeFrame(m));
   void sendRaw(List<int> bytes) => socket.add(bytes);
 
-  Future<Map<String, dynamic>> next({Duration timeout = const Duration(seconds: 3)}) async {
+  Future<Map<String, dynamic>> next(
+      {Duration timeout = const Duration(seconds: 3)}) async {
     final end = DateTime.now().add(timeout);
     while (_queue.isEmpty) {
-      if (_closed.isCompleted || DateTime.now().isAfter(end)) throw TimeoutException('no message');
+      if (_closed.isCompleted || DateTime.now().isAfter(end))
+        throw TimeoutException('no message');
       final w = Completer<void>();
       _waiters.add(w);
       await w.future.timeout(end.difference(DateTime.now()), onTimeout: () {});
@@ -55,7 +58,8 @@ class TestClient {
     return _queue.removeAt(0);
   }
 
-  Future<bool> waitClosed({Duration timeout = const Duration(seconds: 3)}) async {
+  Future<bool> waitClosed(
+      {Duration timeout = const Duration(seconds: 3)}) async {
     try {
       await closed.timeout(timeout);
       return true;
@@ -69,5 +73,9 @@ class TestClient {
   }
 }
 
-Map<String, Object?> helloMsg(String sessionId, {int protocol = 1}) =>
-    {'type': 'hello', 'protocol': protocol, 'sessionId': sessionId, 'extVersion': '0.1.0'};
+Map<String, Object?> helloMsg(String sessionId, {int protocol = 1}) => {
+      'type': 'hello',
+      'protocol': protocol,
+      'sessionId': sessionId,
+      'extVersion': '0.1.0'
+    };

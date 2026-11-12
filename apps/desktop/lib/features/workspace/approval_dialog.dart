@@ -20,7 +20,8 @@ class ApprovalDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('Confirm Action'),
-      content: Text('DevSphere requests permission to run:\n\n$actionDescription'),
+      content:
+          Text('DevSphere requests permission to run:\n\n$actionDescription'),
       actions: [
         TextButton(onPressed: onDecline, child: const Text('Decline')),
         ElevatedButton(onPressed: onApprove, child: const Text('Allow Once')),
@@ -28,4 +29,3 @@ class ApprovalDialog extends StatelessWidget {
     );
   }
 }
-

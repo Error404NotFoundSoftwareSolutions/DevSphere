@@ -1,0 +1,8 @@
+# Builds the API image from the repository root and pushes it to Artifact Registry.
+# Run from the repo root:  gcloud builds submit --config services/api/cloudbuild.yaml --ignore-file services/api/.cloudbuildignore --substitutions _IMAGE=... .
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args: ["build", "-f", "services/api/Dockerfile", "-t", "${_IMAGE}", "."]
+images: ["${_IMAGE}"]
+options:
+  logging: CLOUD_LOGGING_ONLY

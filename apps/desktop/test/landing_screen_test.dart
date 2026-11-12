@@ -4,12 +4,15 @@ import 'package:desktop/features/landing/landing_screen.dart';
 import 'package:desktop/router.dart';
 import 'package:desktop/worker/worker_client.dart';
 import 'package:flutter/material.dart';
+import 'package:ui/ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('LandingScreen and NeonGlowBackground tests', () {
-    testWidgets('renders desktop landing screen with navbar, hero, dual CTAs and 3 glassmorphism cards', (tester) async {
+    testWidgets(
+        'renders desktop landing screen with navbar, hero, dual CTAs and 3 glassmorphism cards',
+        (tester) async {
       tester.view.physicalSize = const Size(1280, 800);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
@@ -20,6 +23,7 @@ void main() {
             workerClientProvider.overrideWithValue(MockWorkerClient()),
           ],
           child: MaterialApp(
+            theme: devPilotTheme(),
             home: const LandingScreen(),
           ),
         ),
@@ -27,7 +31,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Top floating navbar checks
-      expect(find.text('DevSphere'), findsOneWidget);
+      expect(find.text('DevPilot'), findsOneWidget);
       expect(find.text('Features'), findsOneWidget);
       expect(find.text('Curriculum'), findsOneWidget);
       expect(find.text('Roadmaps'), findsOneWidget);
@@ -35,19 +39,21 @@ void main() {
       expect(find.text('Sign In'), findsOneWidget);
 
       // Hero section checks
-      expect(find.text('Engineering Mastery,\nAccelerated by AI.'), findsOneWidget);
+      expect(find.text('Learn the tools engineers\nactually use.'),
+          findsOneWidget);
       expect(find.text('Get Started Free'), findsOneWidget);
       expect(find.text('Explore Dashboard'), findsOneWidget);
 
       // 3 Glassmorphism cards check
-      expect(find.text('Companion IDE'), findsOneWidget);
-      expect(find.text('Verified Badges'), findsOneWidget);
-      expect(find.text('Isolated Sandboxes'), findsOneWidget);
+      expect(find.text('Guided labs in your VS Code'), findsOneWidget);
+      expect(find.text('Badges only from verified results'), findsOneWidget);
+      expect(find.text('Checks that read your real work'), findsOneWidget);
 
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('navigates from landing screen to sign-in screen via router', (tester) async {
+    testWidgets('navigates from landing screen to sign-in screen via router',
+        (tester) async {
       tester.view.physicalSize = const Size(1280, 800);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
@@ -74,7 +80,9 @@ void main() {
       expect(find.byKey(const Key('auth_back_button')), findsOneWidget);
     });
 
-    testWidgets('tapping navbar Sign In button navigates to sign-in screen and triggers launch animation', (tester) async {
+    testWidgets(
+        'tapping navbar Sign In button navigates to the sign-in screen in sign-in mode',
+        (tester) async {
       tester.view.physicalSize = const Size(1280, 800);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
@@ -95,7 +103,8 @@ void main() {
 
       // Tap Sign In in top navbar
       await tester.tap(signInBtn);
-      await tester.pump(); // Route transition begins & postFrameCallback scheduled
+      await tester
+          .pump(); // Route transition begins & postFrameCallback scheduled
       await tester.pump(const Duration(milliseconds: 100));
 
       // Arrives at SignInScreen in Sign in mode
@@ -103,14 +112,8 @@ void main() {
       expect(find.text('Sign in'), findsWidgets);
       expect(find.byKey(const Key('auth_back_button')), findsOneWidget);
 
-      // Advance animation through Phase 1 rumble & Phase 2 blast off
-      await tester.pump(const Duration(milliseconds: 300));
-      await tester.pump(const Duration(milliseconds: 1600));
       await tester.pumpAndSettle();
-
-      // Product slideshow is revealed after rocket launch sequence
-      expect(find.text('AI Active'), findsOneWidget);
-      expect(find.text('devpilot_tutor.py'), findsOneWidget);
+      expect(find.text('Welcome back'), findsOneWidget);
 
       expect(tester.takeException(), isNull);
     });

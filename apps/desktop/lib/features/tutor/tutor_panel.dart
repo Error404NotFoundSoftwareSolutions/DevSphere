@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ui/ui.dart';
 import '../../api.dart';
 import '../../services/devpilot_api.dart';
+import '../../ui/kit.dart';
 
 const tutorLanguages = <String, String>{
   'en': 'English',
@@ -90,85 +91,87 @@ class _TutorPanelState extends ConsumerState<TutorPanel> {
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
     final language = ref.watch(tutorLanguageProvider);
-    return Card(
+    return Panel(
       key: const Key('tutor-panel'),
-      child: Padding(
-        padding: const EdgeInsets.all(BL.space6),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(children: [
-              const Icon(Icons.psychology, color: BL.primary),
-              const SizedBox(width: BL.space2),
-              Expanded(child: Text('Ask the tutor', style: text.titleLarge)),
-              DropdownButton<String>(
-                key: const Key('tutor-language'),
-                value: language,
-                underline: const SizedBox.shrink(),
-                items: [
-                  for (final e in tutorLanguages.entries)
-                    DropdownMenuItem(value: e.key, child: Text(e.value))
-                ],
-                onChanged: (v) =>
-                    ref.read(tutorLanguageProvider.notifier).state = v ?? 'en',
-              ),
-            ]),
-            Text(
-                'Hints only: the tutor never hands you the solution. Passwords and keys are removed before your question leaves this computer.',
-                style: text.bodySmall),
-            const Divider(height: BL.space6),
-            for (final m in _messages)
-              Align(
-                alignment:
-                    m.fromTutor ? Alignment.centerLeft : Alignment.centerRight,
-                child: Container(
-                  margin: const EdgeInsets.symmetric(vertical: BL.space1),
-                  padding: const EdgeInsets.all(BL.space3),
-                  constraints: const BoxConstraints(maxWidth: 640),
-                  decoration: BoxDecoration(
-                    color: m.isError
-                        ? BL.danger.withValues(alpha: 0.08)
-                        : (m.fromTutor ? BL.surfaceMuted : BL.selected),
-                    borderRadius: BorderRadius.circular(BL.radiusMd),
-                  ),
-                  child: SelectableText(m.text, style: text.bodyMedium),
+      title: 'Ask the tutor',
+      trailing: DropdownButton<String>(
+        key: const Key('tutor-language'),
+        value: language,
+        isDense: true,
+        underline: const SizedBox.shrink(),
+        dropdownColor: BL.surfaceMuted,
+        style: BL.mono(size: 13, color: BL.textPrimary),
+        items: [
+          for (final e in tutorLanguages.entries)
+            DropdownMenuItem(value: e.key, child: Text(e.value))
+        ],
+        onChanged: (v) =>
+            ref.read(tutorLanguageProvider.notifier).state = v ?? 'en',
+      ),
+      padding: const EdgeInsets.all(BL.space4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+              'Hints only: the tutor never hands you the solution. Passwords and keys are removed before your question leaves this computer.',
+              style: text.bodySmall),
+          const SizedBox(height: BL.space4),
+          for (final m in _messages)
+            Align(
+              alignment:
+                  m.fromTutor ? Alignment.centerLeft : Alignment.centerRight,
+              child: Container(
+                margin: const EdgeInsets.symmetric(vertical: BL.space1),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: BL.space4, vertical: BL.space3),
+                constraints: const BoxConstraints(maxWidth: 640),
+                decoration: BoxDecoration(
+                  color: m.isError
+                      ? BL.danger.withValues(alpha: 0.08)
+                      : (m.fromTutor ? BL.surfaceMuted : BL.primarySoft),
+                  borderRadius: BorderRadius.only(
+                      topLeft: const Radius.circular(14),
+                      topRight: const Radius.circular(14),
+                      bottomLeft: Radius.circular(m.fromTutor ? 4 : 14),
+                      bottomRight: Radius.circular(m.fromTutor ? 14 : 4)),
                 ),
+                child: SelectableText(m.text,
+                    style: text.bodyMedium?.copyWith(
+                        color: m.isError ? BL.danger : BL.textPrimary)),
               ),
-            if (_busy)
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: BL.space2),
-                child: Row(children: [
-                  SizedBox(
-                      width: 14,
-                      height: 14,
-                      child: CircularProgressIndicator(strokeWidth: 2)),
-                  SizedBox(width: BL.space2),
-                  Text('The tutor is thinking...'),
-                ]),
+            ),
+          if (_busy)
+            Padding(
+                padding: const EdgeInsets.symmetric(vertical: BL.space2),
+                child: Text('The tutor is thinking...',
+                    style: BL.mono(size: 12.5))),
+          const SizedBox(height: BL.space3),
+          Row(children: [
+            Expanded(
+              child: TextField(
+                key: const Key('tutor-input'),
+                controller: _controller,
+                maxLength: 2000,
+                maxLines: 1,
+                decoration: const InputDecoration(
+                    hintText: 'Ask a hint or a question', counterText: ''),
+                onSubmitted: (_) => _send(),
               ),
-            const SizedBox(height: BL.space3),
-            Row(children: [
-              Expanded(
-                child: TextField(
-                  key: const Key('tutor-input'),
-                  controller: _controller,
-                  maxLength: 2000,
-                  maxLines: 1,
-                  decoration: const InputDecoration(
-                      hintText: 'Ask a hint or a question...', counterText: ''),
-                  onSubmitted: (_) => _send(),
-                ),
-              ),
-              const SizedBox(width: BL.space2),
-              IconButton.filled(
-                key: const Key('tutor-send'),
-                icon: const Icon(Icons.send, size: 18),
-                tooltip: 'Send',
-                onPressed: _busy ? null : _send,
-              ),
-            ]),
-          ],
-        ),
+            ),
+            const SizedBox(width: BL.space2),
+            IconButton.filled(
+              key: const Key('tutor-send'),
+              style: IconButton.styleFrom(
+                  backgroundColor: BL.primary,
+                  foregroundColor: BL.onPrimary,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(BL.radiusMd))),
+              icon: const Icon(Icons.arrow_upward, size: 18),
+              tooltip: 'Send',
+              onPressed: _busy ? null : _send,
+            ),
+          ]),
+        ],
       ),
     );
   }

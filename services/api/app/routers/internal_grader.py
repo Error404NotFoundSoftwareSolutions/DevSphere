@@ -45,4 +45,14 @@ def accept_result(result: SignedResult) -> dict:
     if sub["result"] is None:  # a replayed result does not overwrite the first one
         sub["result"] = {**result.payload, "kind": "verified"}
         sub["status"] = "graded"
+        attempt = memory.ATTEMPTS.get(sub.get("attempt_id"))
+        payload = result.payload
+        if attempt and payload.get("max_score") and payload.get("score", 0) / payload["max_score"] >= 0.7:
+            from app.routers.credentials import upgrade_to_verified
+
+            upgrade_to_verified(
+                attempt["user_id"],
+                attempt["lab_id"],
+                {"score": payload.get("score"), "max_score": payload.get("max_score")},
+            )
     return {"ok": True}

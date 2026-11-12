@@ -26,4 +26,3 @@ class TaskBar extends StatelessWidget {
     );
   }
 }
-

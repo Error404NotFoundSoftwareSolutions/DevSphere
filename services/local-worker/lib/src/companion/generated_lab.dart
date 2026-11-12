@@ -179,7 +179,14 @@ GeneratedLabInstall installGeneratedLab(Map<String, dynamic> lab, String root) {
         ..writeln('    - id: ${s['id']}')
         ..writeln('      title: ${jsonEncode(s['title'])}')
         ..writeln('      content_ref: $ref');
-      if (s['check'] == true) manifest.writeln('      practice_check: checks');
+      if (s['check'] == true) {
+        // A step with its own test file (tests/visible/test_<id>.py) checks only that file, so steps turn green one at
+        // a time. Otherwise the step runs every visible test.
+        final own =
+            'tests/visible/test_${(s['id'] as String).replaceAll('-', '_')}.py';
+        manifest.writeln(
+            '      practice_check: ${tests.any((f) => f.path == own) ? s['id'] : 'checks'}');
+      }
       write(ref, '# ${s['title']}\n\n${s['md']}\n');
     }
     manifest

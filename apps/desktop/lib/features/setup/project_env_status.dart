@@ -17,4 +17,3 @@ class ProjectEnvStatus extends StatelessWidget {
     );
   }
 }
-

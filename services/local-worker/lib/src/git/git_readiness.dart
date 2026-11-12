@@ -6,10 +6,10 @@ import '../exec/safe_spawn.dart';
 
 Future<bool> checkGitInstalled() async {
   try {
-    final r = await runProcess('git', ['--version'], cwd: '.', timeout: const Duration(seconds: 5));
+    final r = await runProcess('git', ['--version'],
+        cwd: '.', timeout: const Duration(seconds: 5));
     return r.exitCode == 0;
   } catch (_) {
     return false;
   }
 }
-

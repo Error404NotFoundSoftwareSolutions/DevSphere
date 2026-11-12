@@ -56,5 +56,22 @@ All need a signed-in person (Firebase ID token), count against a per-person dail
 |---|---|---|
 | `POST /v1/ai/roadmap` | `{kind: job_description or topic, text (1 to 6000 chars), level}` | `{title, steps[]}`. A step is a real lab (`lab_id` from the catalogue) or a lab to generate (at most 4). |
 | `POST /v1/ai/interview` | same | `{title, questions[4..10]}`. Each question has `kind` (concept, practical, behavioural), `question`, `hint`, up to 3 `good_answer_covers` and up to 4 `skills`. Practice material only. |
+| `POST /v1/ai/explain-error` | `{error_text (1 to 6000), code?, language}` | `{meaning, likely_cause, things_to_try[1..4], concept}`. Guides, never a finished fix. Limit `ai_explain_daily_limit` (60). |
+| `POST /v1/ai/review-code` | `{code (1 to 6000), filename?, goal?, language}` | `{summary, strengths[0..3], suggestions[0..6], question_to_think_about}`. A suggestion has `where`, `issue`, `why_it_matters`, `how_to_improve` and a `kind` (bug, readability, safety, style, tests). No rewritten solution and no mark. Limit `ai_review_daily_limit` (20). |
+| `POST /v1/ai/paths` | `{goal (3 to 600), level, language}` | `{title, summary, steps[3..8]}`; a step has `id`, `title`, `objective`, `skills`, `minutes`. Skill `path-planner`. Limit `ai_path_daily_limit` (10). |
+| `POST /v1/ai/paths/step` | `{goal, path_title, level, language, step {id, title, objective, skills}, previous[]}` | `{intro_md, key_points[3..5], videos[0..2], videos_available, quiz[3], lab}`. Videos are chosen only from YouTube search results and their title, channel and length come from YouTube. `lab` is `{kind: catalog, lab_id, title}` or `{kind: generate, topic}`. Skill `step-builder`. Limit `ai_step_daily_limit` (60). |
 | `POST /v1/ai/labs/generate` | `{topic, level}` | A lab that passed generate-and-verify, as a learner view (no protected tests, no reference). Development only until the isolated verifier exists. |
 | `POST /v1/tutor/messages` | `{attempt_id, question, level, code?, language}` | `{answer, level}`; the level is lowered to the lab's cap by the server. |
+
+## Credential endpoints (built, in `services/api/app/routers/credentials.py`)
+| Endpoint | Purpose |
+|---|---|
+| `POST /v1/credentials/claim` | Body: `lab_id`, `checks` (id and passed), `started_at`, `completed_at`. Issues tier `attested` when the lab is a catalogue lab with checks, every required check passed and the time is believable. Claiming again returns the same credential. 422 with a plain reason otherwise. |
+| `GET /v1/credentials` | The caller's own credentials. |
+| `POST /v1/credentials/{id}/sharing` | Body: `public`, `display_name`. Owner only. A public credential needs a name. |
+| `GET /c/{id}` | Public page (HTML) for a shared credential. No sign-in. 404 unless shared. |
+| `GET /v1/public/credentials/{id}` | The same facts as JSON for a shared credential. |
+Tiers: `attested` (checked on the learner's computer, validated by the service, not independently verified) and `verified` (a signed grader result; set only by `upgrade_to_verified`).
+
+## Player page (built, in `services/api/app/routers/player.py`)
+`GET /player?v=<11-character video id>&s=<session>` (no sign-in): the page the app opens in a small player window to play one video through the privacy-enhanced `youtube-nocookie.com` player. It counts only seconds played in order and posts `{s, v, watched, duration, ended}` to `POST /player/progress` every 4 seconds. The app creates the session with `POST /v1/player/sessions {video_id}` (signed in) and reads it with `GET /v1/player/sessions/{id}` (owner only). Watched time only grows and is capped at the video length. Strict Content-Security-Policy; any other `v` is a 404.

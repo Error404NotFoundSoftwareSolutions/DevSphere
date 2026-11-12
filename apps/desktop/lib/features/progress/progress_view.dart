@@ -77,4 +77,3 @@ class ProgressView extends StatelessWidget {
     );
   }
 }
-

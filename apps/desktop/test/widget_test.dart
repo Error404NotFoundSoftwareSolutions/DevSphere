@@ -3,7 +3,6 @@
 // Test ID: TC-NFR-PERF-001-01
 // Implemented here: Smoke test ensuring the DevPilot desktop app launches cleanly
 
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:desktop/app.dart';
@@ -14,8 +13,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('DevPilot'), findsWidgets);
-    expect(find.text('Learn by building.'), findsOneWidget);
+    expect(find.text('Create an account'), findsOneWidget);
     expect(find.text('Sign in with Google'), findsOneWidget);
-    expect(find.byIcon(Icons.login), findsOneWidget);
   });
 }

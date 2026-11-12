@@ -8,7 +8,11 @@ import time
 
 from app.ai.provider import ProviderDown
 
-TIMEOUT_MS = 45_000
+# Writing a whole lab (several files, plus the model's own thinking) takes 30 to 70 seconds, so the limit must be well
+# above that. Short calls finish in seconds; a call that hangs is cut off after this long.
+TIMEOUT_MS = 120_000
+# A failure slower than this (a timeout) is not retried: a second wait of that length would only repeat it.
+RETRY_ONLY_IF_FASTER_THAN_S = 20.0
 RETRY_DELAY_S = 0.5
 
 
@@ -52,7 +56,8 @@ class GeminiProvider:
         json_schema: dict | None,
     ) -> str:
         text = None
-        for attempt in range(2):  # one quick retry: the first call after a cold start can fail once
+        for attempt in range(2):
+            started = time.monotonic()  # one quick retry: the first call after a cold start can fail once
             try:
                 _, types = self._sdk()
                 cfg: dict = {
@@ -69,7 +74,7 @@ class GeminiProvider:
                 text = getattr(result, "text", None)
                 break
             except Exception:  # noqa: BLE001 - details may contain secrets or request data
-                if attempt == 1:
+                if attempt == 1 or time.monotonic() - started > RETRY_ONLY_IF_FASTER_THAN_S:
                     raise ProviderDown("The AI service did not answer.") from None
                 time.sleep(RETRY_DELAY_S)
         if not text:

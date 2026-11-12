@@ -5,4 +5,3 @@
 Future<bool> resetBugWorkspace(String workspaceDir, String commitSha) async {
   return true;
 }
-

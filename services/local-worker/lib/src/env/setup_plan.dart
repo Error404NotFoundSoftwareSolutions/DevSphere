@@ -20,4 +20,3 @@ Future<bool> applySetupPlan(String planId, String approvalId) async {
   // Consented execution only
   return true;
 }
-

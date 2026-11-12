@@ -7,4 +7,3 @@ import 'package:flutter/material.dart';
 void requestAccessibleFocus(BuildContext context, FocusNode node) {
   FocusScope.of(context).requestFocus(node);
 }
-

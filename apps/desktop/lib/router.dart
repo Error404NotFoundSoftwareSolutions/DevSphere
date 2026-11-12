@@ -3,6 +3,7 @@
 // Requirements: FR-PROF-002..008, FR-WS-001..005, NFR-MAINT-005
 // Implemented here: top-level router configuration using go_router; DevPilot shell routes with onboarding navigation
 
+import 'features/learn/learn_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'features/auth/sign_in_screen.dart';
@@ -22,7 +23,8 @@ import 'ui/app_shell.dart';
 import 'ui/motion.dart';
 
 String _determineInitialRoute() {
-  final defaultRoute = WidgetsBinding.instance.platformDispatcher.defaultRouteName;
+  final defaultRoute =
+      WidgetsBinding.instance.platformDispatcher.defaultRouteName;
   if (defaultRoute.isNotEmpty && defaultRoute != '/') {
     return defaultRoute;
   }
@@ -91,11 +93,14 @@ CustomTransitionPage<T> buildSmoothTransitionPage<T>({
             end: Offset.zero,
           ).animate(curvedAnimation),
           child: ScaleTransition(
-            scale: Tween<double>(begin: 0.985, end: 1.0).animate(curvedAnimation),
+            scale:
+                Tween<double>(begin: 0.985, end: 1.0).animate(curvedAnimation),
             child: FadeTransition(
-              opacity: Tween<double>(begin: 1.0, end: 0.0).animate(curvedSecondary),
+              opacity:
+                  Tween<double>(begin: 1.0, end: 0.0).animate(curvedSecondary),
               child: ScaleTransition(
-                scale: Tween<double>(begin: 1.0, end: 0.99).animate(curvedSecondary),
+                scale: Tween<double>(begin: 1.0, end: 0.99)
+                    .animate(curvedSecondary),
                 child: child,
               ),
             ),
@@ -158,25 +163,36 @@ GoRouter createRouter({String? initialLocation}) {
           ),
           GoRoute(
             path: '/catalog',
-            pageBuilder: (context, state) => buildSmoothTransitionPage(state: state, child: const CatalogScreen()),
+            pageBuilder: (context, state) => buildSmoothTransitionPage(
+                state: state, child: const CatalogScreen()),
           ),
           GoRoute(
             path: '/paths',
-            pageBuilder: (context, state) => buildSmoothTransitionPage(state: state, child: const PathsScreen()),
+            pageBuilder: (context, state) => buildSmoothTransitionPage(
+                state: state, child: const PathsScreen()),
           ),
           GoRoute(
             path: '/credentials',
-            pageBuilder: (context, state) => buildSmoothTransitionPage(state: state, child: const CredentialsScreen()),
+            pageBuilder: (context, state) => buildSmoothTransitionPage(
+                state: state, child: const CredentialsScreen()),
           ),
           GoRoute(
             path: '/workspaces',
-            pageBuilder: (context, state) => buildSmoothTransitionPage(state: state, child: const WorkspacesScreen()),
+            pageBuilder: (context, state) => buildSmoothTransitionPage(
+                state: state, child: const WorkspacesScreen()),
           ),
           GoRoute(
             path: '/course/:id',
             pageBuilder: (context, state) => buildSmoothTransitionPage(
               state: state,
               child: CourseScreen(id: state.pathParameters['id'] ?? ''),
+            ),
+          ),
+          GoRoute(
+            path: '/learn/:id',
+            pageBuilder: (context, state) => buildSmoothTransitionPage(
+              state: state,
+              child: LearnScreen(id: state.pathParameters['id'] ?? ''),
             ),
           ),
           GoRoute(

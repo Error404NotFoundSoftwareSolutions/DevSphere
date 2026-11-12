@@ -71,12 +71,15 @@ class FakeSecureStorage extends FlutterSecureStorage {
 
 void main() {
   group('TC-FR-AUTH-001 Native system browser flow', () {
-    test('TC-FR-AUTH-001-01 offers Google sign-in using external system browser, not embedded webview', () async {
+    test(
+        'TC-FR-AUTH-001-01 offers Google sign-in using external system browser, not embedded webview',
+        () async {
       LaunchMode? recordedMode;
       Uri? recordedUri;
 
       final service = SignInService(
-        urlLauncher: (uri, {LaunchMode mode = LaunchMode.platformDefault}) async {
+        urlLauncher: (uri,
+            {LaunchMode mode = LaunchMode.platformDefault}) async {
           recordedUri = uri;
           recordedMode = mode;
           return true;
@@ -95,14 +98,17 @@ void main() {
       expect(recordedMode, equals(LaunchMode.externalApplication));
     });
 
-    testWidgets('TC-FR-AUTH-001-02 sign-in cancelled in browser shows cancelled message and retry action',
+    testWidgets(
+        'TC-FR-AUTH-001-02 sign-in cancelled in browser shows cancelled message and retry action',
         (tester) async {
       final fakeStorage = FakeSecureStorage();
       final sessionStore = SessionStore(storage: fakeStorage);
 
       // Launcher returns false simulating user cancelling / closing external browser
       final service = SignInService(
-        urlLauncher: (uri, {LaunchMode mode = LaunchMode.platformDefault}) async => false,
+        urlLauncher: (uri,
+                {LaunchMode mode = LaunchMode.platformDefault}) async =>
+            false,
       );
 
       await tester.pumpWidget(
@@ -125,7 +131,8 @@ void main() {
       // Shows error message and recovery action
       expect(find.byKey(const Key('auth_error_container')), findsOneWidget);
       expect(find.text('Sign-in was cancelled.'), findsOneWidget);
-      expect(find.text('Try signing in again when you are ready.'), findsOneWidget);
+      expect(find.text('Try signing in again when you are ready.'),
+          findsOneWidget);
       expect(find.text('Retry Sign In'), findsOneWidget);
 
       // Verify no session token was stored
@@ -135,7 +142,9 @@ void main() {
   });
 
   group('TC-FR-AUTH-002 No confidential secrets in Client', () {
-    test('TC-FR-AUTH-002-01 requirement is met as written: only public client ID used', () {
+    test(
+        'TC-FR-AUTH-002-01 requirement is met as written: only public client ID used',
+        () {
       final service = SignInService();
       expect(service.clientId, contains('.apps.googleusercontent.com'));
       expect(service.clientId, isNot(contains('client_secret')));
@@ -162,12 +171,15 @@ void main() {
         }
       }
 
-      expect(violations, isEmpty, reason: 'Packaged client must contain no secrets');
+      expect(violations, isEmpty,
+          reason: 'Packaged client must contain no secrets');
     });
   });
 
   group('TC-FR-AUTH-003 Identity scopes only', () {
-    test('TC-FR-AUTH-003-01 sign-in request asks only for identity scopes (openid, profile, email)', () {
+    test(
+        'TC-FR-AUTH-003-01 sign-in request asks only for identity scopes (openid, profile, email)',
+        () {
       final service = SignInService();
       final url = service.buildAuthUrl(
         redirectUri: 'http://127.0.0.1:8000/callback',
@@ -184,7 +196,9 @@ void main() {
   });
 
   group('TC-FR-AUTH-007 Session material secure storage and fallback', () {
-    test('TC-FR-AUTH-007-01 session material is persisted in OS-backed secure storage', () async {
+    test(
+        'TC-FR-AUTH-007-01 session material is persisted in OS-backed secure storage',
+        () async {
       final fakeStorage = FakeSecureStorage();
       final store = SessionStore(storage: fakeStorage);
 
@@ -199,7 +213,8 @@ void main() {
       expect(await store.readToken(), isNull);
     });
 
-    test('TC-FR-AUTH-007-02 & TC-NFR-SEC-004-01 no secure storage available: memory only, asks sign-in next start',
+    test(
+        'TC-FR-AUTH-007-02 & TC-NFR-SEC-004-01 no secure storage available: memory only, asks sign-in next start',
         () async {
       final fakeStorage = FakeSecureStorage()..shouldThrow = true;
       final store = SessionStore(storage: fakeStorage);
@@ -222,33 +237,46 @@ void main() {
     });
   });
 
-  group('TC-FR-AUTH-008 Client distinguishes error types and provides recovery actions', () {
-    test('TC-FR-AUTH-008-01 distinguishes cancelled, network failure, expired session, and unverified email', () {
+  group(
+      'TC-FR-AUTH-008 Client distinguishes error types and provides recovery actions',
+      () {
+    test(
+        'TC-FR-AUTH-008-01 distinguishes cancelled, network failure, expired session, and unverified email',
+        () {
       final service = SignInService();
 
       final cancelled = service.classifyError('User cancelled browser auth');
       expect(cancelled.type, equals(AuthErrorType.cancelled));
       expect(cancelled.message, equals('Sign-in was cancelled.'));
-      expect(cancelled.recoveryAction, equals('Try signing in again when you are ready.'));
+      expect(cancelled.recoveryAction,
+          equals('Try signing in again when you are ready.'));
 
-      final network = service.classifyError('SocketException: Connection refused');
+      final network =
+          service.classifyError('SocketException: Connection refused');
       expect(network.type, equals(AuthErrorType.networkFailure));
       expect(network.message, contains('Network connection failed'));
-      expect(network.recoveryAction, equals('Check your internet connection and try again.'));
+      expect(network.recoveryAction,
+          equals('Check your internet connection and try again.'));
 
-      final expired = service.classifyError('HTTP 401 unauthenticated expired session');
+      final expired =
+          service.classifyError('HTTP 401 unauthenticated expired session');
       expect(expired.type, equals(AuthErrorType.expiredSession));
       expect(expired.message, equals('Your session has expired.'));
-      expect(expired.recoveryAction, equals('Please sign in again to continue.'));
+      expect(
+          expired.recoveryAction, equals('Please sign in again to continue.'));
 
       final unverified = service.classifyError('Email is unverified');
       expect(unverified.type, equals(AuthErrorType.unverifiedEmail));
-      expect(unverified.message, equals('Your email address is not verified by Google.'));
-      expect(unverified.recoveryAction, equals('Verify your email address with Google and retry sign-in.'));
+      expect(unverified.message,
+          equals('Your email address is not verified by Google.'));
+      expect(unverified.recoveryAction,
+          equals('Verify your email address with Google and retry sign-in.'));
     });
   });
 
-  group('TC-FR-AUTH-010 Create Account & Sign In sections, password confirmation, and profile removal', () {
+  group(
+      'TC-FR-AUTH-010 Create Account & Sign In sections, password confirmation, and profile removal',
+      () {
     testWidgets('profile button is removed from auth screen', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
@@ -261,7 +289,9 @@ void main() {
       expect(find.widgetWithText(OutlinedButton, 'Profile'), findsNothing);
     });
 
-    testWidgets('initial section is Create account with password confirmation and Google option', (tester) async {
+    testWidgets(
+        'initial section is Create account with password confirmation and Google option',
+        (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: SignInScreen(),
@@ -274,13 +304,15 @@ void main() {
       expect(find.byKey(const Key('auth_last_name_field')), findsOneWidget);
       expect(find.byKey(const Key('auth_email_field')), findsOneWidget);
       expect(find.byKey(const Key('auth_password_field')), findsOneWidget);
-      expect(find.byKey(const Key('auth_confirm_password_field')), findsOneWidget);
+      expect(
+          find.byKey(const Key('auth_confirm_password_field')), findsOneWidget);
       expect(find.byKey(const Key('auth_terms_checkbox')), findsOneWidget);
       expect(find.text('Create account'), findsOneWidget);
       expect(find.text('Sign in with Google'), findsOneWidget);
     });
 
-    testWidgets('requires matching password confirmation for create account', (tester) async {
+    testWidgets('requires matching password confirmation for create account',
+        (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: SignInScreen(),
@@ -288,9 +320,13 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      await tester.enterText(find.byKey(const Key('auth_email_field')), 'test@example.com');
-      await tester.enterText(find.byKey(const Key('auth_password_field')), 'password123');
-      await tester.enterText(find.byKey(const Key('auth_confirm_password_field')), 'differentPassword');
+      await tester.enterText(
+          find.byKey(const Key('auth_email_field')), 'test@example.com');
+      await tester.enterText(
+          find.byKey(const Key('auth_password_field')), 'password123');
+      await tester.enterText(
+          find.byKey(const Key('auth_confirm_password_field')),
+          'differentPassword');
 
       final submitFinder = find.byKey(const Key('auth_submit_button'));
       await tester.ensureVisible(submitFinder);
@@ -301,7 +337,9 @@ void main() {
       expect(find.text('Passwords do not match.'), findsOneWidget);
     });
 
-    testWidgets('removes top-right Sign in and Website buttons from sign in screen', (tester) async {
+    testWidgets(
+        'removes top-right Sign in and Website buttons from sign in screen',
+        (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: SignInScreen(),
@@ -309,54 +347,121 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      // Rocket emblem is present in the card before launch
-      expect(find.byKey(const Key('auth_launching_rocket_image')), findsOneWidget);
-      expect(find.text('AI Active'), findsNothing);
-
-      // Top-right Sign in and Website buttons are removed
-      expect(find.byKey(const Key('auth_top_right_signin_button')), findsNothing);
+      expect(
+          find.byKey(const Key('auth_top_right_signin_button')), findsNothing);
       expect(find.text('Website'), findsNothing);
 
       // Back navigation button is present
       expect(find.byKey(const Key('auth_back_button')), findsOneWidget);
     });
 
-    testWidgets('autoLaunch flag triggers rocket launch sequence on mount and reveals product slideshow', (tester) async {
+    testWidgets('wide window shows the brand panel; its slides can be chosen',
+        (tester) async {
       tester.view.physicalSize = const Size(1280, 800);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
 
       await tester.pumpWidget(
         const MaterialApp(
-          home: SignInScreen(autoLaunch: true, initialCreateAccount: false),
+          home: SignInScreen(initialCreateAccount: false),
         ),
       );
-      await tester.pump(); // Triggers addPostFrameCallback
+      await tester.pumpAndSettle();
 
-      // Verify sign in mode initialized
+      expect(find.byKey(const Key('auth_brand_panel')), findsOneWidget);
+      expect(find.byKey(const Key('auth_mascot')), findsOneWidget);
+      // the mascot covers its eyes while a password field has focus, and nothing breaks
+      await tester.tap(find.byKey(const Key('auth_password_field')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('auth_logo_image')), findsOneWidget);
       expect(find.byKey(const Key('auth_screen_title')), findsOneWidget);
-      expect(find.text('Sign in'), findsWidgets);
+      expect(find.text('Guided labs, right in VS Code'), findsOneWidget);
 
-      // Advance animation through Phase 1 ignition & Phase 2 blast off
-      await tester.pump(const Duration(milliseconds: 300));
-      await tester.pump(const Duration(milliseconds: 1600));
+      await tester.tap(find.byKey(const Key('auth_slide_dot_3')));
       await tester.pumpAndSettle();
-
-      // Product slideshow illustration is revealed after rocket launch!
-      expect(find.text('AI Active'), findsOneWidget);
-      expect(find.text('devpilot_tutor.py'), findsOneWidget);
-
-      // Slideshow navigation operates interactively
-      await tester.tap(find.byKey(const Key('auth_next_slide_button')));
-      await tester.pumpAndSettle();
-
-      expect(find.text('DevSphere Cloud Sandbox'), findsOneWidget);
-      expect(find.text('ISOLATED'), findsOneWidget);
-
+      expect(find.text('Badges you can stand behind'), findsOneWidget);
+      expect(find.text('Verified by the server'), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('switches between Create account and Sign in sections', (tester) async {
+    testWidgets(
+        'password strength shows while creating an account and the two passwords are compared as you type',
+        (tester) async {
+      await tester.pumpWidget(const MaterialApp(home: SignInScreen()));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('auth_strength_meter')), findsNothing);
+      await tester.enterText(
+          find.byKey(const Key('auth_password_field')), 'abc');
+      await tester.pumpAndSettle();
+      expect(find.text('Weak'), findsOneWidget);
+      await tester.enterText(
+          find.byKey(const Key('auth_password_field')), 'Correct-Horse-9!');
+      await tester.pumpAndSettle();
+      expect(find.text('Strong'), findsOneWidget);
+      await tester.enterText(
+          find.byKey(const Key('auth_confirm_password_field')), 'Correct');
+      await tester.pumpAndSettle();
+      expect(find.text('The two passwords are different.'), findsOneWidget);
+      await tester.enterText(
+          find.byKey(const Key('auth_confirm_password_field')),
+          'Correct-Horse-9!');
+      await tester.pumpAndSettle();
+      expect(find.text('The two passwords are different.'), findsNothing);
+      expect(passwordStrength(''), 0);
+      expect(passwordStrength('abcdefgh'),
+          lessThan(passwordStrength('Abcdefgh1234!')));
+    });
+
+    testWidgets(
+        'forgot password asks for an email, sends the reset and shows a neutral confirmation',
+        (tester) async {
+      final sent = <String>[];
+      final client = FirebaseAuthRestClient(
+        client: http_testing.MockClient((request) async {
+          sent.add(request.body);
+          return http.Response(jsonEncode({'email': 'a@example.com'}), 200,
+              headers: {'content-type': 'application/json'});
+        }),
+      );
+      await tester.pumpWidget(MaterialApp(
+        home: SignInScreen(
+          firebaseAuthService: FirebaseAuthService(restClient: client),
+          initialCreateAccount: false,
+        ),
+      ));
+      await tester.pumpAndSettle();
+      await tester
+          .ensureVisible(find.byKey(const Key('auth_forgot_password_button')));
+      await tester.tap(find.byKey(const Key('auth_forgot_password_button')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('reset-send')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('reset-problem')), findsOneWidget,
+          reason: 'an empty email is not sent');
+      expect(sent, isEmpty);
+      await tester.enterText(
+          find.byKey(const Key('reset-email-field')), 'a@example.com');
+      await tester.tap(find.byKey(const Key('reset-send')));
+      await tester.pumpAndSettle();
+      expect(sent.single, contains('PASSWORD_RESET'));
+      expect(find.byKey(const Key('reset-sent')), findsOneWidget);
+      expect(find.textContaining('If an account exists'), findsOneWidget);
+    });
+
+    testWidgets('the terms link opens a short, plain summary', (tester) async {
+      await tester.pumpWidget(const MaterialApp(home: SignInScreen()));
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.text('terms and privacy notes'));
+      await tester.tap(find.text('terms and privacy notes'));
+      await tester.pumpAndSettle();
+      expect(find.text('Terms and privacy, in short'), findsOneWidget);
+      await tester.tap(find.text('Got it'));
+      await tester.pumpAndSettle();
+      expect(find.text('Terms and privacy, in short'), findsNothing);
+    });
+
+    testWidgets('switches between Create account and Sign in sections',
+        (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: SignInScreen(),
@@ -365,24 +470,32 @@ void main() {
       await tester.pumpAndSettle();
 
       // Switch to Sign In
+      await tester
+          .ensureVisible(find.byKey(const Key('auth_switch_mode_button')));
       await tester.tap(find.byKey(const Key('auth_switch_mode_button')));
       await tester.pumpAndSettle();
 
       expect(find.byKey(const Key('auth_screen_title')), findsOneWidget);
       expect(find.text('Sign in'), findsWidgets);
       expect(find.text("Don't have an account? "), findsOneWidget);
-      expect(find.byKey(const Key('auth_confirm_password_field')), findsNothing);
+      expect(
+          find.byKey(const Key('auth_confirm_password_field')), findsNothing);
       expect(find.byKey(const Key('auth_terms_checkbox')), findsNothing);
 
       // Switch back to Create Account
+      await tester
+          .ensureVisible(find.byKey(const Key('auth_switch_mode_button')));
       await tester.tap(find.byKey(const Key('auth_switch_mode_button')));
       await tester.pumpAndSettle();
 
       expect(find.text('Create an account'), findsWidgets);
-      expect(find.byKey(const Key('auth_confirm_password_field')), findsOneWidget);
+      expect(
+          find.byKey(const Key('auth_confirm_password_field')), findsOneWidget);
     });
 
-    testWidgets('Firebase Authentication blocks access on invalid credentials and displays error without bypassing', (tester) async {
+    testWidgets(
+        'Firebase Authentication blocks access on invalid credentials and displays error without bypassing',
+        (tester) async {
       tester.view.physicalSize = const Size(1280, 800);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
@@ -418,8 +531,10 @@ void main() {
       await tester.pumpAndSettle();
 
       // Fill in credentials
-      await tester.enterText(find.byKey(const Key('auth_email_field')), 'wrong@example.com');
-      await tester.enterText(find.byKey(const Key('auth_password_field')), 'wrongpass');
+      await tester.enterText(
+          find.byKey(const Key('auth_email_field')), 'wrong@example.com');
+      await tester.enterText(
+          find.byKey(const Key('auth_password_field')), 'wrongpass');
 
       // Tap Sign in
       final submitFinder = find.byKey(const Key('auth_submit_button'));
@@ -436,7 +551,9 @@ void main() {
       expect(successCalled, isFalse);
     });
 
-    testWidgets('Firebase Authentication saves real session token and calls onSignInSuccess on successful auth', (tester) async {
+    testWidgets(
+        'Firebase Authentication saves real session token and calls onSignInSuccess on successful auth',
+        (tester) async {
       tester.view.physicalSize = const Size(1280, 800);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
@@ -472,8 +589,10 @@ void main() {
       await tester.pumpAndSettle();
 
       // Fill in credentials
-      await tester.enterText(find.byKey(const Key('auth_email_field')), 'realuser@example.com');
-      await tester.enterText(find.byKey(const Key('auth_password_field')), 'correctpass');
+      await tester.enterText(
+          find.byKey(const Key('auth_email_field')), 'realuser@example.com');
+      await tester.enterText(
+          find.byKey(const Key('auth_password_field')), 'correctpass');
 
       // Tap Sign in
       final submitFinder = find.byKey(const Key('auth_submit_button'));

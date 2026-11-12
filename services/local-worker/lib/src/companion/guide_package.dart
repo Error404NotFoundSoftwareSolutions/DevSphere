@@ -20,14 +20,23 @@ ExtensionPackage? loadGuidePackage(String guideDir) {
     if (!meta.existsSync() || meta.lengthSync() > 4096) return null;
     final j = jsonDecode(meta.readAsStringSync());
     if (j is! Map) return null;
-    final id = j['id'], version = j['version'], sha = j['sha256'], file = j['vsix'];
+    final id = j['id'],
+        version = j['version'],
+        sha = j['sha256'],
+        file = j['vsix'];
     if (id is! String || !_extId.hasMatch(id)) return null;
     if (version is! String || !_semver.hasMatch(version)) return null;
     if (sha is! String || !_sha.hasMatch(sha)) return null;
-    if (file is! String || !_fileName.hasMatch(file) || file.contains('..')) return null;
+    if (file is! String || !_fileName.hasMatch(file) || file.contains('..'))
+      return null;
     final vsix = File('$guideDir/$file');
-    if (!vsix.existsSync() || FileSystemEntity.isLinkSync(vsix.path)) return null;
-    return ExtensionPackage(id: id, version: version, vsixPath: vsix.resolveSymbolicLinksSync(), sha256: sha);
+    if (!vsix.existsSync() || FileSystemEntity.isLinkSync(vsix.path))
+      return null;
+    return ExtensionPackage(
+        id: id,
+        version: version,
+        vsixPath: vsix.resolveSymbolicLinksSync(),
+        sha256: sha);
   } on FormatException {
     return null;
   } on FileSystemException {

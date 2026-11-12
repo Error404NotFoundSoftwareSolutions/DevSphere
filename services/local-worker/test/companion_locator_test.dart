@@ -34,19 +34,32 @@ VsCodeLocator locator({
 }) {
   final p = probe ?? Probe(outputs);
   return VsCodeLocator(
-    env: LocatorEnv(os: os, pathDirs: pathDirs, variables: const {'HOME': '/home/u', 'LOCALAPPDATA': r'C:\Users\u\AppData\Local', 'ProgramFiles': r'C:\Program Files'}),
+    env: LocatorEnv(os: os, pathDirs: pathDirs, variables: const {
+      'HOME': '/home/u',
+      'LOCALAPPDATA': r'C:\Users\u\AppData\Local',
+      'ProgramFiles': r'C:\Program Files'
+    }),
     files: FakeFiles(files),
     versionProbe: p.call,
   );
 }
 
 void main() {
-  test('TC-CMP-02-01 parseVersionOutput accepts the three-line VS Code format only', () {
+  test(
+      'TC-CMP-02-01 parseVersionOutput accepts the three-line VS Code format only',
+      () {
     final v = parseVersionOutput(goodOut)!;
     expect(v.version, '1.144.0');
     expect(v.commit.length, 40);
     expect(v.arch, 'x64');
-    for (final bad in ['', 'hello world', '1.144.0', 'v1.2.3\nabc\nx64', '1.2.3\nnothex-commit-----------------------!!\nx64', '1.2.3\n${'a' * 40}\nx64; rm -rf ~']) {
+    for (final bad in [
+      '',
+      'hello world',
+      '1.144.0',
+      'v1.2.3\nabc\nx64',
+      '1.2.3\nnothex-commit-----------------------!!\nx64',
+      '1.2.3\n${'a' * 40}\nx64; rm -rf ~'
+    ]) {
       expect(parseVersionOutput(bad), isNull, reason: bad);
     }
   });
@@ -58,14 +71,16 @@ void main() {
   });
 
   test('TC-CMP-02-03 finds code on PATH and verifies it', () async {
-    final l = locator(files: {'/usr/bin/code'}, outputs: {'/usr/bin/code': goodOut});
+    final l =
+        locator(files: {'/usr/bin/code'}, outputs: {'/usr/bin/code': goodOut});
     final r = await l.find();
     expect(r.install?.path, '/usr/bin/code');
     expect(r.install?.version, '1.144.0');
     expect(r.install?.kind, EditorKind.vscode);
   });
 
-  test('TC-CMP-02-04 never runs a path that is not an executable file', () async {
+  test('TC-CMP-02-04 never runs a path that is not an executable file',
+      () async {
     final probe = Probe({'/usr/bin/code': goodOut});
     final l = locator(files: {}, outputs: {}, probe: probe);
     final r = await l.find();
@@ -74,8 +89,12 @@ void main() {
     expect(r.rejected, isNotEmpty);
   });
 
-  test('TC-CMP-02-05 a fake `code` that prints anything else is rejected (T22)', () async {
-    final l = locator(files: {'/usr/local/bin/code', '/usr/bin/code'}, outputs: {
+  test('TC-CMP-02-05 a fake `code` that prints anything else is rejected (T22)',
+      () async {
+    final l = locator(files: {
+      '/usr/local/bin/code',
+      '/usr/bin/code'
+    }, outputs: {
       '/usr/local/bin/code': 'pwned\n',
       '/usr/bin/code': goodOut,
     });
@@ -84,24 +103,37 @@ void main() {
     expect(r.rejected.any((m) => m.contains('/usr/local/bin/code')), isTrue);
   });
 
-  test('TC-CMP-02-06 a version below the minimum is rejected with a plain reason', () async {
-    final l = locator(files: {'/usr/bin/code'}, outputs: {'/usr/bin/code': '1.60.0\n${'a' * 40}\nx64\n'});
+  test(
+      'TC-CMP-02-06 a version below the minimum is rejected with a plain reason',
+      () async {
+    final l = locator(
+        files: {'/usr/bin/code'},
+        outputs: {'/usr/bin/code': '1.60.0\n${'a' * 40}\nx64\n'});
     final r = await l.find();
     expect(r.install, isNull);
     expect(r.rejected.single, contains('1.144.0'));
   });
 
-  test('TC-CMP-02-07 a path chosen by the user is tried first and still verified', () async {
-    final l = locator(files: {'/opt/vscode/bin/code', '/usr/bin/code'}, outputs: {
+  test(
+      'TC-CMP-02-07 a path chosen by the user is tried first and still verified',
+      () async {
+    final l = locator(files: {
+      '/opt/vscode/bin/code',
+      '/usr/bin/code'
+    }, outputs: {
       '/opt/vscode/bin/code': goodOut,
       '/usr/bin/code': goodOut,
     });
-    expect((await l.find(userPath: '/opt/vscode/bin/code')).install?.path, '/opt/vscode/bin/code');
-    final bad = locator(files: {'/opt/x/code'}, outputs: {'/opt/x/code': 'nope'});
+    expect((await l.find(userPath: '/opt/vscode/bin/code')).install?.path,
+        '/opt/vscode/bin/code');
+    final bad =
+        locator(files: {'/opt/x/code'}, outputs: {'/opt/x/code': 'nope'});
     expect((await bad.find(userPath: '/opt/x/code')).install, isNull);
   });
 
-  test('TC-CMP-02-08 relative or odd user paths are refused without running anything', () async {
+  test(
+      'TC-CMP-02-08 relative or odd user paths are refused without running anything',
+      () async {
     final probe = Probe({});
     final l = locator(files: {'code', '-rf'}, outputs: {}, probe: probe);
     for (final p in ['code', '../code', '-rf', 'a\u0000b', '']) {
@@ -110,14 +142,22 @@ void main() {
     expect(probe.called, isEmpty);
   });
 
-  test('TC-CMP-02-09 VSCodium is recognised and labelled; Windows .cmd shims are skipped for now', () async {
-    final codium = locator(files: {'/usr/bin/codium'}, outputs: {'/usr/bin/codium': goodOut});
+  test(
+      'TC-CMP-02-09 VSCodium is recognised and labelled; Windows .cmd shims are skipped for now',
+      () async {
+    final codium = locator(
+        files: {'/usr/bin/codium'}, outputs: {'/usr/bin/codium': goodOut});
     expect((await codium.find()).install?.kind, EditorKind.vscodium);
     final win = locator(
       os: 'windows',
       pathDirs: [r'C:\Users\u\AppData\Local\Programs\Microsoft VS Code\bin'],
-      files: {r'C:\Users\u\AppData\Local\Programs\Microsoft VS Code\bin\code.cmd'},
-      outputs: {r'C:\Users\u\AppData\Local\Programs\Microsoft VS Code\bin\code.cmd': goodOut},
+      files: {
+        r'C:\Users\u\AppData\Local\Programs\Microsoft VS Code\bin\code.cmd'
+      },
+      outputs: {
+        r'C:\Users\u\AppData\Local\Programs\Microsoft VS Code\bin\code.cmd':
+            goodOut
+      },
     );
     final r = await win.find();
     expect(r.install, isNull);

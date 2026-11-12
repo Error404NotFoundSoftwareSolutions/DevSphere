@@ -51,12 +51,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _displayNameController = TextEditingController(text: widget.initialDisplayName ?? '');
-    _collegeController = TextEditingController(text: widget.initialCollege ?? '');
+    _displayNameController =
+        TextEditingController(text: widget.initialDisplayName ?? '');
+    _collegeController =
+        TextEditingController(text: widget.initialCollege ?? '');
     _courseController = TextEditingController(text: widget.initialCourse ?? '');
-    _academicYearController = TextEditingController(text: widget.initialAcademicYear ?? '');
+    _academicYearController =
+        TextEditingController(text: widget.initialAcademicYear ?? '');
     _interestsController = TextEditingController(
-      text: widget.initialInterests != null ? widget.initialInterests!.join(', ') : '',
+      text: widget.initialInterests != null
+          ? widget.initialInterests!.join(', ')
+          : '',
     );
   }
 
@@ -90,9 +95,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       uid: widget.uid ?? 'default-user',
       displayName: _displayNameController.text.trim(),
       email: widget.email ?? '',
-      college: _collegeController.text.trim().isEmpty ? null : _collegeController.text.trim(),
-      course: _courseController.text.trim().isEmpty ? null : _courseController.text.trim(),
-      academicYear: _academicYearController.text.trim().isEmpty ? null : _academicYearController.text.trim(),
+      college: _collegeController.text.trim().isEmpty
+          ? null
+          : _collegeController.text.trim(),
+      course: _courseController.text.trim().isEmpty
+          ? null
+          : _courseController.text.trim(),
+      academicYear: _academicYearController.text.trim().isEmpty
+          ? null
+          : _academicYearController.text.trim(),
       interests: interests,
     );
 
@@ -157,11 +168,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     decoration: BoxDecoration(
                       color: theme.colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: theme.colorScheme.outlineVariant),
+                      border:
+                          Border.all(color: theme.colorScheme.outlineVariant),
                     ),
                     child: Row(
                       children: [
-                        Icon(Icons.lock_outline, size: 20, color: theme.colorScheme.primary),
+                        Icon(Icons.lock_outline,
+                            size: 20, color: theme.colorScheme.primary),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
@@ -180,7 +193,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     controller: _displayNameController,
                     decoration: const InputDecoration(
                       labelText: 'Display Name *',
-                      helperText: 'Prefilled from your sign-in account. Editable anytime.',
+                      helperText:
+                          'Prefilled from your sign-in account. Editable anytime.',
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
@@ -234,7 +248,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     controller: _interestsController,
                     decoration: const InputDecoration(
                       labelText: 'Interests (comma-separated, optional)',
-                      hintText: 'e.g. Python, Machine Learning, Web Development',
+                      hintText:
+                          'e.g. Python, Machine Learning, Web Development',
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -245,7 +260,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       _statusMessage!,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: _statusMessage!.contains('Failed') ? theme.colorScheme.error : theme.colorScheme.primary,
+                        color: _statusMessage!.contains('Failed')
+                            ? theme.colorScheme.error
+                            : theme.colorScheme.primary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -262,7 +279,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             if (Navigator.of(context).canPop()) {
                               Navigator.of(context).pop();
                             } else {
-                              context.go(widget.isOnboarding ? '/' : '/dashboard');
+                              context
+                                  .go(widget.isOnboarding ? '/' : '/dashboard');
                             }
                           },
                           icon: const Icon(Icons.arrow_back, size: 18),
@@ -278,9 +296,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ? const SizedBox(
                                   width: 20,
                                   height: 20,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                  child:
+                                      CircularProgressIndicator(strokeWidth: 2),
                                 )
-                              : Text(widget.isOnboarding ? 'Save & Continue' : 'Save Changes'),
+                              : Text(widget.isOnboarding
+                                  ? 'Save & Continue'
+                                  : 'Save Changes'),
                         ),
                       ),
                     ],
