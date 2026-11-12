@@ -28,7 +28,10 @@ sealed class ExtensionRequest {
 }
 
 final class HelloRequest extends ExtensionRequest {
-  const HelloRequest({required this.protocol, required this.sessionId, required this.extVersion});
+  const HelloRequest(
+      {required this.protocol,
+      required this.sessionId,
+      required this.extVersion});
   final int protocol;
   final String sessionId;
   final String extVersion;
@@ -53,7 +56,9 @@ final class FinishLabRequest extends ExtensionRequest {
 }
 
 bool _exactKeys(Map<dynamic, dynamic> m, Set<String> keys) =>
-    m.length == keys.length && keys.every(m.containsKey) && m.keys.every((k) => k is String);
+    m.length == keys.length &&
+    keys.every(m.containsKey) &&
+    m.keys.every((k) => k is String);
 
 bool _isId(Object? v) => v is String && _id.hasMatch(v);
 
@@ -62,19 +67,27 @@ ExtensionRequest? parseRequest(Object? json) {
   if (json is! Map) return null;
   switch (json['type']) {
     case 'hello':
-      if (!_exactKeys(json, {'type', 'protocol', 'sessionId', 'extVersion'})) return null;
+      if (!_exactKeys(json, {'type', 'protocol', 'sessionId', 'extVersion'}))
+        return null;
       final protocol = json['protocol'];
       final session = json['sessionId'];
       final version = json['extVersion'];
-      if (protocol is! int || session is! String || !_sessionId.hasMatch(session)) return null;
+      if (protocol is! int ||
+          session is! String ||
+          !_sessionId.hasMatch(session)) return null;
       if (version is! String || !_semver.hasMatch(version)) return null;
-      return HelloRequest(protocol: protocol, sessionId: session, extVersion: version);
+      return HelloRequest(
+          protocol: protocol, sessionId: session, extVersion: version);
     case 'getLabState':
       return _exactKeys(json, {'type'}) ? const GetLabStateRequest() : null;
     case 'runCheck':
-      return _exactKeys(json, {'type', 'stepId'}) && _isId(json['stepId']) ? RunCheckRequest(json['stepId'] as String) : null;
+      return _exactKeys(json, {'type', 'stepId'}) && _isId(json['stepId'])
+          ? RunCheckRequest(json['stepId'] as String)
+          : null;
     case 'goStep':
-      return _exactKeys(json, {'type', 'stepId'}) && _isId(json['stepId']) ? GoStepRequest(json['stepId'] as String) : null;
+      return _exactKeys(json, {'type', 'stepId'}) && _isId(json['stepId'])
+          ? GoStepRequest(json['stepId'] as String)
+          : null;
     case 'finishLab':
       return _exactKeys(json, {'type'}) ? const FinishLabRequest() : null;
     default:
@@ -84,7 +97,8 @@ ExtensionRequest? parseRequest(Object? json) {
 
 Uint8List encodeFrame(Map<String, Object?> message) {
   final body = utf8.encode(jsonEncode(message));
-  if (body.isEmpty || body.length > maxFrameBytes) throw ProtocolError('Message is too large.');
+  if (body.isEmpty || body.length > maxFrameBytes)
+    throw ProtocolError('Message is too large.');
   final out = Uint8List(4 + body.length);
   ByteData.sublistView(out).setUint32(0, body.length);
   out.setRange(4, out.length, body);
@@ -102,7 +116,9 @@ class FrameDecoder {
     _buffer.addAll(bytes);
     final out = <Object?>[];
     while (_buffer.length >= 4) {
-      final length = ByteData.sublistView(Uint8List.fromList(_buffer.sublist(0, 4))).getUint32(0);
+      final length =
+          ByteData.sublistView(Uint8List.fromList(_buffer.sublist(0, 4)))
+              .getUint32(0);
       if (length == 0 || length > maxFrameBytes) {
         _failed = true;
         throw ProtocolError('Invalid message length.');
@@ -121,7 +137,13 @@ class FrameDecoder {
   }
 }
 
-enum GateDecision { allow, needHello, wrongSession, protocolMismatch, duplicateHello }
+enum GateDecision {
+  allow,
+  needHello,
+  wrongSession,
+  protocolMismatch,
+  duplicateHello
+}
 
 bool _constantTimeEquals(String a, String b) {
   if (a.length != b.length) return false;
@@ -141,8 +163,10 @@ class SessionGate {
   GateDecision check(ExtensionRequest request) {
     if (request is HelloRequest) {
       if (_helloDone) return GateDecision.duplicateHello;
-      if (!_constantTimeEquals(request.sessionId, sessionId)) return GateDecision.wrongSession;
-      if (request.protocol != protocolVersion) return GateDecision.protocolMismatch;
+      if (!_constantTimeEquals(request.sessionId, sessionId))
+        return GateDecision.wrongSession;
+      if (request.protocol != protocolVersion)
+        return GateDecision.protocolMismatch;
       _helloDone = true;
       return GateDecision.allow;
     }
@@ -153,23 +177,40 @@ class SessionGate {
 // ---------------------------------------------------------------- events (worker -> extension)
 
 const Set<String> errorCodes = {
-  'protocol-mismatch', 'wrong-session', 'need-hello', 'duplicate-hello', 'unknown-step', 'invalid-message', 'busy', 'steps-incomplete',
+  'protocol-mismatch',
+  'wrong-session',
+  'need-hello',
+  'duplicate-hello',
+  'unknown-step',
+  'invalid-message',
+  'busy',
+  'steps-incomplete',
 };
 
-Map<String, Object?> welcomeEvent(String labId) => {'type': 'welcome', 'protocol': protocolVersion, 'labId': labId};
+Map<String, Object?> welcomeEvent(String labId) =>
+    {'type': 'welcome', 'protocol': protocolVersion, 'labId': labId};
 
 Map<String, Object?> labStateEvent({
   required String labId,
   required String title,
   required String currentStepId,
-  required List<({String id, String title, String state, String contentRef})> steps,
+  required List<({String id, String title, String state, String contentRef})>
+      steps,
 }) =>
     {
       'type': 'labState',
       'labId': labId,
       'title': title,
       'currentStepId': currentStepId,
-      'steps': [for (final s in steps) {'id': s.id, 'title': s.title, 'state': s.state, 'contentRef': s.contentRef}],
+      'steps': [
+        for (final s in steps)
+          {
+            'id': s.id,
+            'title': s.title,
+            'state': s.state,
+            'contentRef': s.contentRef
+          }
+      ],
     };
 
 /// Only Practice results exist in this protocol. Verified results come from the server in a later milestone.
@@ -185,7 +226,9 @@ Map<String, Object?> checkResultEvent({
       'passed': passed,
       'kind': 'Practice',
       'summary': summary,
-      'output': output.length > maxCheckOutputChars ? output.substring(0, maxCheckOutputChars) : output,
+      'output': output.length > maxCheckOutputChars
+          ? output.substring(0, maxCheckOutputChars)
+          : output,
     };
 
 Map<String, Object?> errorEvent(String code, String message) {

@@ -21,13 +21,19 @@ class MyProfileRoute extends ConsumerWidget {
     final user = AuthSession.instance.user;
     final data = controller.data;
     if (user == null) {
-      return Scaffold(appBar: AppBar(title: const Text('Profile')), body: const Padding(padding: EdgeInsets.all(32), child: SignedOutNotice()));
+      return Scaffold(
+          appBar: AppBar(title: const Text('Profile')),
+          body: const Padding(
+              padding: EdgeInsets.all(32), child: SignedOutNotice()));
     }
     if (data == null) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
     final p = data.profile;
-    final neverSaved = p.college.isEmpty && p.course.isEmpty && p.academicYear.isEmpty && p.interests.isEmpty;
+    final neverSaved = p.college.isEmpty &&
+        p.course.isEmpty &&
+        p.academicYear.isEmpty &&
+        p.interests.isEmpty;
     return ProfileScreen(
       key: ValueKey('profile-${user.uid}'),
       uid: user.uid,

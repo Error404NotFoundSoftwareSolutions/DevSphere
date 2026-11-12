@@ -8,4 +8,3 @@ class AppUpdater {
     return false;
   }
 }
-

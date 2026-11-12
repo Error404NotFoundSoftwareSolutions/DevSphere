@@ -12,7 +12,8 @@ class NewVersionBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialBanner(
-      content: Text('A newer version ($newerVersion) of this lab is available.'),
+      content:
+          Text('A newer version ($newerVersion) of this lab is available.'),
       actions: [
         TextButton(
           onPressed: () {},
@@ -22,4 +23,3 @@ class NewVersionBanner extends StatelessWidget {
     );
   }
 }
-

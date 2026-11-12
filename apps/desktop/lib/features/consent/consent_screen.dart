@@ -94,7 +94,8 @@ class _ConsentScreenState extends State<ConsentScreen> {
                           ),
                         ),
                         Chip(
-                          label: Text('Version ${ConsentScreen.currentNoticeVersion}'),
+                          label: Text(
+                              'Version ${ConsentScreen.currentNoticeVersion}'),
                         ),
                       ],
                     ),
@@ -104,12 +105,18 @@ class _ConsentScreenState extends State<ConsentScreen> {
                       'please review what information is collected and how it is used:',
                     ),
                     const SizedBox(height: 12),
-                    const Text('• Identity: Account ID and email to authenticate your session.'),
-                    const Text('• Profile: Display name and optional academic details (college, course, interests).'),
-                    const Text('• Lab Progress: Attempt status, task completion timestamps, and code submissions.'),
-                    const Text('• Evaluation: Automated grading results and feedback from the Grader.'),
-                    const Text('• AI Tutor: Ephemeral question context to assist you in real time.'),
-                    const Text('• Telemetry: Minimal, non-PII diagnostic logs to improve platform stability.'),
+                    const Text(
+                        '• Identity: Account ID and email to authenticate your session.'),
+                    const Text(
+                        '• Profile: Display name and optional academic details (college, course, interests).'),
+                    const Text(
+                        '• Lab Progress: Attempt status, task completion timestamps, and code submissions.'),
+                    const Text(
+                        '• Evaluation: Automated grading results and feedback from the Grader.'),
+                    const Text(
+                        '• AI Tutor: Ephemeral question context to assist you in real time.'),
+                    const Text(
+                        '• Telemetry: Minimal, non-PII diagnostic logs to improve platform stability.'),
                     const SizedBox(height: 12),
                     Container(
                       padding: const EdgeInsets.all(12),
@@ -119,7 +126,8 @@ class _ConsentScreenState extends State<ConsentScreen> {
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.shield_outlined, color: theme.colorScheme.primary),
+                          Icon(Icons.shield_outlined,
+                              color: theme.colorScheme.primary),
                           const SizedBox(width: 12),
                           const Expanded(
                             child: Text(
@@ -134,7 +142,8 @@ class _ConsentScreenState extends State<ConsentScreen> {
                     const Divider(height: 32),
                     Text(
                       'Age Verification (TBD-08)',
-                      style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                      style: theme.textTheme.titleMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 4),
                     const Text(
@@ -152,7 +161,8 @@ class _ConsentScreenState extends State<ConsentScreen> {
                           _showDeclineMessage = false;
                         });
                       },
-                      title: const Text('I confirm that I am at least 18 years old.'),
+                      title: const Text(
+                          'I confirm that I am at least 18 years old.'),
                       controlAffinity: ListTileControlAffinity.leading,
                       contentPadding: EdgeInsets.zero,
                     ),
@@ -183,7 +193,8 @@ class _ConsentScreenState extends State<ConsentScreen> {
                         child: Text(
                           'Consent and age confirmation are required to use DevSphere. '
                           'Without consent, no profile or lab progress data will be collected.',
-                          style: TextStyle(color: theme.colorScheme.onErrorContainer),
+                          style: TextStyle(
+                              color: theme.colorScheme.onErrorContainer),
                         ),
                       ),
                     ],
@@ -199,7 +210,9 @@ class _ConsentScreenState extends State<ConsentScreen> {
                         const SizedBox(width: 12),
                         FilledButton(
                           key: const Key('consent_agree_button'),
-                          onPressed: (_ageConfirmed && _privacyAgreed) ? _handleAgree : null,
+                          onPressed: (_ageConfirmed && _privacyAgreed)
+                              ? _handleAgree
+                              : null,
                           child: const Text('I Agree & Continue'),
                         ),
                       ],

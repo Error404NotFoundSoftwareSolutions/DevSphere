@@ -24,7 +24,8 @@ class FirebaseUserResult {
     this.isNewUser = false,
   });
 
-  factory FirebaseUserResult.fromJson(Map<String, dynamic> json, {bool isNewUser = false}) {
+  factory FirebaseUserResult.fromJson(Map<String, dynamic> json,
+      {bool isNewUser = false}) {
     return FirebaseUserResult(
       uid: json['localId'] as String? ?? json['sub'] as String? ?? '',
       email: json['email'] as String? ?? '',
@@ -87,6 +88,39 @@ class FirebaseAuthRestClient {
     return _processResponse(response, isNewUser: false);
   }
 
+  /// Asks Firebase to email a password reset link. An unknown address is treated as success on purpose, so the screen
+  /// never reveals whether an account exists (the same answer for every address).
+  Future<void> sendPasswordReset({required String email}) async {
+    final uri = Uri.parse('$_identityBaseUrl:sendOobCode?key=$apiKey');
+    final response = await _client.post(
+      uri,
+      headers: {'Content-Type': 'application/json'},
+      body:
+          jsonEncode({'requestType': 'PASSWORD_RESET', 'email': email.trim()}),
+    );
+    if (response.statusCode >= 200 && response.statusCode < 300) return;
+    Map<String, dynamic>? data;
+    try {
+      data =
+          jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+    } catch (_) {
+      throw AuthException.networkFailure(
+          'Invalid response from authentication server.');
+    }
+    final code =
+        (data['error'] as Map<String, dynamic>?)?['message'] as String? ??
+            'UNKNOWN_ERROR';
+    if (code.contains('EMAIL_NOT_FOUND')) return;
+    if (code.contains('INVALID_EMAIL') || code.contains('MISSING_EMAIL')) {
+      throw const AuthException(
+        type: AuthErrorType.unknown,
+        message: 'That email address does not look right.',
+        recoveryAction: 'Check it for typing mistakes and try again.',
+      );
+    }
+    throw _mapFirebaseError(code);
+  }
+
   /// Exchanges a federated identity provider token (such as Google OAuth) with Firebase Auth.
   Future<FirebaseUserResult> signInWithIdp({
     required String idToken,
@@ -119,7 +153,8 @@ class FirebaseAuthRestClient {
     throw AuthException.cancelled();
   }
 
-  FirebaseUserResult _processResponse(http.Response response, {bool isNewUser = false}) {
+  FirebaseUserResult _processResponse(http.Response response,
+      {bool isNewUser = false}) {
     final statusCode = response.statusCode;
     Map<String, dynamic> data;
 
@@ -133,7 +168,8 @@ class FirebaseAuthRestClient {
           recoveryAction: 'Please try again.',
         );
       }
-      throw AuthException.networkFailure('Invalid response from authentication server.');
+      throw AuthException.networkFailure(
+          'Invalid response from authentication server.');
     }
 
     if (statusCode >= 200 && statusCode < 300) {
@@ -152,7 +188,8 @@ class FirebaseAuthRestClient {
       return const AuthException(
         type: AuthErrorType.unknown,
         message: 'An account with this email already exists.',
-        recoveryAction: 'Log in with your existing account or use another email.',
+        recoveryAction:
+            'Log in with your existing account or use another email.',
       );
     }
     if (errorCode.contains('INVALID_PASSWORD') ||
@@ -168,7 +205,8 @@ class FirebaseAuthRestClient {
       return const AuthException(
         type: AuthErrorType.unknown,
         message: 'Password must be at least 6 characters.',
-        recoveryAction: 'Please enter a stronger password with 6 or more characters.',
+        recoveryAction:
+            'Please enter a stronger password with 6 or more characters.',
       );
     }
     if (errorCode.contains('USER_DISABLED')) {
@@ -189,10 +227,10 @@ class FirebaseAuthRestClient {
       return const AuthException(
         type: AuthErrorType.unknown,
         message: 'Sign-in method not enabled in Firebase Console.',
-        recoveryAction: 'Please ensure Email/Password and Google are enabled in the Firebase Console.',
+        recoveryAction:
+            'Please ensure Email/Password and Google are enabled in the Firebase Console.',
       );
     }
     return SignInService().classifyError(errorCode);
   }
 }
-

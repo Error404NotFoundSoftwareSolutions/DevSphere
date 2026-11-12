@@ -25,27 +25,42 @@ void main() {
 
   test('TC-LNK-21 concurrent requests get their own answers', () async {
     final c = make();
-    final results = await Future.wait([for (var i = 0; i < 5; i++) c.send('echo', {'n': i})]);
+    final results = await Future.wait([
+      for (var i = 0; i < 5; i++) c.send('echo', {'n': i})
+    ]);
     expect([for (final r in results) r['n']], [0, 1, 2, 3, 4]);
   });
 
-  test('TC-LNK-22 an error answer becomes a WorkerException with code, message and recovery', () async {
+  test(
+      'TC-LNK-22 an error answer becomes a WorkerException with code, message and recovery',
+      () async {
     final c = make();
     await expectLater(
       c.send('fail', {}),
-      throwsA(isA<WorkerException>().having((e) => e.message, 'message', 'It did not work.').having((e) => e.recovery, 'recovery', 'Try again.')),
+      throwsA(isA<WorkerException>()
+          .having((e) => e.message, 'message', 'It did not work.')
+          .having((e) => e.recovery, 'recovery', 'Try again.')),
     );
   });
 
-  test('TC-LNK-23 a request that takes too long times out with a plain message', () async {
+  test('TC-LNK-23 a request that takes too long times out with a plain message',
+      () async {
     final c = make(timeout: const Duration(milliseconds: 500));
-    await expectLater(c.send('slow', {}), throwsA(isA<WorkerException>().having((e) => e.code, 'code', 'timeout')));
+    await expectLater(
+        c.send('slow', {}),
+        throwsA(
+            isA<WorkerException>().having((e) => e.code, 'code', 'timeout')));
   });
 
-  test('TC-LNK-24 if the worker crashes, pending calls fail and the next call restarts it', () async {
+  test(
+      'TC-LNK-24 if the worker crashes, pending calls fail and the next call restarts it',
+      () async {
     final c = make();
     expect(await c.send('echo', {'x': 1}), {'x': 1});
-    await expectLater(c.send('crash', {}), throwsA(isA<WorkerException>().having((e) => e.code, 'code', 'stopped')));
+    await expectLater(
+        c.send('crash', {}),
+        throwsA(
+            isA<WorkerException>().having((e) => e.code, 'code', 'stopped')));
     expect(await c.send('echo', {'x': 2}), {'x': 2});
   });
 
@@ -54,15 +69,26 @@ void main() {
     expect(await c.send('garbage', {}), {'after': 'garbage'});
   });
 
-  test('TC-LNK-26 a missing worker program gives a plain message, not a crash', () async {
-    final c = ProcessWorkerClient(executable: '/definitely/not/here/worker', validator: (channel, data) {});
-    await expectLater(c.send('echo', {}), throwsA(isA<WorkerException>().having((e) => e.code, 'code', 'unavailable')));
+  test('TC-LNK-26 a missing worker program gives a plain message, not a crash',
+      () async {
+    final c = ProcessWorkerClient(
+        executable: '/definitely/not/here/worker',
+        validator: (channel, data) {});
+    await expectLater(
+        c.send('echo', {}),
+        throwsA(isA<WorkerException>()
+            .having((e) => e.code, 'code', 'unavailable')));
   });
 
-  test('TC-LNK-27 requests are validated against the contract before they are sent', () async {
-    final c = ProcessWorkerClient(executable: 'dart', args: const ['run', 'test/support/fake_worker.dart']);
+  test(
+      'TC-LNK-27 requests are validated against the contract before they are sent',
+      () async {
+    final c = ProcessWorkerClient(
+        executable: 'dart',
+        args: const ['run', 'test/support/fake_worker.dart']);
     addTearDown(c.dispose);
     await expectLater(c.send('system:rmrf', {}), throwsA(anything));
-    await expectLater(c.send('companion:launch', {'labId': '../x'}), throwsA(anything));
+    await expectLater(
+        c.send('companion:launch', {'labId': '../x'}), throwsA(anything));
   });
 }

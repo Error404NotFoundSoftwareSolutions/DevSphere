@@ -15,4 +15,3 @@ class LabView extends StatelessWidget {
     return WorkspaceView(attemptId: attemptId);
   }
 }
-

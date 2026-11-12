@@ -7,8 +7,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:desktop/features/consent/consent_screen.dart';
 
 void main() {
-  group('TC-FR-PROF-001-01 Privacy notice presentation and consent recording', () {
-    testWidgets('presents privacy notice version and disables agree button initially', (WidgetTester tester) async {
+  group('TC-FR-PROF-001-01 Privacy notice presentation and consent recording',
+      () {
+    testWidgets(
+        'presents privacy notice version and disables agree button initially',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: ConsentScreen(),
@@ -22,11 +25,14 @@ void main() {
 
       // Agree button is disabled until requirements are checked
       await tester.ensureVisible(find.byKey(const Key('consent_agree_button')));
-      final agreeButton = tester.widget<FilledButton>(find.byKey(const Key('consent_agree_button')));
+      final agreeButton = tester
+          .widget<FilledButton>(find.byKey(const Key('consent_agree_button')));
       expect(agreeButton.onPressed, isNull);
     });
 
-    testWidgets('records consent with notice version and timestamp when student agrees', (WidgetTester tester) async {
+    testWidgets(
+        'records consent with notice version and timestamp when student agrees',
+        (WidgetTester tester) async {
       String? recordedVersion;
       String? recordedTimestamp;
       bool? recordedAgeCheck;
@@ -57,13 +63,15 @@ void main() {
       await tester.tap(find.byKey(const Key('consent_age_checkbox')));
       await tester.pumpAndSettle();
 
-      await tester.ensureVisible(find.byKey(const Key('consent_privacy_checkbox')));
+      await tester
+          .ensureVisible(find.byKey(const Key('consent_privacy_checkbox')));
       await tester.tap(find.byKey(const Key('consent_privacy_checkbox')));
       await tester.pumpAndSettle();
 
       // Agree button is now enabled
       await tester.ensureVisible(find.byKey(const Key('consent_agree_button')));
-      final agreeButton = tester.widget<FilledButton>(find.byKey(const Key('consent_agree_button')));
+      final agreeButton = tester
+          .widget<FilledButton>(find.byKey(const Key('consent_agree_button')));
       expect(agreeButton.onPressed, isNotNull);
 
       // Tap Agree button
@@ -80,7 +88,9 @@ void main() {
   });
 
   group('TC-FR-PROF-010-01 Age policy verification with outcome only', () {
-    testWidgets('applies age policy and contains NO date of birth collection fields', (WidgetTester tester) async {
+    testWidgets(
+        'applies age policy and contains NO date of birth collection fields',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: ConsentScreen(),
@@ -91,16 +101,20 @@ void main() {
       // Age policy disclosure is visible
       expect(find.text('Age Verification (TBD-08)'), findsOneWidget);
       await tester.ensureVisible(find.byKey(const Key('consent_age_checkbox')));
-      expect(find.text('I confirm that I am at least 18 years old.'), findsOneWidget);
+      expect(find.text('I confirm that I am at least 18 years old.'),
+          findsOneWidget);
 
       // Verify STRICT absence of any Date of Birth text fields or date pickers
       expect(find.byType(TextField), findsNothing);
-      expect(find.textContaining('Date of Birth', findRichText: true), findsNothing);
+      expect(find.textContaining('Date of Birth', findRichText: true),
+          findsNothing);
       expect(find.textContaining('dob', findRichText: true), findsNothing);
-      expect(find.textContaining('birth date', findRichText: true), findsNothing);
+      expect(
+          find.textContaining('birth date', findRichText: true), findsNothing);
     });
 
-    testWidgets('declining consent shows required notice and invokes onDecline', (WidgetTester tester) async {
+    testWidgets('declining consent shows required notice and invokes onDecline',
+        (WidgetTester tester) async {
       bool declineInvoked = false;
 
       await tester.pumpWidget(
@@ -115,19 +129,22 @@ void main() {
       await tester.pumpAndSettle();
 
       // Tap Decline button
-      await tester.ensureVisible(find.byKey(const Key('consent_decline_button')));
+      await tester
+          .ensureVisible(find.byKey(const Key('consent_decline_button')));
       await tester.tap(find.byKey(const Key('consent_decline_button')));
       await tester.pumpAndSettle();
 
       expect(declineInvoked, isTrue);
       expect(find.byKey(const Key('consent_decline_message')), findsOneWidget);
       expect(
-        find.textContaining('Consent and age confirmation are required to use DevSphere'),
+        find.textContaining(
+            'Consent and age confirmation are required to use DevSphere'),
         findsOneWidget,
       );
     });
 
-    testWidgets('backward navigation button exists on consent screen', (WidgetTester tester) async {
+    testWidgets('backward navigation button exists on consent screen',
+        (WidgetTester tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: ConsentScreen(),

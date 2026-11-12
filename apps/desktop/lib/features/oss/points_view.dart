@@ -43,14 +43,16 @@ class PointsView extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            Text('Earned Badges', style: Theme.of(context).textTheme.titleSmall),
+            Text('Earned Badges',
+                style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
               runSpacing: 8,
               children: badges
                   .map((b) => Chip(
-                        avatar: const Icon(Icons.stars, color: Colors.amber, size: 18),
+                        avatar: const Icon(Icons.stars,
+                            color: Colors.amber, size: 18),
                         label: Text(b),
                       ))
                   .toList(),
@@ -61,4 +63,3 @@ class PointsView extends StatelessWidget {
     );
   }
 }
-

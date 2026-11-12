@@ -84,9 +84,11 @@ class StudentProfile {
 class FirestoreService {
   final FirebaseFirestore? _customFirestore;
 
-  FirestoreService({FirebaseFirestore? firestore}) : _customFirestore = firestore;
+  FirestoreService({FirebaseFirestore? firestore})
+      : _customFirestore = firestore;
 
-  FirebaseFirestore get _firestore => _customFirestore ?? FirebaseFirestore.instance;
+  FirebaseFirestore get _firestore =>
+      _customFirestore ?? FirebaseFirestore.instance;
 
   CollectionReference get usersRef => _firestore.collection('users');
   CollectionReference get consentsRef => _firestore.collection('consents');
@@ -104,11 +106,13 @@ class FirestoreService {
       ageCheckPassed: ageCheckPassed,
     );
 
-    await consentsRef.doc(uid).set(record.toFirestore(), SetOptions(merge: true));
+    await consentsRef
+        .doc(uid)
+        .set(record.toFirestore(), SetOptions(merge: true));
     await usersRef.doc(uid).collection('consent').doc('current').set(
-      record.toFirestore(),
-      SetOptions(merge: true),
-    );
+          record.toFirestore(),
+          SetOptions(merge: true),
+        );
   }
 
   /// Fetches student consent record.
@@ -120,7 +124,9 @@ class FirestoreService {
 
   /// Saves student profile.
   Future<void> saveProfile(StudentProfile profile) async {
-    await usersRef.doc(profile.uid).set(profile.toFirestore(), SetOptions(merge: true));
+    await usersRef
+        .doc(profile.uid)
+        .set(profile.toFirestore(), SetOptions(merge: true));
   }
 
   /// Fetches student profile.
@@ -130,4 +136,3 @@ class FirestoreService {
     return StudentProfile.fromFirestore(doc);
   }
 }
-

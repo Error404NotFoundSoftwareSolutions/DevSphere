@@ -14,7 +14,9 @@ import 'package:ui/ui.dart';
 import '../../api.dart';
 import '../../data/user_data.dart';
 import '../../worker/worker_client.dart';
+import '../../ui/kit.dart';
 import '../dashboard/dashboard_data.dart';
+import '../tutor/coach_panel.dart';
 import '../tutor/tutor_panel.dart';
 import 'start_lab_flow.dart';
 
@@ -157,38 +159,32 @@ class _Breadcrumb extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       key: const Key('breadcrumb'),
-      height: 56,
-      padding: const EdgeInsets.symmetric(horizontal: BL.space6),
-      decoration: const BoxDecoration(
-          color: BL.surface,
-          border: Border(bottom: BorderSide(color: BL.border))),
-      child: Row(
-        children: [
-          IconButton(
-            key: const Key('lab_back_button'),
-            icon: const Icon(Icons.arrow_back, size: 20),
-            tooltip: 'Back',
-            onPressed: () {
-              if (Navigator.of(context).canPop()) {
-                Navigator.of(context).pop();
-              } else {
-                context.go('/dashboard');
-              }
-            },
-          ),
-          const SizedBox(width: BL.space2),
-          InkWell(
-              onTap: () => context.go('/dashboard'),
-              child: const Icon(Icons.home_outlined, size: 22)),
-          const SizedBox(width: BL.space3),
-          const Icon(Icons.chevron_right, size: 18),
-          const SizedBox(width: BL.space3),
-          Expanded(
-              child: Text('$title: Lab',
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodySmall)),
-        ],
-      ),
+      height: 44,
+      padding: const EdgeInsets.symmetric(horizontal: BL.space3),
+      decoration:
+          BoxDecoration(border: Border(bottom: BorderSide(color: BL.border))),
+      child: Row(children: [
+        IconButton(
+          key: const Key('lab_back_button'),
+          visualDensity: VisualDensity.compact,
+          tooltip: 'Back to the course',
+          icon: const Icon(Icons.arrow_back, size: 18),
+          onPressed: () {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            } else {
+              context.go('/catalog');
+            }
+          },
+        ),
+        const SizedBox(width: BL.space2),
+        Expanded(
+          child: Text('$title: Lab',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.titleSmall),
+        ),
+      ]),
     );
   }
 }
@@ -209,37 +205,37 @@ class _Toolbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final text = Theme.of(context).textTheme;
     return Container(
       key: const Key('lab-toolbar'),
-      color: BL.background,
       padding: const EdgeInsets.symmetric(
           horizontal: BL.space6, vertical: BL.space3),
+      decoration:
+          BoxDecoration(border: Border(bottom: BorderSide(color: BL.border))),
       child: Wrap(
-        spacing: BL.space4,
-        runSpacing: BL.space2,
+        alignment: WrapAlignment.spaceBetween,
         crossAxisAlignment: WrapCrossAlignment.center,
+        runSpacing: BL.space2,
+        spacing: BL.space4,
         children: [
-          Container(
-            padding: const EdgeInsets.symmetric(
-                horizontal: BL.space4, vertical: BL.space2),
-            decoration: BoxDecoration(
-                color: const Color(0xFFD9F2E6),
-                borderRadius: BorderRadius.circular(BL.radiusMd)),
-            child: Text('Practice score: $score / 100',
-                style: text.labelLarge?.copyWith(color: BL.success)),
-          ),
-          OutlinedButton.icon(
-            onPressed: busy == null ? onOpenAgain : null,
-            icon: const Icon(Icons.open_in_new, size: 18),
-            label: Text(busy ?? 'Open VS Code again'),
-            style: OutlinedButton.styleFrom(shape: const StadiumBorder()),
-          ),
-          OutlinedButton(
-            onPressed: onTogglePanel,
-            style: OutlinedButton.styleFrom(shape: const StadiumBorder()),
-            child: Text(panelOpen ? 'Hide setup' : 'Lab setup'),
-          ),
+          Row(mainAxisSize: MainAxisSize.min, children: [
+            Text('Practice score: $score / 100',
+                style: BL.mono(
+                    size: 13,
+                    color: score > 0 ? BL.primary : BL.textSecondary,
+                    weight: FontWeight.w700)),
+            const SizedBox(width: BL.space4),
+            SizedBox(
+                width: 160, child: AsciiBar(value: score / 100, height: 8)),
+          ]),
+          Row(mainAxisSize: MainAxisSize.min, children: [
+            OutlinedButton(
+                onPressed: busy == null ? onOpenAgain : null,
+                child: Text(busy ?? 'Open VS Code again')),
+            const SizedBox(width: BL.space2),
+            TextButton(
+                onPressed: onTogglePanel,
+                child: Text(panelOpen ? 'Hide setup' : 'Lab setup')),
+          ]),
         ],
       ),
     );
@@ -267,55 +263,61 @@ class _Body extends StatelessWidget {
       padding: const EdgeInsets.all(BL.space8),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 820),
+          constraints: const BoxConstraints(maxWidth: 1000),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Container(
-                padding: const EdgeInsets.all(BL.space8),
-                decoration: BoxDecoration(
-                    color: BL.surface,
-                    borderRadius: BorderRadius.circular(BL.radiusXl),
-                    border: Border.all(color: BL.border)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (!active) ...[
-                      Text('This lab is not open', style: text.headlineMedium),
-                      const SizedBox(height: BL.space3),
-                      Text(
-                          'Start it to open VS Code with your lab folder and the DevPilot Guide. Your progress will show here.',
-                          style: text.bodyLarge),
-                      const SizedBox(height: BL.space6),
-                      ElevatedButton(
-                          onPressed: busy == null ? onStart : null,
-                          child: Text(busy ?? 'Start this lab')),
-                    ] else ...[
-                      Text('Your lab is open in VS Code',
-                          style: text.headlineMedium),
-                      const SizedBox(height: BL.space3),
-                      Text(
-                        'Follow the DevPilot Guide panel on the right side of VS Code. Press Check my work on each step. Results appear here too.',
-                        style: text.bodyLarge,
-                      ),
-                      const SizedBox(height: BL.space6),
-                      Text('Steps', style: text.titleLarge),
-                      const SizedBox(height: BL.space2),
-                      Column(
-                        key: const Key('lab-steps'),
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          for (final s in steps)
-                            _StepRow(
-                                title: '${s['title']}', state: '${s['state']}')
-                        ],
-                      ),
-                    ],
-                  ],
+              if (!active)
+                Panel(
+                  title: 'Lab',
+                  padding: const EdgeInsets.all(BL.space6),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('This lab is not open', style: text.headlineSmall),
+                        const SizedBox(height: BL.space3),
+                        Text(
+                            'Start it to open VS Code with your lab folder and the DevPilot Guide. Your progress will show here.',
+                            style: text.bodyMedium),
+                        const SizedBox(height: BL.space6),
+                        FilledButton(
+                            onPressed: busy == null ? onStart : null,
+                            child: Text(busy ?? 'Start this lab')),
+                      ]),
+                )
+              else
+                Section(
+                  label: 'Your lab is open in VS Code',
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                            'Follow the DevPilot Guide panel on the right side of VS Code. Press Check my work on each step. Results appear here too.',
+                            style: text.bodyMedium),
+                        const SizedBox(height: BL.space6),
+                        Column(
+                          key: const Key('lab-steps'),
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Panel(
+                              padding: EdgeInsets.zero,
+                              child: Column(children: [
+                                for (var i = 0; i < steps.length; i++) ...[
+                                  _StepRow(
+                                      title: '${steps[i]['title']}',
+                                      state: '${steps[i]['state']}'),
+                                  if (i < steps.length - 1) const Rule(),
+                                ],
+                              ]),
+                            ),
+                          ],
+                        ),
+                      ]),
                 ),
-              ),
-              const SizedBox(height: BL.space6),
+              const SizedBox(height: BL.space12),
               TutorPanel(labId: labId),
+              const SizedBox(height: BL.space6),
+              const CoachPanel(),
             ],
           ),
         ),
@@ -332,22 +334,26 @@ class _StepRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (icon, color, label) = switch (state) {
-      'pass' => (Icons.check_circle, BL.success, 'Passed'),
-      'fail' => (Icons.error_outline, BL.danger, 'Not yet'),
-      _ => (Icons.radio_button_unchecked, BL.textDisabled, 'To do'),
-    };
+    final pass = state == 'pass';
+    final fail = state == 'fail';
+    final tone = pass ? Tone.accent : (fail ? Tone.bad : Tone.muted);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        children: [
-          Icon(icon, size: 20, color: color),
-          const SizedBox(width: BL.space3),
-          Expanded(
-              child: Text(title, style: Theme.of(context).textTheme.bodyLarge)),
-          Text(label, style: Theme.of(context).textTheme.bodySmall),
-        ],
-      ),
+      padding: const EdgeInsets.symmetric(
+          vertical: BL.space3, horizontal: BL.space3),
+      child: Row(children: [
+        Icon(
+            pass
+                ? Icons.check_circle
+                : (fail ? Icons.cancel : Icons.radio_button_unchecked),
+            size: 22,
+            color: pass ? BL.success : (fail ? BL.danger : BL.textDisabled)),
+        const SizedBox(width: BL.space3),
+        Expanded(
+            child: Text(title,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: pass ? BL.textPrimary : BL.textSecondary))),
+        Tag(pass ? 'Passed' : (fail ? 'Not passed yet' : 'To do'), tone: tone),
+      ]),
     );
   }
 }
@@ -362,74 +368,70 @@ class _SetupPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final text = Theme.of(context).textTheme;
     return Container(
-      width: 400,
-      margin: const EdgeInsets.fromLTRB(0, BL.space2, BL.space6, BL.space6),
+      width: 360,
+      decoration:
+          BoxDecoration(border: Border(left: BorderSide(color: BL.border))),
       padding: const EdgeInsets.all(BL.space6),
-      decoration: BoxDecoration(
-        color: BL.surface,
-        borderRadius: BorderRadius.circular(BL.radiusXl),
-        border: Border.all(color: BL.border),
-        boxShadow: const [
-          BoxShadow(
-              color: Color(0x14183153), blurRadius: 16, offset: Offset(0, 4))
-        ],
-      ),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(children: [
               Expanded(
-                  child: Text('Lab setup and access', style: text.titleLarge)),
+                  child: Text('Lab setup and access',
+                      style: Theme.of(context).textTheme.titleSmall)),
               IconButton(
                   onPressed: onClose,
-                  icon: const Icon(Icons.close),
+                  visualDensity: VisualDensity.compact,
+                  icon: const Icon(Icons.close, size: 16),
                   tooltip: 'Close'),
             ]),
-            const SizedBox(height: BL.space2),
+            const Rule(),
+            const SizedBox(height: BL.space4),
             Text('Your lab files live on this computer.',
                 style: text.bodyMedium),
             const SizedBox(height: BL.space4),
-            Text('Lab folder', style: text.labelSmall),
+            Text('Lab folder',
+                style: BL.mono(size: 12, weight: FontWeight.w600)),
             const SizedBox(height: BL.space1),
             Container(
               decoration: BoxDecoration(
+                  color: BL.background,
                   border: Border.all(color: BL.border),
-                  borderRadius: BorderRadius.circular(BL.radiusSm)),
+                  borderRadius: BorderRadius.circular(BL.radiusMd)),
               child: Row(children: [
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(BL.space3),
                     child: Text(labRoot.isEmpty ? 'Not open yet' : labRoot,
-                        style: BL.codeStyle, overflow: TextOverflow.ellipsis),
+                        style: BL.mono(size: 12, color: BL.textPrimary),
+                        overflow: TextOverflow.ellipsis),
                   ),
                 ),
                 IconButton(
                   onPressed: labRoot.isEmpty
                       ? null
                       : () => Clipboard.setData(ClipboardData(text: labRoot)),
-                  icon: const Icon(Icons.content_copy, size: 18),
+                  icon: const Icon(Icons.content_copy, size: 16),
                   tooltip: 'Copy',
                 ),
               ]),
             ),
-            const SizedBox(height: BL.space4),
+            const SizedBox(height: BL.space6),
             Container(
-              padding: const EdgeInsets.all(BL.space4),
+              padding: const EdgeInsets.all(BL.space3),
               decoration: BoxDecoration(
-                  color: const Color(0xFFFBEFD9),
-                  borderRadius: BorderRadius.circular(BL.radiusLg)),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Icon(Icons.info_outline, color: BL.warning),
-                  const SizedBox(width: BL.space3),
-                  Expanded(
-                      child: Text(
-                          'Practice results stay on this computer. Only Verified results earn badges.',
-                          style: text.bodyMedium)),
-                ],
-              ),
+                  color: BL.warning.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(BL.radiusMd)),
+              child:
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Icon(Icons.info_outline, color: BL.warning, size: 18),
+                const SizedBox(width: BL.space3),
+                Expanded(
+                    child: Text(
+                        'Practice results stay on this computer. Only Verified results earn badges.',
+                        style: text.bodySmall))
+              ]),
             ),
           ],
         ),

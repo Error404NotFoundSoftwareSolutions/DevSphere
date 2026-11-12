@@ -12,9 +12,11 @@ Directory tmp() => Directory.systemTemp.createTempSync('bl-lab-');
 Directory makeContent() {
   final root = tmp();
   void w(String rel, String body) {
-    final f = File('${root.path}/demo-lab-001/$rel')..createSync(recursive: true);
+    final f = File('${root.path}/demo-lab-001/$rel')
+      ..createSync(recursive: true);
     f.writeAsStringSync(body);
   }
+
   w('lab.yaml', '''
 id: demo-lab-001
 version: 1.0.0
@@ -39,19 +41,33 @@ guide:
   return root;
 }
 
-List<String> allFiles(Directory d) => [for (final e in d.listSync(recursive: true).whereType<File>()) e.path];
+List<String> allFiles(Directory d) =>
+    [for (final e in d.listSync(recursive: true).whereType<File>()) e.path];
 
 void main() {
-  test('TC-CMP-06-01 learner files are copied, protected tests and reference solutions never are (SEC-04)', () {
+  test(
+      'TC-CMP-06-01 learner files are copied, protected tests and reference solutions never are (SEC-04)',
+      () {
     final content = makeContent();
     final labs = tmp();
     final dest = prepareLabFolder(content.path, 'demo-lab-001', labs.path);
-    for (final f in ['hello.py', 'tests/visible/test_a.py', '.devsphere/guide/01.md', '.devsphere/lab.yaml', '.devsphere/lab.json', 'README.md']) {
+    for (final f in [
+      'hello.py',
+      'tests/visible/test_a.py',
+      '.devsphere/guide/01.md',
+      '.devsphere/lab.yaml',
+      '.devsphere/lab.json',
+      'README.md'
+    ]) {
       expect(File('$dest/$f').existsSync(), isTrue, reason: f);
     }
     for (final path in allFiles(Directory(dest))) {
       final body = File(path).readAsStringSync();
-      expect(body.contains('SECRET_PROTECTED') || body.contains('REFERENCE_SOLUTION'), isFalse, reason: path);
+      expect(
+          body.contains('SECRET_PROTECTED') ||
+              body.contains('REFERENCE_SOLUTION'),
+          isFalse,
+          reason: path);
     }
   });
 
@@ -64,21 +80,27 @@ void main() {
     expect(File('$dest/hello.py').readAsStringSync(), 'MY WORK');
   });
 
-  test('TC-CMP-06-03 bad ids are refused and symlinks in the bundle are skipped', () {
+  test(
+      'TC-CMP-06-03 bad ids are refused and symlinks in the bundle are skipped',
+      () {
     final content = makeContent();
     final labs = tmp();
     for (final bad in ['../x', 'a/b', '', 'Demo']) {
-      expect(() => prepareLabFolder(content.path, bad, labs.path), throwsArgumentError, reason: bad);
+      expect(() => prepareLabFolder(content.path, bad, labs.path),
+          throwsArgumentError,
+          reason: bad);
     }
     final outside = tmp();
     File('${outside.path}/leak.py').writeAsStringSync('LEAK');
-    Link('${content.path}/demo-lab-001/starter/link.py').createSync('${outside.path}/leak.py');
+    Link('${content.path}/demo-lab-001/starter/link.py')
+        .createSync('${outside.path}/leak.py');
     final dest = prepareLabFolder(content.path, 'demo-lab-001', labs.path);
     expect(File('$dest/link.py').existsSync(), isFalse);
   });
 
   test('TC-CMP-06-04 the labs root must be absolute and not the disk root', () {
-    expect(() => resolveLabsRoot('relative/dir', '/home/u'), throwsArgumentError);
+    expect(
+        () => resolveLabsRoot('relative/dir', '/home/u'), throwsArgumentError);
     expect(() => resolveLabsRoot('/', '/home/u'), throwsArgumentError);
     expect(resolveLabsRoot('', '/home/u'), '/home/u/DevPilotLabs');
     expect(resolveLabsRoot('/data/labs', '/home/u'), '/data/labs');
@@ -95,16 +117,21 @@ void main() {
     expect(info.steps[1].contentRef, 'guide/02.md');
   });
 
-  test('TC-CMP-06-06 hostile manifests are rejected (ids, content_ref traversal, size, aliases)', () {
+  test(
+      'TC-CMP-06-06 hostile manifests are rejected (ids, content_ref traversal, size, aliases)',
+      () {
     Directory lab(String yaml) {
       final d = tmp();
       File('${d.path}/.devsphere/lab.yaml')
         ..createSync(recursive: true)
         ..writeAsStringSync(yaml);
-      File('${d.path}/.devsphere/lab.json').writeAsStringSync('{"labId":"demo-lab-001","version":1}');
+      File('${d.path}/.devsphere/lab.json')
+          .writeAsStringSync('{"labId":"demo-lab-001","version":1}');
       return d;
     }
-    const base = 'id: demo-lab-001\ntitle: T\nguide:\n  steps:\n    - id: a\n      title: A\n      content_ref: ';
+
+    const base =
+        'id: demo-lab-001\ntitle: T\nguide:\n  steps:\n    - id: a\n      title: A\n      content_ref: ';
     for (final bad in [
       '${base}../../etc/passwd\n',
       '${base}/etc/passwd\n',
@@ -114,12 +141,14 @@ void main() {
       '- not\n- a map\n',
       'x: ${'a' * 70000}',
     ]) {
-      expect(() => loadLabInfo(lab(bad).path), throwsFormatException, reason: bad.substring(0, bad.length.clamp(0, 40)));
+      expect(() => loadLabInfo(lab(bad).path), throwsFormatException,
+          reason: bad.substring(0, bad.length.clamp(0, 40)));
     }
   });
 
   test('TC-CMP-06-07 the real sample lab prepares and loads', () {
-    final dest = prepareLabFolder('../../content/labs', 'python-hello-001', tmp().path);
+    final dest =
+        prepareLabFolder('../../content/labs', 'python-hello-001', tmp().path);
     final info = loadLabInfo(dest);
     expect(info.id, 'python-hello-001');
     expect(info.steps.length, 2);

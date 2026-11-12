@@ -14,4 +14,3 @@ class StartupTimer {
     return DateTime.now().difference(_start!);
   }
 }
-

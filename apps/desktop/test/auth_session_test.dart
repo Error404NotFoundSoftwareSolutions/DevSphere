@@ -20,8 +20,14 @@ import 'package:flutter_test/flutter_test.dart';
 
 class FakeAuth extends FirebaseAuthService {
   @override
-  Future<FirebaseUserResult> signInWithEmailAndPassword({required String email, required String password}) async =>
-      FirebaseUserResult(uid: 'u1', email: email, displayName: 'Asha Rao', idToken: 'TOKEN-SECRET', refreshToken: 'REFRESH-SECRET');
+  Future<FirebaseUserResult> signInWithEmailAndPassword(
+          {required String email, required String password}) async =>
+      FirebaseUserResult(
+          uid: 'u1',
+          email: email,
+          displayName: 'Asha Rao',
+          idToken: 'TOKEN-SECRET',
+          refreshToken: 'REFRESH-SECRET');
 }
 
 class MemoryStore extends SessionStore {
@@ -42,8 +48,11 @@ Future<void> pump(WidgetTester tester, {String location = '/dashboard'}) async {
 void main() {
   setUp(() => AuthSession.instance.signOut());
 
-  test('TC-AUTH-30 AuthUser derives a display name and initial; falls back to the email', () {
-    const named = AuthUser(uid: 'u', email: 'asha@example.com', displayName: 'Asha Rao');
+  test(
+      'TC-AUTH-30 AuthUser derives a display name and initial; falls back to the email',
+      () {
+    const named =
+        AuthUser(uid: 'u', email: 'asha@example.com', displayName: 'Asha Rao');
     expect(named.label, 'Asha Rao');
     expect(named.initial, 'A');
     const unnamed = AuthUser(uid: 'u', email: 'balaraj.r@example.com');
@@ -54,7 +63,9 @@ void main() {
     expect(blank.initial, 'L');
   });
 
-  test('TC-AUTH-31 the shared session notifies on sign in and sign out and holds no tokens', () {
+  test(
+      'TC-AUTH-31 the shared session notifies on sign in and sign out and holds no tokens',
+      () {
     var calls = 0;
     AuthSession.instance.addListener(() => calls++);
     AuthSession.instance.signIn(const AuthUser(uid: 'u', email: 'a@b.co'));
@@ -66,7 +77,9 @@ void main() {
     expect(AuthUser.fieldNames, ['uid', 'email', 'displayName']);
   });
 
-  testWidgets('TC-AUTH-32 a successful email sign-in publishes the user (and only the safe fields)', (tester) async {
+  testWidgets(
+      'TC-AUTH-32 a successful email sign-in publishes the user (and only the safe fields)',
+      (tester) async {
     tester.view.physicalSize = const Size(1280, 800);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
@@ -81,8 +94,10 @@ void main() {
       ),
     ));
     await tester.pump(const Duration(seconds: 6));
-    await tester.enterText(find.byKey(const Key('auth_email_field')), 'asha@example.com');
-    await tester.enterText(find.byKey(const Key('auth_password_field')), 'password123');
+    await tester.enterText(
+        find.byKey(const Key('auth_email_field')), 'asha@example.com');
+    await tester.enterText(
+        find.byKey(const Key('auth_password_field')), 'password123');
     final submit = find.byKey(const Key('auth_submit_button'));
     await tester.ensureVisible(submit);
     await tester.tap(submit);
@@ -93,15 +108,27 @@ void main() {
     expect(AuthSession.instance.user.toString(), isNot(contains('SECRET')));
   });
 
-  testWidgets('TC-AUTH-33 the header shows the signed-in user: initial in the avatar', (tester) async {
-    AuthSession.instance.signIn(const AuthUser(uid: 'u', email: 'asha@example.com', displayName: 'Asha Rao'));
+  testWidgets(
+      'TC-AUTH-33 the header shows the signed-in user: initial in the avatar',
+      (tester) async {
+    AuthSession.instance.signIn(const AuthUser(
+        uid: 'u', email: 'asha@example.com', displayName: 'Asha Rao'));
     await pump(tester);
-    expect(find.descendant(of: find.byKey(const Key('profile')), matching: find.text('A')), findsOneWidget);
-    expect(find.descendant(of: find.byKey(const Key('profile')), matching: find.text('L')), findsNothing);
+    expect(
+        find.descendant(
+            of: find.byKey(const Key('profile')), matching: find.text('A')),
+        findsOneWidget);
+    expect(
+        find.descendant(
+            of: find.byKey(const Key('profile')), matching: find.text('L')),
+        findsNothing);
   });
 
-  testWidgets('TC-AUTH-34 the account menu shows name and email and offers Sign out', (tester) async {
-    AuthSession.instance.signIn(const AuthUser(uid: 'u', email: 'asha@example.com', displayName: 'Asha Rao'));
+  testWidgets(
+      'TC-AUTH-34 the account menu shows name and email and offers Sign out',
+      (tester) async {
+    AuthSession.instance.signIn(const AuthUser(
+        uid: 'u', email: 'asha@example.com', displayName: 'Asha Rao'));
     await pump(tester);
     await tester.tap(find.byKey(const Key('profile')));
     await tester.pumpAndSettle();
@@ -110,8 +137,11 @@ void main() {
     expect(find.text('Sign out'), findsOneWidget);
   });
 
-  testWidgets('TC-AUTH-35 Sign out clears the session and leaves the app screens', (tester) async {
-    AuthSession.instance.signIn(const AuthUser(uid: 'u', email: 'asha@example.com', displayName: 'Asha Rao'));
+  testWidgets(
+      'TC-AUTH-35 Sign out clears the session and leaves the app screens',
+      (tester) async {
+    AuthSession.instance.signIn(const AuthUser(
+        uid: 'u', email: 'asha@example.com', displayName: 'Asha Rao'));
     await pump(tester);
     await tester.tap(find.byKey(const Key('profile')));
     await tester.pumpAndSettle();
@@ -121,16 +151,24 @@ void main() {
     expect(find.byKey(const Key('topbar')), findsNothing);
   });
 
-  testWidgets('TC-AUTH-36 the dashboard greets the signed-in user by name', (tester) async {
-    AuthSession.instance.signIn(const AuthUser(uid: 'u', email: 'asha@example.com', displayName: 'Asha Rao'));
+  testWidgets('TC-AUTH-36 the dashboard greets the signed-in user by name',
+      (tester) async {
+    AuthSession.instance.signIn(const AuthUser(
+        uid: 'u', email: 'asha@example.com', displayName: 'Asha Rao'));
     await pump(tester);
-    expect(find.text('Welcome, Asha Rao'), findsOneWidget);
-    expect(find.text('Welcome, Learner'), findsNothing);
+    expect(find.textContaining(', Asha'), findsOneWidget,
+        reason: 'the greeting uses the first name');
+    expect(find.textContaining('Learner'), findsNothing);
   });
 
-  testWidgets('TC-AUTH-37 when nobody is signed in the header says so and offers Sign in', (tester) async {
+  testWidgets(
+      'TC-AUTH-37 when nobody is signed in the header says so and offers Sign in',
+      (tester) async {
     await pump(tester);
     expect(find.byKey(const Key('header-sign-in')), findsOneWidget);
-    expect(find.descendant(of: find.byKey(const Key('profile')), matching: find.text('L')), findsNothing);
+    expect(
+        find.descendant(
+            of: find.byKey(const Key('profile')), matching: find.text('L')),
+        findsNothing);
   });
 }

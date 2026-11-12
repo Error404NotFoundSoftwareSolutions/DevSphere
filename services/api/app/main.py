@@ -8,25 +8,59 @@ import uuid
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
+from starlette.concurrency import run_in_threadpool
 
+from app.core.settings import settings
+from app.db import store
 from app.routers import (
     ai,
     attempts,
     auth,
     config,
+    credentials,
     data_requests,
     health,
     internal_grader,
     labs,
     me,
     operator,
+    player,
     submissions,
     tutor,
 )
 
 
+def configure_storage() -> None:
+    """Choose where data lives. Firestore needs the google-cloud-firestore library and Google credentials."""
+    if settings.database == "firestore":
+        store.configure(
+            store.FirestoreBackend(
+                settings.firestore_project or settings.gemini_project,
+                settings.firestore_database,
+                settings.firestore_prefix,
+            )
+        )
+    elif settings.database != "memory":
+        raise RuntimeError(f"Unknown DEVSPHERE_DATABASE value: {settings.database!r}")
+
+
 def create_app() -> FastAPI:
     app = FastAPI(title="DevSphere API", version="0.0.0")
+    configure_storage()
+
+    @app.middleware("http")
+    async def unit_of_work(request: Request, call_next):
+        # Each request works on its own copy of the documents it touches and writes the changes back at the end.
+        if not store.enabled():
+            return await call_next(request)
+        token = store.begin()
+        try:
+            response = await call_next(request)
+            if response.status_code < 500:
+                await run_in_threadpool(store.flush)
+            return response
+        finally:
+            store.end(token)
 
     @app.middleware("http")
     async def correlation_id(request: Request, call_next):
@@ -79,9 +113,12 @@ def create_app() -> FastAPI:
         config,
         internal_grader,
         operator,
+        credentials,
     ):
         app.include_router(r.router)
     app.include_router(me.students_router)
+    app.include_router(credentials.public_router)
+    app.include_router(player.router)
     return app
 
 

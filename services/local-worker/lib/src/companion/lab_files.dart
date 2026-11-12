@@ -19,11 +19,13 @@ const int _maxManifestBytes = 64 * 1024;
 const int _maxSteps = 50;
 
 String resolveLabsRoot(String configured, String home) {
-  final root = configured.trim().isEmpty ? '$home/DevPilotLabs' : configured.trim();
+  final root =
+      configured.trim().isEmpty ? '$home/DevPilotLabs' : configured.trim();
   if (!root.startsWith('/') && !RegExp(r'^[A-Za-z]:[\\/]').hasMatch(root)) {
     throw ArgumentError('The labs folder must be a full path.');
   }
-  if (root == '/' || RegExp(r'^[A-Za-z]:[\\/]?$').hasMatch(root)) throw ArgumentError('The labs folder cannot be the disk root.');
+  if (root == '/' || RegExp(r'^[A-Za-z]:[\\/]?$').hasMatch(root))
+    throw ArgumentError('The labs folder cannot be the disk root.');
   return root;
 }
 
@@ -38,7 +40,10 @@ const _denied = {'protected', 'reference'};
 List<_Copy> _select(List<String> rels) {
   final out = <_Copy>[];
   for (final raw in rels) {
-    if (raw.contains('\u0000') || raw.contains('\\') || raw.startsWith('/') || RegExp(r'^[A-Za-z]:').hasMatch(raw)) continue;
+    if (raw.contains('\u0000') ||
+        raw.contains('\\') ||
+        raw.startsWith('/') ||
+        RegExp(r'^[A-Za-z]:').hasMatch(raw)) continue;
     final seg = raw.split('/');
     if (seg.any((s) => s.isEmpty || s == '.' || s == '..')) continue;
     if (seg.any((s) => _denied.contains(s.toLowerCase()))) continue;
@@ -67,16 +72,20 @@ List<String> _listFiles(Directory root) {
       if (e is Link) continue;
       if (e is Directory) {
         walk(e, r, depth + 1);
-      } else if (e is File && out.length < _maxFiles && e.lengthSync() <= _maxFileBytes) {
+      } else if (e is File &&
+          out.length < _maxFiles &&
+          e.lengthSync() <= _maxFileBytes) {
         out.add(r);
       }
     }
   }
+
   walk(root, '', 0);
   return out;
 }
 
-bool _inside(String root, String path) => path == root || path.startsWith('$root${Platform.pathSeparator}');
+bool _inside(String root, String path) =>
+    path == root || path.startsWith('$root${Platform.pathSeparator}');
 
 /// Returns the lab folder (created if needed). Throws ArgumentError for bad ids or unsafe paths.
 String prepareLabFolder(String contentRoot, String labId, String labsRoot) {
@@ -85,13 +94,15 @@ String prepareLabFolder(String contentRoot, String labId, String labsRoot) {
   final srcDir = Directory('$realContent/$labId');
   if (!srcDir.existsSync()) throw ArgumentError('Lab not found');
   final src = srcDir.resolveSymbolicLinksSync();
-  if (!_inside(realContent, src)) throw ArgumentError('Lab is outside the content folder');
+  if (!_inside(realContent, src))
+    throw ArgumentError('Lab is outside the content folder');
   Directory('$labsRoot/$labId').createSync(recursive: true);
   final dest = Directory('$labsRoot/$labId').resolveSymbolicLinksSync();
   for (final c in _select(_listFiles(Directory(src)))) {
     final target = File('$dest/${c.to}');
     target.parent.createSync(recursive: true);
-    if (!_inside(dest, target.parent.resolveSymbolicLinksSync())) throw ArgumentError('Unsafe path in lab');
+    if (!_inside(dest, target.parent.resolveSymbolicLinksSync()))
+      throw ArgumentError('Unsafe path in lab');
     if (target.existsSync() || Link(target.path).existsSync()) continue;
     File('$src/${c.from}').copySync(target.path);
   }
@@ -104,17 +115,24 @@ String prepareLabFolder(String contentRoot, String labId, String labsRoot) {
 }
 
 bool _plain(Object? v, int max) =>
-    v is String && v.isNotEmpty && v.length <= max && !RegExp(r'[\u0000-\u001f\u007f]').hasMatch(v);
+    v is String &&
+    v.isNotEmpty &&
+    v.length <= max &&
+    !RegExp(r'[\u0000-\u001f\u007f]').hasMatch(v);
 
 /// Read and validate `.devsphere/lab.yaml` (untrusted input) from a prepared lab folder.
 LabInfo loadLabInfo(String labFolder) {
   final markerFile = File('$labFolder/.devsphere/lab.json');
   final manifestFile = File('$labFolder/.devsphere/lab.yaml');
-  if (!markerFile.existsSync() || !manifestFile.existsSync()) throw const FormatException('This is not a DevPilot lab folder.');
-  if (manifestFile.lengthSync() > _maxManifestBytes) throw const FormatException('Lab manifest is too large.');
+  if (!markerFile.existsSync() || !manifestFile.existsSync())
+    throw const FormatException('This is not a DevPilot lab folder.');
+  if (manifestFile.lengthSync() > _maxManifestBytes)
+    throw const FormatException('Lab manifest is too large.');
   final text = manifestFile.readAsStringSync();
-  if (RegExp(r'(^|[\s\[{,])[&*][A-Za-z0-9_-]+', multiLine: true).hasMatch(text)) {
-    throw const FormatException('Lab manifest uses YAML anchors or aliases, which are not allowed.');
+  if (RegExp(r'(^|[\s\[{,])[&*][A-Za-z0-9_-]+', multiLine: true)
+      .hasMatch(text)) {
+    throw const FormatException(
+        'Lab manifest uses YAML anchors or aliases, which are not allowed.');
   }
   final Object? doc;
   try {
@@ -122,29 +140,46 @@ LabInfo loadLabInfo(String labFolder) {
   } on YamlException {
     throw const FormatException('Lab manifest is not valid YAML.');
   }
-  if (doc is! YamlMap) throw const FormatException('Lab manifest must be a mapping.');
+  if (doc is! YamlMap)
+    throw const FormatException('Lab manifest must be a mapping.');
   final id = doc['id'];
-  if (id is! String || id.length < 3 || !_id.hasMatch(id)) throw const FormatException('Lab manifest has an invalid id.');
+  if (id is! String || id.length < 3 || !_id.hasMatch(id))
+    throw const FormatException('Lab manifest has an invalid id.');
   final marker = jsonDecode(markerFile.readAsStringSync());
-  if (marker is! Map || marker['labId'] != id) throw const FormatException('Lab folder and manifest do not match.');
-  if (!_plain(doc['title'], 120)) throw const FormatException('Lab manifest has an invalid title.');
+  if (marker is! Map || marker['labId'] != id)
+    throw const FormatException('Lab folder and manifest do not match.');
+  if (!_plain(doc['title'], 120))
+    throw const FormatException('Lab manifest has an invalid title.');
   final guide = doc['guide'];
   final steps = guide is YamlMap ? guide['steps'] : null;
-  if (steps is! YamlList || steps.isEmpty || steps.length > _maxSteps) throw const FormatException('Lab manifest has invalid steps.');
+  if (steps is! YamlList || steps.isEmpty || steps.length > _maxSteps)
+    throw const FormatException('Lab manifest has invalid steps.');
   final seen = <String>{};
   final out = <LabStepInfo>[];
   for (final s in steps) {
-    if (s is! YamlMap) throw const FormatException('Lab manifest has an invalid step.');
+    if (s is! YamlMap)
+      throw const FormatException('Lab manifest has an invalid step.');
     final sid = s['id'];
     final ref = s['content_ref'];
-    if (sid is! String || !_id.hasMatch(sid) || !seen.add(sid)) throw const FormatException('Lab manifest has an invalid step id.');
-    if (!_plain(s['title'], 120)) throw const FormatException('Lab manifest has an invalid step title.');
-    if (ref is! String || !_contentRef.hasMatch(ref) || ref.split('/').any((p) => p == '..' || p == '.' || p.isEmpty)) {
-      throw const FormatException('Lab manifest has an invalid content reference.');
+    if (sid is! String || !_id.hasMatch(sid) || !seen.add(sid))
+      throw const FormatException('Lab manifest has an invalid step id.');
+    if (!_plain(s['title'], 120))
+      throw const FormatException('Lab manifest has an invalid step title.');
+    if (ref is! String ||
+        !_contentRef.hasMatch(ref) ||
+        ref.split('/').any((p) => p == '..' || p == '.' || p.isEmpty)) {
+      throw const FormatException(
+          'Lab manifest has an invalid content reference.');
     }
     final check = s['practice_check'];
-    if (check != null && !(check is String && _id.hasMatch(check))) throw const FormatException('Lab manifest has an invalid check id.');
-    out.add(LabStepInfo(id: sid, title: s['title'] as String, contentRef: ref, hasCheck: check != null, checkId: check as String?));
+    if (check != null && !(check is String && _id.hasMatch(check)))
+      throw const FormatException('Lab manifest has an invalid check id.');
+    out.add(LabStepInfo(
+        id: sid,
+        title: s['title'] as String,
+        contentRef: ref,
+        hasCheck: check != null,
+        checkId: check as String?));
   }
   return LabInfo(id: id, title: doc['title'] as String, steps: out);
 }

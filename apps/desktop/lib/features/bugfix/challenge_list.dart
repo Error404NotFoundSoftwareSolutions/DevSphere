@@ -72,7 +72,8 @@ class _ChallengeListState extends State<ChallengeList> {
                   child: ListTile(
                     leading: const Icon(Icons.bug_report, color: Colors.amber),
                     title: Text(challenge['title'] as String),
-                    subtitle: Text('${challenge['language']} • ${challenge['difficulty']}'),
+                    subtitle: Text(
+                        '${challenge['language']} • ${challenge['difficulty']}'),
                     trailing: Chip(
                       label: Text('${challenge['points']} pts'),
                     ),
@@ -86,4 +87,3 @@ class _ChallengeListState extends State<ChallengeList> {
     );
   }
 }
-

@@ -9,6 +9,7 @@ import 'package:ui/ui.dart';
 import '../../api.dart';
 import '../../data/user_data.dart';
 import '../auth/auth_session.dart';
+import '../../ui/kit.dart';
 import '../dashboard/dashboard_data.dart';
 
 class PageFrame extends ConsumerStatefulWidget {
@@ -41,21 +42,22 @@ class _PageFrameState extends ConsumerState<PageFrame> {
 
   @override
   Widget build(BuildContext context) {
-    final text = Theme.of(context).textTheme;
     final signedIn = AuthSession.instance.user != null;
     return SingleChildScrollView(
       key: Key('page-${widget.slug}'),
-      padding: const EdgeInsets.all(BL.space8),
+      padding: const EdgeInsets.symmetric(
+          horizontal: BL.space8, vertical: BL.space8),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1120),
+          constraints: const BoxConstraints(maxWidth: BL.contentMaxWidth),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(widget.title, style: text.headlineMedium),
-              const SizedBox(height: BL.space1),
-              Text(widget.subtitle, style: text.bodySmall),
-              const SizedBox(height: BL.space6),
+              PageHead(
+                  label: '~/${widget.slug}',
+                  title: widget.title,
+                  description: widget.subtitle),
+              const SizedBox(height: BL.space8),
               if (!signedIn) const SignedOutNotice() else widget.child,
             ],
           ),
@@ -70,50 +72,42 @@ class SignedOutNotice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Panel(
       key: const Key('signed-out-notice'),
-      child: Padding(
-        padding: const EdgeInsets.all(BL.space6),
-        child: Row(
-          children: [
-            const Icon(Icons.lock_outline, color: BL.textSecondary),
-            const SizedBox(width: BL.space4),
-            const Expanded(
+      title: 'sign in required',
+      child: Row(
+        children: [
+          Expanded(
               child: Text(
-                  'Sign in to see your own courses, progress and credentials. Everything here belongs to your account only.'),
-            ),
-            FilledButton(
-                onPressed: () => context.go('/'), child: const Text('Sign in')),
-          ],
-        ),
+                  'Sign in to see your own labs, progress and credentials. Everything here belongs to your account only.',
+                  style: Theme.of(context).textTheme.bodyMedium)),
+          const SizedBox(width: BL.space4),
+          FilledButton(
+              onPressed: () => context.go('/'), child: const Text('Sign in')),
+        ],
       ),
     );
   }
 }
 
+/// Status and labels as plain coloured mono text (the terminal-native look). The old name is kept so every page
+/// that shows a status gets the new style: the colour passed in picks the tone.
 class StatusChip extends StatelessWidget {
   const StatusChip({super.key, required this.label, required this.color});
 
   final String label;
   final Color color;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-          horizontal: BL.space3, vertical: BL.space1),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(BL.radiusSm),
-        border: Border.all(color: color.withValues(alpha: 0.35)),
-      ),
-      child: Text(label,
-          style: Theme.of(context)
-              .textTheme
-              .bodySmall
-              ?.copyWith(color: color, fontWeight: FontWeight.w600)),
-    );
+  Tone get _tone {
+    if (color == BL.success || color == BL.primary) return Tone.accent;
+    if (color == BL.warning) return Tone.warn;
+    if (color == BL.danger) return Tone.bad;
+    if (color == BL.info) return Tone.info;
+    return Tone.muted;
   }
+
+  @override
+  Widget build(BuildContext context) => Tag(label, tone: _tone);
 }
 
 /// The person's own status for one catalogue item, in plain words.

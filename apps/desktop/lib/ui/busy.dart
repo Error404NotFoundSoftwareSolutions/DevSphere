@@ -25,4 +25,3 @@ class BusyIndicator extends StatelessWidget {
     );
   }
 }
-

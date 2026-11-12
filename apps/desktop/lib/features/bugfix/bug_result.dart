@@ -41,4 +41,3 @@ class BugResult extends StatelessWidget {
     );
   }
 }
-

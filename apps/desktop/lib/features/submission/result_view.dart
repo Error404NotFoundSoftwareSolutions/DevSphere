@@ -38,7 +38,8 @@ class ResultView extends StatelessWidget {
               child: Column(
                 children: [
                   ResultBadge(
-                    kind: isVerified ? ResultKind.verified : ResultKind.practice,
+                    kind:
+                        isVerified ? ResultKind.verified : ResultKind.practice,
                   ),
                   const SizedBox(height: 16),
                   Text(
@@ -84,4 +85,3 @@ class ResultView extends StatelessWidget {
     );
   }
 }
-

@@ -13,7 +13,8 @@ class ReadinessPanel extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Environment Readiness', style: Theme.of(context).textTheme.titleMedium),
+        Text('Environment Readiness',
+            style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 8),
         const Row(
           children: [
@@ -25,4 +26,3 @@ class ReadinessPanel extends StatelessWidget {
     );
   }
 }
-

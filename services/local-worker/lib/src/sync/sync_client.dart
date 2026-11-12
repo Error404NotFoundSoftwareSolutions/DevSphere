@@ -20,4 +20,3 @@ Future<int> syncOnce(
   outbox.ack(ids);
   return ids.length;
 }
-

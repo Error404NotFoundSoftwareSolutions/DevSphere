@@ -1,6 +1,6 @@
 // Capability: CAP-WORKSPACES. Requirements: FR-WS-001..005. Tests: TC-PGS-05..
-// Implemented here: the labs this person has opened on this computer, where their folders are, and whether VS Code
-// and the guide are ready. No file access here: the folder paths come from the worker's lab session.
+// Implemented here: the labs this person has opened on this computer, where their folders are, and whether VS Code and
+// the guide are ready. No file access here: the folder paths come from the worker's lab session.
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,9 +9,10 @@ import 'package:go_router/go_router.dart';
 import 'package:ui/ui.dart';
 import '../../api.dart';
 import '../../data/user_data.dart';
+import '../../ui/kit.dart';
+import '../../ui/motion.dart';
 import '../course/start_lab_flow.dart';
 import '../dashboard/dashboard_data.dart';
-import '../../ui/motion.dart';
 import 'shared.dart';
 
 class WorkspacesScreen extends ConsumerStatefulWidget {
@@ -47,39 +48,46 @@ class _WorkspacesScreenState extends ConsumerState<WorkspacesScreen> {
       subtitle:
           'The labs you have opened on this computer, and the tools they need.',
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _EditorCard(future: _editor),
-          const SizedBox(height: BL.space6),
-          Text('Your lab folders', style: text.titleLarge),
-          const SizedBox(height: BL.space3),
-          if (labs.isEmpty)
-            Card(
-              key: const Key('workspaces-empty'),
-              child: Padding(
-                padding: const EdgeInsets.all(BL.space6),
-                child: Row(
-                  children: [
-                    const Expanded(
-                        child: Text(
-                            'You have not opened a lab on this computer yet. Start one from the catalog and its folder appears here.')),
-                    OutlinedButton(
-                        onPressed: () => context.go('/catalog'),
-                        child: const Text('Browse the catalog')),
-                  ],
-                ),
-              ),
-            )
-          else
-            for (var i = 0; i < labs.length; i++)
-              Reveal(
-                key: ValueKey(labs[i].labId),
-                index: i,
-                child: _LabFolder(
-                    lab: labs[i],
-                    busy: _busy,
-                    onBusy: (v) => setState(() => _busy = v)),
-              ),
+          Reveal(
+              child: Section(
+                  label: 'Environment',
+                  child: Panel(
+                      padding: const EdgeInsets.all(BL.space4),
+                      child: _EditorCard(future: _editor)))),
+          const SizedBox(height: BL.space12),
+          Reveal(
+            index: 1,
+            child: Section(
+              label: 'Lab folders',
+              child: labs.isEmpty
+                  ? Panel(
+                      key: const Key('workspaces-empty'),
+                      child: Row(children: [
+                        Expanded(
+                            child: Text(
+                                'You have not opened a lab on this computer yet. Start one from the catalog and its folder appears here.',
+                                style: text.bodyMedium)),
+                        const SizedBox(width: BL.space4),
+                        OutlinedButton(
+                            onPressed: () => context.go('/catalog'),
+                            child: const Text('Browse the catalog')),
+                      ]),
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                          for (final l in labs) ...[
+                            _LabFolder(
+                                lab: l,
+                                busy: _busy,
+                                onBusy: (v) => setState(() => _busy = v)),
+                            const SizedBox(height: BL.space3)
+                          ],
+                        ]),
+            ),
+          ),
         ],
       ),
     );
@@ -93,37 +101,27 @@ class _EditorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final text = Theme.of(context).textTheme;
-    return Card(
+    return Container(
       key: const Key('editor-card'),
-      child: Padding(
-        padding: const EdgeInsets.all(BL.space6),
-        child: FutureBuilder<Map<String, dynamic>?>(
-          future: future,
-          builder: (context, snap) {
-            if (snap.connectionState != ConnectionState.done) {
-              return Row(children: [
-                const SizedBox(
-                    width: 18,
-                    height: 18,
-                    child: CircularProgressIndicator(strokeWidth: 2)),
-                const SizedBox(width: BL.space3),
-                Text('Checking VS Code...', style: text.bodyMedium)
-              ]);
-            }
-            final r = snap.data;
-            final editor = r?['editor'];
-            final guide = r?['guide'];
-            if (r == null || editor is! Map) {
-              return const _Line(
-                  ok: false,
-                  title: 'DevPilot helper',
-                  detail:
-                      'The helper program is not running, so labs cannot open in VS Code. Reinstall DevPilot.');
-            }
-            final found = editor['found'] == true;
-            final action = guide is Map ? '${guide['action']}' : 'unknown';
-            return Column(
+      child: FutureBuilder<Map<String, dynamic>?>(
+        future: future,
+        builder: (context, snap) {
+          if (snap.connectionState != ConnectionState.done) {
+            return Text('Checking VS Code...', style: BL.mono(size: 12.5));
+          }
+          final r = snap.data;
+          final editor = r?['editor'];
+          final guide = r?['guide'];
+          if (r == null || editor is! Map) {
+            return const _Line(
+                ok: false,
+                title: 'DevPilot helper',
+                detail:
+                    'The helper program is not running, so labs cannot open in VS Code. Reinstall DevPilot.');
+          }
+          final found = editor['found'] == true;
+          final action = guide is Map ? '${guide['action']}' : 'unknown';
+          return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _Line(
@@ -142,14 +140,12 @@ class _EditorCard extends StatelessWidget {
                   title: 'DevPilot Guide extension',
                   detail: !found
                       ? 'Needs VS Code first.'
-                      : action == 'none'
+                      : (action == 'none'
                           ? 'Installed and up to date.'
-                          : 'It will be installed or updated, with your approval, the next time you start a lab.',
+                          : 'It will be installed or updated, with your approval, the next time you start a lab.'),
                 ),
-              ],
-            );
-          },
-        ),
+              ]);
+        },
       ),
     );
   }
@@ -164,22 +160,17 @@ class _Line extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final text = Theme.of(context).textTheme;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(ok ? Icons.check_circle : Icons.info_outline,
-            color: ok ? BL.success : BL.warning, size: 20),
-        const SizedBox(width: BL.space3),
-        Expanded(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-              Text(title, style: text.titleSmall),
-              Text(detail, style: text.bodySmall)
-            ])),
-      ],
-    );
+    return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Icon(ok ? Icons.check_circle : Icons.error_outline,
+          size: 20, color: ok ? BL.success : BL.warning),
+      const SizedBox(width: BL.space3),
+      Expanded(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(title, style: Theme.of(context).textTheme.titleSmall),
+          Text(detail, style: BL.mono(size: 12)),
+        ]),
+      ),
+    ]);
   }
 }
 
@@ -196,51 +187,49 @@ class _LabFolder extends ConsumerWidget {
     final text = Theme.of(context).textTheme;
     final a = SampleData.find(lab.labId);
     final complete = lab.status == LabStatus.practiceComplete;
-    return Card(
+    return Panel(
       key: Key('workspace-${lab.labId}'),
-      child: Padding(
-        padding: const EdgeInsets.all(BL.space4),
-        child: Row(
-          children: [
-            Icon(complete ? Icons.check_circle : Icons.folder_open,
-                color: complete ? BL.success : BL.primary),
-            const SizedBox(width: BL.space3),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(a?.title ?? lab.title, style: text.titleSmall),
-                  const SizedBox(height: BL.space1),
-                  if (lab.labRoot.isNotEmpty)
-                    SelectableText(lab.labRoot,
-                        style: BL.codeStyle.copyWith(fontSize: 12)),
-                  Text(
-                      '${lab.passed} of ${lab.total} checks passed · last used ${shortDate(lab.lastActivity)}',
-                      style: text.bodySmall),
-                ],
-              ),
-            ),
+      padding: const EdgeInsets.all(BL.space4),
+      child: Row(children: [
+        IconTile(
+            icon: complete ? Icons.folder_special_outlined : Icons.folder_open,
+            tint: complete ? BL.tintTeal : BL.tintBlue,
+            color: complete ? BL.success : BL.blue,
+            size: 44),
+        const SizedBox(width: BL.space4),
+        Expanded(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(a?.title ?? lab.title, style: text.titleSmall),
             if (lab.labRoot.isNotEmpty)
-              IconButton(
-                tooltip: 'Copy folder path',
-                icon: const Icon(Icons.copy, size: 18),
-                onPressed: () async {
-                  await Clipboard.setData(ClipboardData(text: lab.labRoot));
-                  if (context.mounted)
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Folder path copied')));
-                },
-              ),
-            const SizedBox(width: BL.space2),
-            FilledButton(
-              onPressed: busy != null
-                  ? null
-                  : () => startLab(context, ref, lab.labId, onBusy: onBusy),
-              child: Text(busy ?? 'Open in VS Code'),
-            ),
-          ],
+              SelectableText(lab.labRoot,
+                  style: BL.codeStyle
+                      .copyWith(fontSize: 12, color: BL.textSecondary)),
+            const SizedBox(height: 2),
+            Text(
+                '${lab.passed} of ${lab.total} checks passed  ·  last used ${shortDate(lab.lastActivity)}',
+                style: BL.mono(size: 12)),
+          ]),
         ),
-      ),
+        if (lab.labRoot.isNotEmpty)
+          IconButton(
+            tooltip: 'Copy folder path',
+            icon: const Icon(Icons.copy, size: 18),
+            onPressed: () async {
+              await Clipboard.setData(ClipboardData(text: lab.labRoot));
+              if (context.mounted)
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Folder path copied')));
+            },
+          ),
+        const SizedBox(width: BL.space2),
+        FilledButton(
+          onPressed: busy != null
+              ? null
+              : () => startLab(context, ref, lab.labId, onBusy: onBusy),
+          child: Text(busy ?? 'Open in VS Code'),
+        ),
+      ]),
     );
   }
 }

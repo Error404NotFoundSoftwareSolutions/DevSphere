@@ -262,4 +262,46 @@ void main() {
     expect(all, isNot(contains('secret')));
     expect(all, isNot(contains('solution')));
   });
+
+  test(
+      'TC-FORGE-11 a step with its own test file checks only that file; others check the whole folder',
+      () {
+    final multi = lab(over: {
+      'steps': [
+        {'id': 'meet', 'title': 'Meet', 'content_md': 'Read.', 'check': false},
+        {
+          'id': 'count-words',
+          'title': 'Count',
+          'content_md': 'Count.',
+          'check': true
+        },
+        {
+          'id': 'most-common',
+          'title': 'Most',
+          'content_md': 'Most.',
+          'check': true
+        },
+      ],
+      'visible_tests': [
+        {
+          'path': 'tests/visible/test_count_words.py',
+          'content': 'def test_a():\n    assert False\n'
+        },
+        {
+          'path': 'tests/visible/test_most_common.py',
+          'content': 'def test_b():\n    assert False\n'
+        },
+      ],
+    });
+    final out = installGeneratedLab(multi, labs.path);
+    final manifest = File('${out.folder}/lab.yaml').readAsStringSync();
+    expect(manifest, contains('practice_check: count-words'));
+    expect(manifest, contains('practice_check: most-common'));
+    expect(manifest, isNot(contains('practice_check: checks')));
+    final single = installGeneratedLab(lab(), labs.path);
+    expect(File('${single.folder}/lab.yaml').readAsStringSync(),
+        contains('practice_check: checks'),
+        reason:
+            'test_cart.py is not named after the step, so the step runs the whole folder');
+  });
 }

@@ -62,7 +62,8 @@ class _PracticeChecksState extends State<PracticeChecks> {
                 children: [
                   Icon(Icons.check_circle, color: Colors.green, size: 18),
                   SizedBox(width: 6),
-                  Text('All practice tests passed!', style: TextStyle(color: Colors.green)),
+                  Text('All practice tests passed!',
+                      style: TextStyle(color: Colors.green)),
                 ],
               ),
             const SizedBox(height: 8),
@@ -85,4 +86,3 @@ class _PracticeChecksState extends State<PracticeChecks> {
     );
   }
 }
-

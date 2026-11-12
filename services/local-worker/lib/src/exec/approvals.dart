@@ -11,4 +11,3 @@ void registerApproval(String approvalId, bool approved) {
 bool isApproved(String approvalId) {
   return _approvals[approvalId] ?? false;
 }
-

@@ -20,7 +20,8 @@ class FirebaseAuthService {
   /// Signs in with Google using Firebase Authentication.
   Future<FirebaseUserResult> signInWithGoogle({String? googleIdToken}) async {
     try {
-      final result = await _restClient.signInWithGoogle(googleIdToken: googleIdToken);
+      final result =
+          await _restClient.signInWithGoogle(googleIdToken: googleIdToken);
       _currentUser = result;
       return result;
     } catch (e) {
@@ -66,6 +67,15 @@ class FirebaseAuthService {
   }
 
   /// Signs out from Firebase Authentication and clears active user session.
+  /// Sends a password reset email. Never says whether the address has an account.
+  Future<void> sendPasswordReset({required String email}) async {
+    try {
+      await _restClient.sendPasswordReset(email: email);
+    } catch (e) {
+      throw SignInService().classifyError(e);
+    }
+  }
+
   Future<void> signOut() async {
     _currentUser = null;
   }

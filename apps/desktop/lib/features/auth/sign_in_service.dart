@@ -44,19 +44,21 @@ class AuthException implements Exception {
   factory AuthException.unverifiedEmail() => const AuthException(
         type: AuthErrorType.unverifiedEmail,
         message: 'Your email address is not verified by Google.',
-        recoveryAction: 'Verify your email address with Google and retry sign-in.',
+        recoveryAction:
+            'Verify your email address with Google and retry sign-in.',
       );
 
   @override
-  String toString() => 'AuthException($type): $message (Recovery: $recoveryAction)';
+  String toString() =>
+      'AuthException($type): $message (Recovery: $recoveryAction)';
 }
 
 class SignInService {
   // Public desktop application client ID (not confidential, no secret - FR-AUTH-002).
   // Replace with your real Google Cloud OAuth 2.0 Client ID once configured.
-  // Instructions: https://console.cloud.google.com/apis/credentials?project=devpilot-1a384
+  // Instructions: https://console.cloud.google.com/apis/credentials?project=devpilot-app
   static const String defaultClientId =
-      '608221930150-dkgr99kbg4nc79upn8of030uvc22fng0.apps.googleusercontent.com';
+      '664564860639-krfs7e53tmuclebe325u46f7ei74cmqp.apps.googleusercontent.com';
 
   /// Returns true when [clientId] is still the placeholder (not yet configured)
   /// AND no custom [urlLauncher] was injected (i.e. production mode, not tests).
@@ -116,7 +118,9 @@ class SignInService {
     if (error is AuthException) return error;
 
     final str = error.toString().toLowerCase();
-    if (str.contains('cancel') || str.contains('abort') || str.contains('closed')) {
+    if (str.contains('cancel') ||
+        str.contains('abort') ||
+        str.contains('closed')) {
       return AuthException.cancelled();
     }
     if (str.contains('socket') ||
@@ -126,24 +130,29 @@ class SignInService {
         str.contains('timed out')) {
       return AuthException.networkFailure();
     }
-    if (str.contains('expired') || str.contains('401') || str.contains('unauthenticated')) {
+    if (str.contains('expired') ||
+        str.contains('401') ||
+        str.contains('unauthenticated')) {
       return AuthException.expiredSession();
     }
     if (str.contains('unverified') || str.contains('email_verified')) {
       return AuthException.unverifiedEmail();
     }
-    if (str.contains('email-already-in-use') || str.contains('already in use')) {
+    if (str.contains('email-already-in-use') ||
+        str.contains('already in use')) {
       return const AuthException(
         type: AuthErrorType.unknown,
         message: 'An account with this email already exists.',
-        recoveryAction: 'Log in with your existing account or use another email.',
+        recoveryAction:
+            'Log in with your existing account or use another email.',
       );
     }
     if (str.contains('weak-password') || str.contains('weak password')) {
       return const AuthException(
         type: AuthErrorType.unknown,
         message: 'Password must be at least 6 characters.',
-        recoveryAction: 'Please enter a stronger password with 6 or more characters.',
+        recoveryAction:
+            'Please enter a stronger password with 6 or more characters.',
       );
     }
     if (str.contains('user-not-found') ||
@@ -159,7 +168,8 @@ class SignInService {
       return const AuthException(
         type: AuthErrorType.unknown,
         message: 'The email address is badly formatted.',
-        recoveryAction: 'Please enter a valid email address (e.g. name@example.com).',
+        recoveryAction:
+            'Please enter a valid email address (e.g. name@example.com).',
       );
     }
     return const AuthException(

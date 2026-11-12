@@ -80,4 +80,3 @@ class _GuidePanelState extends State<GuidePanel> {
     );
   }
 }
-

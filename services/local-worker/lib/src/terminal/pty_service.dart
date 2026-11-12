@@ -30,4 +30,3 @@ class MockTerminalPtyService implements TerminalPtyService {
     _controller.close();
   }
 }
-

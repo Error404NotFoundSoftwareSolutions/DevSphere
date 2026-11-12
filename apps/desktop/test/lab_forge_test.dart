@@ -13,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'support/api_stub.dart';
+
 const asha =
     AuthUser(uid: 'asha-uid', email: 'asha@example.com', displayName: 'Asha');
 const bob =
@@ -43,7 +45,36 @@ Map<String, dynamic> learnerLab() => {
       ],
     };
 
-class ForgeApi implements DevPilotApi {
+class ForgeApi extends DevPilotApiStub {
+  @override
+  Future<Map<String, dynamic>> explainError(
+          {required String errorText, String? code, String language = 'en'}) =>
+      throw UnimplementedError();
+  @override
+  Future<Map<String, dynamic>> reviewCode(
+          {required String code,
+          String filename = '',
+          String goal = '',
+          String language = 'en'}) =>
+      throw UnimplementedError();
+
+  @override
+  Future<List<Credential>> credentials() => throw UnimplementedError();
+  @override
+  Future<Credential> claimCredential(
+          {required String labId,
+          required Map<String, bool> checks,
+          required String startedAt,
+          required String completedAt}) =>
+      throw UnimplementedError();
+  @override
+  Future<Credential> setSharing(String id,
+          {required bool isPublic, String displayName = ''}) =>
+      throw UnimplementedError();
+  @override
+  String publicLink(String id) => '';
+  @override
+  bool get isLocalService => true;
   ForgeApi({this.error, this.verified = true});
   final ApiProblem? error;
   final bool verified;
@@ -149,7 +180,7 @@ void main() {
     expect(find.text('Fix an IndexError in a Shopping Cart'), findsOneWidget);
     expect(find.text('Checked: the answer passes the tests'), findsOneWidget);
     expect(find.text('Checked: the starter fails the tests'), findsOneWidget);
-    expect(find.text('Practice only, no badge'), findsOneWidget);
+    expect(find.textContaining('Practice only, no badge'), findsOneWidget);
     expect(find.textContaining('not reviewed by a person'), findsOneWidget);
     expect(find.textContaining('cart.py'), findsWidgets);
     expect(find.textContaining('2 steps'), findsOneWidget);
@@ -204,12 +235,9 @@ void main() {
     await tester.tap(find.byKey(const Key('forge-open')));
     await tester.pumpAndSettle();
     final header = find.byKey(const Key('course-header'));
-    expect(
-        find.descendant(
-            of: header,
-            matching: find.text('Fix an IndexError in a Shopping Cart')),
-        findsOneWidget,
-        reason: 'not the first catalogue lab');
+    expect(find.text('Fix an IndexError in a Shopping Cart'), findsOneWidget,
+        reason:
+            'the course page is about this lab, not the first catalogue lab');
     expect(find.descendant(of: header, matching: find.text('Start')),
         findsOneWidget);
   });

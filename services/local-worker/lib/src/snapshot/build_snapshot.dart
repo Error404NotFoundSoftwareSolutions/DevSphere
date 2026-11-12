@@ -42,4 +42,3 @@ SnapshotSelection selectFiles(List<String> all) {
 Future<SnapshotSelection> previewSnapshot(String attemptId) async {
   return selectFiles([]);
 }
-

@@ -34,4 +34,3 @@ export 'src/companion/lab_files.dart';
 export 'src/companion/launcher.dart';
 export 'src/companion/guide_package.dart';
 export 'src/companion/service.dart';
-

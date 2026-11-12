@@ -12,4 +12,3 @@ Future<RunResult> createProjectEnvironment(String workspaceDir) async {
     timeout: const Duration(seconds: 120),
   );
 }
-

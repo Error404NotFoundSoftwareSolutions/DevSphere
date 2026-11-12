@@ -53,7 +53,8 @@ class ChallengeWorkspace extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 8),
-                  const Text('Issue description and failing stack traces go here.'),
+                  const Text(
+                      'Issue description and failing stack traces go here.'),
                 ],
               ),
             ),
@@ -63,4 +64,3 @@ class ChallengeWorkspace extends StatelessWidget {
     );
   }
 }
-

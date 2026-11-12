@@ -42,13 +42,15 @@ class PullRequestTracker extends StatelessWidget {
               ],
             ),
             const Divider(height: 20),
-            Text('Review Feedback:', style: Theme.of(context).textTheme.bodySmall),
+            Text('Review Feedback:',
+                style: Theme.of(context).textTheme.bodySmall),
             const SizedBox(height: 8),
             ...reviewComments.map((comment) => Container(
                   margin: const EdgeInsets.symmetric(vertical: 4),
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                    color:
+                        Theme.of(context).colorScheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(comment, style: const TextStyle(fontSize: 12)),
@@ -59,4 +61,3 @@ class PullRequestTracker extends StatelessWidget {
     );
   }
 }
-

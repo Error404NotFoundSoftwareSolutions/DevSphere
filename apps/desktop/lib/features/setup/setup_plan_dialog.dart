@@ -8,7 +8,8 @@ class SetupPlanDialog extends StatelessWidget {
   final List<String> steps;
   final VoidCallback onApprove;
 
-  const SetupPlanDialog({super.key, required this.steps, required this.onApprove});
+  const SetupPlanDialog(
+      {super.key, required this.steps, required this.onApprove});
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +20,12 @@ class SetupPlanDialog extends StatelessWidget {
         children: steps.map((s) => ListTile(title: Text(s))).toList(),
       ),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: const Text('Decline')),
-        ElevatedButton(onPressed: onApprove, child: const Text('Approve & Run')),
+        TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Decline')),
+        ElevatedButton(
+            onPressed: onApprove, child: const Text('Approve & Run')),
       ],
     );
   }
 }
-

@@ -5,4 +5,3 @@
 Future<bool> openWorkspace(String attemptId) async {
   return true;
 }
-

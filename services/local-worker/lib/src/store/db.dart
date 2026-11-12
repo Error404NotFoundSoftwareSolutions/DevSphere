@@ -6,7 +6,8 @@ import 'package:sqlite3/sqlite3.dart';
 
 Database openDb(String path) {
   final db = sqlite3.open(path);
-  db.execute('PRAGMA journal_mode = WAL;'); // survives abnormal exit (FR-PROG-003)
+  db.execute(
+      'PRAGMA journal_mode = WAL;'); // survives abnormal exit (FR-PROG-003)
   db.execute('''
     CREATE TABLE IF NOT EXISTS progress_events (
       event_id TEXT PRIMARY KEY,
@@ -30,4 +31,3 @@ Database openDb(String path) {
   ''');
   return db;
 }
-

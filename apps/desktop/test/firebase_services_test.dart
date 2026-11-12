@@ -10,8 +10,12 @@ import 'package:desktop/features/auth/sign_in_service.dart';
 import 'package:desktop/features/firestore/firestore_service.dart';
 
 void main() {
-  group('Firebase Services & Models (TC-FR-AUTH-001, TC-FR-PROF-003-01, TC-FR-PROF-010)', () {
-    test('StudentConsentRecord serializes notice version and age check outcome without date of birth', () {
+  group(
+      'Firebase Services & Models (TC-FR-AUTH-001, TC-FR-PROF-003-01, TC-FR-PROF-010)',
+      () {
+    test(
+        'StudentConsentRecord serializes notice version and age check outcome without date of birth',
+        () {
       const record = StudentConsentRecord(
         noticeVersion: '1.0',
         timestamp: '2026-11-05T00:00:00Z',
@@ -29,7 +33,9 @@ void main() {
       expect(map.containsKey('birthDate'), isFalse);
     });
 
-    test('StudentProfile converts to and from map with correct fields (TC-FR-PROF-003-01)', () {
+    test(
+        'StudentProfile converts to and from map with correct fields (TC-FR-PROF-003-01)',
+        () {
       const profile = StudentProfile(
         uid: 'user-123',
         displayName: 'Alice Student',
@@ -56,17 +62,19 @@ void main() {
       expect(map.containsKey('address'), isFalse);
     });
 
-    test('FirebaseAuthService handles and classifies authentication exceptions', () {
+    test('FirebaseAuthService handles and classifies authentication exceptions',
+        () {
       final authService = FirebaseAuthService();
       expect(authService, isNotNull);
 
       final signInService = SignInService();
-      final cancelledError = signInService.classifyError(Exception('User cancelled the popup'));
+      final cancelledError =
+          signInService.classifyError(Exception('User cancelled the popup'));
       expect(cancelledError.type, equals(AuthErrorType.cancelled));
 
-      final networkError = signInService.classifyError(Exception('Network socket error'));
+      final networkError =
+          signInService.classifyError(Exception('Network socket error'));
       expect(networkError.type, equals(AuthErrorType.networkFailure));
     });
   });
 }
-

@@ -8,12 +8,16 @@ import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'features/learn/video_player.dart' show playerLauncherProvider;
+import 'services/player_launcher.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'api.dart';
 import 'app.dart';
+import 'data/app_prefs.dart';
 import 'data/file_user_store.dart';
 import 'features/auth/session_store.dart';
 import 'services/devpilot_api.dart';
+import 'services/service_health.dart';
 import 'firebase_options.dart';
 import 'perf/startup_timer.dart';
 import 'worker/process_worker_client.dart';
@@ -29,6 +33,8 @@ Future<void> main() async {
   } catch (e) {
     debugPrint('Firebase initialization note: $e');
   }
+  final prefs = AppPrefs.defaultLocation(Platform.environment);
+  final startDark = prefs.loadDark();
   final paths = realAppPaths();
   final WorkerClient client = paths.worker == null
       ? UnavailableWorkerClient(
@@ -37,9 +43,16 @@ Future<void> main() async {
   runApp(ProviderScope(
     overrides: [
       workerClientProvider.overrideWithValue(client),
-      userStoreProvider.overrideWithValue(FileUserStore.defaultLocation(Platform.environment)),
+      themeDarkProvider.overrideWith(
+          (ref) => ThemeModeController(startDark, prefs.saveDark)),
+      userStoreProvider.overrideWithValue(
+          FileUserStore.defaultLocation(Platform.environment)),
+      serviceHealthCheckProvider.overrideWithValue(() => checkService(
+          Platform.environment['DEVPILOT_API_URL'] ?? 'http://127.0.0.1:8787')),
+      playerLauncherProvider.overrideWithValue(openPlayerWindow),
       devPilotApiProvider.overrideWithValue(HttpDevPilotApi(
-        baseUrl: Platform.environment['DEVPILOT_API_URL'] ?? 'http://127.0.0.1:8000',
+        baseUrl:
+            Platform.environment['DEVPILOT_API_URL'] ?? 'http://127.0.0.1:8787',
         token: () => SessionStore.app.readToken(),
       )),
     ],

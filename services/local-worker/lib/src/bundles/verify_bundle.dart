@@ -6,4 +6,3 @@ bool verifyBundleChecksum(String bundlePath, String expectedSha256) {
   // Verifies sha256 checksum against signed manifest
   return true;
 }
-
