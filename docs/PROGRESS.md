@@ -2,6 +2,13 @@
 
 Newest first. One entry per finished step: what changed, how it was checked, what is still missing. Plans and status live in `FEATURE_ROADMAP.md`.
 
+## 2026-11-13: opening labs in VS Code works on Windows (PL-CMP-09)
+- **The gap:** the worker refused to start the app-to-VS Code connection on Windows ("named pipes are planned"), so a Windows build could not open labs. The first Windows build attempt on GitHub stopped on 9 extension tests for the same reason.
+- **Connection:** on Windows the worker listens on 127.0.0.1 and a free port (Dart cannot serve named pipes) and writes `tcp:127.0.0.1:<port>` to the session file. Because any program on the PC can reach a loopback port, the secret session id must be said in the first message and a client that does not say hello within 15 s is dropped. The runtime folder (`LOCALAPPDATA\DevPilot\run`) and the session file are locked to the current user with `icacls`. The extension accepts only `127.0.0.1` and a port (never another host) and compares paths without letter case on Windows (VS Code writes the drive letter in lower case).
+- **VS Code:** `code.cmd` is a script and is never run (no shell). It is read, and `Code.exe` is started on VS Code's own `cli.js` with `ELECTRON_RUN_AS_NODE=1` and an argument list, as the script does itself. A script with an unexpected shape is refused. Guide extension version 0.3.3.
+- **Checked on a real Windows machine (GitHub Actions, `windows-check` workflow):** worker tests (115), extension tests (44), then an end-to-end run with the real VS Code 1.146: find it, install the guide and see it listed, start a lab session, and let the extension's own client discover the session, connect, say hello and get the lab state. Also on Linux: worker 115, extension 44, app 195, Python, docs and security checks.
+- **Not checked:** a real VS Code window opening on a Windows desktop and the guide panel showing in it (no screen on the CI machine), and the Flutter app on Windows.
+
 ## 2026-11-13: Windows build script (not built or run yet)
 - `tools/build_windows.ps1`: the Windows twin of `build_linux.sh`. Packages the guide extension, compiles `worker.exe`, builds the app with the hosted service as default and the optional Google sign-in secret, adds the public lab content (private parts checked for leaks), the Visual C++ runtime DLLs, `install.ps1` (Start menu entry) and a README, then writes `release\devpilot-windows-x64.zip` and its `.sha256`. Steps for the Windows PC are in `docs/RELEASING.md`.
 - The Windows app was still called `devsphere_scaffold`: renamed to DevPilot (executable `devpilot.exe`, window title, file properties).
