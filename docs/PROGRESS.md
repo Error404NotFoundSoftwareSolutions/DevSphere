@@ -169,3 +169,8 @@ Newest first. One entry per finished step: what changed, how it was checked, wha
 - 2026-11-10 Per-person pages (Catalog, Paths, Credentials, Workspaces), per-account data file, motion kit.
 - 2026-11-10 Open-source first contribution lab with per-step checks and a replay test.
 - 2026-11-08 Companion VS Code extension, AI gateway, design system, security programme.
+
+## 2026-11-13 — lab-check fix rolled out
+- Service deployed (Cloud Run revision `devpilot-api-00012-kht`); branch merged to `main`.
+- Windows installer, zip and Linux package rebuilt and replaced on `v0.1.0-preview.1`; installer SHA-256 `d5a3841d…05f3` written to `apps/web/release-info.json`.
+- Docs and `install.ps1` deployed to https://devpilot.web.app. Still untried by a person on a real Windows desktop.
