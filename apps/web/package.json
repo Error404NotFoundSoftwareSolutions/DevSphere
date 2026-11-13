@@ -8,7 +8,9 @@
     "build": "next build",
     "start": "python3 -m http.server 3100 -d out",
     "typecheck": "tsc --noEmit",
-    "deploy": "next build && firebase deploy --only hosting --project devpilot-app"
+    "deploy": "next build && firebase deploy --only hosting --project devpilot-app",
+    "gen:install": "node scripts/make-install-script.mjs",
+    "prebuild": "node scripts/make-install-script.mjs"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",

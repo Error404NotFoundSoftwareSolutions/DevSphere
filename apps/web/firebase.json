@@ -29,6 +29,19 @@
         ]
       },
       {
+        "source": "/install.ps1",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          },
+          {
+            "key": "Content-Type",
+            "value": "text/plain; charset=utf-8"
+          }
+        ]
+      },
+      {
         "source": "/{app,docs-img}/**",
         "headers": [
           {
