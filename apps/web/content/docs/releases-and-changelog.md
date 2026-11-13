@@ -12,7 +12,8 @@ Releases are published in the public [devpilot-releases](https://github.com/Erro
 | File | For |
 |---|---|
 | `devpilot-linux-x64.tar.gz` | Linux, 64-bit (about 365 MB) |
-| `devpilot-windows-x64.zip` | Windows 10 and 11, 64-bit (about 190 MB) |
+| `devpilot-windows-x64-setup.exe` | Windows 10 and 11, 64-bit: the installer (about 190 MB) |
+| `devpilot-windows-x64.zip` | Windows, portable copy with no installer |
 | `*.sha256` | The SHA-256 checksum of the file with the same name |
 
 Install steps: [Linux](/docs/install-linux) and [Windows](/docs/install-windows).

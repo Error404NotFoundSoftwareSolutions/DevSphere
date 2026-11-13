@@ -23,7 +23,8 @@ const PUBLIC = "https://github.com/Error404NotFoundSoftwareSolutions/devpilot-re
 export const release = {
   tag: process.env.NEXT_PUBLIC_RELEASE_TAG ?? "v0.1.0-preview.1",
   file: "devpilot-linux-x64.tar.gz",
-  fileWindows: "devpilot-windows-x64.zip",
+  fileWindows: "devpilot-windows-x64-setup.exe",
+  fileWindowsZip: "devpilot-windows-x64.zip",
   label: "Linux x64 preview",
 };
 
@@ -31,8 +32,10 @@ export const release = {
 export const links = {
   /** Direct download of the Linux package (starts the download straight away). */
   download: `${PUBLIC}/releases/download/${release.tag}/${release.file}`,
-  /** Direct download of the Windows package. */
+  /** Direct download of the Windows installer (setup.exe). */
   downloadWindows: `${PUBLIC}/releases/download/${release.tag}/${release.fileWindows}`,
+  /** The Windows portable zip. */
+  downloadWindowsZip: `${PUBLIC}/releases/download/${release.tag}/${release.fileWindowsZip}`,
   /** The release page: notes, checksums and install steps. */
   releases: `${PUBLIC}/releases/tag/${release.tag}`,
   github: PUBLIC,

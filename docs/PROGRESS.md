@@ -2,6 +2,12 @@
 
 Newest first. One entry per finished step: what changed, how it was checked, what is still missing. Plans and status live in `FEATURE_ROADMAP.md`.
 
+## 2026-11-13: Windows installer (and the SmartScreen warning)
+- The owner's friend got the Windows SmartScreen warning ("Windows protected your PC") on the unsigned zip and wanted one `.exe` to download. `tools/windows_installer.iss` (Inno Setup) builds `devpilot-windows-x64-setup.exe`: per-user install (no administrator rights), Start menu entry, optional desktop shortcut, uninstaller that keeps `~/.devpilot` and `~/DevPilotLabs`. `build_windows.ps1` builds it when Inno Setup is present (the GitHub runner installs it); the `windows-release` workflow now installs it quietly, starts the app for 15 seconds and uninstalls it. All passed on a Windows machine. The zip stays as a portable copy.
+- Released both on v0.1.0-preview.1 (setup.exe 179 MB, zip 192 MB, checksums checked). The site's Windows Download button and footer link go to the installer; the docs' Windows page leads with it, explains "Unblock" for the zip, and mentions Smart App Control.
+- **The warning is not gone:** it appears for any unsigned app with no download history. Research (Microsoft docs and Q&A, DigiCert): reputation is per file and builds with download volume; a new build starts at zero; EV certificates no longer give an instant pass; Microsoft has no application route; the Microsoft Store avoids it. Options for later: a browser-less install command, the Store (MSIX), a code-signing certificate.
+- **Not done:** signing, the Store package, a person using the installer on a real desktop.
+
 ## 2026-11-13: Windows fix, labs can now find Python
 - **Bug (found while writing the docs):** the lab checks and the setup check ran `python3`, which a normal Windows Python install does not have (it has `python` and the `py` launcher; the Microsoft Store stub named `python` opens the Store). On Windows, checks could not run.
 - **Fix:** `python_locator.dart` tries `python3`, `python` on Linux and macOS and `python`, `py`, `python3` on Windows, using the first that prints `Python 3.x`; with none it says so in plain words and the pytest hint names the command found. Second bug found by the new probe: `runProcess` could return before the program's last output arrived (a version number came back empty); it now waits briefly for both streams.
