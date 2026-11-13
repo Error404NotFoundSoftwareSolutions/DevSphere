@@ -39,6 +39,16 @@ NEXT_PUBLIC_API_URL=https://your-api.example.com   # optional, defaults to the h
 | Night plate | 16:9 still, about 2400 px wide, darker and cooler than the day plate. |
 | Model | Binary glTF (`.glb`), single mesh preferred, under 5 MB. The longest axis is scaled to length 1, the nose should point along +X (it is auto-oriented along the longest axis). |
 
+## Documentation (`/docs`)
+
+The docs are Markdown files in `content/docs/`, built into the static site (no server). Each file starts with a front matter
+block (`title`, `description`, `section`, `order`; quote the values) and the file path is the address:
+`content/docs/labs.md` is `/docs/labs`, and `index.md` is the docs home. The engine is `lib/docs.ts`; the pages and
+search are in `app/docs/` and `components/docs/`. Notes are written as `:::note Title` ... `:::` (also `tip`, `warning`,
+`important`). Images go in `public/`, for example the app screenshots in `public/app/` and diagrams in
+`public/docs-img/`. The sidebar, search index, sitemap and previous/next links are generated from the files. To add a
+page, add a `.md` file in an existing section and rebuild.
+
 ## Downloads
 
 The source repository is private, so the app is published from the public repository

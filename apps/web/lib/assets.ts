@@ -36,7 +36,15 @@ export const links = {
   /** The release page: notes, checksums and install steps. */
   releases: `${PUBLIC}/releases/tag/${release.tag}`,
   github: PUBLIC,
-  docs: `${PUBLIC}#readme`,
+  /** The documentation, on this site. */
+  docs: "/docs",
+  docsLearn: "/docs/learning-paths",
+  docsLabs: "/docs/labs",
+  docsCoach: "/docs/tutor-and-coach",
+  docsCredentials: "/docs/credentials",
+  docsSecurity: "/docs/security-and-privacy",
+  docsVscode: "/docs/vscode-guide",
+  docsStart: "/docs/quickstart",
   issues: `${PUBLIC}/issues`,
   api: process.env.NEXT_PUBLIC_API_URL ?? "https://devpilot-api-664564860639.asia-south1.run.app",
 };

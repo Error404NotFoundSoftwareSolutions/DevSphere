@@ -2,6 +2,13 @@
 
 Newest first. One entry per finished step: what changed, how it was checked, what is still missing. Plans and status live in `FEATURE_ROADMAP.md`.
 
+## 2026-11-13: documentation site at https://devpilot.web.app/docs
+- 26 pages written from the product and the code, not from the old design notes: install (Linux, Windows), quickstart, learning paths, watching videos, labs, the VS Code guide, tutor and coach, roadmaps and interviews, credentials, Lab Forge, account and shortcuts, how it works (with a diagram), how AI is used, scoring and trust, security and privacy, system requirements, settings and your data, troubleshooting, FAQ, lab format, service API overview, glossary, status and roadmap, releases. Planned features are marked planned.
+- Engine: Markdown in `apps/web/content/docs`, rendered at build time (`marked`, `gray-matter`); sidebar, search (client-side over a generated index), on-this-page navigation, copy buttons, previous/next, notes, sitemap and robots. All internal links, anchors and images were checked after the build; phone widths have no sideways scroll.
+- The landing page's Docs, Documentation, Security, Privacy and product links now point to the docs (they pointed at the releases repository README).
+- Checked live: every page returns 200, search finds the Windows page for "windows smartscreen", the copy button works, no console errors.
+- Not done: a Terms page (the footer link is still empty); a dedicated security contact (the page says to open an issue titled "Security contact request" until one exists); versioned docs.
+
 ## 2026-11-13: Windows preview released (v0.1.0-preview.1)
 - Built by the `windows-release` workflow on a GitHub Windows machine from `main` (`tools/build_windows.ps1`, Google sign-in secret in the repository secrets, compiled in). `devpilot-windows-x64.zip` (192 MB, unzips into `devpilot\`) and its `.sha256` are attached to the same public pre-release as Linux. Checked: checksum, contents (devpilot.exe, worker.exe, guide 0.3.3, both labs, Visual C++ runtime, no private lab parts or `.env`), and the app was still running 15 s after start.
 - Website: the Download button picks Windows or Linux from the browser (macOS visitors get Linux, no macOS build yet); the footer lists both. Live at https://devpilot.web.app.

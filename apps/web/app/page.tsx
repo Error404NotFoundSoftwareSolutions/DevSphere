@@ -131,7 +131,7 @@ export default function Page() {
                 Start from a goal or a job description. DevPilot plans the steps, and each one opens only when you have finished the one before it.
               </p>
               <div className="btnrow left">
-                <a className="btn white" href={links.docs}>Read the docs</a>
+                <a className="btn white" href={links.docsStart}>Read the docs</a>
                 <DownloadLink className="btn dk" plain />
               </div>
             </div>
@@ -148,21 +148,21 @@ export default function Page() {
               <div className="eyebrow">AI-PLANNED PATHS</div>
               <h3>Learn Anything, Step by Step</h3>
               <p>Name a goal or paste a job description. Gemini plans the steps and fills in each one when you reach it.</p>
-              <div className="meta"><div><small>Steps per path</small><b>3–8</b></div><a className="tl" href={links.docs}>Build a path <Arrow /></a></div>
+              <div className="meta"><div><small>Steps per path</small><b>3–8</b></div><a className="tl" href={links.docsLearn}>Build a path <Arrow /></a></div>
             </article>
             <article className="card glass reveal" style={{ transitionDelay: ".08s" }}>
               <div className="row"><span className="idx">02</span><Icon>{I.screen}</Icon></div>
               <div className="eyebrow">REAL LABS</div>
               <h3>Practise in Your Own VS Code</h3>
               <p>Short projects with starter files. Checks run on your computer and turn green one step at a time.</p>
-              <div className="meta"><div><small>Where code runs</small><b>100%</b></div><a className="tl" href={links.docs}>See the labs <Arrow /></a></div>
+              <div className="meta"><div><small>Where code runs</small><b>100%</b></div><a className="tl" href={links.docsLabs}>See the labs <Arrow /></a></div>
             </article>
             <article className="card glass reveal" style={{ transitionDelay: ".16s" }}>
               <div className="row"><span className="idx">03</span><Icon>{I.trend}</Icon></div>
               <div className="eyebrow">PROOF</div>
               <h3>Show What You Can Do</h3>
               <p>Claim a credential from a finished lab. It says plainly how it was checked, never more.</p>
-              <div className="meta"><div><small>Credential tiers</small><b>2</b></div><a className="tl" href={links.docs}>How it works <Arrow /></a></div>
+              <div className="meta"><div><small>Credential tiers</small><b>2</b></div><a className="tl" href={links.docsCredentials}>How it works <Arrow /></a></div>
             </article>
           </div>
 
@@ -221,14 +221,14 @@ export default function Page() {
                 <p className="fbrand">The guided way to learn practical engineering tools, from first goal to proven skill.</p>
                 <LiveStatus />
               </div>
-              <div><h5>PRODUCT</h5><a href={links.docs}>Learning paths</a><a href={links.docs}>Labs</a><a href={links.docs}>Coach</a><a href={links.docs}>Credentials</a></div>
+              <div><h5>PRODUCT</h5><a href={links.docsLearn}>Learning paths</a><a href={links.docsLabs}>Labs</a><a href={links.docsCoach}>Coach</a><a href={links.docsCredentials}>Credentials</a></div>
               <div><h5>WHO IT IS FOR</h5><a href="#uses">Students</a><a href="#uses">Career switchers</a><a href="#uses">Open-source beginners</a><a href="#uses">Mentors</a></div>
-              <div><h5>PLATFORMS</h5><a href={links.download}>Linux</a><a href={links.downloadWindows}>Windows</a><a href={links.releases}>macOS (soon)</a><a href={links.docs}>VS Code</a></div>
+              <div><h5>PLATFORMS</h5><a href={links.download}>Linux</a><a href={links.downloadWindows}>Windows</a><a href={links.releases}>macOS (soon)</a><a href={links.docsVscode}>VS Code</a></div>
               <div><h5>RESOURCES</h5><a href={links.github}>GitHub</a><a href={links.docs}>Documentation</a><a href={`${links.api}/health`}>Service status</a><a href={links.issues}>Contact</a></div>
             </div>
             <div className="legal">
               <span>©2026 DevPilot</span>
-              <span className="ll"><a href="#">Privacy</a><a href="#">Terms</a><a href={links.docs}>Security</a></span>
+              <span className="ll"><a href={links.docsSecurity}>Privacy</a><a href="#">Terms</a><a href={links.docsSecurity}>Security</a></span>
             </div>
             <div className="wordmark" aria-hidden="true">DevPilot</div>
           </footer>

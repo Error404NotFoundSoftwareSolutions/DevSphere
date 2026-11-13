@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" role="img" aria-labelledby="t d">
+<title id="t">How DevPilot fits together</title>
+<desc id="d">On your computer: the DevPilot app, the helper, VS Code with the DevPilot Guide, and the lab tests. In Google Cloud: the DevPilot service on Cloud Run, which uses Gemini, Firestore, Firebase Authentication, Secret Manager and the YouTube Data API.</desc>
+<defs>
+<style>
+.zone{fill:#120d3d;stroke:#3b3490;stroke-width:1.5}
+.zl{font:600 13px system-ui,sans-serif;letter-spacing:.12em;fill:#9aa2ff}
+.n{fill:#1b1560;stroke:#5a52c9;stroke-width:1.2}
+.nt{font:600 15px system-ui,sans-serif;fill:#fff}
+.ns{font:12.5px system-ui,sans-serif;fill:#b9b4ea}
+.hot{fill:#2a1f7a;stroke:#8d94ff;stroke-width:1.6}
+.ar{stroke:#8d94ff;stroke-width:2;fill:none;marker-end:url(#a)}
+.al{font:12px system-ui,sans-serif;fill:#c9c5f5}
+.cl{font:600 11px system-ui,sans-serif;fill:#8ff0cf;letter-spacing:.08em}
+</style>
+<marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M1 1 L9 5 L1 9 z" fill="#8d94ff"/></marker>
+</defs>
+<rect width="960" height="520" rx="18" fill="#0b0826"/>
+<rect class="zone" x="24" y="24" width="400" height="472" rx="16"/>
+<text class="zl" x="46" y="54">YOUR COMPUTER</text>
+<rect class="hot" x="52" y="76" width="344" height="76" rx="12"/><text class="nt" x="72" y="108">DevPilot app</text><text class="ns" x="72" y="130">Dashboard, paths, labs, credentials</text>
+<rect class="n" x="52" y="196" width="344" height="76" rx="12"/><text class="nt" x="72" y="228">Helper program</text><text class="ns" x="72" y="250">Files, VS Code, checks, your progress file</text>
+<rect class="n" x="52" y="316" width="344" height="76" rx="12"/><text class="nt" x="72" y="348">VS Code + DevPilot Guide</text><text class="ns" x="72" y="370">Where you write code</text>
+<rect class="n" x="52" y="416" width="344" height="60" rx="12"/><text class="nt" x="72" y="442">Lab tests (pytest)</text><text class="ns" x="72" y="462">They decide pass or fail</text>
+<path class="ar" d="M224 152 V194"/><text class="al" x="236" y="178">validated requests</text>
+<path class="ar" d="M224 272 V314"/><text class="al" x="236" y="298">private local channel</text>
+<path class="ar" d="M224 392 V414"/>
+<rect class="zone" x="536" y="24" width="400" height="472" rx="16"/>
+<text class="zl" x="558" y="54">GOOGLE CLOUD</text>
+<rect class="hot" x="564" y="76" width="344" height="92" rx="12"/><text class="nt" x="584" y="108">DevPilot service (Cloud Run)</text><text class="ns" x="584" y="130">Mumbai, scales to zero. Checks sign-in,</text><text class="ns" x="584" y="148">plans paths, answers tutor and coach</text>
+<rect class="n" x="564" y="206" width="160" height="60" rx="12"/><text class="nt" x="580" y="232">Gemini</text><text class="ns" x="580" y="252">The AI. Service only</text>
+<rect class="n" x="748" y="206" width="160" height="60" rx="12"/><text class="nt" x="764" y="232">Firestore</text><text class="ns" x="764" y="252">Your records</text>
+<rect class="n" x="564" y="286" width="160" height="60" rx="12"/><text class="nt" x="580" y="312">Firebase Auth</text><text class="ns" x="580" y="332">Sign-in</text>
+<rect class="n" x="748" y="286" width="160" height="60" rx="12"/><text class="nt" x="764" y="312">Secret Manager</text><text class="ns" x="764" y="332">Keys stay here</text>
+<rect class="n" x="564" y="366" width="344" height="52" rx="12"/><text class="nt" x="580" y="390">YouTube Data API</text><text class="ns" x="580" y="408">Video search for learning paths</text>
+<text class="cl" x="564" y="450">FIREBASE HOSTING</text><text class="ns" x="564" y="470">devpilot.web.app (this website)</text>
+<path class="ar" d="M396 114 H562"/><text class="al" x="414" y="104">HTTPS + sign-in token</text>
+<path class="ar" d="M644 168 V204"/><path class="ar" d="M828 168 V204"/><path class="ar" d="M644 168 L644 168"/>
+<text class="ns" x="436" y="300" text-anchor="start"></text>
+</svg>
