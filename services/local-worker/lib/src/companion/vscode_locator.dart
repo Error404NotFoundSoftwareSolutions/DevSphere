@@ -11,14 +11,27 @@ abstract class FileProbe {
 
 typedef VersionProbe = Future<String?> Function(String path);
 
+/// Windows: run `exe cliArgs --version` (with ELECTRON_RUN_AS_NODE=1 set by the adapter).
+typedef CliVersionProbe = Future<String?> Function(
+    String exe, List<String> cliArgs);
+
+/// Reads a small text file, or null when it cannot be read.
+typedef TextReader = Future<String?> Function(String path);
+
 enum EditorKind { vscode, vscodium }
 
 class EditorInstall {
   const EditorInstall(
-      {required this.path, required this.version, required this.kind});
+      {required this.path,
+      required this.version,
+      required this.kind,
+      this.cliArgs = const []});
   final String path;
   final String version;
   final EditorKind kind;
+
+  /// Arguments that come before the real ones. Empty on Linux and macOS. On Windows: [path to VS Code's cli.js].
+  final List<String> cliArgs;
   String get displayName =>
       kind == EditorKind.vscodium ? 'VSCodium' : 'Visual Studio Code';
 }
@@ -75,11 +88,15 @@ class VsCodeLocator {
       {required this.env,
       required this.files,
       required this.versionProbe,
+      this.cliVersionProbe,
+      this.readText,
       this.minVersion = '1.144.0'});
 
   final LocatorEnv env;
   final FileProbe files;
   final VersionProbe versionProbe;
+  final CliVersionProbe? cliVersionProbe;
+  final TextReader? readText;
   final String minVersion;
 
   String get _sep => env.os == 'windows' ? r'\' : '/';
@@ -119,12 +136,37 @@ class VsCodeLocator {
       case 'windows':
         final local = env.variables['LOCALAPPDATA'];
         final programs = env.variables['ProgramFiles'];
+        final programs86 = env.variables['ProgramFiles(x86)'];
         if (local != null)
           out.add(_join(local, r'Programs\Microsoft VS Code\bin\code.cmd'));
         if (programs != null)
           out.add(_join(programs, r'Microsoft VS Code\bin\code.cmd'));
+        if (programs86 != null)
+          out.add(_join(programs86, r'Microsoft VS Code\bin\code.cmd'));
     }
     return out.toSet().toList();
+  }
+
+  /// The two paths a Windows `code.cmd` launcher runs: `<root>\\Code.exe` and `<root>\\<...>\\cli.js`. Null if the
+  /// script does not have the known shape (then it is not trusted).
+  Future<({String exe, String cli})?> _windowsCli(String cmdPath) async {
+    final read = readText;
+    if (read == null) return null;
+    final lower = cmdPath.toLowerCase();
+    if (!lower.endsWith(r'\bin\code.cmd')) return null;
+    final text = await read(cmdPath);
+    if (text == null || text.length > 4096) return null;
+    final root = cmdPath.substring(0, cmdPath.length - r'\bin\code.cmd'.length);
+    final exeLine = RegExp(r'"%~dp0\.\.\\Code\.exe"', caseSensitive: false);
+    final cliMatch = RegExp(
+            r'"%~dp0\.\.\\([A-Za-z0-9_.\\-]+\\cli\.js)"',
+            caseSensitive: false)
+        .firstMatch(text);
+    if (!exeLine.hasMatch(text) || cliMatch == null) return null;
+    final rel = cliMatch.group(1)!;
+    if (rel.split(r'\').any((part) => part.isEmpty || part == '..' || part == '.'))
+      return null;
+    return (exe: '$root\\Code.exe', cli: '$root\\$rel');
   }
 
   Future<LocateResult> find({String? userPath}) async {
@@ -140,15 +182,32 @@ class VsCodeLocator {
     }
     order.addAll(candidates().where((c) => c != userPath));
     for (final path in order) {
+      String? probeOutput;
+      var exePath = path;
+      var cliArgs = const <String>[];
       if (path.toLowerCase().endsWith('.cmd') ||
           path.toLowerCase().endsWith('.bat')) {
-        rejected.add(
-            '$path is a Windows script launcher, which DevPilot cannot start safely yet.');
-        continue;
+        final cli = env.os == 'windows' ? await _windowsCli(path) : null;
+        if (cli == null) {
+          if (!files.isExecutableFile(path)) continue;
+          rejected.add(
+              '$path is a Windows script launcher that DevPilot does not recognise, so it was not used.');
+          continue;
+        }
+        if (!files.isExecutableFile(cli.exe) ||
+            !files.isExecutableFile(cli.cli)) {
+          rejected.add('${cli.exe} or its command-line script was not found.');
+          continue;
+        }
+        exePath = cli.exe;
+        cliArgs = [cli.cli];
+        final probe = cliVersionProbe;
+        probeOutput = probe == null ? null : await probe(exePath, cliArgs);
+      } else {
+        if (!files.isExecutableFile(path)) continue;
+        probeOutput = await versionProbe(path);
       }
-      if (!files.isExecutableFile(path)) continue;
-      final output = await versionProbe(path);
-      final info = output == null ? null : parseVersionOutput(output);
+      final info = probeOutput == null ? null : parseVersionOutput(probeOutput);
       if (info == null) {
         rejected.add(
             '$path did not look like VS Code (unexpected version output), so it was not used.');
@@ -163,7 +222,11 @@ class VsCodeLocator {
           ? EditorKind.vscodium
           : EditorKind.vscode;
       return LocateResult(
-          install: EditorInstall(path: path, version: info.version, kind: kind),
+          install: EditorInstall(
+              path: exePath,
+              version: info.version,
+              kind: kind,
+              cliArgs: cliArgs),
           rejected: rejected);
     }
     if (rejected.isEmpty)

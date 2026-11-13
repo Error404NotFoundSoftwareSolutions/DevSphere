@@ -1,9 +1,9 @@
 // Capability: CAP-APP-EXT-CHANNEL (ADR-022). Rules: SEC-21, SEC-26. Threat T19. Tests: TC-CMP-11-xx
-// Implemented here: the channel client. Connects to the worker's private socket, says hello, waits for
+// Implemented here: the channel client. Connects to the worker's private socket (on Windows its loopback port), says hello, waits for
 // welcome, then relays only valid events and sends only valid requests. It holds no credentials.
 import net from 'node:net';
 import { FrameDecoder, ProtocolError, checkRequest, encodeFrame, parseEvent, requests, type ExtRequest, type WorkerEvent } from '../core/protocol';
-import type { SessionInfo } from './session';
+import { parseTcpEndpoint, type SessionInfo } from './session';
 
 export class ChannelClient {
   private socket: net.Socket | undefined;
@@ -23,7 +23,9 @@ export class ChannelClient {
   connect(): Promise<void> {
     return new Promise((resolve, reject) => {
       const decoder = new FrameDecoder();
-      const socket = net.createConnection({ path: this.session.socketPath });
+      // Windows: a loopback port (127.0.0.1 only); elsewhere: the worker's private Unix socket
+      const tcp = parseTcpEndpoint(this.session.socketPath);
+      const socket = tcp ? net.createConnection({ host: tcp.host, port: tcp.port }) : net.createConnection({ path: this.session.socketPath });
       this.socket = socket;
       let settled = false;
       const fail = (message: string): void => {

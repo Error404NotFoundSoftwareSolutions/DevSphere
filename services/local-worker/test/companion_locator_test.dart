@@ -163,4 +163,75 @@ void main() {
     expect(r.install, isNull);
     expect(r.rejected.any((m) => m.toLowerCase().contains('windows')), isTrue);
   });
+
+  // ---- Windows (PL-CMP-09): the code.cmd launcher is never run; Code.exe is started on VS Code's cli.js instead
+  const winRoot = r'C:\Users\u\AppData\Local\Programs\Microsoft VS Code';
+  const winCmd = '$winRoot\\bin\\code.cmd';
+  const winExe = '$winRoot\\Code.exe';
+  const winCli = '$winRoot\\a1b2c3d4e5\\resources\\app\\out\\cli.js';
+  const realCmd = '@echo off\r\nsetlocal\r\nset VSCODE_DEV=\r\n'
+      'set ELECTRON_RUN_AS_NODE=1\r\n'
+      '"%~dp0..\\Code.exe" "%~dp0..\\a1b2c3d4e5\\resources\\app\\out\\cli.js" %*\r\nendlocal\r\n';
+
+  VsCodeLocator winLocator({
+    String? cmdText = realCmd,
+    Set<String>? files,
+    String? versionOut = goodOut,
+    List<String>? calls,
+  }) =>
+      VsCodeLocator(
+        env: const LocatorEnv(os: 'windows', pathDirs: [], variables: {
+          'LOCALAPPDATA': r'C:\Users\u\AppData\Local',
+          'ProgramFiles': r'C:\Program Files'
+        }),
+        files: FakeFiles(files ?? {winCmd, winExe, winCli}),
+        versionProbe: (_) async => throw StateError('must not run a .cmd path'),
+        cliVersionProbe: (exe, args) async {
+          calls?.add('$exe ${args.join(' ')}');
+          return versionOut;
+        },
+        readText: (path) async => path == winCmd ? cmdText : null,
+      );
+
+  test('TC-CMP-02-10 Windows: Code.exe is run on cli.js read from code.cmd, and code.cmd itself is never run',
+      () async {
+    final calls = <String>[];
+    final r = await winLocator(calls: calls).find();
+    expect(r.install, isNotNull);
+    expect(r.install!.path, winExe);
+    expect(r.install!.cliArgs, [winCli]);
+    expect(r.install!.version, '1.144.0');
+    expect(calls, ['$winExe $winCli']);
+  });
+
+  test('TC-CMP-02-11 Windows: a code.cmd with an unknown shape is refused and nothing is run', () async {
+    for (final bad in [
+      'echo hacked & calc.exe',
+      '"%~dp0..\\Code.exe" "%~dp0..\\..\\evil\\cli.js" %*',
+      '"%~dp0..\\Code.exe" "%~dp0..\\a b\\cli.js" %*',
+      '"%~dp0..\\Code.exe" "C:\\evil\\cli.js" %*',
+      'x' * 5000,
+    ]) {
+      final calls = <String>[];
+      final r = await winLocator(cmdText: bad, calls: calls).find();
+      expect(r.install, isNull, reason: bad);
+      expect(calls, isEmpty, reason: bad);
+    }
+  });
+
+  test('TC-CMP-02-12 Windows: missing Code.exe or cli.js, or odd version output, means VS Code is not used', () async {
+    expect((await winLocator(files: {winCmd, winCli}).find()).install, isNull);
+    expect((await winLocator(files: {winCmd, winExe}).find()).install, isNull);
+    expect((await winLocator(versionOut: 'hello').find()).install, isNull);
+    expect((await winLocator(versionOut: '1.100.0\n${'a' * 40}\nx64\n').find()).install, isNull);
+  });
+
+  test('TC-CMP-02-13 Windows without a file reader keeps refusing .cmd launchers', () async {
+    final loc = VsCodeLocator(
+      env: const LocatorEnv(os: 'windows', pathDirs: [], variables: {'LOCALAPPDATA': r'C:\Users\u\AppData\Local'}),
+      files: FakeFiles({winCmd}),
+      versionProbe: (_) async => throw StateError('must not run'),
+    );
+    expect((await loc.find()).install, isNull);
+  });
 }

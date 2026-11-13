@@ -1,0 +1,63 @@
+name: windows-check
+# Runs the worker and extension tests on a GitHub Windows machine, then an end-to-end check with the real VS Code:
+# find it, install the guide extension, start a lab session and let the extension's own client connect (PL-CMP-09).
+# Start it by hand: Actions > windows-check > Run workflow.
+on:
+  workflow_dispatch:
+  push:
+    branches: [feat/windows-companion]
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - uses: actions/setup-node@v4
+        with: { node-version: "22" }
+
+      - name: Worker tests
+        working-directory: services/local-worker
+        run: |
+          dart pub get
+          dart test -r expanded
+
+      - name: Extension tests and package
+        working-directory: extensions/devsphere-learn
+        run: |
+          npm ci --ignore-scripts
+          if ($LASTEXITCODE -ne 0) { throw "npm ci failed" }
+          npm test
+          if ($LASTEXITCODE -ne 0) { throw "extension tests failed" }
+          New-Item -ItemType Directory -Force "$env:RUNNER_TEMP/guide-build" | Out-Null
+          $pkg = Get-Content package.json -Raw | ConvertFrom-Json
+          $vsix = "devpilot-guide-$($pkg.version).vsix"
+          npx vsce package --no-dependencies --allow-missing-repository --skip-license -o "$env:RUNNER_TEMP/guide-build/$vsix"
+          if ($LASTEXITCODE -ne 0) { throw "vsce package failed" }
+          $sha = (Get-FileHash "$env:RUNNER_TEMP/guide-build/$vsix" -Algorithm SHA256).Hash.ToLower()
+          $json = '{"id":"' + $pkg.publisher + '.' + $pkg.name + '","version":"' + $pkg.version + '","sha256":"' + $sha + '","vsix":"' + $vsix + '"}'
+          [System.IO.File]::WriteAllText("$env:RUNNER_TEMP/guide-build/devpilot-guide.json", $json, (New-Object System.Text.UTF8Encoding($false)))
+
+      - name: Is VS Code here? Install it if not
+        run: |
+          $known = @("$env:ProgramFiles\Microsoft VS Code\bin\code.cmd", "$env:LOCALAPPDATA\Programs\Microsoft VS Code\bin\code.cmd")
+          if (-not ($known | Where-Object { Test-Path $_ })) {
+            Write-Host "VS Code not found, installing with Chocolatey"
+            choco install vscode -y --no-progress
+          }
+          foreach ($p in $known) { if (Test-Path $p) { Write-Host "found $p"; Write-Host "--- code.cmd:"; Get-Content $p } }
+
+      - name: End to end with the real VS Code
+        working-directory: services/local-worker
+        run: |
+          dart run tool/windows_e2e.dart "$env:GITHUB_WORKSPACE/content/labs" "$env:RUNNER_TEMP/guide-build" "$env:GITHUB_WORKSPACE/extensions/devsphere-learn/dist" "$env:GITHUB_WORKSPACE/tools/windows_e2e/client.js"

@@ -254,7 +254,7 @@ void main() {
     final ok = loadGuidePackage(make(json: meta()).path)!;
     expect(ok.version, '0.1.0');
     expect(ok.vsixPath, endsWith('guide-0.1.0.vsix'));
-    expect(ok.vsixPath.startsWith('/'), isTrue);
+    expect(RegExp(r'^(/|[A-Za-z]:[\\/])').hasMatch(ok.vsixPath), isTrue, reason: ok.vsixPath);
     expect(loadGuidePackage(make().path), isNull);
     expect(
         loadGuidePackage(make(json: meta(file: '../evil.vsix')).path), isNull);

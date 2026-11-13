@@ -104,13 +104,26 @@ void main() {
     expect(spawn.args, ['--new-window', session.labRoot]);
     expect(spawn.env!.containsKey('GITHUB_TOKEN'), isFalse);
     final file = File(session.sessionFile);
-    expect(FileStat.statSync(file.path).mode & 0x1FF, 0x180); // 0600
+    if (Platform.isWindows) {
+      // no inherited access for Everyone, Users or Authenticated Users (icacls lists who may use the file)
+      final acl = Process.runSync('icacls', [file.path]).stdout.toString();
+      for (final others in ['Everyone', r'BUILTIN\Users', 'Authenticated Users']) {
+        expect(acl, isNot(contains(others)), reason: acl);
+      }
+    } else {
+      expect(FileStat.statSync(file.path).mode & 0x1FF, 0x180); // 0600
+    }
     final json = jsonDecode(file.readAsStringSync()) as Map<String, dynamic>;
     expect(json['sessionId'], session.sessionId);
     expect(json['labId'], 'python-hello-001');
     expect(json['labRoot'], session.labRoot);
     expect(json['protocol'], 1);
-    expect(File(json['socketPath'] as String).existsSync(), isTrue);
+    final endpoint = json['socketPath'] as String;
+    if (endpoint.startsWith('tcp:')) {
+      expect(endpoint, matches(RegExp(r'^tcp:127\.0\.0\.1:\d{1,5}$')));
+    } else {
+      expect(File(endpoint).existsSync(), isTrue);
+    }
   });
 
   test(
@@ -205,5 +218,12 @@ void main() {
     expect([for (final s in fin['steps'] as List) (s as Map)['state']],
         everyElement('pass'));
     await c.close();
+  });
+
+  test('TC-CMP-07-20 the runtime folder: Linux and macOS as before, Windows under LOCALAPPDATA\\DevPilot\\run', () {
+    expect(defaultRuntimeDir({'XDG_RUNTIME_DIR': '/run/user/1000'}, windows: false), '/run/user/1000/devpilot');
+    expect(defaultRuntimeDir({'HOME': '/home/u'}, windows: false), '/home/u/.devpilot/run');
+    expect(defaultRuntimeDir({'LOCALAPPDATA': r'C:\Users\u\AppData\Local'}, windows: true), r'C:\Users\u\AppData\Local\DevPilot\run');
+    expect(defaultRuntimeDir({'LOCALAPPDATA': 'relative', 'USERPROFILE': r'C:\Users\u'}, windows: true), r'C:\Users\u\.devpilot\run');
   });
 }

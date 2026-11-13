@@ -7,10 +7,13 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { ChannelClient } from '../src/host/channel';
-import { discoverSession } from '../src/host/session';
+import { defaultRuntimeDir, discoverSession, parseTcpEndpoint } from '../src/host/session';
 import { FrameDecoder, encodeFrame, type WorkerEvent } from '../src/core/protocol';
 
 const SID = 'a1'.repeat(16);
+const WIN = process.platform === 'win32';
+// POSIX file modes and Unix sockets do not exist on Windows; there the worker uses a loopback port and a private folder
+const posixOnly = WIN ? { skip: 'POSIX permissions only' } : {};
 
 function runtime(): { dir: string; lab: string } {
   const base = fs.mkdtempSync(path.join(os.tmpdir(), 'bl-ext-'));
@@ -41,20 +44,20 @@ test('TC-CMP-10-02 ignores a session for a different lab folder', () => {
   assert.equal(discoverSession(lab, dir), undefined);
 });
 
-test('TC-CMP-10-03 refuses a session file that others can read or write (T20)', () => {
+test('TC-CMP-10-03 refuses a session file that others can read or write (T20)', posixOnly, () => {
   const { dir, lab } = runtime();
   writeSession(dir, lab, {}, 0o644);
   assert.equal(discoverSession(lab, dir), undefined);
 });
 
-test('TC-CMP-10-04 refuses a runtime directory that others can enter (T20)', () => {
+test('TC-CMP-10-04 refuses a runtime directory that others can enter (T20)', posixOnly, () => {
   const { dir, lab } = runtime();
   writeSession(dir, lab);
   fs.chmodSync(dir, 0o755);
   assert.equal(discoverSession(lab, dir), undefined);
 });
 
-test('TC-CMP-10-05 refuses a symlinked session file', () => {
+test('TC-CMP-10-05 refuses a symlinked session file', posixOnly, () => {
   const { dir, lab } = runtime();
   const real = writeSession(dir, lab);
   const moved = path.join(path.dirname(dir), 'real.json');
@@ -64,7 +67,7 @@ test('TC-CMP-10-05 refuses a symlinked session file', () => {
 });
 
 test('TC-CMP-10-06 refuses malformed or hostile session content', () => {
-  for (const over of [{ sessionId: 'short' }, { labId: '../x' }, { protocol: 2 }, { socketPath: '/etc/passwd' }, { socketPath: 'relative.sock' }]) {
+  for (const over of [{ sessionId: 'short' }, { labId: '../x' }, { protocol: 2 }, { socketPath: '/etc/passwd' }, { socketPath: 'relative.sock' }, { socketPath: 'tcp:10.0.0.5:4000' }, { socketPath: 'tcp:127.0.0.1:0' }, { socketPath: 'tcp:127.0.0.1:70000' }, { socketPath: 'tcp:127.0.0.1:80/x' }]) {
     const { dir, lab } = runtime();
     writeSession(dir, lab, over);
     assert.equal(discoverSession(lab, dir), undefined, JSON.stringify(over));
@@ -75,15 +78,32 @@ test('TC-CMP-10-06 refuses malformed or hostile session content', () => {
 });
 
 test('TC-CMP-10-07 a missing runtime directory is simply "no session"', () => {
-  assert.equal(discoverSession('/tmp', '/nonexistent/devpilot/run'), undefined);
+  assert.equal(discoverSession(os.tmpdir(), path.join(os.tmpdir(), 'nonexistent-devpilot', 'run')), undefined);
+});
+
+test('TC-CMP-10-08 a loopback tcp session (the Windows transport) is found', () => {
+  const { dir, lab } = runtime();
+  writeSession(dir, lab, { socketPath: 'tcp:127.0.0.1:49152' });
+  const s = discoverSession(lab, dir);
+  assert.equal(s?.socketPath, 'tcp:127.0.0.1:49152');
+  assert.deepEqual(parseTcpEndpoint('tcp:127.0.0.1:49152'), { host: '127.0.0.1', port: 49152 });
+  assert.equal(parseTcpEndpoint('tcp:localhost:49152'), undefined);
+  assert.equal(parseTcpEndpoint('tcp:127.0.0.1:49152 '), undefined);
+});
+
+test('TC-CMP-10-09 the runtime folder matches the worker: LOCALAPPDATA\\DevPilot\\run on Windows', () => {
+  assert.equal(defaultRuntimeDir({ XDG_RUNTIME_DIR: path.join(path.sep, 'run', 'user', '1000') }, path.join(path.sep, 'home', 'u'), 'linux'), path.join(path.sep, 'run', 'user', '1000', 'devpilot'));
+  assert.equal(defaultRuntimeDir({}, path.join(path.sep, 'home', 'u'), 'linux'), path.join(path.sep, 'home', 'u', '.devpilot', 'run'));
+  assert.equal(defaultRuntimeDir({ LOCALAPPDATA: 'C:\\Users\\u\\AppData\\Local' }, 'C:\\Users\\u', 'win32'), 'C:\\Users\\u\\AppData\\Local\\DevPilot\\run');
+  assert.equal(defaultRuntimeDir({ LOCALAPPDATA: 'relative' }, 'C:\\Users\\u', 'win32'), 'C:\\Users\\u\\.devpilot\\run');
 });
 
 // ---------------------------------------------------------------- client against a fake worker
 
 interface Fake { path: string; server: net.Server; received: unknown[]; sockets: net.Socket[]; }
-async function fakeWorker(onFrame: (msg: Record<string, unknown>, s: net.Socket) => void): Promise<Fake> {
+async function fakeWorker(onFrame: (msg: Record<string, unknown>, s: net.Socket) => void, tcp: boolean = WIN): Promise<Fake> {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'bl-fw-'));
-  const p = path.join(dir, 's.sock');
+  let p = path.join(dir, 's.sock');
   const received: unknown[] = []; const sockets: net.Socket[] = [];
   const server = net.createServer((s) => {
     sockets.push(s);
@@ -91,7 +111,12 @@ async function fakeWorker(onFrame: (msg: Record<string, unknown>, s: net.Socket)
     s.on('data', (c) => { try { for (const m of d.push(c)) { received.push(m); onFrame(m as Record<string, unknown>, s); } } catch { s.destroy(); } });
     s.on('error', () => undefined);
   });
-  await new Promise<void>((r) => server.listen(p, r));
+  if (tcp) {
+    await new Promise<void>((r) => server.listen(0, '127.0.0.1', r));
+    p = `tcp:127.0.0.1:${(server.address() as net.AddressInfo).port}`;
+  } else {
+    await new Promise<void>((r) => server.listen(p, r));
+  }
   return { path: p, server, received, sockets };
 }
 const send = (s: net.Socket, m: Record<string, unknown>): void => { s.write(encodeFrame(m)); };
@@ -163,5 +188,14 @@ test('TC-CMP-11-07 only valid requests can be sent, and nothing is sent when not
   await new Promise((r) => setTimeout(r, 100));
   assert.deepEqual(f.received[1], { type: 'runCheck', stepId: 'greet' });
   assert.throws(() => c.send({ type: 'runCheck', stepId: '../../x' }));
+  c.close(); f.server.close();
+});
+
+test('TC-CMP-11-08 the client also connects over the loopback tcp address (the Windows transport), on every system', async () => {
+  const f = await fakeWorker((m, s) => { if (m.type === 'hello') send(s, welcome); }, true);
+  assert.match(f.path, /^tcp:127\.0\.0\.1:\d+$/);
+  const c = new ChannelClient(session(f.path), '0.1.0');
+  await c.connect();
+  assert.deepEqual(f.received[0], { type: 'hello', protocol: 1, sessionId: SID, extVersion: '0.1.0' });
   c.close(); f.server.close();
 });

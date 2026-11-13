@@ -25,7 +25,7 @@ CompanionService? _buildCompanion(List<String> args) {
   final env = Platform.environment;
   final labsRoot = resolveLabsRoot(_opt(args, 'labs-root') ?? '', env['HOME'] ?? env['USERPROFILE'] ?? Directory.systemTemp.path);
   final extra = [for (final a in args) if (a.startsWith('--editor-arg=')) a.substring('--editor-arg='.length)];
-  Future<LocateResult> find() => VsCodeLocator(env: realLocatorEnv(), files: const RealFileProbe(), versionProbe: realVersionProbe).find();
+  Future<LocateResult> find() => VsCodeLocator(env: realLocatorEnv(), files: const RealFileProbe(), versionProbe: realVersionProbe, cliVersionProbe: realCliVersionProbe, readText: realReadText).find();
   final launcher = LabLauncher(
     findEditor: find,
     spawnDetached: realSpawnDetached,
