@@ -150,6 +150,8 @@ class _LearnScreenState extends ConsumerState<LearnScreen> {
     }
   }
 
+  String _labFeedback = ''; // why the last generated lab failed its check on this computer
+
   Future<void> _createLab(StudyPath p, int i) async {
     final step = p.steps[i];
     final topic = step.detail?.labTopic;
@@ -161,11 +163,13 @@ class _LearnScreenState extends ConsumerState<LearnScreen> {
     try {
       final r = await ref
           .read(devPilotApiProvider)
-          .generateLab(topic: topic, level: p.level);
+          .generateLab(topic: topic, level: p.level, feedback: _labFeedback);
       final lab = r['lab'];
-      if (r['status'] != 'verified' || lab is! Map<String, dynamic>) {
-        throw const ApiProblem(
-            'The lab did not pass its own checks, so it was not added.',
+      final check = r['check'];
+      final needsCheck = r['status'] == 'needs_check' && check is Map;
+      if ((r['status'] != 'verified' && !needsCheck) ||
+          lab is! Map<String, dynamic>) {
+        throw const ApiProblem('The lab could not be created.',
             recovery: 'Try again.');
       }
       if (!mounted) return;
@@ -174,9 +178,9 @@ class _LearnScreenState extends ConsumerState<LearnScreen> {
         builder: (c) => AlertDialog(
           title: const Text('Add this AI-written lab?'),
           content: Text(
-            '"${lab['title']}". Gemini wrote it and DevPilot proved it works (the reference passes and every step '
-            'fails on the starter), but no person has reviewed it. Its tests run Python code on your computer '
-            'when you press "Check my work".',
+            '"${lab['title']}". Gemini wrote it and no person has reviewed it. Before adding it, DevPilot runs its tests on '
+            'this computer to prove that the answer passes and the starter fails (it is added only if both are true). '
+            'Its tests run Python code on your computer, and again when you press "Check my work".',
           ),
           actions: [
             TextButton(
@@ -192,11 +196,15 @@ class _LearnScreenState extends ConsumerState<LearnScreen> {
       if (agreed != true) return;
       final w = await ref
           .read(workerClientProvider)
-          .send('labforge:install', {'lab': lab});
+          .send('labforge:install', {'lab': lab, if (needsCheck) 'check': check});
       if (w['ok'] != true || w['labId'] is! String) {
+        if (w['checked'] == true && w['details'] is String) {
+          _labFeedback = w['details'] as String; // the next try is written knowing what went wrong
+        }
         throw ApiProblem('${w['message'] ?? 'The lab could not be added.'}',
             recovery: 'Try again.');
       }
+      _labFeedback = '';
       final id = w['labId'] as String;
       final users = ref.read(userDataProvider);
       users.addGeneratedLab(GeneratedLabRef(

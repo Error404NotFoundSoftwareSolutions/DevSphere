@@ -135,4 +135,25 @@ void main() {
         const OfflineDevPilotApi().roadmap(kind: 'topic', text: 'x'),
         throwsA(isA<ApiProblem>()));
   });
+
+  test(
+      'TC-API-30 generateLab asks the service to only write the lab (check: app) and passes the failure report along',
+      () async {
+    final bodies = <Map<String, dynamic>>[];
+    final a = api(MockClient((r) async {
+      bodies.add(jsonDecode(r.body) as Map<String, dynamic>);
+      expect(r.url.path, '/v1/ai/labs/generate');
+      return json({'status': 'needs_check', 'lab': {}, 'check': {}});
+    }));
+    await a.generateLab(topic: 'strings');
+    await a.generateLab(
+        topic: 'strings', level: 'intermediate', feedback: 'starter did not fail');
+    expect(bodies[0], {'topic': 'strings', 'level': 'beginner', 'check': 'app'});
+    expect(bodies[1], {
+      'topic': 'strings',
+      'level': 'intermediate',
+      'check': 'app',
+      'feedback': 'starter did not fail'
+    });
+  });
 }

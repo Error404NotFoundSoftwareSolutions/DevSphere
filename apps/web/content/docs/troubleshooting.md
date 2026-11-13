@@ -71,9 +71,13 @@ The preview is not code-signed. Choose **More info**, then **Run anyway**, after
 
 The AI or the service is down, or you reached your daily limit. Try again later. Everything else keeps working. A code review can also take up to a minute; wait for it.
 
-## "The online service cannot write new labs yet"
+## "The lab's own answer did not pass its tests, so it was not added"
 
-That is expected on the hosted service. See [Create a lab with AI](/docs/create-a-lab-with-ai).
+The lab Gemini wrote did not work when DevPilot checked it on your computer, so nothing was added. Press **Create a lab** again: the report of what went wrong goes back to Gemini so it can fix the lab. A more specific topic helps. If it keeps failing, check that Python and pytest work (see "DevPilot could not find Python" above).
+
+## "The online service cannot check new labs itself"
+
+You are using an older DevPilot. Download the newest release: newer versions check the lab on your own computer. See [Create a lab with AI](/docs/create-a-lab-with-ai).
 
 ## A lab folder is missing
 

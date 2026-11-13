@@ -84,8 +84,13 @@ Future<Map<String, dynamic>> handleIpcRequest(
       return Map<String, dynamic>.from(
           await _companion().launch(data['labId'] as String));
     case 'labforge:install':
-      return Map<String, dynamic>.from(_companion()
-          .installGeneratedLab((data['lab'] as Map).cast<String, dynamic>()));
+      final lab = (data['lab'] as Map).cast<String, dynamic>();
+      final check = data['check'];
+      if (check is Map) {
+        return Map<String, dynamic>.from(await _companion()
+            .installCheckedGeneratedLab(lab, check.cast<String, dynamic>()));
+      }
+      return Map<String, dynamic>.from(_companion().installGeneratedLab(lab));
     case 'companion:sessionState':
       return Map<String, dynamic>.from(
           await _companion().sessionState(data['labId'] as String));

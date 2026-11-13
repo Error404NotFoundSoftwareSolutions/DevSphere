@@ -2,10 +2,17 @@
 // Implemented here: install a lab that the AI generated, as a real lab folder the launcher can open. The input
 // arrives from the app, which got it from the API, which got it from a model: so every field, path and size is
 // checked again here, nothing outside the lab folder can be written, protected tests and reference solutions are
-// never part of the input, and the lab gets an "ai-" id so it can never replace a published lab.
+// never part of the input of the INSTALL, and the lab gets an "ai-" id so it can never replace a published lab.
+// Checking: the hosted service has no safe place to run AI-written code, so the service only writes the lab and THIS code
+// proves it works on the learner's own computer, after they agree: the reference answer must pass every test and the
+// starter must fail them (each step's own test too), in a temporary folder that is deleted afterwards. The reference
+// answer and the protected tests are used for that check only and are never written into the lab folder.
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import '../exec/safe_spawn.dart';
+import 'launcher.dart' show launcherEnvironment;
 
 const generatedLabPrefix = 'ai-';
 
@@ -211,4 +218,153 @@ GeneratedLabInstall installGeneratedLab(Map<String, dynamic> lab, String root) {
   }
   return GeneratedLabInstall(
       labId: localId, title: title as String, folder: target);
+}
+
+// ------------------------------------------------------------------------------------------------ checking a lab here
+
+final RegExp _protected = RegExp(r'^tests/protected/test_[A-Za-z0-9_]+\.py$');
+
+/// One pytest run in a temporary folder: the files to write, and which target to run.
+typedef PytestRun = Future<({int? exitCode, String output, bool timedOut})> Function(
+    Map<String, String> files, String target);
+
+class LabCheckReport {
+  const LabCheckReport(
+      {required this.ok, required this.message, this.details = ''});
+  final bool ok;
+
+  /// A plain sentence for the learner.
+  final String message;
+
+  /// The end of the test output, for the retry (it goes back to the service, redacted there).
+  final String details;
+}
+
+/// Writes the files into a new temporary folder, runs `python -m pytest` there with a minimal environment and a time limit,
+/// and deletes the folder. Every path was validated before this is reached.
+PytestRun localPytestRun(String python) {
+  const allowed = {'python3', 'python', 'py'};
+  return (files, target) async {
+    if (!allowed.contains(python))
+      throw ArgumentError('Python command must be python3, python or py');
+    final dir = Directory.systemTemp.createTempSync('devpilot-labcheck-');
+    try {
+      final root = dir.resolveSymbolicLinksSync();
+      for (final e in files.entries) {
+        final f = File('$root/${e.key}');
+        f.parent.createSync(recursive: true);
+        f.writeAsStringSync(e.value);
+      }
+      final env = launcherEnvironment(Platform.environment)
+        ..addAll({
+          'PYTHONPATH': root,
+          'PYTHONDONTWRITEBYTECODE': '1',
+          'PYTHONNOUSERSITE': '1',
+        });
+      final r = await runProcess(
+        python,
+        ['-m', 'pytest', '-q', '--no-header', '-p', 'no:cacheprovider', target],
+        cwd: root,
+        timeout: const Duration(seconds: 20),
+        maxOutput: 16 * 1024,
+        environment: env,
+        includeParentEnvironment: false,
+      );
+      return (exitCode: r.exitCode, output: r.output, timedOut: r.timedOut);
+    } finally {
+      try {
+        dir.deleteSync(recursive: true);
+      } on FileSystemException {
+        // a leftover temp folder is harmless
+      }
+    }
+  };
+}
+
+/// Proves a lab works, the way the service used to: the reference answer must pass every test, and the starter must fail
+/// them (exit code 1 means the tests ran and failed, not that something crashed), including each step's own test file.
+/// [lab] is the service's learner view, [check] holds the reference answer and the protected tests. Throws
+/// [GeneratedLabInvalid] for anything malformed.
+Future<LabCheckReport> checkGeneratedLab(
+    Map<String, dynamic> lab, Map<String, dynamic> check,
+    {required PytestRun run}) async {
+  var total = 0;
+  int add(int n) {
+    total += n;
+    if (total > _maxTotalBytes)
+      throw const GeneratedLabInvalid('The lab is too large.');
+    return total;
+  }
+
+  final starter = _files(lab['starter'], test: false, addBytes: add);
+  final visible = _files(lab['visible_tests'], test: true, addBytes: add);
+  final reference = _files(check['reference'], test: false, addBytes: add);
+  final rawProtected = check['protected_tests'];
+  final protected = <_File>[];
+  if (rawProtected != null) {
+    if (rawProtected is! List || rawProtected.length > _maxFiles)
+      throw const GeneratedLabInvalid('The lab has an invalid set of files.');
+    final seen = <String>{};
+    for (final f in rawProtected) {
+      if (f is! Map)
+        throw const GeneratedLabInvalid('The lab has an invalid file.');
+      final path = f['path'];
+      final content = f['content'];
+      if (path is! String ||
+          !_protected.hasMatch(path) ||
+          !seen.add(path) ||
+          content is! String ||
+          utf8.encode(content).length > _maxFileBytes)
+        throw const GeneratedLabInvalid('A test file is not valid.');
+      add(utf8.encode(content).length);
+      protected.add(_File(path, content));
+    }
+  }
+  final startMap = {for (final f in starter) f.path: f.content};
+  final tests = {
+    for (final f in [...visible, ...protected]) f.path: f.content
+  };
+  final refBuild = {
+    ...startMap,
+    for (final f in reference) f.path: f.content,
+    ...tests
+  };
+  final startBuild = {...startMap, ...tests};
+
+  final ref = await run(refBuild, 'tests');
+  final start = await run(startBuild, 'tests');
+  String tail(String s) => s.length > 900 ? s.substring(s.length - 900) : s;
+  if (ref.timedOut || start.timedOut) {
+    return LabCheckReport(
+        ok: false,
+        message: 'The lab\'s tests took too long, so it was not added.',
+        details: 'timed out; reference exit ${ref.exitCode}; starter exit ${start.exitCode}');
+  }
+  final refPasses = ref.exitCode == 0;
+  final startFails = start.exitCode == 1;
+  if (!refPasses || !startFails) {
+    return LabCheckReport(
+        ok: false,
+        message: !refPasses
+            ? 'The lab\'s own answer did not pass its tests, so it was not added.'
+            : 'The lab\'s starter already passes its tests, so there is nothing to do, and it was not added.',
+        details:
+            'reference passes=$refPasses (must be true), starter fails=$startFails (must be true, exit code 1)\n${tail(ref.output)}\n${tail(start.output)}');
+  }
+  if (visible.length > 1) {
+    // a step whose test already passes on the starter would be finished before the learner did anything
+    for (final f in visible) {
+      final one = await run(startBuild, f.path);
+      if (one.timedOut || one.exitCode != 1) {
+        return LabCheckReport(
+            ok: false,
+            message:
+                'One step of the lab is already finished on the starter, so it was not added.',
+            details:
+                'starter does not fail ${f.path} (exit ${one.exitCode})\n${tail(one.output)}');
+      }
+    }
+  }
+  return const LabCheckReport(
+      ok: true, message: 'The lab passed its own checks on this computer.');
 }

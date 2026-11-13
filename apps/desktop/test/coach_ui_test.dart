@@ -88,7 +88,9 @@ class CoachApi extends DevPilotApiStub {
       throw UnimplementedError();
   @override
   Future<Map<String, dynamic>> generateLab(
-          {required String topic, String level = 'beginner'}) =>
+          {required String topic,
+          String level = 'beginner',
+          String feedback = ''}) =>
       throw UnimplementedError();
   @override
   Future<String> attemptFor(String labId) => throw UnimplementedError();

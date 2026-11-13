@@ -10,6 +10,7 @@ import 'dart:io';
 import 'extension_installer.dart';
 import 'generated_lab.dart' as gen;
 import 'launcher.dart';
+import 'python_locator.dart';
 import 'vscode_locator.dart';
 
 class CompanionService {
@@ -109,6 +110,53 @@ class CompanionService {
     try {
       final r = gen.installGeneratedLab(lab, root);
       return {'ok': true, 'labId': r.labId, 'title': r.title};
+    } on gen.GeneratedLabInvalid catch (e) {
+      return {
+        'ok': false,
+        'message': 'This lab was not installed: ${e.message}'
+      };
+    } on FileSystemException {
+      return {
+        'ok': false,
+        'message':
+            'DevPilot could not save the lab. Check that you have space and permission, then try again.'
+      };
+    }
+  }
+
+  /// Checks a lab on this computer (the reference answer passes, the starter fails), then installs it. Nothing is installed
+  /// when the check fails; the answer then carries a plain message and the end of the test output for a retry.
+  Future<Map<String, Object?>> installCheckedGeneratedLab(
+      Map<String, dynamic> lab, Map<String, dynamic> check,
+      {gen.PytestRun? run}) async {
+    final root = launcher.generatedRoot;
+    if (root == null)
+      throw StateError(
+          'Generated labs are not set up in this build of DevPilot.');
+    gen.PytestRun? runner = run;
+    if (runner == null) {
+      final py = await findPython();
+      if (py == null) {
+        return {
+          'ok': false,
+          'message':
+              'DevPilot could not find Python on this computer, so it cannot check the lab. Install Python 3.10 or newer from python.org (on Windows, tick "Add python.exe to PATH"), then try again.'
+        };
+      }
+      runner = gen.localPytestRun(py);
+    }
+    try {
+      final report = await gen.checkGeneratedLab(lab, check, run: runner);
+      if (!report.ok) {
+        return {
+          'ok': false,
+          'checked': true,
+          'message': report.message,
+          'details': report.details
+        };
+      }
+      final r = gen.installGeneratedLab(lab, root);
+      return {'ok': true, 'labId': r.labId, 'title': r.title, 'checked': true};
     } on gen.GeneratedLabInvalid catch (e) {
       return {
         'ok': false,

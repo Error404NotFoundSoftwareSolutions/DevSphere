@@ -75,10 +75,13 @@ abstract class DevPilotApi {
   Future<Map<String, dynamic>> interview(
       {required String kind, required String text, String level = 'beginner'});
 
-  /// Asks Lab Forge to write a lab. The service checks it (the reference solution must pass, the starter must
-  /// fail) before answering. Takes about 30 seconds.
+  /// Asks Lab Forge to write a lab. The service only WRITES it (status `needs_check`, with the reference answer and the
+  /// protected tests in `check`); the app proves it works on this computer before installing it. [feedback] is the report
+  /// of a failed check, so the model can fix the lab. Takes about 20 seconds.
   Future<Map<String, dynamic>> generateLab(
-      {required String topic, String level = 'beginner'});
+      {required String topic,
+      String level = 'beginner',
+      String feedback = ''});
 
   /// Opens (or reuses) a server-side attempt for a lab, which the tutor needs.
   Future<String> attemptFor(String labId);
@@ -171,7 +174,9 @@ class OfflineDevPilotApi implements DevPilotApi {
 
   @override
   Future<Map<String, dynamic>> generateLab(
-          {required String topic, String level = 'beginner'}) =>
+          {required String topic,
+          String level = 'beginner',
+          String feedback = ''}) =>
       Future.error(_problem);
 
   @override
@@ -329,8 +334,17 @@ class HttpDevPilotApi implements DevPilotApi {
 
   @override
   Future<Map<String, dynamic>> generateLab(
-          {required String topic, String level = 'beginner'}) =>
-      _post('/v1/ai/labs/generate', {'topic': topic, 'level': level},
+          {required String topic,
+          String level = 'beginner',
+          String feedback = ''}) =>
+      _post(
+          '/v1/ai/labs/generate',
+          {
+            'topic': topic,
+            'level': level,
+            'check': 'app',
+            if (feedback.isNotEmpty) 'feedback': feedback,
+          },
           timeout: const Duration(seconds: 150));
 
   @override

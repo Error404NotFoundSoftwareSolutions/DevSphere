@@ -75,16 +75,33 @@ class ForgeApi extends DevPilotApiStub {
   String publicLink(String id) => '';
   @override
   bool get isLocalService => true;
-  ForgeApi({this.error, this.verified = true});
+  ForgeApi({this.error, this.verified = true, this.needsCheck = false});
   final ApiProblem? error;
   final bool verified;
+  final bool needsCheck; // the hosted service: it only writes the lab, the app checks it
   final requests = <Map<String, String>>[];
+  final feedbacks = <String>[];
 
   @override
   Future<Map<String, dynamic>> generateLab(
-      {required String topic, String level = 'beginner'}) async {
+      {required String topic,
+      String level = 'beginner',
+      String feedback = ''}) async {
     requests.add({'topic': topic, 'level': level});
+    feedbacks.add(feedback);
     if (error != null) throw error!;
+    if (needsCheck) {
+      return {
+        'status': 'needs_check',
+        'lab': learnerLab(),
+        'check': {
+          'reference': [
+            {'path': 'cart.py', 'content': 'def last(cart):\n    return cart[-1]\n'}
+          ],
+          'protected_tests': []
+        }
+      };
+    }
     return {
       'status': verified ? 'verified' : 'draft',
       'lab': learnerLab(),
@@ -116,8 +133,10 @@ class ForgeApi extends DevPilotApiStub {
 }
 
 class ForgeWorker extends MockWorkerClient {
-  ForgeWorker({this.fail = false});
+  ForgeWorker({this.fail = false, this.checkFails = false});
   final bool fail;
+  final bool checkFails; // the lab did not pass its own check on this computer
+
   final installs = <Map<String, dynamic>>[];
 
   @override
@@ -125,6 +144,15 @@ class ForgeWorker extends MockWorkerClient {
       String channel, Map<String, dynamic> data) async {
     if (channel == 'labforge:install') {
       installs.add(data);
+      if (checkFails && data['check'] != null) {
+        return {
+          'ok': false,
+          'checked': true,
+          'message':
+              "The lab's own answer did not pass its tests, so it was not added.",
+          'details': 'reference passes=false (must be true)'
+        };
+      }
       if (fail)
         return {
           'ok': false,
@@ -329,5 +357,56 @@ void main() {
       ],
     }, uid: 'u');
     expect(back.generatedLabs.map((g) => g.labId), ['ai-good-lab']);
+  });
+
+  testWidgets(
+      'TC-FORGE-16 hosted service: the lab is written, shown as not checked yet, and the check data goes to the worker with the lab',
+      (tester) async {
+    final worker = ForgeWorker();
+    final store = MemoryUserStore();
+    await pump(tester, '/catalog', store, ForgeApi(needsCheck: true), worker);
+    await generate(tester);
+    expect(find.byKey(const Key('forge-check-here')), findsOneWidget);
+    expect(find.text('Checked: the answer passes the tests'), findsNothing,
+        reason: 'nothing has been checked yet');
+    await tester.ensureVisible(find.byKey(const Key('forge-install')));
+    await tester.tap(find.byKey(const Key('forge-install')));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('runs its tests on this computer'), findsOneWidget);
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+    expect(worker.installs, isEmpty, reason: 'nothing is run before the person agrees');
+    await tester.tap(find.byKey(const Key('forge-install')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('forge-agree')));
+    await tester.pumpAndSettle();
+    final sent = worker.installs.single;
+    expect(sent['check'], isA<Map>());
+    expect(((sent['check'] as Map)['reference'] as List).single['path'], 'cart.py');
+    expect(find.text('Added to your labs.'), findsOneWidget);
+  });
+
+  testWidgets(
+      'TC-FORGE-17 a lab that fails its check on this computer is not added, the reason is shown, and the retry carries the report',
+      (tester) async {
+    final api = ForgeApi(needsCheck: true);
+    final store = MemoryUserStore();
+    await pump(tester, '/catalog', store, api, ForgeWorker(checkFails: true));
+    await generate(tester);
+    await tester.ensureVisible(find.byKey(const Key('forge-install')));
+    await tester.tap(find.byKey(const Key('forge-install')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('forge-agree')));
+    await tester.pumpAndSettle();
+    expect(
+        find.descendant(
+            of: find.byKey(const Key('forge-error')),
+            matching: find.textContaining('own answer did not pass')),
+        findsOneWidget);
+    expect(find.text('Added to your labs.'), findsNothing);
+    expect((await store.load('asha-uid')).generatedLabs, isEmpty);
+    await generate(tester); // press Create again: the report goes back so the lab can be fixed
+    expect(api.feedbacks.last, contains('reference passes=false'));
+    expect(api.feedbacks.first, '');
   });
 }

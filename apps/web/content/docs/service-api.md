@@ -42,7 +42,7 @@ Errors are returned as a short code, a plain message and a recovery hint, so the
 | | `POST /v1/ai/roadmap` | Roadmap from the catalogue |
 | | `POST /v1/ai/interview` | Interview questions |
 | | `POST /v1/ai/explain-error`, `POST /v1/ai/review-code` | The coach |
-| | `POST /v1/ai/labs/generate` | Lab Forge (refused on the hosted service) |
+| | `POST /v1/ai/labs/generate` | Lab Forge: the service writes the lab (`check: "app"`) and the app checks it on your computer. Without that, the hosted service refuses at once. |
 | | `POST /v1/tutor/messages` | The tutor |
 | Videos | `POST /v1/player/sessions`, `POST /player/progress`, `GET /v1/player/sessions/{id}`, `GET /player` | The measured player and its progress |
 | Credentials | `POST /v1/credentials/claim`, `GET /v1/credentials`, `POST /v1/credentials/{id}/sharing` | Claim, list and share |
