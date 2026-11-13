@@ -3,6 +3,8 @@ name: windows-release
 # (Actions tab, the run, "Artifacts"). Start it by hand: Actions > windows-release > Run workflow.
 on:
   workflow_dispatch:
+  push:
+    branches: [feat/windows-installer]
 
 permissions:
   contents: read
@@ -37,10 +39,34 @@ jobs:
           if ($p.HasExited) { throw "devpilot.exe exited early with code $($p.ExitCode)" }
           Write-Host "devpilot.exe was still running after 15 seconds"
           Stop-Process -Id $p.Id -Force
+      - name: Installer test (install quietly, start, uninstall)
+        shell: pwsh
+        run: |
+          $setup = "release/devpilot-windows-x64-setup.exe"
+          if (-not (Test-Path $setup)) { throw "the installer was not built" }
+          $dir = Join-Path $env:RUNNER_TEMP "installed"
+          $p = Start-Process -FilePath $setup -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/DIR=$dir" -Wait -PassThru
+          if ($p.ExitCode -ne 0) { throw "the installer exited with $($p.ExitCode)" }
+          foreach ($f in "devpilot.exe", "worker.exe", "guide\devpilot-guide.json", "content\labs\python-hello-001\lab.yaml", "unins000.exe") {
+            if (-not (Test-Path (Join-Path $dir $f))) { throw "missing after install: $f" }
+          }
+          Write-Host "installed files are all there"
+          $app = Start-Process -FilePath (Join-Path $dir "devpilot.exe") -PassThru
+          Start-Sleep -Seconds 15
+          if ($app.HasExited) { throw "the installed devpilot.exe exited early with code $($app.ExitCode)" }
+          Write-Host "the installed app was still running after 15 seconds"
+          Stop-Process -Id $app.Id -Force
+          Start-Sleep -Seconds 2
+          $u = Start-Process -FilePath (Join-Path $dir "unins000.exe") -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART" -Wait -PassThru
+          Start-Sleep -Seconds 3
+          if (Test-Path (Join-Path $dir "devpilot.exe")) { throw "the uninstaller left devpilot.exe behind" }
+          Write-Host "the uninstaller removed the app"
       - uses: actions/upload-artifact@v4
         with:
           name: devpilot-windows-x64
           path: |
+            release/devpilot-windows-x64-setup.exe
+            release/devpilot-windows-x64-setup.exe.sha256
             release/devpilot-windows-x64.zip
             release/devpilot-windows-x64.zip.sha256
           retention-days: 14
