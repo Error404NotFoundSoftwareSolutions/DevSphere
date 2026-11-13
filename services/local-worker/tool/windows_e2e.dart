@@ -7,6 +7,7 @@
 import 'dart:io';
 import 'package:local_worker/src/companion/adapters.dart';
 import 'package:local_worker/src/companion/extension_installer.dart';
+import 'package:local_worker/src/companion/generated_lab.dart';
 import 'package:local_worker/src/companion/guide_package.dart';
 import 'package:local_worker/src/companion/lab_session.dart';
 import 'package:local_worker/src/companion/lab_files.dart';
@@ -89,6 +90,45 @@ Future<void> main(List<String> args) async {
   if (!RegExp(r'\d+ (failed|passed)').hasMatch(out)) fail('no pytest result in the output:\n$out');
   if (ck.passed) fail('the unfinished starter should not pass its check');
   stdout.writeln('the check ran pytest and the starter failed, as it should');
+  // 5. checking an AI-written lab on this computer (what the hosted service can no longer do itself)
+  stdout.writeln('== 5. checking an AI-written lab with the real runner');
+  final labJson = <String, dynamic>{
+    'lab_id': 'string-utils-001',
+    'title': 'String utils',
+    'steps': [
+      {'id': 'shout', 'title': 'Shout', 'content_md': 'Uppercase it', 'check': true}
+    ],
+    'starter': [
+      {'path': 'utils.py', 'content': 'def shout(s):\n    return None\n'}
+    ],
+    'visible_tests': [
+      {
+        'path': 'tests/visible/test_shout.py',
+        'content': 'from utils import shout\n\n\ndef test_shout():\n    assert shout("a") == "A"\n'
+      }
+    ],
+  };
+  Map<String, dynamic> checkJson(String answer) => {
+        'reference': [
+          {'path': 'utils.py', 'content': answer}
+        ],
+        'protected_tests': [
+          {
+            'path': 'tests/protected/test_edge.py',
+            'content': 'from utils import shout\n\n\ndef test_empty():\n    assert shout("") == ""\n'
+          }
+        ],
+      };
+  final runner = localPytestRun(py);
+  final good = await checkGeneratedLab(labJson, checkJson('def shout(s):\n    return s.upper()\n'), run: runner);
+  stdout.writeln('good lab: ok=${good.ok} - ${good.message}');
+  if (!good.ok) fail('a correct lab was refused: ${good.details}');
+  final wrong = await checkGeneratedLab(labJson, checkJson('def shout(s):\n    return s\n'), run: runner);
+  stdout.writeln('lab with a wrong answer: ok=${wrong.ok} - ${wrong.message}');
+  if (wrong.ok) fail('a lab with a wrong answer was accepted');
+  final left = Directory.systemTemp.listSync().whereType<Directory>().where((d) => d.path.contains('devpilot-labcheck-'));
+  if (left.isNotEmpty) fail('temporary check folders were left behind: ${left.map((d) => d.path).join(', ')}');
+  stdout.writeln('the lab check works on this computer and cleans up after itself');
   final node = await Process.run('node', [clientJs, extDist, session.labRoot]);
   stdout.write(node.stdout);
   stderr.write(node.stderr);

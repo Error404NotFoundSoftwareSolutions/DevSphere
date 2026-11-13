@@ -292,3 +292,13 @@ def learner_view(lab: GeneratedLab) -> dict:
         "starter": [f.model_dump() for f in lab.starter],
         "visible_tests": [f.model_dump() for f in lab.visible_tests],
     }
+
+
+def check_bundle(lab: GeneratedLab) -> dict:
+    """What the app needs to check a lab on the learner's own computer: the reference solution and every test.
+    Labs written this way are Practice only (they can never be claimed as credentials), so the learner seeing the reference
+    answer costs nothing; the app uses it to prove the lab works and then throws it away."""
+    return {
+        "reference": [f.model_dump() for f in lab.reference],
+        "protected_tests": [f.model_dump() for f in lab.protected_tests],
+    }

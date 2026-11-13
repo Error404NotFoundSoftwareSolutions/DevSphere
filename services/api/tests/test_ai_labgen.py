@@ -129,3 +129,47 @@ def test_tc_ai_32_endpoint_rejects_an_unverified_lab_and_never_publishes_it(clie
     assert r.status_code == 422 and r.json()["code"] == "lab_not_verified"
     from app.db import memory
     assert not getattr(memory, "GENERATED_LABS", {})
+
+
+# ----------------------------------------------------------------------------- the app checks the lab (hosted service)
+def test_tc_ai_33_app_check_mode_writes_the_lab_without_running_it_and_sends_what_the_app_needs(client, monkeypatch):
+    monkeypatch.setattr("app.routers.ai.server_can_check", lambda: False)  # the hosted service: it has no sandbox
+    fake = prov.FakeProvider(json_responses=[json.dumps(lab_dict())])
+    prov.set_provider(fake)
+    r = client.post("/v1/ai/labs/generate", json={"topic": "string helpers", "level": "beginner", "check": "app"}, headers=STUDENT)
+    assert r.status_code == 200, r.text
+    body = r.json()
+    assert body["status"] == "needs_check"
+    assert body["lab"]["starter"] and body["lab"]["visible_tests"]
+    assert "reference" not in body["lab"] and "protected_tests" not in body["lab"]  # the lab itself stays the learner's view
+    assert body["check"]["reference"][0]["content"].startswith("def shout")
+    assert body["check"]["protected_tests"][0]["path"].startswith("tests/protected/")
+    assert len(fake.calls) == 1  # one model call, no retry loop on the server
+
+
+def test_tc_ai_34_the_hosted_service_refuses_server_side_checking_at_once_without_a_model_call_or_spending_the_allowance(client, monkeypatch):
+    monkeypatch.setattr("app.routers.ai.server_can_check", lambda: False)
+    fake = prov.FakeProvider(json_responses=[json.dumps(lab_dict())])
+    prov.set_provider(fake)
+    r = client.post("/v1/ai/labs/generate", json={"topic": "string helpers", "level": "beginner"}, headers=STUDENT)
+    assert r.status_code == 503 and r.json()["code"] == "verifier_unavailable"
+    assert fake.calls == []  # no model call, no minute of waiting
+
+
+def test_tc_ai_35_feedback_from_the_app_reaches_the_model_redacted_and_a_bad_answer_is_a_plain_error(client, monkeypatch):
+    monkeypatch.setattr("app.routers.ai.server_can_check", lambda: False)
+    fake = prov.FakeProvider(json_responses=[json.dumps(lab_dict())])
+    prov.set_provider(fake)
+    secret = "ghp_" + "B" * 36
+    r = client.post(
+        "/v1/ai/labs/generate",
+        json={"topic": "string helpers", "level": "beginner", "check": "app", "feedback": f"starter did not fail {secret}"},
+        headers=STUDENT,
+    )
+    assert r.status_code == 200
+    assert "starter did not fail" in str(fake.calls[0]) and secret not in str(fake.calls[0])
+    prov.set_provider(prov.FakeProvider(json_responses=["not json"]))
+    bad = client.post("/v1/ai/labs/generate", json={"topic": "x", "level": "beginner", "check": "app"}, headers=STUDENT)
+    assert bad.status_code == 502 and bad.json()["code"] == "ai_invalid"
+    too_long = client.post("/v1/ai/labs/generate", json={"topic": "x", "check": "app", "feedback": "a" * 1501}, headers=STUDENT)
+    assert too_long.status_code == 422

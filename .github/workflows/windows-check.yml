@@ -5,7 +5,7 @@ name: windows-check
 on:
   workflow_dispatch:
   push:
-    branches: [feat/windows-companion, fix/windows-python-command]
+    branches: [feat/windows-companion, fix/windows-python-command, feat/client-side-lab-check]
 
 permissions:
   contents: read

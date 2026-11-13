@@ -19,7 +19,9 @@ class DevPilotApiStub implements DevPilotApi {
       _unused();
   @override
   Future<Map<String, dynamic>> generateLab(
-          {required String topic, String level = 'beginner'}) =>
+          {required String topic,
+          String level = 'beginner',
+          String feedback = ''}) =>
       _unused();
   @override
   Future<String> attemptFor(String labId) => _unused();

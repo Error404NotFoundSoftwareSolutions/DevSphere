@@ -4,9 +4,10 @@
 # redaction before the model, validated output, plain errors. AI never scores anything.
 
 from datetime import UTC, datetime
+from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import ConfigDict
+from pydantic import ConfigDict, Field
 
 from app.ai import provider as prov
 from app.ai.coach import (
@@ -21,6 +22,8 @@ from app.ai.labgen import (
     LabSpec,
     LocalDevSandbox,
     SandboxUnavailable,
+    check_bundle,
+    generate_lab,
     generate_verified_lab,
     learner_view,
 )
@@ -28,6 +31,7 @@ from app.ai.paths import PathRequest, StepRequest, build_step, plan_path
 from app.ai.roadmap import RoadmapRequest, plan_roadmap
 from app.ai.youtube import get_video_search
 from app.core.auth import User, current_user
+from app.core.redaction import redact
 from app.core.settings import settings
 from app.db import memory
 
@@ -168,15 +172,56 @@ def path_step(body: StepRequest, user: User = Depends(current_user)) -> dict:
 
 class LabRequest(LabSpec):
     model_config = ConfigDict(extra="forbid")
+    # "app": the service only writes the lab and the DESKTOP APP checks it on the learner's own computer (the starter
+    # must fail its tests, the reference must pass). "server": the service checks it itself, which only works in dev.
+    check: Literal["server", "app"] = "server"
+    # The app's report of what went wrong when a previous lab failed its check, so the model can fix it.
+    feedback: str = Field(default="", max_length=1500)
+
+
+def server_can_check() -> bool:
+    """True only in development: the service has no isolated place to run AI-written code in production."""
+    return settings.environment == "dev"
 
 
 @router.post("/labs/generate")
 def generate(body: LabRequest, user: User = Depends(current_user)) -> dict:
-    _spend(user, "labgen", settings.ai_labgen_daily_limit)
-    try:
-        lab, report = generate_verified_lab(
-            LabSpec(**body.model_dump()), _provider(), LocalDevSandbox()
+    if body.check == "server" and not server_can_check():
+        # Refuse BEFORE spending an AI call or the person's daily allowance: the lab could not be checked here anyway.
+        raise _err(
+            503,
+            "verifier_unavailable",
+            "The online service cannot check new labs itself.",
+            "Update DevPilot: newer versions check the lab on your own computer.",
         )
+    _spend(user, "labgen", settings.ai_labgen_daily_limit)
+    spec = LabSpec(topic=body.topic, level=body.level)
+    if body.check == "app":
+        try:
+            lab = generate_lab(spec, _provider(), redact(body.feedback))
+        except prov.ProviderDown as e:
+            raise _err(
+                503,
+                "ai_unavailable",
+                "The lab generator is not available right now.",
+                "Try again later.",
+            ) from e
+        except prov.AiOutputInvalid as e:
+            raise _err(
+                502,
+                "ai_invalid",
+                "The lab generator gave an answer we could not use.",
+                "Try again in a moment.",
+            ) from e
+        memory.GENERATED_LABS[lab.lab_id] = {
+            "status": "unchecked",
+            "owner": user.user_id,
+            "lab": lab.model_dump(),
+            "report": "not checked by the service; the app checks it on the learner's computer",
+        }
+        return {"status": "needs_check", "lab": learner_view(lab), "check": check_bundle(lab)}
+    try:
+        lab, report = generate_verified_lab(spec, _provider(), LocalDevSandbox())
     except prov.ProviderDown as e:
         raise _err(
             503,
@@ -189,7 +234,7 @@ def generate(body: LabRequest, user: User = Depends(current_user)) -> dict:
             503,
             "verifier_unavailable",
             "The online service cannot write new labs yet, because it has no safe place to check them.",
-            "Use the labs in the catalogue for now. Writing labs works when DevPilot runs its own service (./start.sh).",
+            "Update DevPilot: newer versions check the lab on your own computer.",
         ) from e
     except LabNotVerified as e:
         raise _err(

@@ -141,7 +141,9 @@ class FakeApi extends DevPilotApiStub {
 
   @override
   Future<Map<String, dynamic>> generateLab(
-          {required String topic, String level = 'beginner'}) async =>
+          {required String topic,
+          String level = 'beginner',
+          String feedback = ''}) async =>
       throw UnimplementedError();
 
   @override

@@ -206,11 +206,16 @@ final Map<String, ChannelSchema> channelSchemas = {
     validateRequestData: (d) => _checkLabId(d["labId"]),
   ),
   "labforge:install": ChannelSchema(
-    allowedRequestKeys: {"lab"},
+    // "check" (the reference answer and the protected tests, from the service) asks the worker to prove the lab works
+    // on this computer (the answer passes, the starter fails) before it is installed.
+    allowedRequestKeys: {"lab", "check"},
     requiredRequestKeys: {"lab"},
     validateRequestData: (d) {
       if (d["lab"] is! Map) {
         throw IpcValidationException('Field "lab" must be an object.');
+      }
+      if (d.containsKey("check") && d["check"] is! Map) {
+        throw IpcValidationException('Field "check" must be an object.');
       }
     },
   ),
