@@ -104,7 +104,15 @@ void main() {
     expect(spawn.args, ['--new-window', session.labRoot]);
     expect(spawn.env!.containsKey('GITHUB_TOKEN'), isFalse);
     final file = File(session.sessionFile);
-    expect(FileStat.statSync(file.path).mode & 0x1FF, 0x180); // 0600
+    if (Platform.isWindows) {
+      // no inherited access for Everyone, Users or Authenticated Users (icacls lists who may use the file)
+      final acl = Process.runSync('icacls', [file.path]).stdout.toString();
+      for (final others in ['Everyone', r'BUILTIN\Users', 'Authenticated Users']) {
+        expect(acl, isNot(contains(others)), reason: acl);
+      }
+    } else {
+      expect(FileStat.statSync(file.path).mode & 0x1FF, 0x180); // 0600
+    }
     final json = jsonDecode(file.readAsStringSync()) as Map<String, dynamic>;
     expect(json['sessionId'], session.sessionId);
     expect(json['labId'], 'python-hello-001');
