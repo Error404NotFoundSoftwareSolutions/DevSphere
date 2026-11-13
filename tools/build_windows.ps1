@@ -8,7 +8,8 @@
 #   - the guide extension packaged as a .vsix, with a metadata file holding its SHA-256
 #   - the local worker compiled to worker.exe
 #   - the Flutter app, with worker.exe, guide\ and content\labs placed next to devpilot.exe
-# Output: release\devpilot-windows-x64.zip (unpacks into a devpilot\ folder) and its .sha256 file.
+# Output: release\devpilot-windows-x64-setup.exe (an installer, built with Inno Setup when it is available) and
+# release\devpilot-windows-x64.zip (a portable copy that unpacks into a devpilot\ folder), each with a .sha256 file.
 # Lab content is bundled WITHOUT its private parts (no reference\, no tests\protected, no AUTHORING.md).
 # The hosted service is the default address (DEVPILOT_API_URL still overrides it at run time). When
 # DEVPILOT_GOOGLE_CLIENT_SECRET is in .env or the environment, the Google sign-in client secret is compiled in. Google
@@ -152,3 +153,28 @@ WriteText "$Zip.sha256" "$Hash  devpilot-windows-x64.zip`n"
 $sizeMb = [math]::Round((Get-Item $Zip).Length / 1MB)
 Write-Host "Built: $Bundle\devpilot.exe, package $Zip ($sizeMb MB)"
 Write-Host "SHA-256: $Hash"
+
+Write-Host "== installer (Inno Setup)"
+function FindIscc {
+  $c = @("${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe", "$env:ProgramFiles\Inno Setup 6\ISCC.exe", "$env:LOCALAPPDATA\Programs\Inno Setup 6\ISCC.exe") | Where-Object { Test-Path $_ } | Select-Object -First 1
+  if (-not $c) { $g = Get-Command iscc -ErrorAction SilentlyContinue; if ($g) { $c = $g.Source } }
+  return $c
+}
+$Iscc = FindIscc
+if (-not $Iscc -and $env:CI -and (Get-Command choco -ErrorAction SilentlyContinue)) {
+  choco install innosetup -y --no-progress | Out-Null
+  $Iscc = FindIscc
+}
+if ($Iscc) {
+  $verLine = Select-String -Path (Join-Path $Root "apps\desktop\pubspec.yaml") -Pattern '^version:\s*(\d+\.\d+\.\d+)' | Select-Object -First 1
+  $AppVer = if ($verLine) { $verLine.Matches[0].Groups[1].Value } else { "0.1.0" }
+  Run { & $Iscc /Q "/DAppVersion=$AppVer" "/DSourceDir=$Bundle" (Join-Path $Root "tools\windows_installer.iss") } "Inno Setup"
+  $Setup = Join-Path $Out "devpilot-windows-x64-setup.exe"
+  if (-not (Test-Path $Setup)) { throw "the installer was not produced" }
+  $SetupHash = (Get-FileHash $Setup -Algorithm SHA256).Hash.ToLower()
+  WriteText "$Setup.sha256" "$SetupHash  devpilot-windows-x64-setup.exe`n"
+  Write-Host "Installer: $Setup ($([math]::Round((Get-Item $Setup).Length / 1MB)) MB)"
+  Write-Host "SHA-256: $SetupHash"
+} else {
+  Write-Host "Inno Setup 6 was not found, so no installer was made (install it from jrsoftware.org, or run this on a GitHub runner). The zip is still complete."
+}

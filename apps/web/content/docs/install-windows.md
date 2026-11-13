@@ -29,30 +29,32 @@ The Windows build is new. It passed automated checks on a Windows machine (findi
 
 ## Download
 
-Get **devpilot-windows-x64.zip** from the [release page](https://github.com/Error404NotFoundSoftwareSolutions/devpilot-releases/releases) (about 190 MB).
+Get **devpilot-windows-x64-setup.exe** from the [release page](https://github.com/Error404NotFoundSoftwareSolutions/devpilot-releases/releases) (about 190 MB). It is one installer: it puts DevPilot in your user folder (no administrator rights needed), adds a Start menu entry, and can add a desktop shortcut. There is also **devpilot-windows-x64.zip**, a portable copy with no installer.
 
-Check the download. In PowerShell, in the folder with the zip:
-
-```powershell
-Get-FileHash devpilot-windows-x64.zip -Algorithm SHA256
-```
-
-Compare the printed hash with the one in `devpilot-windows-x64.zip.sha256`.
-
-## Unzip and run
-
-1. Right-click the zip, choose **Extract All**, and pick a folder you will keep, for example `C:\Users\you\DevPilot`.
-2. Open the `devpilot` folder and double-click **devpilot.exe**.
-
-To add DevPilot to the Start menu, open PowerShell in the `devpilot` folder and run:
+Check the download. In PowerShell, in the folder with the file:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File install.ps1
+Get-FileHash devpilot-windows-x64-setup.exe -Algorithm SHA256
 ```
+
+Compare the printed hash with the one in `devpilot-windows-x64-setup.exe.sha256`.
+
+## Install and run
+
+1. Double-click **devpilot-windows-x64-setup.exe** and follow the steps. Leave "Start DevPilot" ticked on the last page.
+2. Later, start DevPilot from the Start menu.
+
+To uninstall, use **Settings, Apps** (or *Add or remove programs*) and remove DevPilot. Your progress in `%USERPROFILE%\.devpilot` and your lab folders in `%USERPROFILE%\DevPilotLabs` stay until you delete them.
+
+### Prefer the zip?
+
+Right-click the zip, choose **Properties**, tick **Unblock** and press OK (this stops Windows from warning about every file inside), then **Extract All**. Open the `devpilot` folder and double-click **devpilot.exe**. To add it to the Start menu, run `powershell -ExecutionPolicy Bypass -File install.ps1` in that folder.
 
 ## The SmartScreen warning
 
 The preview is **not code-signed**, so Windows SmartScreen may show "Windows protected your PC". Choose **More info**, then **Run anyway**. This appears for any program from a publisher Windows does not know yet. Checking the file hash (above) is how you confirm it is the file we published.
+
+On Windows 11, **Smart App Control**, if it is turned on, can block an unsigned app outright, with no "Run anyway" button. You can turn it off in *Windows Security, App and browser control, Smart App Control settings*. Doing so is your choice; only do it for software you trust.
 
 ## First start
 
@@ -62,4 +64,4 @@ The preview is **not code-signed**, so Windows SmartScreen may show "Windows pro
 
 ## Update and uninstall
 
-There are no automatic updates yet: download the newest zip and extract it to a new folder. To uninstall, delete the `devpilot` folder and the Start menu shortcut (`DevPilot` under Start). Your progress lives in `%USERPROFILE%\.devpilot` and your lab folders in `%USERPROFILE%\DevPilotLabs`. Delete those too if you want to remove everything. See [Settings and your data](/docs/settings-and-data).
+There are no automatic updates yet. Download the newest installer and run it over the old one; it updates DevPilot in place. For the zip, extract the new one to a new folder. Your progress lives in `%USERPROFILE%\.devpilot` and your lab folders in `%USERPROFILE%\DevPilotLabs`. Delete those too if you want to remove everything. See [Settings and your data](/docs/settings-and-data).
