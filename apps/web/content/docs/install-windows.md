@@ -27,7 +27,29 @@ Get Python from python.org and tick **Add python.exe to PATH** in the installer.
 The Windows build is new. It passed automated checks on a Windows machine (finding VS Code, installing the guide, opening a lab session) and a start-up test, but it has not yet been used on a real desktop by a person. If something does not work, please [tell us](/docs/troubleshooting#reporting-a-problem).
 :::
 
-## Download
+## The one-command install
+
+Open **PowerShell** (press the Windows key, type `PowerShell`, press Enter) and run:
+
+```powershell
+irm https://devpilot.web.app/install.ps1 | iex
+```
+
+It downloads the installer, checks it, installs DevPilot for your user and starts it. This is the way we recommend, because Windows is less likely to show the SmartScreen warning for a file that PowerShell downloaded than for one a browser downloaded. It cannot promise to avoid every warning.
+
+What the script does, and nothing else:
+
+1. Checks that you have 64-bit Windows.
+2. Downloads **devpilot-windows-x64-setup.exe** from the public release.
+3. Compares its SHA-256 with the value written in the script, and **stops without running anything if they differ**.
+4. Runs the installer for your user (no administrator rights), then deletes the downloaded file.
+5. Tells you if Visual Studio Code, Python or Git is missing, and starts DevPilot.
+
+It is short and you can read it first: open `https://devpilot.web.app/install.ps1` in your browser. Only run commands like this from sources you trust.
+
+If PowerShell says running scripts is disabled, this command is not affected (it does not run a script file). If your company blocks PowerShell, use the installer below.
+
+## Or download the installer
 
 Get **devpilot-windows-x64-setup.exe** from the [release page](https://github.com/Error404NotFoundSoftwareSolutions/devpilot-releases/releases) (about 190 MB). It is one installer: it puts DevPilot in your user folder (no administrator rights needed), adds a Start menu entry, and can add a desktop shortcut. There is also **devpilot-windows-x64.zip**, a portable copy with no installer.
 

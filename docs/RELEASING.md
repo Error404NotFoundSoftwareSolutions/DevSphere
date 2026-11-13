@@ -28,8 +28,11 @@ marked **pre-release** and only ship for Linux.
      --title "DevPilot 0.1.0 preview 2 (Linux)" --notes-file notes.md
    ```
 
-6. Point the website at it: set `release.tag` in `apps/web/lib/assets.ts` (or `NEXT_PUBLIC_RELEASE_TAG`), then run
-   `npm run deploy` in `apps/web` to publish https://devpilot.web.app.
+6. Point the website at it: set `release.tag` in `apps/web/lib/assets.ts`, and in `apps/web/release-info.json` set the same
+   `tag` and the SHA-256 of `devpilot-windows-x64-setup.exe` (from its `.sha256` file). The one-line install
+   (`irm https://devpilot.web.app/install.ps1 | iex`) is generated from that file, and the build refuses when the tags
+   differ. Then run `npm run deploy` in `apps/web` to publish https://devpilot.web.app. The `windows-install-script`
+   workflow tests the one-line install on a Windows machine.
 7. Check that the download works without signing in:
    `curl -sIL https://github.com/Error404NotFoundSoftwareSolutions/devpilot-releases/releases/download/<tag>/devpilot-linux-x64.tar.gz`
    should end in `200`.

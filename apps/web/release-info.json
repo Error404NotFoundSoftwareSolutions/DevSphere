@@ -1,0 +1,7 @@
+{
+  "tag": "v0.1.0-preview.1",
+  "windowsSetup": {
+    "file": "devpilot-windows-x64-setup.exe",
+    "sha256": "9a88a0c3b912371c7761c3e04e3d81aa501a4b4c0d03bd1f1a7330f50d18ad2e"
+  }
+}

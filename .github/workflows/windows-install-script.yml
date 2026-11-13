@@ -1,0 +1,61 @@
+name: windows-install-script
+# Tests the one-line install (irm https://devpilot.web.app/install.ps1 | iex) on a GitHub Windows machine: a normal run under
+# Windows PowerShell 5.1, the installed files carry no "downloaded from the internet" mark, the app starts, it uninstalls;
+# and a file with the wrong checksum is refused and nothing is installed.
+on:
+  workflow_dispatch:
+  push:
+    branches: [feat/windows-install-command]
+
+permissions:
+  contents: read
+
+jobs:
+  install-script:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "22" }
+      - run: node apps/web/scripts/make-install-script.mjs
+
+      - name: Normal run (Windows PowerShell 5.1)
+        shell: powershell
+        run: |
+          $env:DEVPILOT_NO_LAUNCH = '1'
+          Get-Content apps/web/public/install.ps1 -Raw | Invoke-Expression
+          if ($LASTEXITCODE -ne 0) { throw "the install script reported failure ($LASTEXITCODE)" }
+          $dir = Join-Path $env:LOCALAPPDATA 'Programs\DevPilot'
+          foreach ($f in 'devpilot.exe', 'worker.exe', 'unins000.exe') {
+            if (-not (Test-Path (Join-Path $dir $f))) { throw "missing after install: $f" }
+          }
+          Write-Host 'installed files are there'
+          $marked = Get-ChildItem $dir -Recurse -File -Include *.exe, *.dll | Where-Object { (Get-Item $_.FullName -Stream *).Stream -contains 'Zone.Identifier' }
+          if ($marked) { throw "files carry the internet mark: $($marked | Select-Object -First 3 | ForEach-Object Name)" }
+          Write-Host 'no file carries the "downloaded from the internet" mark'
+          if (Get-ChildItem $env:TEMP -Filter 'devpilot-setup-*.exe' -ErrorAction SilentlyContinue) { throw 'the temporary installer was not cleaned up' }
+          $app = Start-Process -FilePath (Join-Path $dir 'devpilot.exe') -PassThru
+          Start-Sleep -Seconds 12
+          if ($app.HasExited) { throw "the app exited early with code $($app.ExitCode)" }
+          Write-Host 'the app was still running after 12 seconds'
+          Stop-Process -Id $app.Id -Force
+          Start-Sleep -Seconds 2
+          Start-Process -FilePath (Join-Path $dir 'unins000.exe') -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART' -Wait
+          Start-Sleep -Seconds 3
+          if (Test-Path (Join-Path $dir 'devpilot.exe')) { throw 'the uninstaller left the app behind' }
+          Write-Host 'uninstalled'
+
+      - name: A wrong checksum is refused (PowerShell 7)
+        shell: pwsh
+        run: |
+          $env:DEVPILOT_NO_LAUNCH = '1'
+          $raw = Get-Content apps/web/public/install.ps1 -Raw
+          $bad = [regex]::Replace($raw, '(?<=\$expected\s+= '')[0-9a-f]{64}', ('0' * 64))
+          if ($bad -eq $raw) { throw 'could not build the tampered script' }
+          Invoke-Expression $bad
+          if ($LASTEXITCODE -ne 1) { throw "expected the script to fail with 1, got $LASTEXITCODE" }
+          if (Test-Path (Join-Path $env:LOCALAPPDATA 'Programs\DevPilot\devpilot.exe')) { throw 'the installer ran although the checksum was wrong' }
+          if (Get-ChildItem $env:TEMP -Filter 'devpilot-setup-*.exe' -ErrorAction SilentlyContinue) { throw 'the rejected file was not deleted' }
+          Write-Host 'the wrong checksum was refused, nothing was installed, the file was deleted'
+          exit 0   # the script's deliberate exit code 1 must not become this step's result
