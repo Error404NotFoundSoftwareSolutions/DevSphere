@@ -206,4 +206,11 @@ void main() {
         everyElement('pass'));
     await c.close();
   });
+
+  test('TC-CMP-07-20 the runtime folder: Linux and macOS as before, Windows under LOCALAPPDATA\\DevPilot\\run', () {
+    expect(defaultRuntimeDir({'XDG_RUNTIME_DIR': '/run/user/1000'}, windows: false), '/run/user/1000/devpilot');
+    expect(defaultRuntimeDir({'HOME': '/home/u'}, windows: false), '/home/u/.devpilot/run');
+    expect(defaultRuntimeDir({'LOCALAPPDATA': r'C:\Users\u\AppData\Local'}, windows: true), r'C:\Users\u\AppData\Local\DevPilot\run');
+    expect(defaultRuntimeDir({'LOCALAPPDATA': 'relative', 'USERPROFILE': r'C:\Users\u'}, windows: true), r'C:\Users\u\.devpilot\run');
+  });
 }

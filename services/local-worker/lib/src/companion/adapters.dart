@@ -37,6 +37,41 @@ LocatorEnv realLocatorEnv() => LocatorEnv(
       variables: Platform.environment,
     );
 
+/// On Windows VS Code's command line is `Code.exe <cli.js> ...` run as plain Node (what code.cmd does). The marker is
+/// the first argument: VS Code's own `cli.js`. Nothing else gets this variable.
+bool _isCliScript(List<String> args) =>
+    args.isNotEmpty && args.first.toLowerCase().endsWith(r'\cli.js');
+
+Map<String, String> _cliEnvironment() =>
+    {...launcherEnvironment(Platform.environment), 'ELECTRON_RUN_AS_NODE': '1'};
+
+Future<String?> realCliVersionProbe(String exe, List<String> cliArgs) async {
+  try {
+    final r = await runProcess(exe, [...cliArgs, '--version'],
+        cwd: Directory.systemTemp.path,
+        timeout: const Duration(seconds: 20),
+        maxOutput: 2000,
+        environment: _cliEnvironment(),
+        includeParentEnvironment: false);
+    return r.exitCode == 0 && !r.timedOut ? r.output : null;
+  } on ProcessException {
+    return null;
+  }
+}
+
+/// A small text file (the launcher script), or null. Never more than 4 KB.
+Future<String?> realReadText(String path) async {
+  try {
+    final f = File(path);
+    if (await f.length() > 4096) return null;
+    return await f.readAsString();
+  } on FileSystemException {
+    return null;
+  } on FormatException {
+    return null;
+  }
+}
+
 Future<String?> realVersionProbe(String path) async {
   try {
     final r = await runProcess(path, ['--version'],
@@ -52,8 +87,13 @@ Future<String?> realVersionProbe(String path) async {
 Future<CommandResult> realCommandRunner(String exe, List<String> args,
     {Duration timeout = const Duration(seconds: 60)}) async {
   try {
+    final cli = _isCliScript(args);
     final r = await runProcess(exe, args,
-        cwd: Directory.systemTemp.path, timeout: timeout, maxOutput: 20000);
+        cwd: Directory.systemTemp.path,
+        timeout: timeout,
+        maxOutput: 20000,
+        environment: cli ? _cliEnvironment() : null,
+        includeParentEnvironment: !cli);
     return CommandResult(
         exitCode: r.exitCode, stdout: r.output, timedOut: r.timedOut);
   } on ProcessException catch (e) {
@@ -74,7 +114,9 @@ Future<bool> realSpawnDetached(
     String exe, List<String> args, Map<String, String> env) async {
   try {
     await Process.start(exe, args,
-        environment: env,
+        environment: _isCliScript(args)
+            ? {...env, 'ELECTRON_RUN_AS_NODE': '1'}
+            : env,
         includeParentEnvironment: false,
         mode: ProcessStartMode.detached,
         runInShell: false);

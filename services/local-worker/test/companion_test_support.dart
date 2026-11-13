@@ -13,9 +13,13 @@ class TestClient {
   final Completer<void> _closed = Completer<void>();
   Future<void> get closed => _closed.future;
 
+  /// `path` is a Unix socket path, or `tcp:127.0.0.1:<port>` (the Windows transport).
   static Future<TestClient> connect(String path) async {
-    final s = await Socket.connect(
-        InternetAddress(path, type: InternetAddressType.unix), 0);
+    final tcp = RegExp(r'^tcp:127\.0\.0\.1:(\d{1,5})$').firstMatch(path);
+    final s = tcp != null
+        ? await Socket.connect(InternetAddress.loopbackIPv4, int.parse(tcp.group(1)!))
+        : await Socket.connect(
+            InternetAddress(path, type: InternetAddressType.unix), 0);
     final c = TestClient._(s);
     s.listen(
       (data) {

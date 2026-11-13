@@ -96,8 +96,8 @@ void _validate(ExtensionPackage p) {
 
 Future<Map<String, String>?> _listInstalled(
     EditorInstall editor, CommandRunner runner, List<String> extraArgs) async {
-  final r = await runner(
-      editor.path, [...extraArgs, '--list-extensions', '--show-versions'],
+  final r = await runner(editor.path,
+      [...editor.cliArgs, ...extraArgs, '--list-extensions', '--show-versions'],
       timeout: const Duration(seconds: 30));
   if (r.exitCode != 0 || r.timedOut) return null;
   final out = <String, String>{};
@@ -183,6 +183,7 @@ Future<InstallOutcome> installExtension(
   final run = await runner(
     plan.editor.path,
     [
+      ...plan.editor.cliArgs,
       ...plan.extraArgs,
       '--install-extension',
       plan.package.vsixPath,
@@ -206,8 +207,8 @@ Future<InstallOutcome> installExtension(
   }
   var removalFailed = false;
   for (final id in plan.legacyInstalled) {
-    final r = await runner(
-        plan.editor.path, [...plan.extraArgs, '--uninstall-extension', id],
+    final r = await runner(plan.editor.path,
+        [...plan.editor.cliArgs, ...plan.extraArgs, '--uninstall-extension', id],
         timeout: const Duration(seconds: 60));
     if (r.exitCode != 0 || r.timedOut) removalFailed = true;
   }

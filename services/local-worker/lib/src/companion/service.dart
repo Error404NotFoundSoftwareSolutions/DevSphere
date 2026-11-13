@@ -148,8 +148,15 @@ class CompanionService {
     final existing = _sessions[labId];
     if (existing != null) {
       final env = launcherEnvironment(launcher.parentEnvironment);
-      final ok = await launcher.spawnDetached(editor.path,
-          [...launcher.extraEditorArgs, '--new-window', existing.labRoot], env);
+      final ok = await launcher.spawnDetached(
+          editor.path,
+          [
+            ...editor.cliArgs,
+            ...launcher.extraEditorArgs,
+            '--new-window',
+            existing.labRoot
+          ],
+          env);
       return {
         'ok': ok,
         'message': ok

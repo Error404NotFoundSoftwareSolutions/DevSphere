@@ -25,8 +25,12 @@ class FakeHandler implements RequestHandler {
   }
 }
 
+ChannelTransport transport = ChannelTransport.auto;
+
 Future<(ChannelServer, FakeHandler, String, Directory)> start(
-    {Duration idle = const Duration(minutes: 5), int rate = 100}) async {
+    {Duration idle = const Duration(minutes: 5),
+    int rate = 100,
+    Duration? hello}) async {
   final dir = Directory.systemTemp.createTempSync('bl-run-');
   final handler = FakeHandler();
   final server = ChannelServer(
@@ -34,7 +38,9 @@ Future<(ChannelServer, FakeHandler, String, Directory)> start(
       sessionId: sid,
       handler: handler,
       idleTimeout: idle,
-      maxRequestsPerSecond: rate);
+      maxRequestsPerSecond: rate,
+      transport: transport,
+      handshakeTimeout: hello);
   final path = await server.start();
   addTearDown(() async {
     await server.close();
@@ -43,9 +49,13 @@ Future<(ChannelServer, FakeHandler, String, Directory)> start(
   return (server, handler, path, dir);
 }
 
-void main() {
+void suite(ChannelTransport t) {
+  setUp(() => transport = t);
+  tearDown(() => transport = ChannelTransport.auto);
   test('TC-CMP-04-01 runtime directory is 0700 and the socket is 0600 (T20)',
-      () async {
+      skip: t == ChannelTransport.loopbackTcp || Platform.isWindows
+          ? 'Unix permissions and sockets only'
+          : null, () async {
     final (_, __, path, dir) = await start();
     expect(FileStat.statSync('${dir.path}/run').mode & 0x1FF, 0x1C0); // 0700
     expect(FileStat.statSync(path).mode & 0x1FF, 0x180); // 0600
@@ -174,6 +184,47 @@ void main() {
     }
     expect(await c.waitClosed(), isTrue);
     await server.close();
-    expect(File(path).existsSync(), isFalse);
+    if (!path.startsWith('tcp:')) expect(File(path).existsSync(), isFalse);
   });
+
+  if (t == ChannelTransport.loopbackTcp) {
+    test('TC-CMP-04-12 the loopback transport answers only on 127.0.0.1 and names itself tcp:127.0.0.1:<port>',
+        () async {
+      final (server, _, path, __) = await start();
+      expect(path, matches(RegExp(r'^tcp:127\.0\.0\.1:\d{1,5}$')));
+      final c = await TestClient.connect(path);
+      c.send(helloMsg(sid));
+      expect((await c.next())['type'], 'welcome');
+      await server.close();
+    });
+
+    test('TC-CMP-04-13 a client that never says hello is dropped, and the slot is free again',
+        () async {
+      final (_, __, path, ___) =
+          await start(hello: const Duration(milliseconds: 300));
+      final squatter = await TestClient.connect(path);
+      expect(await squatter.waitClosed(), isTrue);
+      final real = await TestClient.connect(path);
+      real.send(helloMsg(sid));
+      expect((await real.next())['type'], 'welcome');
+    });
+
+    test('TC-CMP-04-14 saying hello in time keeps the connection past the handshake limit',
+        () async {
+      final (_, __, path, ___) =
+          await start(hello: const Duration(milliseconds: 400));
+      final c = await TestClient.connect(path);
+      c.send(helloMsg(sid));
+      expect((await c.next())['type'], 'welcome');
+      await Future<void>.delayed(const Duration(milliseconds: 700));
+      c.send({'type': 'getLabState'});
+      expect((await c.next())['type'], 'sessionClosed');
+    });
+  }
+}
+
+void main() {
+  group('default transport for this system', () => suite(ChannelTransport.auto));
+  group('loopback TCP (the Windows transport), on every system',
+      () => suite(ChannelTransport.loopbackTcp));
 }

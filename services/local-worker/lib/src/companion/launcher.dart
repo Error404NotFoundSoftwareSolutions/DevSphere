@@ -45,7 +45,15 @@ Map<String, String> launcherEnvironment(Map<String, String> parent) => {
         if (_envAllow.contains(e.key)) e.key: e.value,
     };
 
-String defaultRuntimeDir(Map<String, String> env) {
+/// Where the session files live. The VS Code guide computes the same folder (extensions/devsphere-learn/src/host/session.ts).
+String defaultRuntimeDir(Map<String, String> env, {bool? windows}) {
+  if (windows ?? Platform.isWindows) {
+    final local = env['LOCALAPPDATA'];
+    if (local != null && RegExp(r'^[A-Za-z]:[\\/]').hasMatch(local)) {
+      return '$local\\DevPilot\\run';
+    }
+    return '${env['USERPROFILE'] ?? Directory.systemTemp.path}\\.devpilot\\run';
+  }
   final xdg = env['XDG_RUNTIME_DIR'];
   if (xdg != null && xdg.startsWith('/')) return '$xdg/devpilot';
   return '${env['HOME'] ?? Directory.systemTemp.path}/.devpilot/run';
@@ -107,6 +115,7 @@ class LabLauncher {
     this.onPractice,
     this.onFinishRequested,
     this.extraEditorArgs = const [],
+    this.channelTransport = ChannelTransport.auto,
   });
 
   final Future<LocateResult> Function() findEditor;
@@ -124,6 +133,9 @@ class LabLauncher {
 
   /// Set only by code (for example tests or development), never from user input.
   final List<String> extraEditorArgs;
+
+  /// `auto` picks a Unix socket on Linux and macOS and a loopback port on Windows.
+  final ChannelTransport channelTransport;
 
   Future<LaunchResult> launch(String labId) async {
     if (!_id.hasMatch(labId))
@@ -160,7 +172,15 @@ class LabLauncher {
       onFinishRequested: (all) => onFinishRequested?.call(info.id, all),
     );
     final server = ChannelServer(
-        runtimeDir: runtimeDir, sessionId: sessionId, handler: controller);
+        runtimeDir: runtimeDir,
+        sessionId: sessionId,
+        handler: controller,
+        transport: channelTransport,
+        // on a loopback port any program on the PC can connect: drop whoever does not say hello quickly
+        handshakeTimeout: Platform.isWindows ||
+                channelTransport == ChannelTransport.loopbackTcp
+            ? const Duration(seconds: 15)
+            : null);
     final String socketPath;
     try {
       socketPath = await server.start();
@@ -192,7 +212,7 @@ class LabLauncher {
     }
     final opened = await spawnDetached(
         editor.path,
-        [...extraEditorArgs, '--new-window', labRoot],
+        [...editor.cliArgs, ...extraEditorArgs, '--new-window', labRoot],
         launcherEnvironment(parentEnvironment));
     if (!opened) {
       await session.close();
