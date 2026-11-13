@@ -58,3 +58,4 @@ jobs:
           if (Test-Path (Join-Path $env:LOCALAPPDATA 'Programs\DevPilot\devpilot.exe')) { throw 'the installer ran although the checksum was wrong' }
           if (Get-ChildItem $env:TEMP -Filter 'devpilot-setup-*.exe' -ErrorAction SilentlyContinue) { throw 'the rejected file was not deleted' }
           Write-Host 'the wrong checksum was refused, nothing was installed, the file was deleted'
+          exit 0   # the script's deliberate exit code 1 must not become this step's result
