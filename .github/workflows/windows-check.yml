@@ -5,7 +5,7 @@ name: windows-check
 on:
   workflow_dispatch:
   push:
-    branches: [feat/windows-companion]
+    branches: [feat/windows-companion, fix/windows-python-command]
 
 permissions:
   contents: read
@@ -56,6 +56,9 @@ jobs:
             choco install vscode -y --no-progress
           }
           foreach ($p in $known) { if (Test-Path $p) { Write-Host "found $p"; Write-Host "--- code.cmd:"; Get-Content $p } }
+
+      - name: Install pytest (the lab checks need it)
+        run: python -m pip install pytest
 
       - name: End to end with the real VS Code
         working-directory: services/local-worker

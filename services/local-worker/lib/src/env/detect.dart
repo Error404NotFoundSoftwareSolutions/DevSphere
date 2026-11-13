@@ -3,6 +3,7 @@
 // Implemented here: detect Python, uv, Git and OS status on student machine
 
 import 'dart:io';
+import '../companion/python_locator.dart';
 import '../platform/platform_adapter.dart';
 import '../exec/safe_spawn.dart';
 
@@ -25,6 +26,11 @@ Future<List<ToolStatus>> detectTools() async {
   final tools = ['python3', 'uv', 'git'];
 
   for (final t in tools) {
+    if (t == 'python3') {
+      // the Python command differs by system (python or py on Windows); report what the checks will really use
+      items.add(ToolStatus(tool: t, status: await findPython() == null ? 'missing' : 'ready', version: 'detected'));
+      continue;
+    }
     try {
       final cmd = lookupCommand(t);
       final r = await runProcess(

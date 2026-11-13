@@ -71,8 +71,15 @@ Future<RunResult> runProcess(
     }
   }
 
-  final stdoutSub = process.stdout.listen(take);
-  final stderrSub = process.stderr.listen(take);
+  // the exit code can arrive before the last output does, so wait for both streams to end (briefly) before reading
+  final outEnded = Completer<void>();
+  final errEnded = Completer<void>();
+  void ended(Completer<void> c) {
+    if (!c.isCompleted) c.complete();
+  }
+
+  final stdoutSub = process.stdout.listen(take, onDone: () => ended(outEnded), onError: (_) => ended(outEnded));
+  final stderrSub = process.stderr.listen(take, onDone: () => ended(errEnded), onError: (_) => ended(errEnded));
 
   void stop() {
     if (Platform.isWindows) {
@@ -91,6 +98,8 @@ Future<RunResult> runProcess(
   try {
     final exitCode = await process.exitCode;
     timer.cancel();
+    // a program that left a child holding the pipes open must not hang us: give the streams two seconds
+    await Future.wait([outEnded.future, errEnded.future]).timeout(const Duration(seconds: 2), onTimeout: () => <void>[]);
     await stdoutSub.cancel();
     await stderrSub.cancel();
 

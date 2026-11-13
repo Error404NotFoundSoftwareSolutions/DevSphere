@@ -35,4 +35,12 @@ void main() {
       expect(() => resolveInside(dir.path, '..'), throwsArgumentError);
     });
   });
+
+  test('TC-FR-EXEC-002-03 very short output is not lost when the program exits at once', () async {
+    if (Platform.isWindows) return;
+    for (var i = 0; i < 25; i++) {
+      final r = await runProcess('echo', ['hi'], cwd: Directory.systemTemp.path, timeout: const Duration(seconds: 10));
+      expect(r.output.trim(), 'hi', reason: 'run $i');
+    }
+  });
 }
