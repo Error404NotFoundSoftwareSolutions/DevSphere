@@ -234,37 +234,22 @@ export function buildRobot(): Mascot {
   group.add(root);
 
   // --- body (small and round, tucked under the big head)
-  const bodyGeo = new THREE.SphereGeometry(1, 56, 42);
-  bodyGeo.scale(0.205, 0.265, 0.17);
-  // a little narrower towards the bottom: an egg, not a ball
-  const bp = bodyGeo.getAttribute('position') as THREE.BufferAttribute;
-  for (let i = 0; i < bp.count; i++) {
-    const y = bp.getY(i) / 0.265; // -1 bottom .. 1 top
-    const k = 1 - 0.14 * Math.max(0, -y);
-    bp.setX(i, bp.getX(i) * k);
-    bp.setZ(i, bp.getZ(i) * k);
-  }
-  bodyGeo.computeVertexNormals();
-  const body = furry(bodyGeo, BODYFUR);
-  body.position.y = -0.37;
+  const body = furry(new RoundedBoxGeometry(0.4, 0.46, 0.32, 10, 0.17), BODYFUR);
+  body.position.y = -0.32;
   root.add(body);
-  // a short indigo neck makes the head and body two clear shapes
-  const neck = T.mesh(new THREE.CylinderGeometry(0.07, 0.085, 0.14, 24), accent(0x3a2fb8, 0.15));
-  neck.position.y = -0.14;
-  root.add(neck);
   // glowing cyan chest button with a ring and a soft halo
   const haloTex = radial(CYAN);
   T.trackTex(haloTex);
   const haloMat = new THREE.SpriteMaterial({ map: haloTex, blending: THREE.AdditiveBlending, depthWrite: false, transparent: true, opacity: 0.55, toneMapped: false });
   T.track(haloMat);
   const halo = new THREE.Sprite(haloMat);
-  halo.position.set(0, -0.3, 0.235);
+  halo.position.set(0, -0.26, 0.235);
   halo.scale.setScalar(0.2);
   root.add(halo);
   const button = T.mesh(new THREE.CircleGeometry(0.043, 32), glowMat(CYAN));
-  button.position.set(0, -0.3, 0.218);
+  button.position.set(0, -0.26, 0.215);
   const ring = T.mesh(new THREE.TorusGeometry(0.054, 0.007, 10, 36), glowMat(0xa8f4ff, 0.9));
-  ring.position.set(0, -0.3, 0.218);
+  ring.position.set(0, -0.26, 0.215);
   root.add(button, ring);
 
   // --- head (a big squircle)
@@ -272,11 +257,44 @@ export function buildRobot(): Mascot {
   head.position.y = 0.15;
   root.add(head);
   head.add(furry(new RoundedBoxGeometry(0.66, 0.52, 0.46, 10, 0.23), WHITE));
-  const screen = T.mesh(new RoundedBoxGeometry(0.45, 0.31, 0.05, 8, 0.15), glass);
-  screen.position.z = 0.27;
+  // the glass sits recessed inside a raised bezel, so the screen has depth
+  const roundRect = (w: number, h: number, r: number, path: THREE.Path | THREE.Shape) => {
+    path.moveTo(-w / 2 + r, -h / 2);
+    path.lineTo(w / 2 - r, -h / 2); path.quadraticCurveTo(w / 2, -h / 2, w / 2, -h / 2 + r);
+    path.lineTo(w / 2, h / 2 - r); path.quadraticCurveTo(w / 2, h / 2, w / 2 - r, h / 2);
+    path.lineTo(-w / 2 + r, h / 2); path.quadraticCurveTo(-w / 2, h / 2, -w / 2, h / 2 - r);
+    path.lineTo(-w / 2, -h / 2 + r); path.quadraticCurveTo(-w / 2, -h / 2, -w / 2 + r, -h / 2);
+  };
+  const outer = new THREE.Shape();
+  roundRect(0.515, 0.365, 0.16, outer);
+  const hole = new THREE.Path();
+  roundRect(0.46, 0.3, 0.14, hole);
+  outer.holes.push(hole);
+  const bezelGeo = new THREE.ExtrudeGeometry(outer, { depth: 0.045, bevelEnabled: true, bevelSize: 0.008, bevelThickness: 0.01, bevelSegments: 3, curveSegments: 18 });
+  const bezelMat = new THREE.MeshPhysicalMaterial({ color: 0x141a3d, roughness: 0.28, metalness: 0.3, clearcoat: 1, clearcoatRoughness: 0.12, envMapIntensity: 1.1 });
+  const bezel = T.mesh(bezelGeo, bezelMat);
+  bezel.position.z = 0.285; // the front edge of the bezel stands proud of the fur
+  head.add(bezel);
+  const screen = T.mesh(new RoundedBoxGeometry(0.47, 0.31, 0.04, 8, 0.14), glass);
+  screen.position.z = 0.272; // the glass front is about 0.05 behind the bezel's front edge
   head.add(screen);
+  // a soft dark edge inside the bezel (an inner shadow) adds to the depth
+  const shadeCanvas = document.createElement("canvas");
+  shadeCanvas.width = 128; shadeCanvas.height = 88;
+  const sg = shadeCanvas.getContext("2d")!;
+  const grad = sg.createRadialGradient(64, 44, 20, 64, 44, 78);
+  grad.addColorStop(0, "rgba(0,0,0,0)");
+  grad.addColorStop(1, "rgba(0,0,0,0.55)");
+  sg.fillStyle = grad; sg.fillRect(0, 0, 128, 88);
+  const shadeTex = new THREE.CanvasTexture(shadeCanvas);
+  T.trackTex(shadeTex);
+  const shadeMat = new THREE.MeshBasicMaterial({ map: shadeTex, transparent: true, depthWrite: false, toneMapped: false });
+  const shade = T.mesh(new THREE.PlaneGeometry(0.46, 0.3), shadeMat);
+  shade.position.z = 0.3; // in front of the glass and the face, under the bezel's front edge
+  shade.renderOrder = 2;
+  head.add(shade);
   const face = new THREE.Group(); // slides a little towards the pointer
-  face.position.z = 0.305;
+  face.position.z = 0.297;
   head.add(face);
   // happy eyes: glowing arches ( ^ ^ ), each with a soft outer glow
   const archGeo = new THREE.TorusGeometry(0.052, 0.0135, 10, 28, Math.PI);
@@ -321,24 +339,34 @@ export function buildRobot(): Mascot {
   head.add(bulb);
 
   // --- arms: short and thick, with indigo mitten hands (pivot at the shoulder)
-  const armGeo = new THREE.CapsuleGeometry(0.064, 0.1, 10, 18);
+  const armGeo = new THREE.CapsuleGeometry(0.062, 0.075, 10, 18);
+  // a narrow wrist with a soft cuff, so the arm and the hand are two clear parts
+  const wristGeo = new THREE.CylinderGeometry(0.044, 0.048, 0.06, 24);
+  const wristMat = accent(0x30268f, 0.12);
+  const cuffGeo = new THREE.TorusGeometry(0.05, 0.014, 12, 32);
+  const cuffMat = accent(0x5547e0, 0.2);
   const handGeo = new THREE.SphereGeometry(0.078, 22, 18);
   handGeo.scale(1, 0.9, 0.95);
   const knuckle = new THREE.SphereGeometry(0.024, 12, 10);
   const knuckleMat = accent(0x6f60f2, 0.2);
   const mkArm = (side: 1 | -1) => {
     const pivot = new THREE.Group();
-    pivot.position.set(side * 0.15, -0.27, 0.01);
+    pivot.position.set(side * 0.215, -0.22, 0.01);
     const a = furry(armGeo, WHITE);
-    a.position.y = -0.11;
+    a.position.y = -0.1;
+    const wrist = T.mesh(wristGeo, wristMat);
+    wrist.position.y = -0.232;
+    const cuff = T.mesh(cuffGeo, cuffMat);
+    cuff.rotation.x = Math.PI / 2;
+    cuff.position.y = -0.215;
     const h = furry(handGeo, MITT);
-    h.position.y = -0.235;
+    h.position.y = -0.31;
     for (const [kx, ky] of [[-0.034, -0.052], [0, -0.062], [0.034, -0.052]] as const) {
       const k = T.mesh(knuckle, knuckleMat);
       k.position.set(kx, ky, 0.07);
       h.add(k);
     }
-    pivot.add(a, h);
+    pivot.add(a, wrist, cuff, h);
     root.add(pivot);
     return pivot;
   };
@@ -347,11 +375,19 @@ export function buildRobot(): Mascot {
 
   // --- cyan jet under the body, from an indigo nozzle
   const jet = makeJet(T, 0.5, 0.085, BLUE);
-  jet.group.position.y = -0.64;
+  jet.group.position.y = -0.665;
   root.add(jet.group);
-  const nozzle = T.mesh(new THREE.CylinderGeometry(0.1, 0.075, 0.045, 28), indigoMat);
-  nozzle.position.y = -0.625;
+  // the nozzle hangs below the fur so it stays visible, with a bright ring around its mouth
+  const nozzle = T.mesh(new THREE.CylinderGeometry(0.1, 0.078, 0.06, 32), accent(0x3a2fb8, 0.25));
+  nozzle.position.y = -0.628;
   root.add(nozzle);
+  const nozzleRim = T.mesh(new THREE.TorusGeometry(0.1, 0.017, 12, 40), accent(0x6a5cf5, 0.55));
+  nozzleRim.rotation.x = Math.PI / 2;
+  nozzleRim.position.y = -0.6;
+  const nozzleGlow = T.mesh(new THREE.TorusGeometry(0.078, 0.008, 10, 40), glowMat(0x9ff0ff, 0.95));
+  nozzleGlow.rotation.x = Math.PI / 2;
+  nozzleGlow.position.y = -0.66;
+  root.add(nozzleRim, nozzleGlow);
 
   let blink = 0, nextBlink = 2.2, spin = 0, lift = 0;
   const update = (i: MascotInput) => {
