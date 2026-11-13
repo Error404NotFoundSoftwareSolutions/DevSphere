@@ -2,6 +2,11 @@
 
 Newest first. One entry per finished step: what changed, how it was checked, what is still missing. Plans and status live in `FEATURE_ROADMAP.md`.
 
+## 2026-11-13: Windows preview released (v0.1.0-preview.1)
+- Built by the `windows-release` workflow on a GitHub Windows machine from `main` (`tools/build_windows.ps1`, Google sign-in secret in the repository secrets, compiled in). `devpilot-windows-x64.zip` (192 MB, unzips into `devpilot\`) and its `.sha256` are attached to the same public pre-release as Linux. Checked: checksum, contents (devpilot.exe, worker.exe, guide 0.3.3, both labs, Visual C++ runtime, no private lab parts or `.env`), and the app was still running 15 s after start.
+- Website: the Download button picks Windows or Linux from the browser (macOS visitors get Linux, no macOS build yet); the footer lists both. Live at https://devpilot.web.app.
+- **Not checked:** a person using it on a real Windows desktop (SmartScreen, window, sign-in, opening a lab in a real VS Code window). Not signed, no installer, no auto-update. The zip carries about 20 MB of unneeded build `.lib` files.
+
 ## 2026-11-13: opening labs in VS Code works on Windows (PL-CMP-09)
 - **The gap:** the worker refused to start the app-to-VS Code connection on Windows ("named pipes are planned"), so a Windows build could not open labs. The first Windows build attempt on GitHub stopped on 9 extension tests for the same reason.
 - **Connection:** on Windows the worker listens on 127.0.0.1 and a free port (Dart cannot serve named pipes) and writes `tcp:127.0.0.1:<port>` to the session file. Because any program on the PC can reach a loopback port, the secret session id must be said in the first message and a client that does not say hello within 15 s is dropped. The runtime folder (`LOCALAPPDATA\DevPilot\run`) and the session file are locked to the current user with `icacls`. The extension accepts only `127.0.0.1` and a port (never another host) and compares paths without letter case on Windows (VS Code writes the drive letter in lower case).

@@ -41,6 +41,8 @@ Flutter cannot build Windows apps on Linux, so the Windows package is built on a
 worker to `worker.exe`, builds the app, adds the public lab content, and writes
 `release\devpilot-windows-x64.zip` (unpacks into `devpilot\`) and its `.sha256` file.
 
+**Without a Windows PC:** run the `windows-release` workflow (Actions tab, or `gh workflow run windows-release.yml --ref main`); it builds the zip on a GitHub Windows machine and keeps it as the `devpilot-windows-x64` artifact (`gh run download <id> -n devpilot-windows-x64`). It needs the `DEVPILOT_GOOGLE_CLIENT_SECRET` repository secret. The `windows-check` workflow runs the Windows tests and an end-to-end run with the real VS Code.
+
 **One-time setup on the Windows PC**
 
 1. Install [Flutter](https://docs.flutter.dev/get-started/install/windows/desktop) and run `flutter doctor`; the

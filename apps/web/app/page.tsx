@@ -5,6 +5,7 @@ import Typing from "@/components/Typing";
 import LiveStatus from "@/components/LiveStatus";
 import { links } from "@/lib/assets";
 import AppShowcase from "@/components/AppShowcase";
+import DownloadLink from "@/components/DownloadLink";
 
 // ---------------------------------------------------------------------------------------------------------------
 // small pieces
@@ -84,7 +85,7 @@ export default function Page() {
           </h1>
           <p className="sub" data-in="sub">Guided labs &amp; AI learning paths</p>
           <div className="hero-btns" data-in="btns">
-            <a className="btn fill" href={links.download}>Download for Linux</a>
+            <DownloadLink className="btn fill" />
             <a className="btn ghost" href="#studio">See how it works</a>
           </div>
           <a className="scrollcard" href="#studio" data-in="card" aria-label="Scroll down">
@@ -104,7 +105,7 @@ export default function Page() {
             Tell DevPilot what you want to learn. It builds the path, finds the videos, writes the labs and checks your work, all on your own computer.
           </p>
           <div className="btnrow reveal">
-            <a className="btn fill" href={links.download}>Download for Linux</a>
+            <DownloadLink className="btn fill" />
             <a className="btn ghost" href={links.github}>View on GitHub</a>
           </div>
           <div className="stats reveal">
@@ -128,7 +129,7 @@ export default function Page() {
               </p>
               <div className="btnrow left">
                 <a className="btn white" href={links.docs}>Read the docs</a>
-                <a className="btn dk" href={links.download}>Download</a>
+                <DownloadLink className="btn dk" plain />
               </div>
             </div>
             <div className="reveal codeblock" aria-hidden="true">
@@ -201,7 +202,7 @@ export default function Page() {
               Download DevPilot and your first guided lab can be open in VS Code within minutes.
             </p>
             <div className="btnrow">
-              <a className="btn fill" href={links.download}>Download for Linux</a>
+              <DownloadLink className="btn fill" />
               <a className="btn ghost" href={links.github}>View on GitHub</a>
             </div>
             <p className="note">Labs run on your computer  ·  Hints, not answers</p>
@@ -216,7 +217,7 @@ export default function Page() {
               </div>
               <div><h5>PRODUCT</h5><a href={links.docs}>Learning paths</a><a href={links.docs}>Labs</a><a href={links.docs}>Coach</a><a href={links.docs}>Credentials</a></div>
               <div><h5>WHO IT IS FOR</h5><a href="#uses">Students</a><a href="#uses">Career switchers</a><a href="#uses">Open-source beginners</a><a href="#uses">Mentors</a></div>
-              <div><h5>PLATFORMS</h5><a href={links.download}>Linux</a><a href={links.releases}>Windows (soon)</a><a href={links.releases}>macOS (soon)</a><a href={links.docs}>VS Code</a></div>
+              <div><h5>PLATFORMS</h5><a href={links.download}>Linux</a><a href={links.downloadWindows}>Windows</a><a href={links.releases}>macOS (soon)</a><a href={links.docs}>VS Code</a></div>
               <div><h5>RESOURCES</h5><a href={links.github}>GitHub</a><a href={links.docs}>Documentation</a><a href={`${links.api}/health`}>Service status</a><a href={links.issues}>Contact</a></div>
             </div>
             <div className="legal">
