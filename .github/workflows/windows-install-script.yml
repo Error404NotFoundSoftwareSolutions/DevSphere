@@ -50,8 +50,9 @@ jobs:
         shell: pwsh
         run: |
           $env:DEVPILOT_NO_LAUNCH = '1'
-          $bad = (Get-Content apps/web/public/install.ps1 -Raw) -replace "\$expected = '[0-9a-f]{64}'", ("`$expected = '" + ('0' * 64) + "'")
-          if ($bad -notmatch ('0' * 64)) { throw 'could not build the tampered script' }
+          $raw = Get-Content apps/web/public/install.ps1 -Raw
+          $bad = [regex]::Replace($raw, '(?<=\$expected\s+= '')[0-9a-f]{64}', ('0' * 64))
+          if ($bad -eq $raw) { throw 'could not build the tampered script' }
           Invoke-Expression $bad
           if ($LASTEXITCODE -ne 1) { throw "expected the script to fail with 1, got $LASTEXITCODE" }
           if (Test-Path (Join-Path $env:LOCALAPPDATA 'Programs\DevPilot\devpilot.exe')) { throw 'the installer ran although the checksum was wrong' }
