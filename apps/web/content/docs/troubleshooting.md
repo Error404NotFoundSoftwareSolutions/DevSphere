@@ -31,9 +31,13 @@ The helper (`worker` or `worker.exe`) must sit next to the DevPilot program. Unp
 
 When you start a lab, DevPilot shows a plan to install the DevPilot Guide in VS Code. Approve it. If the install fails with *It may be blocked on this computer*, check that VS Code can install extensions (some company-managed computers block this) and try the **Extensions** view in VS Code.
 
+## "DevPilot could not find Python"
+
+DevPilot looks for a working Python 3 command: `python3` then `python` on Linux and macOS, and `python`, `py` then `python3` on Windows. It uses the first one that really prints `Python 3.x`. Install Python 3.10 or newer from python.org (on Windows tick **Add python.exe to PATH**), then press **Run check** again. On Windows the Microsoft Store shortcut named `python` does not count.
+
 ## "pytest is not installed"
 
-Install it: `python3 -m pip install pytest` (on Windows `python -m pip install pytest`), then press **Run check** again.
+Install it with the command the message shows: `python3 -m pip install pytest` on Linux and macOS, `python -m pip install pytest` or `py -m pip install pytest` on Windows. Then press **Run check** again.
 
 ## A check says it "took too long"
 

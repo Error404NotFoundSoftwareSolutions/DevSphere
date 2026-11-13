@@ -2,6 +2,12 @@
 
 Newest first. One entry per finished step: what changed, how it was checked, what is still missing. Plans and status live in `FEATURE_ROADMAP.md`.
 
+## 2026-11-13: Windows fix, labs can now find Python
+- **Bug (found while writing the docs):** the lab checks and the setup check ran `python3`, which a normal Windows Python install does not have (it has `python` and the `py` launcher; the Microsoft Store stub named `python` opens the Store). On Windows, checks could not run.
+- **Fix:** `python_locator.dart` tries `python3`, `python` on Linux and macOS and `python`, `py`, `python3` on Windows, using the first that prints `Python 3.x`; with none it says so in plain words and the pytest hint names the command found. Second bug found by the new probe: `runProcess` could return before the program's last output arrived (a version number came back empty); it now waits briefly for both streams.
+- **Checked:** worker tests 122 on Linux (7 new, including 25 repeated short runs); on a Windows machine the e2e run now also finds `python`, runs pytest on the unfinished starter and sees it fail. New Windows package built from `main`, replaced on the release (checksum and contents checked; no private lab parts). Docs updated (Windows, troubleshooting, requirements, labs).
+- **Not done:** the Linux package was not rebuilt (it still has the rare lost-short-output race); a person trying the Windows app on a real desktop.
+
 ## 2026-11-13: documentation site at https://devpilot.web.app/docs
 - 26 pages written from the product and the code, not from the old design notes: install (Linux, Windows), quickstart, learning paths, watching videos, labs, the VS Code guide, tutor and coach, roadmaps and interviews, credentials, Lab Forge, account and shortcuts, how it works (with a diagram), how AI is used, scoring and trust, security and privacy, system requirements, settings and your data, troubleshooting, FAQ, lab format, service API overview, glossary, status and roadmap, releases. Planned features are marked planned.
 - Engine: Markdown in `apps/web/content/docs`, rendered at build time (`marked`, `gray-matter`); sidebar, search (client-side over a generated index), on-this-page navigation, copy buttons, previous/next, notes, sitemap and robots. All internal links, anchors and images were checked after the build; phone widths have no sideways scroll.

@@ -12,12 +12,16 @@ You need Windows 10 or 11 (64-bit), plus these tools:
 | Tool | Why | Check it (in PowerShell) |
 |---|---|---|
 | **Visual Studio Code** | Labs open in it | `code --version` |
-| **Python 3.10 or newer** | Lab checks are Python tests | `python --version` |
-| **pytest** | Runs those tests | `python -m pip install pytest` |
+| **Python 3.10 or newer** | Lab checks are Python tests. DevPilot finds it as `python` or `py` | `python --version` or `py --version` |
+| **pytest** | Runs those tests | `python -m pip install pytest` (or `py -m pip install pytest`) |
 | **Git** | The open-source lab uses real Git | `git --version` |
 | An internet connection | Paths, videos, tutor and coach use the online service | |
 
 The Microsoft Visual C++ runtime that DevPilot needs is included in the download.
+
+:::tip Installing Python
+Get Python from python.org and tick **Add python.exe to PATH** in the installer. The Python that Windows offers from the Microsoft Store when you type `python` is only a shortcut to the Store, and DevPilot ignores it until you install the real one.
+:::
 
 :::warning Preview
 The Windows build is new. It passed automated checks on a Windows machine (finding VS Code, installing the guide, opening a lab session) and a start-up test, but it has not yet been used on a real desktop by a person. If something does not work, please [tell us](/docs/troubleshooting#reporting-a-problem).

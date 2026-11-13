@@ -21,7 +21,7 @@ We list a system as supported only when it has been tested. If your system is no
 |---|---|---|
 | **Visual Studio Code** (VSCodium also works on Linux) | **1.144 or newer** | Labs open in it, with the DevPilot Guide extension |
 | **Python** | **3.10 or newer**. *Hello, Python* asks for 3.12 or 3.13; the open-source lab asks for 3.10 to 3.14 | The lab checks are Python tests |
-| **pytest** | any recent version | Runs the checks. Install with `python3 -m pip install pytest` (Windows: `python -m pip install pytest`) |
+| **pytest** | any recent version | Runs the checks. Install with `python3 -m pip install pytest` (Windows: `python -m pip install pytest` or `py -m pip install pytest`) |
 | **Git** | **2.28 or newer** | The open-source lab uses real Git |
 | **Internet** | | Paths, videos, tutor, coach, roadmaps, interview practice and credentials use the online service |
 

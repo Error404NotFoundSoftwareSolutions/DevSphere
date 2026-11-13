@@ -59,7 +59,7 @@ A lab you receive contains the guide, the starter code and the visible tests. Re
 ## Needs on your computer
 
 - **VS Code** (version 1.144 or newer).
-- **Python** at the version the lab asks for, and **pytest** (`python3 -m pip install pytest`; on Windows `python -m pip install pytest`).
+- **Python** at the version the lab asks for, and **pytest** (`python3 -m pip install pytest`; on Windows `python -m pip install pytest` or `py -m pip install pytest`). DevPilot finds the right Python command for your system.
 - **Git** for the open-source lab.
 
 If something is missing, DevPilot says which tool in a plain sentence. See [Troubleshooting](/docs/troubleshooting).
