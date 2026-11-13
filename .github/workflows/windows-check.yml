@@ -4,6 +4,8 @@ name: windows-check
 # Start it by hand: Actions > windows-check > Run workflow.
 on:
   workflow_dispatch:
+  push:
+    branches: [feat/windows-companion]
 
 permissions:
   contents: read
