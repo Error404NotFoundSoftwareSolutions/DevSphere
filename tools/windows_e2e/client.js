@@ -12,7 +12,7 @@ const { ChannelClient } = require(path.join(dist, 'src', 'host', 'channel.js'));
   const session = discoverSession(labRoot, dir);
   if (!session) { console.error(`no session found for ${labRoot} in ${dir}`); process.exit(3); }
   console.log(`session found: ${session.labId} at ${session.socketPath}`);
-  const client = new ChannelClient(session, '0.0.0-e2e');
+  const client = new ChannelClient(session, '0.3.3');
   const events = [];
   client.onEvent((e) => events.push(e));
   await client.connect();

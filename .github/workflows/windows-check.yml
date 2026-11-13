@@ -36,7 +36,9 @@ jobs:
         working-directory: extensions/devsphere-learn
         run: |
           npm ci --ignore-scripts
+          if ($LASTEXITCODE -ne 0) { throw "npm ci failed" }
           npm test
+          if ($LASTEXITCODE -ne 0) { throw "extension tests failed" }
           New-Item -ItemType Directory -Force "$env:RUNNER_TEMP/guide-build" | Out-Null
           $pkg = Get-Content package.json -Raw | ConvertFrom-Json
           $vsix = "devpilot-guide-$($pkg.version).vsix"

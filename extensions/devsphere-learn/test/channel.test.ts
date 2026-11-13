@@ -92,8 +92,8 @@ test('TC-CMP-10-08 a loopback tcp session (the Windows transport) is found', () 
 });
 
 test('TC-CMP-10-09 the runtime folder matches the worker: LOCALAPPDATA\\DevPilot\\run on Windows', () => {
-  assert.equal(defaultRuntimeDir({ XDG_RUNTIME_DIR: '/run/user/1000' }, '/home/u', 'linux'), '/run/user/1000/devpilot');
-  assert.equal(defaultRuntimeDir({}, '/home/u', 'linux'), path.join('/home/u', '.devpilot', 'run'));
+  assert.equal(defaultRuntimeDir({ XDG_RUNTIME_DIR: path.join(path.sep, 'run', 'user', '1000') }, path.join(path.sep, 'home', 'u'), 'linux'), path.join(path.sep, 'run', 'user', '1000', 'devpilot'));
+  assert.equal(defaultRuntimeDir({}, path.join(path.sep, 'home', 'u'), 'linux'), path.join(path.sep, 'home', 'u', '.devpilot', 'run'));
   assert.equal(defaultRuntimeDir({ LOCALAPPDATA: 'C:\\Users\\u\\AppData\\Local' }, 'C:\\Users\\u', 'win32'), 'C:\\Users\\u\\AppData\\Local\\DevPilot\\run');
   assert.equal(defaultRuntimeDir({ LOCALAPPDATA: 'relative' }, 'C:\\Users\\u', 'win32'), 'C:\\Users\\u\\.devpilot\\run');
 });
