@@ -9,6 +9,7 @@ import 'package:local_worker/src/companion/adapters.dart';
 import 'package:local_worker/src/companion/extension_installer.dart';
 import 'package:local_worker/src/companion/guide_package.dart';
 import 'package:local_worker/src/companion/lab_session.dart';
+import 'package:local_worker/src/companion/lab_files.dart';
 import 'package:local_worker/src/companion/launcher.dart';
 import 'package:local_worker/src/companion/python_locator.dart';
 import 'package:local_worker/src/companion/vscode_locator.dart';
