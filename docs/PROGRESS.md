@@ -2,6 +2,12 @@
 
 Newest first. One entry per finished step: what changed, how it was checked, what is still missing. Plans and status live in `FEATURE_ROADMAP.md`.
 
+## 2026-11-13: Windows build script (not built or run yet)
+- `tools/build_windows.ps1`: the Windows twin of `build_linux.sh`. Packages the guide extension, compiles `worker.exe`, builds the app with the hosted service as default and the optional Google sign-in secret, adds the public lab content (private parts checked for leaks), the Visual C++ runtime DLLs, `install.ps1` (Start menu entry) and a README, then writes `release\devpilot-windows-x64.zip` and its `.sha256`. Steps for the Windows PC are in `docs/RELEASING.md`.
+- The Windows app was still called `devsphere_scaffold`: renamed to DevPilot (executable `devpilot.exe`, window title, file properties).
+- Why not CI: the owner's friend has a Windows PC and builds there. Flutter cannot cross-build Windows from Linux. The unused draft `release.yml` workflow is untouched.
+- **Not verified:** the script has not been run (no Windows machine here, no PowerShell installed). Expect to fix small things on the first real run; the app's own Windows code paths (`worker.exe` next to the app, `guide` and `content\labs` folders) already exist in `worker_locator.dart`.
+
 ## 2026-11-12: website live at https://devpilot.web.app (free)
 - The landing page is a static export (`output: "export"`) on Firebase Hosting in `devpilot-app`, new site `devpilot`, instead of Cloud Run (owner asked for free or lowest cost, and the name devpilot; the devpilot names on Vercel, Netlify and Cloudflare Pages were taken). Config in `apps/web/firebase.json` and `.firebaserc`, hosting only; `npm run deploy` publishes. The Dockerfile is gone.
 - The hero and the night scene now share one video and one still (they were identical copies), so a first visit downloads about 2.5 MB. Media cached a week, scripts a year, the page revalidates every time; security headers (nosniff, no framing, referrer policy).

@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.devsphere" "\0"
-            VALUE "FileDescription", "devsphere_scaffold" "\0"
+            VALUE "CompanyName", "DevPilot" "\0"
+            VALUE "FileDescription", "DevPilot" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "devsphere_scaffold" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2026 com.devsphere. All rights reserved." "\0"
-            VALUE "OriginalFilename", "devsphere_scaffold.exe" "\0"
-            VALUE "ProductName", "devsphere_scaffold" "\0"
+            VALUE "InternalName", "devpilot" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 DevPilot. All rights reserved." "\0"
+            VALUE "OriginalFilename", "devpilot.exe" "\0"
+            VALUE "ProductName", "DevPilot" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
