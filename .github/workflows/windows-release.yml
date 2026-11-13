@@ -1,0 +1,47 @@
+name: windows-release
+# Builds the Windows package with tools/build_windows.ps1 on a GitHub Windows machine and keeps it as a download
+# (Actions tab, the run, "Artifacts"). Start it by hand: Actions > windows-release > Run workflow.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - uses: actions/setup-node@v4
+        with: { node-version: "22" }
+      - run: flutter config --enable-windows-desktop
+      - name: Build the package
+        shell: pwsh
+        env:
+          DEVPILOT_GOOGLE_CLIENT_SECRET: ${{ secrets.DEVPILOT_GOOGLE_CLIENT_SECRET }}
+        run: ./tools/build_windows.ps1
+      - name: Start the app for 15 seconds (smoke test)
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          $dir = Join-Path $env:RUNNER_TEMP "smoke"
+          New-Item -ItemType Directory $dir | Out-Null
+          tar.exe -xf release/devpilot-windows-x64.zip -C $dir
+          $p = Start-Process -FilePath "$dir/devpilot/devpilot.exe" -PassThru
+          Start-Sleep -Seconds 15
+          if ($p.HasExited) { throw "devpilot.exe exited early with code $($p.ExitCode)" }
+          Write-Host "devpilot.exe was still running after 15 seconds"
+          Stop-Process -Id $p.Id -Force
+      - uses: actions/upload-artifact@v4
+        with:
+          name: devpilot-windows-x64
+          path: |
+            release/devpilot-windows-x64.zip
+            release/devpilot-windows-x64.zip.sha256
+          retention-days: 14
+          compression-level: 0
