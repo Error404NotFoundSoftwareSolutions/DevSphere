@@ -319,3 +319,12 @@ main { position: relative; z-index: 1; }
   .appshow .shot-cap { flex-direction: column; gap: 4px; font-size: 13px; padding: 12px 14px; }
 }
 @media (prefers-reduced-motion: reduce) { .appshow .shot img { transition: none; } }
+
+/* the other platforms, as plain links under the download buttons */
+.platforms { position: absolute; left: calc(var(--u) * 67); top: calc(var(--u) * 826); margin: 0; font-size: calc(var(--u) * 14); color: rgba(235, 230, 255, 0.72); }
+.platforms.mid { position: static; margin-top: calc(var(--u) * 18); text-align: center; }
+.platforms a { color: #fff; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: rgba(255, 255, 255, 0.4); }
+.platforms a:hover { text-decoration-color: #fff; }
+.platforms i { font-style: normal; opacity: 0.5; margin: 0 calc(var(--u) * 4); }
+@media (max-width: 820px) { .platforms { position: absolute; left: 20px; top: auto; bottom: 108px; font-size: 13px; } .platforms.mid { position: static; margin-top: 14px; } }
+@media (max-width: 820px) { .platforms:not(.mid) span, .platforms:not(.mid) i:last-of-type { display: none; } }

@@ -88,6 +88,9 @@ export default function Page() {
             <DownloadLink className="btn fill" />
             <a className="btn ghost" href="#studio">See how it works</a>
           </div>
+          <p className="platforms" data-in="btns">
+            Also for: <a href={links.downloadWindows}>Windows</a> <i>·</i> <a href={links.download}>Linux</a> <i>·</i> <span>macOS soon</span>
+          </p>
           <a className="scrollcard" href="#studio" data-in="card" aria-label="Scroll down">
             <span>Scroll down<br />&amp; discover</span>
             <svg className="down" viewBox="0 0 22 22" fill="none" aria-hidden="true">
@@ -205,6 +208,9 @@ export default function Page() {
               <DownloadLink className="btn fill" />
               <a className="btn ghost" href={links.github}>View on GitHub</a>
             </div>
+            <p className="platforms mid">
+              Download for: <a href={links.downloadWindows}>Windows</a> <i>·</i> <a href={links.download}>Linux</a> <i>·</i> <span>macOS soon</span>
+            </p>
             <p className="note">Labs run on your computer  ·  Hints, not answers</p>
           </div>
 
