@@ -99,7 +99,7 @@ function shellMaterial(spec: FurSpec, layer: number, track: (m: THREE.Material) 
 
 // --- a natural jet flame: soft teardrop layers with a hot core, a glow, and drifting sparks. Palettes: blue (robot), warm (rocket).
 type Palette = { outer: number; outerHot: number; mid: number; midHot: number; core: number; glow: number; spark: number };
-const BLUE: Palette = { outer: 0x2457ff, outerHot: 0x8db8ff, mid: 0x33c4ff, midHot: 0xd9f7ff, core: 0xc4f1ff, glow: 0x4a86ff, spark: 0x8fe0ff };
+const BLUE: Palette = { outer: 0x2b7bff, outerHot: 0x9fe6ff, mid: 0x3fe0ff, midHot: 0xe6fbff, core: 0xd6f8ff, glow: 0x39b8ff, spark: 0x9ff0ff };
 const WARM: Palette = { outer: 0xff5a1f, outerHot: 0xffb067, mid: 0xffa826, midHot: 0xfff0c4, core: 0xfff4d6, glow: 0xff8a3a, spark: 0xffd08a };
 const jetTime = { value: 0 };
 const FLAME_VERT = `
@@ -205,17 +205,18 @@ function makeJet(T: ReturnType<typeof tracker>, len: number, r: number, pal: Pal
   return { group, update };
 }
 
-/** A friendly robot: white shell, dark glass face with glowing eyes and a smile, antenna, waving arms, jet flame. */
+/** A friendly plush robot (the pitch-deck mascot): squircle head with a glossy black screen and happy glowing eyes, indigo
+ * ear muffs and mitten hands, an amber antenna ball, a glowing cyan chest button and a cyan jet. White fur with soft blue shading. */
 export function buildRobot(): Mascot {
   const T = tracker();
-  const white = shell();
-  const violet = accent(0x7a5cff, 0.5);
-  const pink = accent(0xff8ad8, 0.6);
-  const glass = new THREE.MeshPhysicalMaterial({ color: 0x140d42, roughness: 0.06, metalness: 0.25, clearcoat: 1, clearcoatRoughness: 0.03, envMapIntensity: 1.2 });
-  const eyeMat = glowMat(0x8ff0ff);
-  const smileMat = glowMat(0x8ff0ff);
-  const WHITE: FurSpec = { tip: 0xf4efff, root: 0x7f6ed0, len: 0.042 };
-  const VIOLET: FurSpec = { tip: 0xb8a2ff, root: 0x3a22c0, len: 0.032 };
+  const INDIGO = 0x4b3fd6;
+  const CYAN = 0x4fe3ff;
+  const glass = new THREE.MeshPhysicalMaterial({ color: 0x05081a, roughness: 0.05, metalness: 0.3, clearcoat: 1, clearcoatRoughness: 0.02, envMapIntensity: 1.4 });
+  const indigoMat = accent(INDIGO, 0.25);
+  const eyeMat = glowMat(CYAN);
+  const WHITE: FurSpec = { tip: 0xf6f8ff, root: 0x6f86d6, len: 0.044 };
+  const BODYFUR: FurSpec = { tip: 0xe6ecff, root: 0x5d73c8, len: 0.044 };
+  const MITT: FurSpec = { tip: 0x6f60f2, root: 0x2c1fa8, len: 0.034 };
   /** A furry mesh: an opaque root layer plus SHELLS fur layers sharing its geometry. */
   const furry = (geo: THREE.BufferGeometry, spec: FurSpec) => {
     const rootMat = new THREE.MeshStandardMaterial({ color: spec.root, roughness: 1, metalness: 0, envMapIntensity: 0.4 });
@@ -232,68 +233,100 @@ export function buildRobot(): Mascot {
   const root = new THREE.Group(); // bobs and tilts as a whole
   group.add(root);
 
-  // --- body
-  const body = furry(new RoundedBoxGeometry(0.42, 0.36, 0.32, 5, 0.12), WHITE);
-  body.position.y = -0.17;
+  // --- body (small and round, tucked under the big head)
+  const body = furry(new RoundedBoxGeometry(0.42, 0.34, 0.32, 8, 0.15), BODYFUR);
+  body.position.y = -0.36;
   root.add(body);
-  const heart = T.mesh(new THREE.CircleGeometry(0.05, 28), glowMat(0xff8ad8));
-  heart.position.set(0, -0.14, 0.232);
-  root.add(heart);
+  // a short indigo neck makes the head and body two clear shapes
+  const neck = T.mesh(new THREE.CylinderGeometry(0.07, 0.085, 0.14, 24), accent(0x3a2fb8, 0.15));
+  neck.position.y = -0.17;
+  root.add(neck);
+  // glowing cyan chest button with a ring and a soft halo
+  const haloTex = radial(CYAN);
+  T.trackTex(haloTex);
+  const haloMat = new THREE.SpriteMaterial({ map: haloTex, blending: THREE.AdditiveBlending, depthWrite: false, transparent: true, opacity: 0.55, toneMapped: false });
+  T.track(haloMat);
+  const halo = new THREE.Sprite(haloMat);
+  halo.position.set(0, -0.32, 0.25);
+  halo.scale.setScalar(0.2);
+  root.add(halo);
+  const button = T.mesh(new THREE.CircleGeometry(0.043, 32), glowMat(CYAN));
+  button.position.set(0, -0.32, 0.232);
+  const ring = T.mesh(new THREE.TorusGeometry(0.054, 0.007, 10, 36), glowMat(0xa8f4ff, 0.9));
+  ring.position.set(0, -0.32, 0.232);
+  root.add(button, ring);
 
-  // --- head
+  // --- head (a big squircle)
   const head = new THREE.Group();
-  head.position.y = 0.2;
+  head.position.y = 0.15;
   root.add(head);
-  head.add(furry(new RoundedBoxGeometry(0.56, 0.42, 0.4, 6, 0.15), WHITE));
-  const screen = T.mesh(new RoundedBoxGeometry(0.44, 0.29, 0.04, 4, 0.06), glass);
-  screen.position.z = 0.236;
+  head.add(furry(new RoundedBoxGeometry(0.66, 0.52, 0.46, 10, 0.23), WHITE));
+  const screen = T.mesh(new RoundedBoxGeometry(0.45, 0.31, 0.05, 8, 0.15), glass);
+  screen.position.z = 0.27;
   head.add(screen);
   const face = new THREE.Group(); // slides a little towards the pointer
-  face.position.z = 0.259;
+  face.position.z = 0.305;
   head.add(face);
-  const eyeGeo = new THREE.CapsuleGeometry(0.03, 0.05, 6, 12);
-  const eyeL = T.mesh(eyeGeo, eyeMat);
-  const eyeR = T.mesh(eyeGeo, eyeMat);
-  eyeL.position.set(-0.1, 0.045, 0);
-  eyeR.position.set(0.1, 0.045, 0);
-  face.add(eyeL, eyeR);
-  const smile = T.mesh(new THREE.TorusGeometry(0.065, 0.0125, 10, 28, Math.PI), smileMat);
+  // happy eyes: glowing arches ( ^ ^ ), each with a soft outer glow
+  const archGeo = new THREE.TorusGeometry(0.052, 0.0135, 10, 28, Math.PI);
+  const archGlowGeo = new THREE.TorusGeometry(0.052, 0.024, 10, 28, Math.PI);
+  const glowEye = new THREE.MeshBasicMaterial({ color: CYAN, transparent: true, opacity: 0.16, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false });
+  const mkEye = (x: number) => {
+    const g = new THREE.Group();
+    g.position.set(x, 0.045, 0);
+    g.add(T.mesh(archGeo, eyeMat), T.mesh(archGlowGeo, glowEye));
+    face.add(g);
+    return g;
+  };
+  const eyeL = mkEye(-0.118);
+  const eyeR = mkEye(0.118);
+  const smile = T.mesh(new THREE.TorusGeometry(0.038, 0.0105, 10, 24, Math.PI), eyeMat);
   smile.rotation.z = Math.PI; // the lower half of a ring is a smile
-  smile.position.set(0, -0.02, 0);
+  smile.position.set(0, -0.035, 0);
   face.add(smile);
-  const cheekMat = glowMat(0xff7fc8, 0.5);
-  const cheekGeo = new THREE.CircleGeometry(0.03, 20);
+  const cheekMat = glowMat(0xff7fb4, 0.75);
+  const cheekGeo = new THREE.CircleGeometry(0.026, 24);
   const cheekL = T.mesh(cheekGeo, cheekMat);
   const cheekR = T.mesh(cheekGeo, cheekMat);
-  cheekL.position.set(-0.165, -0.03, -0.002);
-  cheekR.position.set(0.165, -0.03, -0.002);
+  cheekL.position.set(-0.17, -0.02, 0);
+  cheekR.position.set(0.17, -0.02, 0);
+  cheekL.scale.set(1.35, 0.8, 1);
+  cheekR.scale.set(1.35, 0.8, 1);
   face.add(cheekL, cheekR);
-  // ear pods
-  const podGeo = new THREE.CylinderGeometry(0.07, 0.07, 0.07, 28);
-  const podL = furry(podGeo, VIOLET);
-  const podR = furry(podGeo, VIOLET);
+  // indigo ear muffs
+  const podGeo = new THREE.CylinderGeometry(0.088, 0.088, 0.07, 32);
+  const podL = furry(podGeo, MITT);
+  const podR = furry(podGeo, MITT);
   podL.rotation.z = podR.rotation.z = Math.PI / 2;
-  podL.position.set(-0.3, 0, 0);
-  podR.position.set(0.3, 0, 0);
+  podL.position.set(-0.37, -0.005, 0);
+  podR.position.set(0.37, -0.005, 0);
   head.add(podL, podR);
-  // antenna
-  const stem = T.mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.13, 10), accent(0xb9a8ff, 0.2));
-  stem.position.y = 0.27;
+  // antenna: a thin indigo stem and an amber ball
+  const stem = T.mesh(new THREE.CylinderGeometry(0.011, 0.011, 0.1, 10), indigoMat);
+  stem.position.y = 0.3;
   head.add(stem);
-  const bulb = T.mesh(new THREE.SphereGeometry(0.04, 20, 16), glowMat(0xff8ad8));
-  bulb.position.y = 0.355;
+  const bulb = T.mesh(new THREE.SphereGeometry(0.042, 24, 18), glowMat(0xffb52e));
+  bulb.position.y = 0.375;
   head.add(bulb);
 
-  // --- arms (pivot at the shoulder)
-  const armGeo = new THREE.CapsuleGeometry(0.04, 0.17, 6, 12);
-  const handGeo = new THREE.SphereGeometry(0.052, 16, 12);
+  // --- arms: short and thick, with indigo mitten hands (pivot at the shoulder)
+  const armGeo = new THREE.CapsuleGeometry(0.052, 0.1, 8, 16);
+  const handGeo = new THREE.SphereGeometry(0.078, 22, 18);
+  handGeo.scale(1, 0.9, 0.95);
+  const knuckle = new THREE.SphereGeometry(0.024, 12, 10);
+  const knuckleMat = accent(0x6f60f2, 0.2);
   const mkArm = (side: 1 | -1) => {
     const pivot = new THREE.Group();
-    pivot.position.set(side * 0.255, -0.08, 0);
+    pivot.position.set(side * 0.27, -0.25, 0);
     const a = furry(armGeo, WHITE);
-    a.position.y = -0.12;
-    const h = furry(handGeo, VIOLET);
-    h.position.y = -0.245;
+    a.position.y = -0.1;
+    const h = furry(handGeo, MITT);
+    h.position.y = -0.235;
+    for (const [kx, ky] of [[-0.034, -0.052], [0, -0.062], [0.034, -0.052]] as const) {
+      const k = T.mesh(knuckle, knuckleMat);
+      k.position.set(kx, ky, 0.07);
+      h.add(k);
+    }
     pivot.add(a, h);
     root.add(pivot);
     return pivot;
@@ -301,15 +334,15 @@ export function buildRobot(): Mascot {
   const armL = mkArm(-1);
   const armR = mkArm(1);
 
-  // --- blue jet flame under the body
+  // --- cyan jet under the body, from an indigo nozzle
   const jet = makeJet(T, 0.5, 0.085, BLUE);
-  jet.group.position.y = -0.41;
+  jet.group.position.y = -0.6;
   root.add(jet.group);
-  const nozzle = T.mesh(new THREE.CylinderGeometry(0.095, 0.07, 0.04, 28), violet);
-  nozzle.position.y = -0.4;
+  const nozzle = T.mesh(new THREE.CylinderGeometry(0.1, 0.075, 0.045, 28), indigoMat);
+  nozzle.position.y = -0.585;
   root.add(nozzle);
 
-  let blink = 0, nextBlink = 2.2, spin = 0;
+  let blink = 0, nextBlink = 2.2, spin = 0, lift = 0;
   const update = (i: MascotInput) => {
     const { t, look, vx, near, hop } = i;
     furTime.value = t;
@@ -317,27 +350,28 @@ export function buildRobot(): Mascot {
     root.position.y = Math.sin(t * 1.6) * 0.025 + (hop > 0 ? Math.sin(hop * Math.PI) * 0.08 : 0);
     root.rotation.z += (clamp(-vx * 0.16, -0.35, 0.35) - root.rotation.z) * 0.1; // lean into the move
     // look at the pointer: eyes slide, head turns
-    face.position.x += (look.x * 0.045 - face.position.x) * 0.2;
-    face.position.y += (look.y * 0.03 - face.position.y) * 0.2;
-    head.rotation.y += (look.x * 0.42 - head.rotation.y) * 0.12;
-    head.rotation.x += (-look.y * 0.22 - head.rotation.x) * 0.12;
-    // blink
+    face.position.x += (look.x * 0.04 - face.position.x) * 0.2;
+    face.position.y += (look.y * 0.025 - face.position.y) * 0.2;
+    head.rotation.y += (look.x * 0.4 - head.rotation.y) * 0.12;
+    head.rotation.x += (-look.y * 0.2 - head.rotation.x) * 0.12;
+    // blink: the arches flatten
     nextBlink -= i.dt;
     if (nextBlink <= 0) { blink = 0.14; nextBlink = 2.4 + Math.random() * 2.6; }
     blink = Math.max(0, blink - i.dt);
-    const eyeY = blink > 0 ? 0.12 : 1 + hop * 0.15;
-    eyeL.scale.y = eyeR.scale.y += (eyeY - eyeR.scale.y) * 0.5;
-    // happier when the pointer is close or after a click
     const joy = clamp(near * 0.7 + hop);
-    smile.scale.setScalar(1 + joy * 0.3);
-    cheekMat.opacity = 0.35 + joy * 0.5;
-    // arms: gentle swing, a wave when the pointer is near
+    const eyeY = blink > 0 ? 0.1 : 1 + joy * 0.1;
+    eyeL.scale.y = eyeR.scale.y += (eyeY - eyeR.scale.y) * 0.5;
+    eyeL.scale.x = eyeR.scale.x = 1 + joy * 0.05;
+    smile.scale.setScalar(1 + joy * 0.35);
+    cheekMat.opacity = 0.6 + joy * 0.35;
+    // arms: a slow bob; the left arm (on the viewer's left) waves up when the pointer is near, as in the slides
     const wave = clamp(near * 1.2 + hop);
-    // a hanging arm swings outwards with a negative angle on the left and a positive one on the right; the wave lifts the right arm up
-    armL.rotation.z = -0.25 - Math.sin(t * 1.3) * 0.07;
-    armR.rotation.z = 0.25 + wave * (2.1 + Math.sin(t * 9) * 0.3) + (1 - wave) * Math.sin(t * 1.3 + 1) * 0.07;
-    // antenna bulb pulses
-    bulb.scale.setScalar(1 + Math.sin(t * 3) * 0.15);
+    lift += (wave - lift) * 0.12;
+    armR.rotation.z = 0.62 + Math.sin(t * 1.3 + 1) * 0.07;
+    armL.rotation.z = -(0.62 + lift * (1.65 + Math.sin(t * 9) * 0.28)) - (1 - lift) * Math.sin(t * 1.3) * 0.07;
+    // antenna ball pulses
+    bulb.scale.setScalar(1 + Math.sin(t * 3) * 0.12);
+    haloMat.opacity = 0.45 + Math.sin(t * 2.4) * 0.12;
     // flame
     jet.update(t, 1 + Math.sin(t * 38) * 0.06 + Math.sin(t * 23) * 0.05 + clamp(Math.abs(i.vy) * 0.6, 0, 0.6));
     // the click spin: one full turn with a hop

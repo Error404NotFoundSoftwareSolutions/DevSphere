@@ -33,7 +33,7 @@ const PHONE: Record<Key, Partial<Pose>> = {
 
 // Where the robot / rocket sits in each section (x, y in -1..1 of the viewport, s = height as a share of the viewport).
 const CHAR: Record<Key, Pose> = {
-  hero: { x: 0.74, y: 0.4, s: 0.3, yaw: 0, pitch: 0, roll: 0 },
+  hero: { x: 0.74, y: 0.36, s: 0.3, yaw: 0, pitch: 0, roll: 0 },
   statement: { x: 0.84, y: -0.4, s: 0.26, yaw: 0, pitch: 0, roll: 0 },
   dash: { x: 0.935, y: -0.05, s: 0.13, yaw: 0, pitch: 0, roll: 0 },
   packs: { x: 0.02, y: 0.2, s: 0.26, yaw: 0, pitch: 0, roll: 0 },
