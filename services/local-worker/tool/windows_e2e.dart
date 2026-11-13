@@ -10,6 +10,7 @@ import 'package:local_worker/src/companion/extension_installer.dart';
 import 'package:local_worker/src/companion/guide_package.dart';
 import 'package:local_worker/src/companion/lab_session.dart';
 import 'package:local_worker/src/companion/launcher.dart';
+import 'package:local_worker/src/companion/python_locator.dart';
 import 'package:local_worker/src/companion/vscode_locator.dart';
 
 Never fail(String message, [int code = 1]) {
@@ -70,6 +71,23 @@ Future<void> main(List<String> args) async {
   stdout.writeln('session ${session.sessionId} at ${session.socketPath}, lab folder ${session.labRoot}');
   stdout.writeln('VS Code would be started as: ${spawned.single}');
   if (!spawned.single.contains('--new-window')) fail('the launch command has no --new-window');
+  // 4. a real lab check, with the Python command found for this computer (this is what failed on Windows before: python3)
+  stdout.writeln('== 4. a lab check with the Python of this computer');
+  final py = await findPython();
+  stdout.writeln('python command: $py');
+  if (py == null) fail('no Python 3 was found on this computer');
+  final info = loadLabInfo(session.labRoot);
+  final step = info.steps.firstWhere((x) => x.hasCheck);
+  final ck = await pytestCheckRunner(session.labRoot)(step);
+  stdout.writeln('check "${step.id}": passed=${ck.passed} - ${ck.summary}');
+  final out = ck.output;
+  if (ck.summary.contains('could not find Python') || ck.summary.contains('pytest is not installed')) {
+    fail('the check could not run: ${ck.summary}');
+  }
+  // the starter is unfinished, so its test must run and FAIL; a pytest summary line proves the tests really ran
+  if (!RegExp(r'\d+ (failed|passed)').hasMatch(out)) fail('no pytest result in the output:\n$out');
+  if (ck.passed) fail('the unfinished starter should not pass its check');
+  stdout.writeln('the check ran pytest and the starter failed, as it should');
   final node = await Process.run('node', [clientJs, extDist, session.labRoot]);
   stdout.write(node.stdout);
   stderr.write(node.stderr);

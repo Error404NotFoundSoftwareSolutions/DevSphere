@@ -10,6 +10,7 @@ import '../exec/safe_spawn.dart';
 import 'extension_installer.dart';
 import 'lab_session.dart';
 import 'launcher.dart';
+import 'python_locator.dart';
 import 'vscode_locator.dart';
 
 class RealFileProbe implements FileProbe {
@@ -140,15 +141,24 @@ String checkTarget(String labRoot, LabStepInfo step) {
   return 'tests/visible';
 }
 
-CheckRunner pytestCheckRunner(String labRoot, {String python = 'python3'}) {
+CheckRunner pytestCheckRunner(String labRoot, {String? python}) {
   const allowed = {'python3', 'python', 'py'};
   return (step) async {
-    if (!allowed.contains(python))
+    // `python` is for tests; normally it is found: python3 on Linux and macOS, python or py on Windows
+    final py = python ?? await findPython();
+    if (py == null) {
+      return const CheckOutcome(
+          passed: false,
+          summary:
+              'DevPilot could not find Python on this computer. Install Python 3.10 or newer from python.org (on Windows, tick "Add python.exe to PATH"), then check again.',
+          output: '');
+    }
+    if (!allowed.contains(py))
       throw ArgumentError('Python command must be python3, python or py');
     final env = launcherEnvironment(Platform.environment)
       ..addAll({'PYTHONDONTWRITEBYTECODE': '1', 'PYTHONNOUSERSITE': '1'});
     final r = await runProcess(
-      python,
+      py,
       [
         '-m',
         'pytest',
@@ -173,7 +183,7 @@ CheckRunner pytestCheckRunner(String labRoot, {String python = 'python3'}) {
       return CheckOutcome(
           passed: false,
           summary:
-              'pytest is not installed. Install it with: python3 -m pip install pytest, then check again.',
+              'pytest is not installed. Install it with: $py -m pip install pytest, then check again.',
           output: r.output);
     }
     return switch (r.exitCode) {
