@@ -18,7 +18,7 @@ DevPilot uses Google's **Gemini** models. The rule that shapes everything else i
 | **Tutor** | Gives hints at the level the lab allows. |
 | **Coach** | Explains an error, or reviews code, as advice. |
 | **Interview practice** | Writes questions from a job description. |
-| **Lab Forge** | Drafts a new lab, which then has to pass its own checks. See [Create a lab with AI](/docs/create-a-lab-with-ai). |
+| **Lab Forge** | Writes a new lab. Your computer then proves it works (the answer passes, the starter fails) before it is added. See [Create a lab with AI](/docs/create-a-lab-with-ai). |
 
 Two kinds of Gemini model are used: a fast, low-cost one for short answers (hints, coaching, interview questions, outlines), and a stronger one for the long structured work of writing a lab.
 

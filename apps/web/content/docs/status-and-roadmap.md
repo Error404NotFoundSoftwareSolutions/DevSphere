@@ -22,7 +22,7 @@ DevPilot is in **preview** (0.1.0). We separate what works from what we plan, so
 | **Labs in your own VS Code** with the DevPilot Guide | Works. Two labs: *Hello, Python* and *Your first open-source contribution*. |
 | **Credentials**, *Completed* level, with share links | Works |
 | **Streaks** and a weekly goal | Works |
-| **Lab Forge** (AI-written labs) | Works only with a self-run service; not on the hosted service. |
+| **Lab Forge** (AI-written labs) | Works. The service writes the lab; DevPilot checks it on your computer before adding it. |
 
 ## Known limits of the preview
 

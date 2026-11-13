@@ -16,7 +16,7 @@ order: 7
 | **Helper (worker)** | The program next to the app that touches your files, starts VS Code and runs checks. |
 | **Hint level** | How much help the tutor may give, from 1 (explain the idea) to 6 (a worked example). Each lab sets a maximum. |
 | **Lab** | A small project with a guide, starter code and tests, done in your own VS Code. |
-| **Lab Forge** | The feature that writes a new lab on a topic you choose. Not available on the hosted service yet. |
+| **Lab Forge** | The feature that writes a new lab on a topic you choose. The service writes it and DevPilot checks it on your computer before adding it. |
 | **Learning path** | An ordered list of 3 to 8 steps for a goal, each with a lesson, videos, a quick check and a lab. |
 | **Practice** | A result produced on your own computer. Labelled Practice wherever it appears. |
 | **Protected tests** | Private tests that never ship in the app. |
