@@ -118,7 +118,12 @@ void main() {
     expect(json['labId'], 'python-hello-001');
     expect(json['labRoot'], session.labRoot);
     expect(json['protocol'], 1);
-    expect(File(json['socketPath'] as String).existsSync(), isTrue);
+    final endpoint = json['socketPath'] as String;
+    if (endpoint.startsWith('tcp:')) {
+      expect(endpoint, matches(RegExp(r'^tcp:127\.0\.0\.1:\d{1,5}$')));
+    } else {
+      expect(File(endpoint).existsSync(), isTrue);
+    }
   });
 
   test(
