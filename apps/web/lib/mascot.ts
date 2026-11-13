@@ -234,12 +234,23 @@ export function buildRobot(): Mascot {
   group.add(root);
 
   // --- body (small and round, tucked under the big head)
-  const body = furry(new RoundedBoxGeometry(0.42, 0.34, 0.32, 8, 0.15), BODYFUR);
-  body.position.y = -0.36;
+  const bodyGeo = new THREE.SphereGeometry(1, 56, 42);
+  bodyGeo.scale(0.205, 0.265, 0.17);
+  // a little narrower towards the bottom: an egg, not a ball
+  const bp = bodyGeo.getAttribute('position') as THREE.BufferAttribute;
+  for (let i = 0; i < bp.count; i++) {
+    const y = bp.getY(i) / 0.265; // -1 bottom .. 1 top
+    const k = 1 - 0.14 * Math.max(0, -y);
+    bp.setX(i, bp.getX(i) * k);
+    bp.setZ(i, bp.getZ(i) * k);
+  }
+  bodyGeo.computeVertexNormals();
+  const body = furry(bodyGeo, BODYFUR);
+  body.position.y = -0.37;
   root.add(body);
   // a short indigo neck makes the head and body two clear shapes
   const neck = T.mesh(new THREE.CylinderGeometry(0.07, 0.085, 0.14, 24), accent(0x3a2fb8, 0.15));
-  neck.position.y = -0.17;
+  neck.position.y = -0.14;
   root.add(neck);
   // glowing cyan chest button with a ring and a soft halo
   const haloTex = radial(CYAN);
@@ -247,13 +258,13 @@ export function buildRobot(): Mascot {
   const haloMat = new THREE.SpriteMaterial({ map: haloTex, blending: THREE.AdditiveBlending, depthWrite: false, transparent: true, opacity: 0.55, toneMapped: false });
   T.track(haloMat);
   const halo = new THREE.Sprite(haloMat);
-  halo.position.set(0, -0.32, 0.25);
+  halo.position.set(0, -0.3, 0.235);
   halo.scale.setScalar(0.2);
   root.add(halo);
   const button = T.mesh(new THREE.CircleGeometry(0.043, 32), glowMat(CYAN));
-  button.position.set(0, -0.32, 0.232);
+  button.position.set(0, -0.3, 0.218);
   const ring = T.mesh(new THREE.TorusGeometry(0.054, 0.007, 10, 36), glowMat(0xa8f4ff, 0.9));
-  ring.position.set(0, -0.32, 0.232);
+  ring.position.set(0, -0.3, 0.218);
   root.add(button, ring);
 
   // --- head (a big squircle)
@@ -310,16 +321,16 @@ export function buildRobot(): Mascot {
   head.add(bulb);
 
   // --- arms: short and thick, with indigo mitten hands (pivot at the shoulder)
-  const armGeo = new THREE.CapsuleGeometry(0.052, 0.1, 8, 16);
+  const armGeo = new THREE.CapsuleGeometry(0.064, 0.1, 10, 18);
   const handGeo = new THREE.SphereGeometry(0.078, 22, 18);
   handGeo.scale(1, 0.9, 0.95);
   const knuckle = new THREE.SphereGeometry(0.024, 12, 10);
   const knuckleMat = accent(0x6f60f2, 0.2);
   const mkArm = (side: 1 | -1) => {
     const pivot = new THREE.Group();
-    pivot.position.set(side * 0.27, -0.25, 0);
+    pivot.position.set(side * 0.15, -0.27, 0.01);
     const a = furry(armGeo, WHITE);
-    a.position.y = -0.1;
+    a.position.y = -0.11;
     const h = furry(handGeo, MITT);
     h.position.y = -0.235;
     for (const [kx, ky] of [[-0.034, -0.052], [0, -0.062], [0.034, -0.052]] as const) {
@@ -336,10 +347,10 @@ export function buildRobot(): Mascot {
 
   // --- cyan jet under the body, from an indigo nozzle
   const jet = makeJet(T, 0.5, 0.085, BLUE);
-  jet.group.position.y = -0.6;
+  jet.group.position.y = -0.64;
   root.add(jet.group);
   const nozzle = T.mesh(new THREE.CylinderGeometry(0.1, 0.075, 0.045, 28), indigoMat);
-  nozzle.position.y = -0.585;
+  nozzle.position.y = -0.625;
   root.add(nozzle);
 
   let blink = 0, nextBlink = 2.2, spin = 0, lift = 0;
@@ -367,8 +378,8 @@ export function buildRobot(): Mascot {
     // arms: a slow bob; the left arm (on the viewer's left) waves up when the pointer is near, as in the slides
     const wave = clamp(near * 1.2 + hop);
     lift += (wave - lift) * 0.12;
-    armR.rotation.z = 0.62 + Math.sin(t * 1.3 + 1) * 0.07;
-    armL.rotation.z = -(0.62 + lift * (1.65 + Math.sin(t * 9) * 0.28)) - (1 - lift) * Math.sin(t * 1.3) * 0.07;
+    armR.rotation.z = 0.72 + Math.sin(t * 1.3 + 1) * 0.07;
+    armL.rotation.z = -(0.72 + lift * (1.55 + Math.sin(t * 9) * 0.28)) - (1 - lift) * Math.sin(t * 1.3) * 0.07;
     // antenna ball pulses
     bulb.scale.setScalar(1 + Math.sin(t * 3) * 0.12);
     haloMat.opacity = 0.45 + Math.sin(t * 2.4) * 0.12;
